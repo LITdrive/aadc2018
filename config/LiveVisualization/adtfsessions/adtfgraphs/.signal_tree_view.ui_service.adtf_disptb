@@ -1,0 +1,8 @@
+<xml>
+ <property name="Signal Tree View" value="treeview" />
+ <property name="Signal Tree View.column_0_width" value="250" />
+ <property name="Signal Tree View.column_1_width" value="200" />
+ <property name="Signal Tree View.column_2_width" value="60" />
+ <property name="Signal Tree View.column_3_width" value="281" />
+ <property name="Signal Tree View.width" value="500" />
+</xml>

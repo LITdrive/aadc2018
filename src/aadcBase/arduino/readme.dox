@@ -1,0 +1,27 @@
+/**
+ * @file
+ * \brief Software Examples Overview for Doxygen.
+ *
+ *
+ * Copyright &copy; Audi Electronics Venture GmbH. All rights reserved
+ *
+ * $Author: voigtlpi $
+ * $Date: 2015-10-15 14:28:29 +0200 (Do, 15 Okt 2015) $
+ * $Revision: 55858 $
+ *
+ * This is only a doxygen file for better understanding.
+ *
+ */
+
+/**
+ * \page page_example_sample_data_reference Sample Data Reference Streaming Source
+ *
+\par This example shows:
+\li ... how to implement a ADTF 3 a @ref subsection_sample_stream_source
+\li ... how you can transmit samples that do not copy the data but only store a reference.
+
+Use this method only if you REALLY know what you are doing!
+
+ */
+
+

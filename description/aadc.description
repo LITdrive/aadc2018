@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="iso-8859-1" standalone="no"?>
+<adtf:ddl xmlns:adtf="adtf">
+ <header>
+  <language_version>3.00</language_version>
+  <author>AADC2017</author>
+  <date_creation>04.07.2014</date_creation>
+  <date_change>29.05.2018</date_change>
+  <description>AADC Common Description File</description>
+ </header>
+ <units />
+ <datatypes>
+  <datatype description="predefined ADTF tBool datatype" name="tBool" size="8" />
+  <datatype description="predefined ADTF tChar datatype" name="tChar" size="8" />
+  <datatype description="predefined ADTF tUInt8 datatype" name="tUInt8" size="8" />
+  <datatype description="predefined ADTF tInt8 datatype" name="tInt8" size="8" />
+  <datatype description="predefined ADTF tUInt16 datatype" name="tUInt16" size="16" />
+  <datatype description="predefined ADTF tInt16 datatype" name="tInt16" size="16" />
+  <datatype description="predefined ADTF tUInt32 datatype" name="tUInt32" size="32" />
+  <datatype description="predefined ADTF tInt32 datatype" name="tInt32" size="32" />
+  <datatype description="predefined ADTF tUInt64 datatype" name="tUInt64" size="64" />
+  <datatype description="predefined ADTF tInt64 datatype" name="tInt64" size="64" />
+  <datatype description="predefined ADTF tFloat32 datatype" name="tFloat32" size="32" />
+  <datatype description="predefined ADTF tFloat64 datatype" name="tFloat64" size="64" />
+ </datatypes>
+ <enums />
+ <structs>
+  <struct alignment="1" name="tJuryStruct" version="1">
+   <element alignment="1" arraysize="1" byteorder="LE" bytepos="0" name="i16ActionID" type="tInt8" />
+   <element alignment="1" arraysize="1" byteorder="LE" bytepos="2" name="i16ManeuverEntry" type="tInt16" />
+  </struct>
+  <struct alignment="1" name="tDriverStruct" version="1">
+   <element alignment="1" arraysize="1" byteorder="LE" bytepos="0" name="i16StateID" type="tInt16" />
+   <element alignment="1" arraysize="1" byteorder="LE" bytepos="2" name="i16ManeuverEntry" type="tInt16" />
+  </struct>
+  <struct alignment="1" name="tSignalValue" version="1">
+   <element alignment="1" arraysize="1" byteorder="LE" bytepos="0" name="ui32ArduinoTimestamp" type="tUInt32" />
+   <element alignment="1" arraysize="1" byteorder="LE" bytepos="4" name="f32Value" type="tFloat32" />
+  </struct>
+  <struct alignment="1" name="tBoolSignalValue" version="1">
+   <element alignment="1" arraysize="1" byteorder="LE" bytepos="0" name="ui32ArduinoTimestamp" type="tUInt32" />
+   <element alignment="1" arraysize="1" byteorder="LE" bytepos="4" name="bValue" type="tBool" />
+  </struct>
+  <struct alignment="1" name="tWheelData" version="1">
+   <element alignment="1" arraysize="1" byteorder="LE" bytepos="0" name="ui32ArduinoTimestamp" type="tUInt32" />
+   <element alignment="1" arraysize="1" byteorder="LE" bytepos="4" name="ui32WheelTach" type="tUInt32" />
+   <element alignment="1" arraysize="1" byteorder="LE" bytepos="8" name="i8WheelDir" type="tInt8" />
+  </struct>
+  <struct alignment="1" name="tInerMeasUnitData" version="1">
+   <element alignment="1" arraysize="1" byteorder="LE" bytepos="0" name="ui32ArduinoTimestamp" type="tUInt32" />
+   <element alignment="1" arraysize="1" byteorder="LE" bytepos="4" name="f32A_x" type="tFloat32" />
+   <element alignment="1" arraysize="1" byteorder="LE" bytepos="8" name="f32A_y" type="tFloat32" />
+   <element alignment="1" arraysize="1" byteorder="LE" bytepos="12" name="f32A_z" type="tFloat32" />
+   <element alignment="1" arraysize="1" byteorder="LE" bytepos="16" name="f32G_x" type="tFloat32" />
+   <element alignment="1" arraysize="1" byteorder="LE" bytepos="20" name="f32G_y" type="tFloat32" />
+   <element alignment="1" arraysize="1" byteorder="LE" bytepos="24" name="f32G_z" type="tFloat32" />
+   <element alignment="1" arraysize="1" byteorder="LE" bytepos="28" name="f32M_x" type="tFloat32" />
+   <element alignment="1" arraysize="1" byteorder="LE" bytepos="32" name="f32M_y" type="tFloat32" />
+   <element alignment="1" arraysize="1" byteorder="LE" bytepos="36" name="f32M_z" type="tFloat32" />
+  </struct>
+  <struct alignment="1" name="tRoadSignExt" version="1">
+   <element alignment="1" arraysize="1" byteorder="LE" bytepos="0" name="i16Identifier" type="tInt16" />
+   <element alignment="1" arraysize="1" byteorder="LE" bytepos="2" name="f32Imagesize" type="tFloat32" />
+   <element alignment="1" arraysize="3" byteorder="LE" bytepos="6" name="af32TVec" type="tFloat32" />
+   <element alignment="1" arraysize="3" byteorder="LE" bytepos="18" name="af32RVec" type="tFloat32" />
+  </struct>
+  <struct alignment="1" name="tPosition" version="1">
+   <element alignment="1" arraysize="1" byteorder="LE" bytepos="0" name="f32x" type="tFloat32" />
+   <element alignment="1" arraysize="1" byteorder="LE" bytepos="4" name="f32y" type="tFloat32" />
+   <element alignment="1" arraysize="1" byteorder="LE" bytepos="8" name="f32radius" type="tFloat32" />
+   <element alignment="1" arraysize="1" byteorder="LE" bytepos="12" name="f32speed" type="tFloat32" />
+   <element alignment="1" arraysize="1" byteorder="LE" bytepos="16" name="f32heading" type="tFloat32" />
+  </struct>
+  <struct alignment="1" name="tObstacle" version="1">
+   <element alignment="1" arraysize="1" byteorder="LE" bytepos="0" name="f32x" type="tFloat32" />
+   <element alignment="1" arraysize="1" byteorder="LE" bytepos="4" name="f32y" type="tFloat32" />
+  </struct>
+  <struct alignment="1" name="tTrafficSign" version="1">
+   <element alignment="1" arraysize="1" byteorder="LE" bytepos="0" name="i16Identifier" type="tInt16" />
+   <element alignment="1" arraysize="1" byteorder="LE" bytepos="2" name="f32x" type="tFloat32" />
+   <element alignment="1" arraysize="1" byteorder="LE" bytepos="6" name="f32y" type="tFloat32" />
+   <element alignment="1" arraysize="1" byteorder="LE" bytepos="10" name="f32angle" type="tFloat32" />
+  </struct>
+  <struct alignment="1" name="tParkingSpace" version="1">
+   <element alignment="1" arraysize="1" byteorder="LE" bytepos="0" name="i16Identifier" type="tInt16" />
+   <element alignment="1" arraysize="1" byteorder="LE" bytepos="2" name="f32x" type="tFloat32" />
+   <element alignment="1" arraysize="1" byteorder="LE" bytepos="6" name="f32y" type="tFloat32" />
+   <element alignment="1" arraysize="1" byteorder="LE" bytepos="10" name="ui16Status" type="tUInt16" />
+  </struct>
+  <struct alignment="1" name="tUltrasonicStruct" version="1">
+   <element alignment="1" arraysize="1" byteorder="LE" bytepos="0" name="tSideLeft" type="tSignalValue" />
+   <element alignment="1" arraysize="1" byteorder="LE" bytepos="8" name="tSideRight" type="tSignalValue" />
+   <element alignment="1" arraysize="1" byteorder="LE" bytepos="16" name="tRearLeft" type="tSignalValue" />
+   <element alignment="1" arraysize="1" byteorder="LE" bytepos="24" name="tRearCenter" type="tSignalValue" />
+   <element alignment="1" arraysize="1" byteorder="LE" bytepos="32" name="tRearRight" type="tSignalValue" />
+  </struct>
+  <struct alignment="1" name="tVoltageStruct" version="1">
+   <element alignment="1" arraysize="1" byteorder="LE" bytepos="0" name="tActuatorVoltage" type="tSignalValue" />
+   <element alignment="1" arraysize="1" byteorder="LE" bytepos="8" name="tActuatorCell1" type="tSignalValue" />
+   <element alignment="1" arraysize="1" byteorder="LE" bytepos="16" name="tActuatorCell2" type="tSignalValue" />
+   <element alignment="1" arraysize="1" byteorder="LE" bytepos="24" name="tSensorVoltage" type="tSignalValue" />
+   <element alignment="1" arraysize="1" byteorder="LE" bytepos="32" name="tSensorCell1" type="tSignalValue" />
+   <element alignment="1" arraysize="1" byteorder="LE" bytepos="40" name="tSensorCell2" type="tSignalValue" />
+   <element alignment="1" arraysize="1" byteorder="LE" bytepos="48" name="tSensorCell3" type="tSignalValue" />
+   <element alignment="1" arraysize="1" byteorder="LE" bytepos="56" name="tSensorCell4" type="tSignalValue" />
+   <element alignment="1" arraysize="1" byteorder="LE" bytepos="64" name="tSensorCell5" type="tSignalValue" />
+   <element alignment="1" arraysize="1" byteorder="LE" bytepos="72" name="tSensorCell6" type="tSignalValue" />
+  </struct>
+  <struct alignment="1" name="tPolarCoordiante" version="1">
+   <element alignment="1" arraysize="1" byteorder="LE" bytepos="0" name="f32Radius" type="tFloat32" />
+   <element alignment="1" arraysize="1" byteorder="LE" bytepos="4" name="f32Angle" type="tFloat32" />
+  </struct>
+  <struct alignment="1" name="tLaserScannerData" version="1">
+   <element alignment="1" arraysize="1" byteorder="LE" bytepos="0" name="ui32Size" type="tUInt32" />
+   <element alignment="1" arraysize="360" byteorder="LE" bytepos="4" name="tScanArray" type="tPolarCoordiante" />
+  </struct>
+  <struct alignment="1" name="tClassification" version="1">
+   <element alignment="1" arraysize="128" byteorder="LE" bytepos="0" name="className" type="tChar" />
+   <element alignment="1" arraysize="1" byteorder="LE" bytepos="128" name="classId" type="tUInt64" />
+   <element alignment="1" arraysize="1" byteorder="LE" bytepos="136" name="probValue" type="tFloat64" />
+  </struct>
+ </structs>
+ <streams>
+ </streams>
+</adtf:ddl>

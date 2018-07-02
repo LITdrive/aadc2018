@@ -1,0 +1,654 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>SensorVisualizationUi</class>
+ <widget class="QWidget" name="SensorVisualizationUi">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>768</width>
+    <height>327</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Widget</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QTabWidget" name="tabWidget">
+     <property name="currentIndex">
+      <number>4</number>
+     </property>
+     <widget class="QWidget" name="tab">
+      <attribute name="title">
+       <string>Ultrasonic Sensors</string>
+      </attribute>
+      <layout class="QGridLayout" name="gridLayout">
+       <item row="0" column="6">
+        <widget class="QLabel" name="label_us_sr">
+         <property name="font">
+          <font>
+           <pointsize>12</pointsize>
+           <weight>75</weight>
+           <italic>true</italic>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>Side Right</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="label_us_r_distance">
+         <property name="text">
+          <string>Distance [cm]</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QLabel" name="label_us_sl">
+         <property name="font">
+          <font>
+           <pointsize>12</pointsize>
+           <weight>75</weight>
+           <italic>true</italic>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>Side Left</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="5">
+        <widget class="QLCDNumber" name="lcdNumber_us_rcr"/>
+       </item>
+       <item row="0" column="3">
+        <widget class="QLabel" name="label_us_rcl">
+         <property name="font">
+          <font>
+           <pointsize>12</pointsize>
+           <weight>75</weight>
+           <italic>true</italic>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>Rear Left</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QLCDNumber" name="lcdNumber_us_update_sl"/>
+       </item>
+       <item row="2" column="6">
+        <widget class="QLCDNumber" name="lcdNumber_us_update_sr"/>
+       </item>
+       <item row="1" column="6">
+        <widget class="QLCDNumber" name="lcdNumber_us_sr"/>
+       </item>
+       <item row="2" column="5">
+        <widget class="QLCDNumber" name="lcdNumber_us_update_rcr"/>
+       </item>
+       <item row="0" column="4">
+        <widget class="QLabel" name="label_us_rc">
+         <property name="font">
+          <font>
+           <pointsize>12</pointsize>
+           <weight>75</weight>
+           <italic>true</italic>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>Rear Center</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="5">
+        <widget class="QLabel" name="label_us_rcr">
+         <property name="font">
+          <font>
+           <pointsize>12</pointsize>
+           <weight>75</weight>
+           <italic>true</italic>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>Rear Right</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="label_us_r_updaterate">
+         <property name="text">
+          <string>Update Rate [Hz]</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="4">
+        <widget class="QLCDNumber" name="lcdNumber_us_rc"/>
+       </item>
+       <item row="2" column="4">
+        <widget class="QLCDNumber" name="lcdNumber_us_update_rc"/>
+       </item>
+       <item row="2" column="3">
+        <widget class="QLCDNumber" name="lcdNumber_us_update_rcl"/>
+       </item>
+       <item row="1" column="3">
+        <widget class="QLCDNumber" name="lcdNumber_us_rcl"/>
+       </item>
+       <item row="1" column="1">
+        <widget class="QLCDNumber" name="lcdNumber_us_sl"/>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tab_2">
+      <attribute name="title">
+       <string>Wheel Encoder</string>
+      </attribute>
+      <layout class="QGridLayout" name="gridLayout_2">
+       <item row="1" column="2">
+        <widget class="QLCDNumber" name="lcdNumber_wheel_right_count"/>
+       </item>
+       <item row="2" column="1">
+        <widget class="QLCDNumber" name="lcdNumber_wheel_left_direction"/>
+       </item>
+       <item row="1" column="1">
+        <widget class="QLCDNumber" name="lcdNumber_wheel_left_count"/>
+       </item>
+       <item row="0" column="1">
+        <widget class="QLabel" name="label_wheel_left">
+         <property name="font">
+          <font>
+           <pointsize>14</pointsize>
+           <weight>75</weight>
+           <italic>true</italic>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>Left</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="label_wheel_direction">
+         <property name="font">
+          <font>
+           <pointsize>16</pointsize>
+           <weight>75</weight>
+           <italic>true</italic>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>Direction</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="2">
+        <widget class="QLCDNumber" name="lcdNumber_wheel_right_direction"/>
+       </item>
+       <item row="0" column="2">
+        <widget class="QLabel" name="label_wheel_right">
+         <property name="font">
+          <font>
+           <pointsize>14</pointsize>
+           <weight>75</weight>
+           <italic>true</italic>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>Right</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="label_wheel_count">
+         <property name="font">
+          <font>
+           <pointsize>16</pointsize>
+           <weight>75</weight>
+           <italic>true</italic>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>Count</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QLabel" name="label_wheel_update">
+         <property name="font">
+          <font>
+           <pointsize>16</pointsize>
+           <weight>75</weight>
+           <italic>true</italic>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>Update Rate [Hz]</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1">
+        <widget class="QLCDNumber" name="lcdNumber_wheel_update_left"/>
+       </item>
+       <item row="3" column="2">
+        <widget class="QLCDNumber" name="lcdNumber_wheel_update_right"/>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tab_3">
+      <attribute name="title">
+       <string>Inertial Measurement Unit</string>
+      </attribute>
+      <layout class="QGridLayout" name="gridLayout_3">
+       <item row="1" column="2">
+        <widget class="QLCDNumber" name="lcdNumber_imu_angular_x"/>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="label_imu_x">
+         <property name="font">
+          <font>
+           <pointsize>20</pointsize>
+           <weight>75</weight>
+           <italic>true</italic>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>X</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QLCDNumber" name="lcdNumber_imu_acc_x"/>
+       </item>
+       <item row="2" column="1">
+        <widget class="QLCDNumber" name="lcdNumber_imu_acc_y"/>
+       </item>
+       <item row="3" column="1">
+        <widget class="QLCDNumber" name="lcdNumber_imu_acc_z"/>
+       </item>
+       <item row="2" column="2">
+        <widget class="QLCDNumber" name="lcdNumber_imu_angular_y"/>
+       </item>
+       <item row="1" column="3">
+        <widget class="QLCDNumber" name="lcdNumber_imu_mag_x"/>
+       </item>
+       <item row="0" column="3">
+        <widget class="QLabel" name="label_imu_mag">
+         <property name="font">
+          <font>
+           <pointsize>14</pointsize>
+           <weight>75</weight>
+           <italic>true</italic>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>Magnetometer [mG]</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="label_imu_y">
+         <property name="font">
+          <font>
+           <pointsize>20</pointsize>
+           <weight>75</weight>
+           <italic>true</italic>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>Y</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QLabel" name="label_imu_z">
+         <property name="font">
+          <font>
+           <pointsize>20</pointsize>
+           <weight>75</weight>
+           <italic>true</italic>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>Z</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="2">
+        <widget class="QLabel" name="label_imu_angular">
+         <property name="font">
+          <font>
+           <pointsize>14</pointsize>
+           <weight>75</weight>
+           <italic>true</italic>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>Angular Rate [deg/s]</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="3">
+        <widget class="QLCDNumber" name="lcdNumber_imu_mag_y"/>
+       </item>
+       <item row="3" column="2">
+        <widget class="QLCDNumber" name="lcdNumber_imu_angular_z"/>
+       </item>
+       <item row="3" column="3">
+        <widget class="QLCDNumber" name="lcdNumber_imu_mag_z"/>
+       </item>
+       <item row="0" column="1">
+        <widget class="QLabel" name="label_imu_acc">
+         <property name="font">
+          <font>
+           <pointsize>14</pointsize>
+           <weight>75</weight>
+           <italic>true</italic>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>Acceleration [g]</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="1" colspan="3">
+        <widget class="QLCDNumber" name="lcdNumber_imu_update"/>
+       </item>
+       <item row="4" column="0">
+        <widget class="QLabel" name="label_imu_update">
+         <property name="font">
+          <font>
+           <pointsize>12</pointsize>
+           <weight>75</weight>
+           <italic>true</italic>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>Update Rate [Hz]</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tab_5">
+      <attribute name="title">
+       <string>Volt Measurement</string>
+      </attribute>
+      <layout class="QGridLayout" name="gridLayout_5">
+       <item row="5" column="2">
+        <widget class="QLabel" name="label_sensors_cell4">
+         <property name="text">
+          <string>Cell 4 [mV]</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="label_volt_actuator_overall">
+         <property name="text">
+          <string>Overall [mV]</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="2">
+        <widget class="QLabel" name="label_sensors_cell2">
+         <property name="text">
+          <string>Cell 2 [mV]</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="2">
+        <widget class="QLabel" name="label_sensors_cell1">
+         <property name="text">
+          <string>Cell 1 [mV]</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="3">
+        <widget class="QLCDNumber" name="lcdNumber_sensors_cell1"/>
+       </item>
+       <item row="4" column="2">
+        <widget class="QLabel" name="label_sensors_cell3">
+         <property name="text">
+          <string>Cell 3 [mV]</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="3">
+        <widget class="QLCDNumber" name="lcdNumber_sensors_cell2"/>
+       </item>
+       <item row="7" column="2">
+        <widget class="QLabel" name="label_sensors_cell6">
+         <property name="text">
+          <string>Cell 6 [mV]</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QLCDNumber" name="lcdNumber_volt_actuator_overall"/>
+       </item>
+       <item row="6" column="2">
+        <widget class="QLabel" name="label_sensors_cell5">
+         <property name="text">
+          <string>Cell 5 [mV]</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="3">
+        <widget class="QLCDNumber" name="lcdNumber_volt_sensors_overall"/>
+       </item>
+       <item row="9" column="2" colspan="2">
+        <widget class="QLCDNumber" name="lcdNumber_volt_update"/>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="label_actuator_cell1">
+         <property name="text">
+          <string>Cell 1 [mV]</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0">
+        <widget class="QLabel" name="label_volt_actuator">
+         <property name="font">
+          <font>
+           <pointsize>14</pointsize>
+           <weight>75</weight>
+           <italic>true</italic>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>Actuator</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="2" colspan="2">
+        <widget class="QLabel" name="label_volt_sensors">
+         <property name="font">
+          <font>
+           <pointsize>14</pointsize>
+           <weight>75</weight>
+           <italic>true</italic>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>Sensors/Pc</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QLabel" name="label_actuator_cell2">
+         <property name="text">
+          <string>Cell 2 [mV]</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QLCDNumber" name="lcdNumber_actuator_cell1"/>
+       </item>
+       <item row="3" column="1">
+        <widget class="QLCDNumber" name="lcdNumber_actuator_cell2"/>
+       </item>
+       <item row="9" column="0" colspan="2">
+        <widget class="QLabel" name="label_volt_update">
+         <property name="text">
+          <string>Update Rate [Hz]</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="2">
+        <widget class="QLabel" name="label_volt_sensors_overall">
+         <property name="text">
+          <string>Overall [mV]</string>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="3">
+        <widget class="QLCDNumber" name="lcdNumber_sensors_cell6"/>
+       </item>
+       <item row="4" column="3">
+        <widget class="QLCDNumber" name="lcdNumber_sensors_cell3"/>
+       </item>
+       <item row="5" column="3">
+        <widget class="QLCDNumber" name="lcdNumber_sensors_cell4"/>
+       </item>
+       <item row="6" column="3">
+        <widget class="QLCDNumber" name="lcdNumber_sensors_cell5"/>
+       </item>
+       <item row="8" column="0" colspan="4">
+        <widget class="Line" name="line">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tab_6">
+      <attribute name="title">
+       <string>US/LS Visual</string>
+      </attribute>
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <widget class="uswidget" name="us_widget" native="true">
+         <layout class="QGridLayout" name="gridLayout_6">
+          <item row="1" column="0" colspan="4">
+           <widget class="Line" name="line_2">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_ls_samples">
+            <property name="text">
+             <string>samples per scan</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QLCDNumber" name="lcdNumber_ls_samples"/>
+          </item>
+          <item row="0" column="3">
+           <widget class="QDoubleSpinBox" name="doubleSpinBox_ls_max_dist"/>
+          </item>
+          <item row="0" column="2">
+           <widget class="QLabel" name="label_ls_max_dist">
+            <property name="text">
+             <string>laser scanner scaling factor</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <spacer name="verticalSpacer">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>uswidget</class>
+   <extends>QWidget</extends>
+   <header>uswidget.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

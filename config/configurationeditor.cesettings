@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<settings xmlns="adtf/xsd/cesettings">
+  <file_version>
+    <major>1</major>
+    <minor>0</minor>
+  </file_version>
+  <name/>
+  <plugin_settings>
+    <plugin_directories>
+      <plugin_directory>
+        <url>$(ADTF_DIR)/bin/*.adtfplugin</url>
+      </plugin_directory>
+      <plugin_directory>
+        <url>$(ADTF_DIR)/bin/debug/*.adtfplugin</url>
+      </plugin_directory>
+      <plugin_directory>
+        <url>$(ADTF_DIR)/src/examples/bin/*.adtfplugin</url>
+      </plugin_directory>
+      <plugin_directory>
+        <url>$(ADTF_DIR)/src/examples/bin/debug/*.adtfplugin</url>
+      </plugin_directory>
+      <plugin_directory>
+        <url>$(ADTF_DIR)/addons/*/bin/*.adtfplugin</url>
+      </plugin_directory>
+      <plugin_directory>
+        <url>$(ADTF_DIR)/addons/*/bin/debug/*.adtfplugin</url>
+      </plugin_directory>
+      <plugin_directory>
+        <url>$(ADTF_DIR)/addons/*/src/examples/bin/*.adtfplugin</url>
+      </plugin_directory>
+      <plugin_directory>
+        <url>$(ADTF_DIR)/addons/*/src/examples/bin/debug/*.adtfplugin</url>
+      </plugin_directory>
+      <plugin_directory>
+        <url>/home/aadc/AADC/_install/linux64/bin/*.adtfplugin</url>
+      </plugin_directory>
+      <plugin_directory>
+        <url>/home/aadc/AADC/_install/linux64/bin/debug/*.adtfplugin</url>
+      </plugin_directory>
+    </plugin_directories>
+  </plugin_settings>
+  <graph_settings>
+    <touch_compatible>false</touch_compatible>
+  </graph_settings>
+  <launch_settings>
+    <launchers>
+      <launcher>
+        <name>via GUI Control</name>
+        <executable>xterm -e "$(ADTF_DIR)/bin/adtf_guicontrol" -l="$(ADTF_SESSION_FILENAME)" -console -launcher=adtf</executable>
+        <workingdirectory>$(ADTF_DIR)/bin</workingdirectory>
+      </launcher>
+      <launcher>
+        <name>via GUI Control (Debug)</name>
+        <executable>xterm -e "$(ADTF_DIR)/bin/adtf_guicontrol" -l="$(ADTF_SESSION_FILENAME)" -console -launcher=adtf_debug</executable>
+        <workingdirectory>$(ADTF_DIR)/bin</workingdirectory>
+      </launcher>
+      <launcher>
+        <name>via ADTF Control</name>
+        <executable>xterm -e "$(ADTF_DIR)/bin/adtf_control" -l="$(ADTF_SESSION_FILENAME)" -console -launcher=adtf</executable>
+        <workingdirectory>$(ADTF_DIR)/bin</workingdirectory>
+      </launcher>
+      <launcher>
+        <name>via ADTF Control (Debug)</name>
+        <executable>xterm -e "$(ADTF_DIR)/bin/adtf_control" -l="$(ADTF_SESSION_FILENAME)" -console -launcher=adtf_debug</executable>
+        <workingdirectory>$(ADTF_DIR)/bin</workingdirectory>
+      </launcher>
+      <launcher>
+        <name>in Console</name>
+        <executable>xterm -e "$(ADTF_DIR)/bin/adtf_launcher" -session="$(ADTF_SESSION_FILENAME)" -console -run</executable>
+        <workingdirectory>$(ADTF_DIR)/bin</workingdirectory>
+      </launcher>
+      <launcher>
+        <name>in Console (Debug)</name>
+        <executable>xterm -e "$(ADTF_DIR)/bin/debug/adtf_launcher" -session="$(ADTF_SESSION_FILENAME)" -console -run</executable>
+        <workingdirectory>$(ADTF_DIR)/bin/debug</workingdirectory>
+      </launcher>
+    </launchers>
+  </launch_settings>
+  <last_opened_project>/home/aadc/AADC/config/LiveVisualization/LiveVisualization.adtfproject</last_opened_project>
+</settings>
