@@ -1,0 +1,21 @@
+
+ 
+ /**
+  * \page Build How to build sources (Windows)
+  * 
+  * -# Compilers \n
+  * First make sure you have the needed Compiler for your platform and ADTF Version
+  * -# SDKs \n
+  * First make sure you have the needed SDKs  
+  * -# Build scripts \n
+  * Run the script "build_base_win.bat". That will use a CMake Projekt to create a Visual Studio 2010 project. 
+  * "build_base_win.bat" will create a project with the AADC Base Filters, 
+  * "build_demo_win.bat" will create a project with the AADC Demo Filters and 
+  * "build_user_win.bat" will create a project with the AADC User Filters.
+  * -# Open the project \n 
+  * The project is located at
+  * "\_build_base\aadc_base.sln" and can be opened with Visual Studio ("\_build_user\aadc_user.sln", "\_build_demo\aadc_demo.sln" in the other cases)
+  * -# Build the sources \n
+  * When you build the solution the sources are compiled and build. Then you can select the target INSTALL which will copy all the binaries 
+  * and other needed dependencies to the folder "\_bin"
+  */

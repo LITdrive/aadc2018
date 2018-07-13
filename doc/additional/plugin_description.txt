@@ -1,0 +1,39 @@
+/*! @defgroup Groupname Group Nacme
+*  @{
+*  
+* Text here
+*  
+*  \image html .PNG "Plugin Fisheye Undistortion"
+*
+* \b Dependencies \n
+* This plugin needs the following libraries:
+* \li OpenCV  v.3.2.0
+*
+* <b> Filter Properties</b>
+* <table>
+* <tr><th>Property<th>Description<th>Default
+* <tr><td><td><td>
+* </table>
+*
+* <b> Output Pins</b>
+* <table>
+* <tr><th>Pin<th>Description<th>MajorType<th>SubType<th>Details* 
+* <tr><td><td><td><td>
+*</table>
+*
+* <b> Input Pins</b>
+* <table>
+* <tr><th>Pin<th>Description<th>MajorType<th>SubType
+* <tr><td><td><td><td>
+* </table>
+*    
+* <b>Plugin Details</b>
+* <table>
+* <tr><td>Path<td>
+* <tr><td>Filename<td>aadc_.plb
+* <tr><td>Version<td>1.0.0
+* </table>
+*    
+*/
+
+/*! @} */ // end of group

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<graph_file xmlns="adtf/xsd/graph">
+  <file_version>
+    <major>1</major>
+    <minor>0</minor>
+  </file_version>
+  <name>arduino_com_graph</name>
+  <graphs/>
+  <streaming_graphs/>
+</graph_file>

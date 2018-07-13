@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<layout_file xmlns="adtf/xsd/layout">
+  <file_version>
+    <major>1</major>
+    <minor>0</minor>
+  </file_version>
+  <layout_packages>
+    <layout_package>
+      <name>default</name>
+      <layout_sets/>
+      <graph_additionals/>
+    </layout_package>
+  </layout_packages>
+</layout_file>
