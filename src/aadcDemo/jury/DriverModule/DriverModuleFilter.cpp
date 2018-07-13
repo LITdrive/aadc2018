@@ -87,13 +87,15 @@ tResult DriverModule::Init(tInitStage eStage)
     RETURN_IF_FAILED(_runtime->GetObject(m_pClock));
     if (eStage == StageFirst)
     {
-        RETURN_IF_FAILED(m_serverSocket.Open(m_propTCPPort, cServerSocket::SS_Exclusive));
+        RETURN_IF_FAILED_DESC(m_serverSocket.Open(m_propTCPPort, cServerSocket::SS_Exclusive),
+            cString::Format("Could not open server socket with port %d", static_cast<tInt>(m_propTCPPort)));
         LOG_INFO(cString::Format("Server Socket was opened with port %d", static_cast<tInt>(m_propTCPPort)));
-        RETURN_IF_FAILED(m_serverSocket.Listen());
+        RETURN_IF_FAILED_DESC(m_serverSocket.Listen(),
+            cString::Format("Could not listen to port %d",static_cast<tInt>(m_propTCPPort)));
         LOG_INFO(cString::Format("Server Socket now listens on port %d", static_cast<tInt>(m_propTCPPort)));
         if (m_serverSocket.IsConnected(static_cast<tTimeStamp>(5e5)))
         {
-            RETURN_IF_FAILED(m_serverSocket.Accept(m_streamSocket));
+            RETURN_IF_FAILED_DESC(m_serverSocket.Accept(m_streamSocket),"Could not access Server socket");
             m_clientConnectionEstablished = tTrue;
             LOG_INFO("TCP Connection was established");
         }

@@ -15,11 +15,31 @@ THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS AS IS AND ANY EXPRESS OR I
 
 ###: ADTF Source Package:
 
-Version:		1.0.1
-Date:			2018.06.08
+Version:        1.0.2
+Date:           2018.06.29
 
 
 ###: changes:
-Version:		1.0.1
-Date:			2018.06.08
-*	cleared obsolete files
+Version:        1.0.2 
+Date:           2018.06.29
+*   fixed arduino logging
+*   camera calibration: change type for number of frames to use for calibration from tInt8 to tUInt64 to prevent overflow errors, i.e. negative number of datasets to use
+*   lane detection: adding functionality to show ROI, detection lines and min/maxLineWidth on output image
+*   converter wheels: update property naming and fix missing direction assignment that backward speed is negative
+*   wheel speed controller: update default values and property naming
+*   object detection: using getNextSample instead of >> operator
+*   fisheye undistortion: added opencv try...catch
+*   cmake: moved ADTF_DIR and QT_DIR from scripts to AADCConfig.cmake
+*   universal camera: modified default resolution
+*   init tScanArray of tLaserScannerData with zeros
+*   moved positioning into src/aadcBase and fixed cid naming
+*   added new adtfproject config/UserConfiguration
+*   extended build scripts for debug and release separately
+*   default TCP Port for jury communication must not be 1000
+*   fixed Bug in Map Visualization in reading xodr File
+
+
+Version:        1.0.1
+Date:           2018.06.08
+*   cleared obsolete files
+*   fixed some configuration issues

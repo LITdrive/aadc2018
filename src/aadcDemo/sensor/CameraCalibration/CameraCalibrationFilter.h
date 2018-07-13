@@ -108,7 +108,7 @@ private:
     /*! The calib delay */
     property_variable<tFloat32> m_calibDelay               = 0.5f;
     /*! The calib datasets to use */
-    property_variable<tInt32>   m_calibDatasetsToUse       = 10;
+    property_variable<tUInt64>   m_calibDatasetsToUse       = 10;
     /*! Size of the calib square */
     property_variable<tFloat32> m_calibSquareSize          = 0.025f;
     /*! The calib aspect ration */

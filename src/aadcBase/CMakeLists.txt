@@ -20,7 +20,6 @@ if(NOT AADC_BUILD_ALL_IN_ONE)
 
 endif(NOT AADC_BUILD_ALL_IN_ONE)
 
-find_package(ADTF REQUIRED)
 
 #-------General------------
 
@@ -33,6 +32,9 @@ else(AADC_FOUND)
    message(FATAL_ERROR "-- AADC not found")
 endif (AADC_FOUND)
 
+find_package(ADTF REQUIRED)
+message(STATUS "Found ADTF: ${ADTF_VERSION}")
+
 #--------------add private macros-----------------
 include(${AADC_DIR}/AADC_PRIVATE.cmake)
 include(${AADC_DIR}/AADCConfigVersion.cmake)
@@ -43,5 +45,5 @@ include_directories(${CMAKE_INSTALL_INCLUDE})
 
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/../../doc doc)
 add_subdirectory(arduino)
-
+add_subdirectory(position)
 

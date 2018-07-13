@@ -239,6 +239,9 @@ tResult cLaserScanner::Transmit(const std::vector<tPolarCoordiante>& scan)
 
             tPolarCoordiante* pCoordinates = reinterpret_cast<tPolarCoordiante*>(oCodec.GetElementAddress(m_ddlLSDataId.scanArray));
 
+            //init array with zeros
+            memset(pCoordinates, 0, LASER_SCANNER_COUNT * sizeof(tPolarCoordiante));
+
             tUInt32 nIdx = 0;
             for (const tPolarCoordiante& pPolarCoordinate : scan)
             {

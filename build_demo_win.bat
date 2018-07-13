@@ -7,19 +7,6 @@ echo CMake found
 REM Set Compiler String
 set VS_STRING=Visual Studio 14 2015 Win64
 
-if "%ADTF3_DIR%" == "" (
-	set ADTF3_DIR=C:/SDK/adtf/3.3.1
-) else (
-	set "ADTF3_DIR=%ADTF3_DIR:\=/%"
-	REM replace backslashes with slashes
-)
-
-REM Set QT Dir
-set QT_DIR=C:/SDK/qt/5.9.5/msvc2015_64
-set QMAKE_EXE=%QT_DIR%/bin/qmake.exe
-set ADTF_ENABLE_QT=true
-if not exist "%QMAKE_EXE%" echo Unable to find qmake executable at "%QMAKE_EXE%" & pause & exit /b
-
 
 FOR /F "tokens=*" %%i in ('cd') do set SOURCE_DIR=%%i
 echo Source directory is "%SOURCE_DIR%"
@@ -35,7 +22,7 @@ cd "%BUILD_DIR%"
 
 
 
-cmake -G "%VS_STRING%" -DADTF_DIR="%ADTF3_DIR%" -DQT_DIR="%QT_DIR%" "%SOURCE_DIR%" -DCMAKE_BUILD_TYPE=RelWithDebInfo ../src/aadcDemo
+cmake -G "%VS_STRING%"  "%SOURCE_DIR%" -DCMAKE_BUILD_TYPE=RelWithDebInfo ../src/aadcDemo
 if errorlevel 1 pause & exit /b
 
 echo.

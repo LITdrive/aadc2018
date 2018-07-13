@@ -1,19 +1,5 @@
 #!/bin/sh
 
-# Parameter für Qt-Pfad
-
-QT_DIR=/opt/qt/5.9.0/5.9/gcc_64/
-ADTF_DIR=/opt/ADTF/3.3.1/
-
-## if commandline --qt-dir
-##  QT_DIR=from commandline
-## fi
-
-## if commandline --adtf-dir
-##  ADTF_DIR=from commandline
-## fi
-
-QMAKE_PATH=$QT_DIR/bin/qmake
 
 if which cmake > /dev/null; then
     echo "cmake found"
@@ -22,44 +8,49 @@ else
     exit 1
 fi
 
-if [ -f $QMAKE_PATH ]; then
-    echo "qmake found."
-else
-    echo "qmake not found in $QMAKE_PATH. Check the path to Qt or set it as commandline parameter."
-    exit 1
-
-fi
-
-if [ -d $ADTF_DIR ]; then
-    echo "ADTF dir found."
-else
-    echo "ADTF dir not found in $ADTF_DIR. Check the path to ADTF or set it as commandline parameter."
-    exit 1
-fi
-
 ## if commandline cleanup before build
 ##     rm -rf _build_user
 ## fi
 
-if [ -d ./_build_user ]; then
-    echo "Build exists. Will using it."
+## configure debug
+
+if [ -d ./_build_user_debug ]; then
+    echo "Debug build exists. Will using it."
 else
-    mkdir ./_build_user
-    echo "Creating build directory."
+    mkdir ./_build_user_debug
+    echo "Creating build directory _build_user_debug."
 fi
 
-echo "entering build directory"
-cd ./_build_user
+cd ./_build_user_debug
 
-echo "generate cmake config"
-cmake -G "Unix Makefiles" -DADTF_DIR=$ADTF_DIR -DCMAKE_BUILD_TYPE=RelWithDebInfo ../src/aadcUser
+echo "Generate cmake config debug"
+cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Debug ../src/aadcUser
 
-echo "build ..."
-cmake --build . --target install --config Debug -- -j4
+## build debug
+
+echo "Build debug ..."
+cmake --build . --target install -- -j4
 
 cd ..
 
 
+## configure release
+if [ -d ./_build_user ]; then
+    echo "Build exists. Will using it."
+else
+    mkdir ./_build_user
+    echo "Creating build directory _build_user"
+fi
 
+echo "Entering build directory"
+cd ./_build_user
 
+echo "generate cmake config"
+cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release ../src/aadcUser
 
+## build release
+
+echo "Build release ..."
+cmake --build . --target install -- -j4
+
+cd ..

@@ -32,9 +32,9 @@ struct calibrationSettings
     /*! The size of a square in your defined unit (point, millimeter,etc) */
     float squareSize;
     /*! the minimum number of frames which are used for actual calibration */
-    tInt8 nrFrames;
+    tUInt64 nrFrames;
 	/*! the minimum number of frames which are used for inital calibration */
-	tInt8 nrFramesDataAq;
+    tUInt64 nrFramesDataAq;
     /*! The aspect ratio */
     float aspectRatio;
     /*! the delay which must be between frames used for calibration (to secure that there is a difference in the images)*/

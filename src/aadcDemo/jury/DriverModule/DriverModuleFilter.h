@@ -67,7 +67,7 @@ private:
     property_variable<tBool> m_propEnableConsoleOutput = tFalse;
 
     /*! The property TCP port */
-    property_variable<tInt>    m_propTCPPort = 1000;
+    property_variable<tInt>    m_propTCPPort = 1234;
 
 
     /*! sample writer of The output driver structure */

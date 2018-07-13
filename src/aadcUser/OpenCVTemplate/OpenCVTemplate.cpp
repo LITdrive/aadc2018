@@ -28,7 +28,7 @@ cOpenCVTemplate::cOpenCVTemplate()
 
     //create and set inital input format type
     m_sImageFormat.m_strFormatName = ADTF_IMAGE_FORMAT(RGB_24);
-    adtf::ucom::object_ptr<IStreamType> pType = adtf::ucom::make_object_ptr<cStreamType>(stream_meta_type_image());
+    const adtf::ucom::object_ptr<IStreamType> pType = adtf::ucom::make_object_ptr<cStreamType>(stream_meta_type_image());
     set_stream_type_image_format(*pType, m_sImageFormat);
 
     //Register input pin
@@ -64,7 +64,7 @@ tResult cOpenCVTemplate::Process(tTimeStamp tmTimeOfTrigger)
         {
             //create a opencv matrix from the media sample buffer
             Mat inputImage = Mat(cv::Size(m_sImageFormat.m_ui32Width, m_sImageFormat.m_ui32Height),
-                                   CV_8UC3, (uchar*) pReadBuffer->GetPtr());
+                                   CV_8UC3, const_cast<unsigned char*>(static_cast<const unsigned char*>(pReadBuffer->GetPtr())));
 
             //Do the image processing and copy to destination image buffer
             Canny(inputImage, outputImage, 100, 200);// Detect Edges

@@ -38,7 +38,7 @@ private:
 
 
     /*! The template data sample factory */
-    adtf::mediadescription::cSampleCodecFactory m_TemplateDataSampleFactory;
+    adtf::mediadescription::cSampleCodecFactory m_templateDataSampleFactory;
 
     /*! Reader of an InPin. */
     cPinReader m_oReader;

@@ -172,42 +172,45 @@ tResult cObjectDetection::Configure()
 tResult cObjectDetection::Process(tTimeStamp tmTimeOfTrigger)
 {
     object_ptr<const ISample> pReadSample;
-    m_oReader >> pReadSample;
-
+ 
     //the result for classification
     Mat outputImage;
     cString className;
     double classProb = 0;
     tUInt64 classId = 0;
 
-    object_ptr_shared_locked<const ISampleBuffer> pReadBuffer;
-    //lock read buffer
-    if (IS_OK(pReadSample->Lock(pReadBuffer)))
+    if (IS_OK(m_oReader.GetNextSample(pReadSample)))
     {
-        //create a opencv matrix from the media sample buffer
-        Mat inputImage = Mat(cv::Size(m_sCurrentFormat.m_ui32Width, m_sCurrentFormat.m_ui32Height),
-            CV_8UC3, (uchar*)pReadBuffer->GetPtr());
-
-        try
+        object_ptr_shared_locked<const ISampleBuffer> pReadBuffer;
+        //lock read buffer
+        if (IS_OK(pReadSample->Lock(pReadBuffer)))
         {
-            Mat oBlob = blobFromImage(inputImage, 1.0f, Size(224, 224),
-                Scalar(104, 117, 123), false);
+            //create a opencv matrix from the media sample buffer
+            Mat inputImage = Mat(cv::Size(m_sCurrentFormat.m_ui32Width, m_sCurrentFormat.m_ui32Height),
+                CV_8UC3, (uchar*)pReadBuffer->GetPtr());
 
-            if (!m_oNet.empty() && oBlob.size > 0)
+            try
             {
-                m_oNet.setInput(oBlob, "data");        //set the network input
-                Mat prob = m_oNet.forward("prob");
-                getMaxClass(prob, classId, classProb);//find the best class
-                className = m_classNames.at(classId);
-                //LOG_INFO("Best class: #%d '%s; Prob: %d'", classId, className.GetPtr(), (tUInt32)(classProb * 100));               
-            }
-        }
-        catch (cv::Exception ex)
-        {
-            LOG_ERROR(ex.msg.c_str());
-        }
+                Mat oBlob = blobFromImage(inputImage, 1.0f, Size(224, 224),
+                    Scalar(104, 117, 123), false);
 
-        outputImage = inputImage.clone();
+                if (!m_oNet.empty() && oBlob.size > 0)
+                {
+                    m_oNet.setInput(oBlob, "data");        //set the network input
+                    Mat prob = m_oNet.forward("prob");
+                    getMaxClass(prob, classId, classProb);//find the best class
+                    className = m_classNames.at(classId);
+                    //LOG_INFO("Best class: #%d '%s; Prob: %d'", classId, className.GetPtr(), (tUInt32)(classProb * 100));               
+                }
+            }
+            catch (cv::Exception ex)
+            {
+                const char* err_msg = ex.what();
+                LOG_ERROR(cString("OpenCV exception caught: ") + err_msg);
+            }
+
+            outputImage = inputImage.clone();
+        }
     }
 
     //send the best result in a media sample

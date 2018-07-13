@@ -34,6 +34,9 @@
       <plugin_directory>
         <url>/home/aadc/AADC/_install/linux64/bin/*.adtfplugin</url>
       </plugin_directory>
+      <plugin_directory>
+        <url>/home/aadc/AADC/_install/linux64/bin/debug/*.adtfplugin</url>
+      </plugin_directory>
     </plugin_directories>
   </plugin_settings>
   <graph_settings>

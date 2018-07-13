@@ -7,13 +7,28 @@ endif(AADC_FOUND)
 set(AADC_OPENCV_FOUND FALSE)
 set(AADC_PYLON_FOUND FALSE)
 set(AADC_BOOST_FOUND FALSE)
-
+#------------------------------------------------------
+#-------ADTF Dir------------------------------------------
+#-------------------------------------------------------
+if (WIN32)
+	#either use env var or set dir here
+	if (ADTF3_DIR)
+		set (ADTF_DIR "C:/SDK/adtf/3.3.1")
+	else (ADTF3_DIR)
+		set (ADTF_DIR "$ENV{ADTF3_DIR}")
+	endif (ADTF3_DIR)
+else(WIN32)
+	set (ADTF_DIR "/opt/ADTF/3.3.1")
+endif(WIN32)
 
 #------------------------------------------------------
 #-------QT Dir------------------------------------------
 #-------------------------------------------------------
-# already set in sh/bat script
-message(STATUS "Qt Dir is ${Qt_DIR}")
+if (WIN32)
+	set (QT_DIR "C:/SDK/qt/5.9.5/msvc2015_64")    
+else(WIN32)
+	set (QT_DIR "/opt/qt/5.9.0/5.9/gcc_64")
+endif(WIN32)
 
 
 #------------------------------------------------------

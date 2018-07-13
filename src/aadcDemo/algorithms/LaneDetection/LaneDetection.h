@@ -37,13 +37,13 @@ private:
     /*! Offset of the ROI in the Stream*/
     adtf::base::property_variable<int> m_ROIOffsetX = 0;
     /*! Offset of the ROI in the Stream*/
-    adtf::base::property_variable<int> m_ROIOffsetY = 500;
+    adtf::base::property_variable<int> m_ROIOffsetY = 600;
     /*! Width of the ROI*/
     adtf::base::property_variable<int> m_ROIWidth = 1280;
     /*! Height of the ROI*/
     adtf::base::property_variable<int> m_ROIHeight = 200;
     /*! number of detection lines searched in ROI */
-    adtf::base::property_variable<int> m_detectionLines = 10;
+    adtf::base::property_variable<int> m_detectionLines = 20;
     /*! Minimum Line Width in Pixel */
     adtf::base::property_variable<int> m_minLineWidth = 10;
     /*! Maximum Line Width in Pixel */
@@ -52,6 +52,7 @@ private:
     adtf::base::property_variable<int> m_minLineContrast = 50;
     /*! Threshold for image binarization */
     adtf::base::property_variable<int> m_thresholdImageBinarization = 180;
+
 
     //Pins
     /*! Reader for the video. */
@@ -68,6 +69,8 @@ private:
     /*! The clock */
     object_ptr<adtf::services::IReferenceClock> m_pClock;
 
+    /*! lane detection roi bounding rectangle */
+    cv::Rect m_LaneRoi = cv::Rect();
 
 public:
     /*! Default constructor. */
@@ -127,6 +130,14 @@ private:
     tResult ChangeType(adtf::streaming::cDynamicSampleReader& inputPin,
         const adtf::streaming::ant::IStreamType& oType);
 
+    /*!
+    * Checks if the ROI is within the Image boundaries
+    *
+    *
+    *
+    * \return  Standard Result Code.
+    */
+    tResult checkRoi(void);
 
 };
 

@@ -27,9 +27,9 @@ cTemplateFilter::cTemplateFilter()
 {
     //DO NOT FORGET TO LOAD MEDIA DESCRIPTION SERVICE IN ADTF3 AND CHOOSE aadc.description
     object_ptr<IStreamType> pTypeTemplateData;
-    if IS_OK(adtf::mediadescription::ant::create_adtf_default_stream_type_from_service("tTemplateData", pTypeTemplateData, m_TemplateDataSampleFactory))
+    if IS_OK(adtf::mediadescription::ant::create_adtf_default_stream_type_from_service("tTemplateData", pTypeTemplateData, m_templateDataSampleFactory))
     {
-        (adtf_ddl::access_element::find_index(m_TemplateDataSampleFactory, cString("f32Value"), m_ddlTemplateDataId.f32Value));
+        adtf_ddl::access_element::find_index(m_templateDataSampleFactory, cString("f32Value"), m_ddlTemplateDataId.f32Value);
     }
     else
     {
@@ -56,7 +56,7 @@ tResult cTemplateFilter::Process(tTimeStamp tmTimeOfTrigger)
 
     if (IS_OK(m_oReader.GetLastSample(pReadSample)))
     {
-        auto oDecoder = m_TemplateDataSampleFactory.MakeDecoderFor(*pReadSample);
+        auto oDecoder = m_templateDataSampleFactory.MakeDecoderFor(*pReadSample);
 
         RETURN_IF_FAILED(oDecoder.IsValid());
 
@@ -73,7 +73,7 @@ tResult cTemplateFilter::Process(tTimeStamp tmTimeOfTrigger)
     if (IS_OK(alloc_sample(pWriteSample)))
     {
 
-        auto oCodec = m_TemplateDataSampleFactory.MakeCodecFor(pWriteSample);
+        auto oCodec = m_templateDataSampleFactory.MakeCodecFor(pWriteSample);
 
         RETURN_IF_FAILED(oCodec.SetElementValue(m_ddlTemplateDataId.f32Value, outputData));
 

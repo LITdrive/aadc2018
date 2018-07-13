@@ -32,7 +32,7 @@ cConverterWheels::cConverterWheels()
     //Register Properties
     RegisterPropertyVariable("wheel circumference [m]", m_f32wheelCircumference);
     RegisterPropertyVariable("filter constant of first order", m_f32FilterConstantfirstOrder);
-    RegisterPropertyVariable("enables or filtering enabled", m_bEnableFiltering);
+    RegisterPropertyVariable("enable filtering", m_bEnableFiltering);
     RegisterPropertyVariable("plausibilization via direction indicator enable", m_bEnableDirectionPlausibilization);
     RegisterPropertyVariable("direction derived from speed controller actuator value", m_bEnableSpeedControllerDirection);
     RegisterPropertyVariable("deadband for speed controll direction", m_f32SpeedControllerDeadband);
@@ -65,7 +65,7 @@ cConverterWheels::cConverterWheels()
         LOG_INFO("No mediadescription for tSignalValue found!");
     }
     Register(m_oInputSpeedController, "speed_control", pTypeSignalValue);
-    Register(m_oOutputCarSpeed, "vehicle_Speed", pTypeSignalValue);
+    Register(m_oOutputCarSpeed, "vehicle_speed", pTypeSignalValue);
     Register(m_oOutputDistanceOverall, "distance_overall", pTypeSignalValue);
     Register(m_oOutputDistanceLastSample, "distance_last_sample", pTypeSignalValue);
 }
@@ -278,21 +278,21 @@ tResult cConverterWheels::TransmitSamples()
         if (m_f32LastCalculatedSpeedRight < CW_MIN_LIMIT_IGNORE)
         {
             f32speed = m_f32LastCalculatedSpeedLeft;
-            // if (m_tLastStructLeft.i8WheelDir == 1)
-            //     f32speed = f32speed * -1;
+            if (m_tLastStructLeft.i8WheelDir == 1)
+                 f32speed = f32speed * -1;
         }
         else if (m_f32LastCalculatedSpeedLeft < CW_MIN_LIMIT_IGNORE)
         {
             f32speed = m_f32LastCalculatedSpeedRight;
-            //if (m_tLastStructRight.i8WheelDir == 1)
-            //    f32speed = f32speed * -1;
+            if (m_tLastStructRight.i8WheelDir == 1)
+                f32speed = f32speed * -1;
         }
         i32WarningCounter++;
         if (i32WarningCounter % 200 == 0)
             LOG_WARNING(cString::Format("Wheel speed from left and right side are very different. Please check cables and connections! Right: %f, Left: %f, Result: %f",
                 m_f32LastCalculatedSpeedRight, m_f32LastCalculatedSpeedLeft, f32speed));
     }
-    //else
+    else
     {
         // if direction is backwards speed should be negative
         if (m_tLastStructLeft.i8WheelDir == 1 && m_tLastStructRight.i8WheelDir == 1)

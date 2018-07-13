@@ -22,7 +22,6 @@ if(NOT AADC_BUILD_ALL_IN_ONE)
 
 endif(NOT AADC_BUILD_ALL_IN_ONE)
 
-find_package(ADTF REQUIRED)
 #-------General------------
 
 set(AADC_FOUND FALSE)
@@ -33,6 +32,9 @@ if (AADC_FOUND)
 else(AADC_FOUND)
    message(FATAL_ERROR "-- AADC not found")
 endif (AADC_FOUND)
+
+find_package(ADTF REQUIRED)
+message(STATUS "Found ADTF: ${ADTF_VERSION}")
 
 #--------------add private macros-----------------
 include(${AADC_DIR}/AADC_PRIVATE.cmake)
@@ -51,7 +53,7 @@ add_subdirectory(jury)
 add_subdirectory(algorithms)
 add_subdirectory(sensor)
 add_subdirectory(markers)
-add_subdirectory(position)
+
 
 
 

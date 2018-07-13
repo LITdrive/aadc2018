@@ -84,28 +84,28 @@ private:
     // PID-Controller values
     //
     /*! proportional factor for PID Controller */
-    property_variable<tFloat64>    m_f64PIDKp = 1.1;
+    property_variable<tFloat64>    m_f64PIDKp = 10;
     /*! integral factor for PID Controller */
-    property_variable<tFloat64>    m_f64PIDKi = 0.001;
+    property_variable<tFloat64>    m_f64PIDKi = 0.85;
     /*! differential factor for PID Controller */
-    property_variable<tFloat64>    m_f64PIDKd = 1;
+    property_variable<tFloat64>    m_f64PIDKd = 0.01;
     /*! the sampletime for the pid controller */
     property_variable<tFloat64> m_f64PIDSampleTime = 0.025;
     /*! the minimum output value for the controller */
-    property_variable<tFloat64> m_f64PIDMinimumOutput = -5;
+    property_variable<tFloat64> m_f64PIDMinimumOutput = -20;
     /*! the maximum output value for the controller */
-    property_variable<tFloat64> m_f64PIDMaximumOutput = 5;
+    property_variable<tFloat64> m_f64PIDMaximumOutput = 20;
     /*! The property for show debug */
     property_variable<tBool>       m_bShowDebug = tFalse;
 
     /*! input factor for PT1 */
     property_variable<tFloat64> m_f64PT1OutputFactor = 1;
     /*! time constant for pt1 controller */
-    property_variable<tFloat64> m_f64PT1TimeConstant = 1.5;
+    property_variable<tFloat64> m_f64PT1TimeConstant = 1;
     /*! the set point is multiplied with this factor, otherwise the set point is not reached by the controller. */
     property_variable<tFloat64> m_f64PT1CorrectionFactor = 1.15;
     /*! gain factor for PT1 controller */
-    property_variable<tFloat64>    m_f64PT1Gain = 6;
+    property_variable<tFloat64>    m_f64PT1Gain = 14;
     /*! defines whether PID or PT1 is used */
     property_variable<tInt32> m_i32ControllerMode = 2;
 

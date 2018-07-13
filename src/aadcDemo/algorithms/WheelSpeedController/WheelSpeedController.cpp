@@ -40,8 +40,8 @@ cWheelSpeedController::cWheelSpeedController()
     RegisterPropertyVariable("integral factor for PID Controller", m_f64PIDKi                    );
     RegisterPropertyVariable("differential factor for PID Controller", m_f64PIDKd                );
     RegisterPropertyVariable("sampletime for the pid controller [ms]", m_f64PIDSampleTime             );
-    RegisterPropertyVariable("the minimum output value for the controller [m/sec2]", m_f64PIDMinimumOutput);
-    RegisterPropertyVariable("the maximum output value for the controller [m/sec2]", m_f64PIDMaximumOutput);
+    RegisterPropertyVariable("the minimum output value for the controller [%]", m_f64PIDMinimumOutput);
+    RegisterPropertyVariable("the maximum output value for the controller [%]", m_f64PIDMaximumOutput);
     RegisterPropertyVariable("show debug output", m_bShowDebug                                   );
     RegisterPropertyVariable("input factor for PT1", m_f64PT1OutputFactor                        );
     RegisterPropertyVariable("time constant for pt1 controller", m_f64PT1TimeConstant            );

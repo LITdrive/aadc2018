@@ -98,12 +98,12 @@ tResult cArduinoActuator::Init()
 
     if (m_serialDevice.init(m_arduinoID, m_serialDevicePrefix, NUM_ARDUINO))
     {
-        LogNamedMessage(cString::Format("Connected to arduino on port: %d\t ID: %d\t Software version: %d",
+        LOG_INFO(cString::Format("Connected to arduino on port: %d\t ID: %d\t Software version: %d",
             m_serialDevice.get_port_num(), m_serialDevice.get_id(), m_serialDevice.get_software_version()));
     }
     else
     {
-        LogNamedMessage(cString::Format("Could not find an arduino with correct id: %d ", m_arduinoID));
+        LOG_ERROR(cString::Format("Could not find an arduino with correct id: %d ", m_arduinoID));
         RETURN_ERROR_DESC(ERR_DEVICE_IO, cString::Format("Could not find an arduino with correct id: %d ", m_arduinoID));
 
     }

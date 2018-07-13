@@ -45,7 +45,7 @@ cFisheyeUndistortion::cFisheyeUndistortion()
     });
 
     //GPU Processing
-	
+
     m_bGpuProcessing = tFalse;
 
     try
@@ -66,6 +66,8 @@ cFisheyeUndistortion::cFisheyeUndistortion()
     }
     catch (cv::Exception& e)
     {
+        const char* err_msg = e.what();
+        LOG_ERROR(cString("OpenCV exception caught: ") + err_msg);
     }
 
 }
@@ -94,6 +96,19 @@ tResult cFisheyeUndistortion::Configure()
         camera_data["distortion_coefficients"] >> m_distorsionMatrix;
     }
 
+
+    //check if we have valid matrices
+    if (m_cameraMatrix.empty())
+    {
+        RETURN_ERROR_DESC(ERR_EMPTY, cString("camera_matrix cannot be loaded from file"));
+    }
+
+    if (m_distorsionMatrix.empty())
+    {
+        RETURN_ERROR_DESC(ERR_EMPTY, cString("camera_matrix cannot be loaded from file"));
+    }
+
+
     //get clock object
     RETURN_IF_FAILED(_runtime->GetObject(m_pClock));
 
@@ -118,29 +133,41 @@ tResult cFisheyeUndistortion::Process(tTimeStamp tmTimeOfTrigger)
             //Do the image processing and copy to destination image buffer
             if (!m_rectifyMapsSet)
             {
-                //estimate the new, undistorted camera matrix
-                cv::Mat newCameraMatrix;
-                cv::fisheye::estimateNewCameraMatrixForUndistortRectify(
-                    m_cameraMatrix,
-                    m_distorsionMatrix,
-                    cv::Size(m_sInputFormat.m_ui32Width, m_sInputFormat.m_ui32Height),
-                    cv::Matx33d::eye(),
-                    newCameraMatrix,
-                    1.0,
-                    cv::Size(m_sInputFormat.m_ui32Width, m_sInputFormat.m_ui32Height),
-                    1.0
-                );
+                try
+                {
 
-                cv::fisheye::initUndistortRectifyMap(
-                    m_cameraMatrix,
-                    m_distorsionMatrix,
-                    cv::Matx33d::eye(),
-                    newCameraMatrix,
-                    cv::Size(m_sInputFormat.m_ui32Width, m_sInputFormat.m_ui32Height),
-                    CV_16SC2,
-                    m_rectifyMap1,
-                    m_rectifyMap2
-                );
+                    //estimate the new, undistorted camera matrix
+                    cv::Mat newCameraMatrix;
+
+                    cv::fisheye::estimateNewCameraMatrixForUndistortRectify(
+                        m_cameraMatrix,
+                        m_distorsionMatrix,
+                        cv::Size(m_sInputFormat.m_ui32Width, m_sInputFormat.m_ui32Height),
+                        cv::Matx33d::eye(),
+                        newCameraMatrix,
+                        1.0,
+                        cv::Size(m_sInputFormat.m_ui32Width, m_sInputFormat.m_ui32Height),
+                        1.0
+                    );
+
+                    cv::fisheye::initUndistortRectifyMap(
+                        m_cameraMatrix,
+                        m_distorsionMatrix,
+                        cv::Matx33d::eye(),
+                        newCameraMatrix,
+                        cv::Size(m_sInputFormat.m_ui32Width, m_sInputFormat.m_ui32Height),
+                        CV_16SC2,
+                        m_rectifyMap1,
+                        m_rectifyMap2
+                    );
+
+                }
+                catch (cv::Exception& e)
+                {
+                    const char* err_msg = e.what();
+                    LOG_ERROR(cString("OpenCV exception caught: ") + err_msg);
+                }
+
                 //GPU Processing
 
                 if (m_bGpuAvailable && m_bGpuProcessing)
@@ -234,6 +261,6 @@ tResult cFisheyeUndistortion::Process(tTimeStamp tmTimeOfTrigger)
             writeMatToPin(m_oWriter, outputImage, m_pClock->GetStreamTime());
         }
     }
-    
+
     RETURN_NOERROR;
 }

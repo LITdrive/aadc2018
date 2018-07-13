@@ -32,9 +32,9 @@ public:
 private:
 
     /*! Width of the stream */
-    property_variable<tInt>   m_streamWidth = 1280;
+    property_variable<tInt>   m_streamWidth = 1024;
     /*! Height of the stream */
-    property_variable<tInt>   m_streamHeight = 960;
+    property_variable<tInt>   m_streamHeight = 768;
     /*! The stream channels */
     property_variable<tInt>   m_streamChannels = 3;
     /*! Identifier for the camera */
