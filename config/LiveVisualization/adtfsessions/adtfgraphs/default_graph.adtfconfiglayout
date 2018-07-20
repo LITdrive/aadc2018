@@ -1473,8 +1473,8 @@
         <layout_set>
           <name>graphs/default_filter_graph/sample_streams/stream_marker_detector</name>
           <boundary>
-            <x>611</x>
-            <y>163</y>
+            <x>613</x>
+            <y>189</y>
             <width>0</width>
             <height>0</height>
           </boundary>
@@ -4287,7 +4287,7 @@
           <connection_layout>
             <name/>
             <centerLineIsManual>true</centerLineIsManual>
-            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsX>1384</centerLineAbsX>
             <centerLineAbsY>0</centerLineAbsY>
             <centerLineStraight>false</centerLineStraight>
           </connection_layout>
@@ -6531,7 +6531,7 @@
           <connection_layout>
             <name/>
             <centerLineIsManual>true</centerLineIsManual>
-            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsX>1371</centerLineAbsX>
             <centerLineAbsY>0</centerLineAbsY>
             <centerLineStraight>false</centerLineStraight>
           </connection_layout>
@@ -8567,7 +8567,7 @@
             <width>0</width>
             <height>0</height>
           </boundary>
-          <selected>false</selected>
+          <selected>true</selected>
           <connection_layout>
             <name/>
             <centerLineIsManual>true</centerLineIsManual>
@@ -8579,8 +8579,8 @@
         <layout_set>
           <name>graphs/marker_detection/filters/Fisheye Undistortion</name>
           <boundary>
-            <x>394</x>
-            <y>178</y>
+            <x>395</x>
+            <y>177</y>
             <width>0</width>
             <height>0</height>
           </boundary>
@@ -8771,7 +8771,7 @@
             <width>0</width>
             <height>0</height>
           </boundary>
-          <selected>true</selected>
+          <selected>false</selected>
           <connection_layout>
             <name/>
             <centerLineIsManual>true</centerLineIsManual>
@@ -9043,7 +9043,7 @@
             <width>0</width>
             <height>0</height>
           </boundary>
-          <selected>true</selected>
+          <selected>false</selected>
           <connection_layout>
             <name/>
             <centerLineIsManual>true</centerLineIsManual>
@@ -9157,8 +9157,8 @@
         <layout_set>
           <name>graphs/camera_visualization/filters/Basler Camera</name>
           <boundary>
-            <x>587</x>
-            <y>266</y>
+            <x>724</x>
+            <y>199</y>
             <width>0</width>
             <height>0</height>
           </boundary>
@@ -9251,7 +9251,7 @@
           <connection_layout>
             <name/>
             <centerLineIsManual>true</centerLineIsManual>
-            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsX>605</centerLineAbsX>
             <centerLineAbsY>0</centerLineAbsY>
             <centerLineStraight>false</centerLineStraight>
           </connection_layout>
@@ -9264,7 +9264,7 @@
             <width>0</width>
             <height>0</height>
           </boundary>
-          <selected>true</selected>
+          <selected>false</selected>
           <connection_layout>
             <name/>
             <centerLineIsManual>true</centerLineIsManual>
@@ -9395,10 +9395,10 @@
         <layout_set>
           <name>layout_packages/default/graph_additionals/graphs/default_filter_graph/notices/FD7A0E7C-A650-4F38-AB3C-88E96086A79F</name>
           <boundary>
-            <x>436</x>
-            <y>8</y>
-            <width>212</width>
-            <height>65</height>
+            <x>246</x>
+            <y>0</y>
+            <width>230</width>
+            <height>140</height>
           </boundary>
           <selected>false</selected>
           <connection_layout>
@@ -10278,6 +10278,550 @@
         </layout_set>
         <layout_set>
           <name>layout_packages/default/graph_additionals/streaming_graphs/camera_calib_graph/notices/686049AB-A60C-4BBB-8774-068F66ECDAF2/pointer</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/default_filter_graph/filters/OpenCV Filter</name>
+          <boundary>
+            <x>777</x>
+            <y>29</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/default_filter_graph/connections/stream_marker_detector._OpenCV Filter.input</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>769</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/default_filter_graph/filters/OpenCV Filter/input_pins/input</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/default_filter_graph/connections/OpenCV Filter.speed_speed_out.</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/default_filter_graph/filters/OpenCV Filter/output_pins/speed</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/default_filter_graph/connections/OpenCV Filter.steering_steering_out.</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/default_filter_graph/filters/OpenCV Filter/output_pins/steering</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/default_filter_graph/sample_streams/undist_video_stream</name>
+          <boundary>
+            <x>560</x>
+            <y>167</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>true</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/default_filter_graph/connections/Sample Stream._OpenCV Filter.input</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/default_filter_graph/connections/marker_detection.undistorted_video_Sample Stream.</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/default_filter_graph/connections/marker_detection.undistorted_video_undist_video_stream.</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/default_filter_graph/connections/undist_video_stream._OpenCV Filter.input</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/camera_visualization/filters/OpenCV Template</name>
+          <boundary>
+            <x>427</x>
+            <y>122</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>true</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/camera_visualization/connections/stream_balser_video._OpenCV Template.input</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/camera_visualization/filters/OpenCV Template/input_pins/input</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/camera_visualization/sample_streams/Sample Stream</name>
+          <boundary>
+            <x>675</x>
+            <y>165</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>true</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/camera_visualization/connections/Sample Stream._Basler Camera.video</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/camera_visualization/connections/OpenCV Template.output_Sample Stream.</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/camera_visualization/filters/OpenCV Template/output_pins/output</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/default_filter_graph/filters/OpenCV</name>
+          <boundary>
+            <x>772</x>
+            <y>38</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>true</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/default_filter_graph/sample_streams/Sample Stream</name>
+          <boundary>
+            <x>530</x>
+            <y>156</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/default_filter_graph/connections/Sample Stream._OpenCV.input</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/default_filter_graph/filters/OpenCV/input_pins/input</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/default_filter_graph/connections/OpenCV.steering_steering_out.</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/default_filter_graph/filters/OpenCV/output_pins/steering</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/default_filter_graph/connections/OpenCV.speed_speed_out.</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/default_filter_graph/filters/OpenCV/output_pins/speed</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/default_filter_graph/filters/RGBFilter</name>
+          <boundary>
+            <x>773</x>
+            <y>58</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>true</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/default_filter_graph/connections/Sample Stream._RGBFilter.input</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/default_filter_graph/filters/RGBFilter/input_pins/input</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/default_filter_graph/connections/RGBFilter.output_camera_visualication.basler_video</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/default_filter_graph/filters/RGBFilter/output_pins/output</name>
           <boundary>
             <x>0</x>
             <y>0</y>

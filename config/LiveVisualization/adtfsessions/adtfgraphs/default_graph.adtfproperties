@@ -503,22 +503,6 @@
           <properties/>
         </property_set>
         <property_set>
-          <name>graphs/default_filter_graph/connections/Car Controller.steering_steering_out.</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/filters/Car Controller/output_pins/steering</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/connections/Car Controller.speed_speed_out.</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/filters/Car Controller/output_pins/speed</name>
-          <properties/>
-        </property_set>
-        <property_set>
           <name>graphs/default_filter_graph/connections/Car Controller.brake_light_brake_light.</name>
           <properties/>
         </property_set>
@@ -1069,10 +1053,6 @@
           <properties/>
         </property_set>
         <property_set>
-          <name>graphs/camera_visualization/connections/stream_balser_video._Basler Camera.video</name>
-          <properties/>
-        </property_set>
-        <property_set>
           <name>graphs/camera_visualization/filters/Rear Camera</name>
           <properties/>
         </property_set>
@@ -1094,10 +1074,6 @@
         </property_set>
         <property_set>
           <name>graphs/default_filter_graph/subgraphs/camera_visualication</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/connections/stream_marker_detector._camera_visualication.basler_video</name>
           <properties/>
         </property_set>
         <property_set>
@@ -1260,6 +1236,54 @@
           <properties/>
         </property_set>
         <property_set>
+          <name>graphs/default_filter_graph/filters/Car Controller/output_pins/steering</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/filters/Car Controller/output_pins/speed</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/sample_streams/Sample Stream</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/connections/marker_detection.undistorted_video_Sample Stream.</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/camera_visualization/connections/stream_balser_video._Basler Camera.video</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/connections/stream_marker_detector._camera_visualication.basler_video</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/filters/OpenCV Filter</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/filters/OpenCV Filter/input_pins/input</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/connections/OpenCV Filter.speed_speed_out.</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/filters/OpenCV Filter/output_pins/speed</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/connections/OpenCV Filter.steering_steering_out.</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/filters/OpenCV Filter/output_pins/steering</name>
+          <properties/>
+        </property_set>
+        <property_set>
           <name>services/kernel.service.adtf</name>
           <properties/>
         </property_set>
@@ -1309,6 +1333,10 @@
         </property_set>
         <property_set>
           <name>services/signal_scope_view.ui_service.adtf_disptb</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/connections/stream_marker_detector._OpenCV Filter.input</name>
           <properties/>
         </property_set>
       </property_sets>

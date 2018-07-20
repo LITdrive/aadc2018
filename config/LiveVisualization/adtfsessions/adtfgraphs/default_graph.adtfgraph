@@ -45,12 +45,6 @@
           <input_pins/>
           <output_pins>
             <pin>
-              <name>steering</name>
-            </pin>
-            <pin>
-              <name>speed</name>
-            </pin>
-            <pin>
               <name>brake_light</name>
             </pin>
             <pin>
@@ -68,10 +62,37 @@
             <pin>
               <name>hazard_light</name>
             </pin>
+            <pin>
+              <name>steering</name>
+            </pin>
+            <pin>
+              <name>speed</name>
+            </pin>
           </output_pins>
           <runners/>
           <init_priority>0</init_priority>
           <deactivated>false</deactivated>
+          <binding_servers/>
+          <binding_clients/>
+        </filter>
+        <filter>
+          <name>OpenCV Filter</name>
+          <class_id>opencv_filter.filter.user.aadc.cid</class_id>
+          <input_pins>
+            <pin>
+              <name>input</name>
+            </pin>
+          </input_pins>
+          <output_pins>
+            <pin>
+              <name>speed</name>
+            </pin>
+            <pin>
+              <name>steering</name>
+            </pin>
+          </output_pins>
+          <runners/>
+          <init_priority>0</init_priority>
           <binding_servers/>
           <binding_clients/>
         </filter>
@@ -165,6 +186,10 @@
       <sample_streams>
         <sample_stream>
           <name>stream_marker_detector</name>
+          <class_id>default_sample_stream.streaming.adtf.cid</class_id>
+        </sample_stream>
+        <sample_stream>
+          <name>Sample Stream</name>
           <class_id>default_sample_stream.streaming.adtf.cid</class_id>
         </sample_stream>
       </sample_streams>
@@ -261,38 +286,6 @@
           <destination_connector_path>
             <connector>voltage_struct</connector>
             <component>Sensor Visualization</component>
-            <portbindingobject/>
-          </destination_connector_path>
-          <priority>0</priority>
-          <deactivated>false</deactivated>
-          <sync>true</sync>
-        </connection>
-        <connection>
-          <name>Car Controller.steering_steering_out.</name>
-          <source_connector_path>
-            <connector>steering</connector>
-            <component>Car Controller</component>
-            <portbindingobject/>
-          </source_connector_path>
-          <destination_connector_path>
-            <connector/>
-            <component>steering_out</component>
-            <portbindingobject/>
-          </destination_connector_path>
-          <priority>0</priority>
-          <deactivated>false</deactivated>
-          <sync>true</sync>
-        </connection>
-        <connection>
-          <name>Car Controller.speed_speed_out.</name>
-          <source_connector_path>
-            <connector>speed</connector>
-            <component>Car Controller</component>
-            <portbindingobject/>
-          </source_connector_path>
-          <destination_connector_path>
-            <connector/>
-            <component>speed_out</component>
             <portbindingobject/>
           </destination_connector_path>
           <priority>0</priority>
@@ -426,6 +419,36 @@
           <sync>true</sync>
         </connection>
         <connection>
+          <name>rear_cam._camera_visualication.rear_video</name>
+          <source_connector_path>
+            <connector/>
+            <component>rear_cam</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector>rear_video</connector>
+            <component>camera_visualication</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>marker_detection.undistorted_video_Sample Stream.</name>
+          <source_connector_path>
+            <connector>undistorted_video</connector>
+            <component>marker_detection</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector/>
+            <component>Sample Stream</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
           <name>stream_marker_detector._camera_visualication.basler_video</name>
           <source_connector_path>
             <connector/>
@@ -441,15 +464,45 @@
           <sync>true</sync>
         </connection>
         <connection>
-          <name>rear_cam._camera_visualication.rear_video</name>
+          <name>OpenCV Filter.speed_speed_out.</name>
           <source_connector_path>
-            <connector/>
-            <component>rear_cam</component>
+            <connector>speed</connector>
+            <component>OpenCV Filter</component>
             <portbindingobject/>
           </source_connector_path>
           <destination_connector_path>
-            <connector>rear_video</connector>
-            <component>camera_visualication</component>
+            <connector/>
+            <component>speed_out</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>OpenCV Filter.steering_steering_out.</name>
+          <source_connector_path>
+            <connector>steering</connector>
+            <component>OpenCV Filter</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector/>
+            <component>steering_out</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>stream_marker_detector._OpenCV Filter.input</name>
+          <source_connector_path>
+            <connector/>
+            <component>stream_marker_detector</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector>input</connector>
+            <component>OpenCV Filter</component>
             <portbindingobject/>
           </destination_connector_path>
           <priority>0</priority>
@@ -954,21 +1007,6 @@
           <sync>true</sync>
         </connection>
         <connection>
-          <name>stream_balser_video._Basler Camera.video</name>
-          <source_connector_path>
-            <connector/>
-            <component>stream_balser_video</component>
-            <portbindingobject/>
-          </source_connector_path>
-          <destination_connector_path>
-            <connector>video</connector>
-            <component>Basler Camera</component>
-            <portbindingobject/>
-          </destination_connector_path>
-          <priority>0</priority>
-          <sync>true</sync>
-        </connection>
-        <connection>
           <name>rear_video._stream_rear_video.</name>
           <source_connector_path>
             <connector/>
@@ -993,6 +1031,21 @@
           <destination_connector_path>
             <connector>video</connector>
             <component>Rear Camera</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>stream_balser_video._Basler Camera.video</name>
+          <source_connector_path>
+            <connector/>
+            <component>stream_balser_video</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector>video</connector>
+            <component>Basler Camera</component>
             <portbindingobject/>
           </destination_connector_path>
           <priority>0</priority>

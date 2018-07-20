@@ -44,6 +44,9 @@ include_directories(${AADC_DIR}/include)
 include_directories(${CMAKE_INSTALL_INCLUDE})
 
 
-add_subdirectory(OpenCVTemplate)
+add_subdirectory(MyFirstFilter)
+add_subdirectory(OpenCVFilter)
 add_subdirectory(TemplateFilter)
 add_subdirectory(playground)
+add_subdirectory(OpenCVTemplate)
+add_subdirectory(RGBFilter)
