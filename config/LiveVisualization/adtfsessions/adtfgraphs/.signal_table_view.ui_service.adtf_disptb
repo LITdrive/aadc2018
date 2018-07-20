@@ -5,7 +5,7 @@
  <property name="Signal Table View.column_0_width" value="148" />
  <property name="Signal Table View.column_1_name" value="Time" />
  <property name="Signal Table View.column_1_show" value="true" />
- <property name="Signal Table View.column_1_width" value="100" />
+ <property name="Signal Table View.column_1_width" value="60" />
  <property name="Signal Table View.column_2_name" value="Value" />
  <property name="Signal Table View.column_2_show" value="true" />
  <property name="Signal Table View.column_2_width" value="100" />

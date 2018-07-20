@@ -55,12 +55,15 @@ cOpenCVFilter::cOpenCVFilter()
     //register callback for type changes
     m_oReader.SetAcceptTypeCallback([this](const adtf::ucom::ant::iobject_ptr<const adtf::streaming::ant::IStreamType>& pType) -> tResult
     {
-        return ChangeType(m_oReader, m_sImageFormat, *pType.Get(), m_oWriter);
+        return ChangeType(m_oReader, m_sImageFormat, *pType.Get());
     });
 }
 
 tResult cOpenCVFilter::Configure()
 {
+    //get clock object
+    RETURN_IF_FAILED(_runtime->GetObject(m_pClock));
+
     RETURN_NOERROR;
 }
 
@@ -79,6 +82,7 @@ tResult cOpenCVFilter::Process(tTimeStamp tmTimeOfTrigger)
                 Mat inputImage = Mat(cv::Size(m_sImageFormat.m_ui32Width, m_sImageFormat.m_ui32Height),
                                        CV_8UC3, const_cast<unsigned char*>(static_cast<const unsigned char*>(pReadBuffer->GetPtr())));
 
+                int redThreshould = 75;
                 //left
                 tInt left = 1;
                 for(tInt i = 0;i< inputImage.size[0];i++){
@@ -86,7 +90,7 @@ tResult cOpenCVFilter::Process(tTimeStamp tmTimeOfTrigger)
                         int r = inputImage.at<unsigned char>(i,j*3);
                         int g = inputImage.at<unsigned char>(i,j*3+1);
                         int b = inputImage.at<unsigned char>(i,j*3+2);
-                        if( r > b + g && r > 100)
+                        if( r > b + g && r > redThreshould)
                             left++;
                     }
                 }
@@ -97,25 +101,11 @@ tResult cOpenCVFilter::Process(tTimeStamp tmTimeOfTrigger)
                         int r = inputImage.at<unsigned char>(i,j*3);
                         int g = inputImage.at<unsigned char>(i,j*3+1);
                         int b = inputImage.at<unsigned char>(i,j*3+2);
-                        if( r > b + g && r > 100)
+                        if( r > b + g && r > redThreshould)
                             right++;
                     }
                 }
-                /*int h = 0;
-                int j=0+h,i=0+h;
-                int r = inputImage.at<unsigned char>(j,i*3), g = inputImage.at<unsigned char>(j,i*3+1), b = inputImage.at<unsigned char>(j,i*3+2);
-                cout << "0,0:\t" << r << " " << g << " "<<b << "\n";
-                j=0+h; i=1279-h;
-                r = inputImage.at<unsigned char>(j,i*3); g = inputImage.at<unsigned char>(j,i*3+1); b = inputImage.at<unsigned char>(j,i*3+2);
-                cout << "0,1279:\t"<< r << " " << g << " "<<b << "\n";
-                j=959-h;i=0+h;
-                r = inputImage.at<unsigned char>(j,i*3);g = inputImage.at<unsigned char>(j,i*3+1); b = inputImage.at<unsigned char>(j,i*3+2);
-                cout << "959,0:\t"<< r << " " << g << " "<<b << "\n";
-                j=959-h;i=1279-h;
-                r = inputImage.at<unsigned char>(j,i*3);g = inputImage.at<unsigned char>(j,i*3+1); b = inputImage.at<unsigned char>(j,i*3+2);
-                cout << "959,1279:\t"<< r << " " << g << " "<<b << "\n\n";
-                */
-                speed = (0.05 - (left+right)*1.0/(inputImage.size[0]*inputImage.size[1]))*100;
+                speed = (0.025 - (left+right)*1.0/(inputImage.size[0]*inputImage.size[1]))*400;
                 if(speed < -10)
                     speed=-10;
                 if(speed > 10)
@@ -135,7 +125,7 @@ tResult cOpenCVFilter::Process(tTimeStamp tmTimeOfTrigger)
                 auto oCodec = m_inputSignalValueSampleFactory.MakeCodecFor(pSteeringSample);
 
                 RETURN_IF_FAILED(oCodec.SetElementValue(m_ddlSignalValueId.value, steering));
-                RETURN_IF_FAILED(oCodec.SetElementValue(m_ddlSignalValueId.timeStamp, 0));
+                RETURN_IF_FAILED(oCodec.SetElementValue(m_ddlSignalValueId.timeStamp, m_pClock->GetStreamTime()));
 
             }
 
@@ -144,7 +134,7 @@ tResult cOpenCVFilter::Process(tTimeStamp tmTimeOfTrigger)
 
                 auto oCodec2 = m_inputSignalValueSampleFactory.MakeCodecFor(pSpeedSample);
                 RETURN_IF_FAILED(oCodec2.SetElementValue(m_ddlSignalValueId.value, speed));
-                RETURN_IF_FAILED(oCodec2.SetElementValue(m_ddlSignalValueId.timeStamp, 0));
+                RETURN_IF_FAILED(oCodec2.SetElementValue(m_ddlSignalValueId.timeStamp, m_pClock->GetStreamTime()));
             }
 
             m_oSpeedWriter << pSpeedSample << flush << trigger;

@@ -4448,8 +4448,8 @@
         <layout_set>
           <name>graphs/default_filter_graph/streaming_out_ports/head_light</name>
           <boundary>
-            <x>1567</x>
-            <y>239</y>
+            <x>1718</x>
+            <y>159</y>
             <width>0</width>
             <height>0</height>
           </boundary>
@@ -4499,8 +4499,8 @@
         <layout_set>
           <name>graphs/default_filter_graph/streaming_out_ports/turn_signal_right</name>
           <boundary>
-            <x>1544</x>
-            <y>137</y>
+            <x>1708</x>
+            <y>198</y>
             <width>0</width>
             <height>0</height>
           </boundary>
@@ -4533,8 +4533,8 @@
         <layout_set>
           <name>graphs/default_filter_graph/streaming_out_ports/reverse_light</name>
           <boundary>
-            <x>1522</x>
-            <y>338</y>
+            <x>1486</x>
+            <y>138</y>
             <width>0</width>
             <height>0</height>
           </boundary>
@@ -4669,8 +4669,8 @@
         <layout_set>
           <name>graphs/default_filter_graph/streaming_out_ports/hazard_light</name>
           <boundary>
-            <x>1536</x>
-            <y>207</y>
+            <x>1530</x>
+            <y>217</y>
             <width>0</width>
             <height>0</height>
           </boundary>
@@ -6735,7 +6735,7 @@
           <connection_layout>
             <name/>
             <centerLineIsManual>true</centerLineIsManual>
-            <centerLineAbsX>1099</centerLineAbsX>
+            <centerLineAbsX>1433</centerLineAbsX>
             <centerLineAbsY>0</centerLineAbsY>
             <centerLineStraight>false</centerLineStraight>
           </connection_layout>
@@ -9344,12 +9344,12 @@
         <layout_set>
           <name>graphs/default_filter_graph/subgraphs/camera_visualication</name>
           <boundary>
-            <x>777</x>
-            <y>167</y>
+            <x>825</x>
+            <y>203</y>
             <width>154</width>
             <height>94</height>
           </boundary>
-          <selected>false</selected>
+          <selected>true</selected>
           <connection_layout>
             <name/>
             <centerLineIsManual>true</centerLineIsManual>
@@ -10322,7 +10322,7 @@
           <connection_layout>
             <name/>
             <centerLineIsManual>true</centerLineIsManual>
-            <centerLineAbsX>769</centerLineAbsX>
+            <centerLineAbsX>672</centerLineAbsX>
             <centerLineAbsY>0</centerLineAbsY>
             <centerLineStraight>false</centerLineStraight>
           </connection_layout>
@@ -10356,7 +10356,7 @@
           <connection_layout>
             <name/>
             <centerLineIsManual>true</centerLineIsManual>
-            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsX>1405</centerLineAbsX>
             <centerLineAbsY>0</centerLineAbsY>
             <centerLineStraight>false</centerLineStraight>
           </connection_layout>
@@ -10390,7 +10390,7 @@
           <connection_layout>
             <name/>
             <centerLineIsManual>true</centerLineIsManual>
-            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsX>1388</centerLineAbsX>
             <centerLineAbsY>0</centerLineAbsY>
             <centerLineStraight>false</centerLineStraight>
           </connection_layout>

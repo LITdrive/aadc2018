@@ -55,6 +55,9 @@ private:
     /*! The input format */
     adtf::streaming::tStreamImageFormat m_sImageFormat;
 
+    /*! The clock */
+    object_ptr<adtf::services::IReferenceClock> m_pClock;
+
 public:
 
     /*! Default constructor. */

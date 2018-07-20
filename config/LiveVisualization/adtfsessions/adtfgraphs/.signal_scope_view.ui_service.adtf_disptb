@@ -111,7 +111,7 @@
  <property name="signal_scope_view.ui_service.adtf_disptb.signal_label_x_offset" value="0" />
  <property name="signal_scope_view.ui_service.adtf_disptb.signal_label_y_offset" value="0" />
  <property name="signal_scope_view.ui_service.adtf_disptb.splitterpos1" value="70" />
- <property name="signal_scope_view.ui_service.adtf_disptb.splitterpos2" value="491" />
+ <property name="signal_scope_view.ui_service.adtf_disptb.splitterpos2" value="566" />
  <property name="signal_scope_view.ui_service.adtf_disptb.statusbar" value="true" />
  <property name="signal_scope_view.ui_service.adtf_disptb.toolbar" value="true" />
  <property name="signal_scope_view.ui_service.adtf_disptb.width" value="640" />

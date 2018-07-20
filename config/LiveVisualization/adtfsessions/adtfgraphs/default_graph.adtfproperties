@@ -1284,6 +1284,10 @@
           <properties/>
         </property_set>
         <property_set>
+          <name>graphs/default_filter_graph/connections/stream_marker_detector._OpenCV Filter.input</name>
+          <properties/>
+        </property_set>
+        <property_set>
           <name>services/kernel.service.adtf</name>
           <properties/>
         </property_set>
@@ -1333,10 +1337,6 @@
         </property_set>
         <property_set>
           <name>services/signal_scope_view.ui_service.adtf_disptb</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/connections/stream_marker_detector._OpenCV Filter.input</name>
           <properties/>
         </property_set>
       </property_sets>
