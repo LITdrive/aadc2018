@@ -1,4 +1,8 @@
-_build_user
-_build_base
-_build_demo
+_build_user/
+_build_base/
+_build_demo/
+_build_base_debug/
+_build_demo_debug/
+_build_user_debug/
 /_install
+.idea/
