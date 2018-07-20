@@ -6,3 +6,7 @@ _build_demo_debug/
 _build_user_debug/
 /_install
 .idea/
+CMakeLists.txt.user
+cmake-build-debug/
+CMakeCache.txt
+CMakeFiles/
