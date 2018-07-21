@@ -1,12 +1,17 @@
-_build_user/
-_build_base/
-_build_demo/
-_build_base_debug/
-_build_demo_debug/
-_build_user_debug/
+/_build_user
+/_build_base
+/_build_demo
+/_build_user_debug
+/_build_base_debug
+/_build_demo_debug
+/_build_user_ide
+/_build_base_ide
+/_build_demo_ide
 /_install
+
+# CLion
 .idea/
-CMakeLists.txt.user
-cmake-build-debug/
-CMakeCache.txt
-CMakeFiles/
+cmake-build-*/
+
+# QtCreator
+CMakeLists.txt.user*
