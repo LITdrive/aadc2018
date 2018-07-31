@@ -15,3 +15,6 @@ cmake-build-*/
 
 # QtCreator
 CMakeLists.txt.user*
+
+# Visual Studio Code
+.vscode/
