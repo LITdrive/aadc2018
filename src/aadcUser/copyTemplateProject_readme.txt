@@ -1,0 +1,1 @@
+python copyTemplateProject.py <FilterName> <anyArgIfOpenCV>
