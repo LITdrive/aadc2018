@@ -2,6 +2,22 @@
 
 This is the main folder for the ADTF plugin development and the running of ADTF projects and contains all the delivered sources.
 
+## Additional libraries
+
+The following additional libraries need to be installed on the car.
+
+### ZeroMQ
+
+ZeroMQ is a low-overhead, low-latency, high-speed IPC library, which is used for pumping sensor data to a message queue and receiving it with another program, e.g. Python.
+
+    cd /opt
+    sudo git clone https://github.com/zeromq/libzmq.git
+    sudo chown -R aadc:aadc libzmq
+    cd /opt/libzmq
+    mkdir build; cd build
+    cmake ..
+    make
+
 ## Structure
 
 ### Folders
