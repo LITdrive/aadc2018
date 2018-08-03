@@ -1422,8 +1422,8 @@
         <layout_set>
           <name>graphs/default_filter_graph/filters/Marker Detector</name>
           <boundary>
-            <x>633</x>
-            <y>92</y>
+            <x>122</x>
+            <y>344</y>
             <width>0</width>
             <height>0</height>
           </boundary>
@@ -9043,7 +9043,7 @@
             <width>0</width>
             <height>0</height>
           </boundary>
-          <selected>true</selected>
+          <selected>false</selected>
           <connection_layout>
             <name/>
             <centerLineIsManual>true</centerLineIsManual>
