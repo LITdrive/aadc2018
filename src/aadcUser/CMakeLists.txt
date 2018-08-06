@@ -48,3 +48,6 @@ add_subdirectory(OpenCVTemplate)
 add_subdirectory(TemplateFilter)
 add_subdirectory(tensorflowPlayground)
 add_subdirectory(TensorFlowTemplate)
+add_subdirectory(playground)
+add_subdirectory(MQSensorStreamer)
+
