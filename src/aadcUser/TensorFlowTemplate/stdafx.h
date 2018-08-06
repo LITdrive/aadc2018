@@ -29,6 +29,4 @@ THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS �AS IS� AND ANY EXPRES
 #include <a_utils_platform_inc.h>
 #include <adtf_systemsdk.h>
 
-#include <stdlib.h>
-
 using namespace std;

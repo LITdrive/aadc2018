@@ -23,63 +23,59 @@ ADTF_TRIGGER_FUNCTION_FILTER_PLUGIN(CID_COPENCVTEMPLATE_DATA_TRIGGERED_FILTER,
 
 cTensorFlowTemplate::cTensorFlowTemplate()
 {
-
-    //create and set inital input format type
-    m_sImageFormat.m_strFormatName = ADTF_IMAGE_FORMAT(RGB_24);
-    const adtf::ucom::object_ptr<IStreamType> pType = adtf::ucom::make_object_ptr<cStreamType>(stream_meta_type_image());
-    set_stream_type_image_format(*pType, m_sImageFormat);
-
-    //Register input pin
-    Register(m_oReader, "input", pType);
-    //Register output pin
-    Register(m_oWriter, "output", pType);
-
-    //register callback for type changes
-    m_oReader.SetAcceptTypeCallback([this](const adtf::ucom::ant::iobject_ptr<const adtf::streaming::ant::IStreamType>& pType) -> tResult
+    //DO NOT FORGET TO LOAD MEDIA DESCRIPTION SERVICE IN ADTF3 AND CHOOSE aadc.description
+    object_ptr<IStreamType> pTypeTemplateData;
+    if IS_OK(adtf::mediadescription::ant::create_adtf_default_stream_type_from_service("tTemplateData", pTypeTemplateData, m_templateDataSampleFactory))
     {
-        return ChangeType(m_oReader, m_sImageFormat, *pType.Get(), m_oWriter);
-    });
+        adtf_ddl::access_element::find_index(m_templateDataSampleFactory, cString("f32Value"), m_ddlTemplateDataId.f32Value);
+    }
+    else
+    {
+        LOG_WARNING("No mediadescription for tTemplateData found!");
+    }
+
+    Register(m_oReader, "input" , pTypeTemplateData);
+    Register(m_oWriter, "output", pTypeTemplateData);
+
 }
 
 tResult cTensorFlowTemplate::Configure()
 {
-    //get clock object
-    RETURN_IF_FAILED(_runtime->GetObject(m_pClock));
-    
     RETURN_NOERROR;
 }
 
 tResult cTensorFlowTemplate::Process(tTimeStamp tmTimeOfTrigger)
 {
+
     object_ptr<const ISample> pReadSample;
-    Mat outputImage;
 
-    while (IS_OK(m_oReader.GetNextSample(pReadSample)))
+    tFloat32 inputData;
+
+    if (IS_OK(m_oReader.GetLastSample(pReadSample)))
     {
-        object_ptr_shared_locked<const ISampleBuffer> pReadBuffer;
-        //lock read buffer
-        if (IS_OK(pReadSample->Lock(pReadBuffer)))
-        {
-            //create a opencv matrix from the media sample buffer
-            Mat inputImage = Mat(cv::Size(m_sImageFormat.m_ui32Width, m_sImageFormat.m_ui32Height),
-                                   CV_8UC3, const_cast<unsigned char*>(static_cast<const unsigned char*>(pReadBuffer->GetPtr())));
+        auto oDecoder = m_templateDataSampleFactory.MakeDecoderFor(*pReadSample);
 
-            //Do the image processing and copy to destination image buffer
-            Canny(inputImage, outputImage, 100, 200);// Detect Edges
-        }
+        RETURN_IF_FAILED(oDecoder.IsValid());
+
+        // retrieve the values (using convenience methods that return a variant)
+        RETURN_IF_FAILED(oDecoder.GetElementValue(m_ddlTemplateDataId.f32Value, &inputData));
+
     }
 
-    //Write processed Image to Output Pin
-    if (!outputImage.empty())
+    // Do the Processing
+    tFloat32 outputData = inputData * 0.001;
+
+    object_ptr<ISample> pWriteSample;
+
+    if (IS_OK(alloc_sample(pWriteSample)))
     {
-        //update output format if matrix size does not fit to
-        if (outputImage.total() * outputImage.elemSize() != m_sImageFormat.m_szMaxByteSize)
-        {
-            setTypeFromMat(m_oWriter, outputImage);
-        }
-        // write to pin
-        writeMatToPin(m_oWriter, outputImage, m_pClock->GetStreamTime());
+
+        auto oCodec = m_templateDataSampleFactory.MakeCodecFor(pWriteSample);
+
+        RETURN_IF_FAILED(oCodec.SetElementValue(m_ddlTemplateDataId.f32Value, outputData));
+
     }
-    
+    m_oWriter << pWriteSample << flush << trigger;
+
     RETURN_NOERROR;
 }

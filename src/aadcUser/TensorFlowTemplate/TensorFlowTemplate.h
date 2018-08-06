@@ -63,19 +63,20 @@ using tensorflow::int32;
 class cTensorFlowTemplate : public cTriggerFunction
 {
 private:
+    /*! Media Descriptions. */
+    struct tTemplateDataId
+    {
+        tSize f32Value;
+    } m_ddlTemplateDataId;
 
-    //Pins
+
+    /*! The template data sample factory */
+    adtf::mediadescription::cSampleCodecFactory m_templateDataSampleFactory;
+
     /*! Reader of an InPin. */
     cPinReader m_oReader;
     /*! Writer to an OutPin. */
     cPinWriter m_oWriter;
-
-    //Stream Formats
-        /*! The input format */
-    adtf::streaming::tStreamImageFormat m_sImageFormat;
-
-    /*! The clock */
-    object_ptr<adtf::services::IReferenceClock> m_pClock;
 
 
 public:
