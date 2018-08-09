@@ -11,12 +11,8 @@ set(AADC_BOOST_FOUND FALSE)
 #-------ADTF Dir------------------------------------------
 #-------------------------------------------------------
 if (WIN32)
-	#either use env var or set dir here
-	if (ADTF3_DIR)
-		set (ADTF_DIR "C:/SDK/adtf/3.3.1")
-	else (ADTF3_DIR)
-		set (ADTF_DIR "$ENV{ADTF3_DIR}")
-	endif (ADTF3_DIR)
+	set (ADTF_DIR "C:/SDK/adtf/3.3.1")
+	set (ADTF_ALLOW_UNSUPPORTED_COMPILER ON)
 else(WIN32)
 	set (ADTF_DIR "/opt/ADTF/3.3.1")
 endif(WIN32)
@@ -204,7 +200,8 @@ endif(WIN32)
 
 # under windows the size of the pre-compiled-header are limited so we have to extend it manually
 if (WIN32)
-    SET( CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -Zm140" )
+	# this doesn't work for a MinGW setup
+    #SET( CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -Zm140" )
 else (WIN32)	
     SET( CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -Wno-unknown-pragmas" )
 endif(WIN32)
