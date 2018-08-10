@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.10.0)
 
 project(tensorflowtemplate_filter)
 
-include_directories(${Protobuf_INCLUDE_DIRS} ${EIGEN3_INCLUDE_DIRS} ${TENSORFLOW_INCLUDE_DIRS})
+include_directories(${Protobuf_INCLUDE_DIRS} ${EIGEN3_INCLUDE_DIRS} ${TENSORFLOW_INCLUDE_DIRS} ${OpenCV_INCLUDE_DIRS})
 
 set (SOURCEFILES    	stdafx.h 
 						TensorFlowTemplate.h

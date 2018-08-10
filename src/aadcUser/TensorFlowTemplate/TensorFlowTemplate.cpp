@@ -15,6 +15,7 @@ THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS AS IS AND ANY EXPRESS OR I
 
 #include "stdafx.h"
 #include "TensorFlowTemplate.h"
+#include "ADTF3_OpenCV_helper.h"
 
 ADTF_TRIGGER_FUNCTION_FILTER_PLUGIN(CID_COPENCVTEMPLATE_DATA_TRIGGERED_FILTER,
                                     "TensorFlowTemplate_cf",
@@ -23,24 +24,29 @@ ADTF_TRIGGER_FUNCTION_FILTER_PLUGIN(CID_COPENCVTEMPLATE_DATA_TRIGGERED_FILTER,
 
 cTensorFlowTemplate::cTensorFlowTemplate()
 {
-    //DO NOT FORGET TO LOAD MEDIA DESCRIPTION SERVICE IN ADTF3 AND CHOOSE aadc.description
-    object_ptr<IStreamType> pTypeTemplateData;
-    if IS_OK(adtf::mediadescription::ant::create_adtf_default_stream_type_from_service("tTemplateData", pTypeTemplateData, m_templateDataSampleFactory))
-    {
-        adtf_ddl::access_element::find_index(m_templateDataSampleFactory, cString("f32Value"), m_ddlTemplateDataId.f32Value);
-    }
-    else
-    {
-        LOG_WARNING("No mediadescription for tTemplateData found!");
-    }
+    //create and set inital input format type
+    m_sImageFormat.m_strFormatName = ADTF_IMAGE_FORMAT(RGB_24);
+    const adtf::ucom::object_ptr<IStreamType> pType = adtf::ucom::make_object_ptr<cStreamType>(stream_meta_type_image());
+    set_stream_type_image_format(*pType, m_sImageFormat);
 
-    Register(m_oReader, "input" , pTypeTemplateData);
-    Register(m_oWriter, "output", pTypeTemplateData);
+    //Register input pin
+    Register(m_oReader, "input", pType);
+    //Register output pin
+    Register(m_oWriter, "output", pType);
+
+    //register callback for type changes
+    m_oReader.SetAcceptTypeCallback([this](const adtf::ucom::ant::iobject_ptr<const adtf::streaming::ant::IStreamType>& pType) -> tResult
+                                    {
+                                        return ChangeType(m_oReader, m_sImageFormat, *pType.Get(), m_oWriter);
+                                    });
 
 }
 
 tResult cTensorFlowTemplate::Configure()
 {
+    //get clock object
+    RETURN_IF_FAILED(_runtime->GetObject(m_pClock));
+
     RETURN_NOERROR;
 }
 
@@ -48,34 +54,42 @@ tResult cTensorFlowTemplate::Process(tTimeStamp tmTimeOfTrigger)
 {
 
     object_ptr<const ISample> pReadSample;
+    Tensor tensorImage;
 
-    tFloat32 inputData;
-
-    if (IS_OK(m_oReader.GetLastSample(pReadSample)))
+    while (IS_OK(m_oReader.GetNextSample(pReadSample)))
     {
-        auto oDecoder = m_templateDataSampleFactory.MakeDecoderFor(*pReadSample);
+        object_ptr_shared_locked<const ISampleBuffer> pReadBuffer;
+        //lock read buffer
+        if (IS_OK(pReadSample->Lock(pReadBuffer)))
+        {
+            //create a opencv matrix from the media sample buffer
+            Mat inputImage = Mat(cv::Size(m_sImageFormat.m_ui32Width, m_sImageFormat.m_ui32Height),
+                                 CV_8UC3, const_cast<unsigned char*>(static_cast<const unsigned char*>(pReadBuffer->GetPtr())));
 
-        RETURN_IF_FAILED(oDecoder.IsValid());
-
-        // retrieve the values (using convenience methods that return a variant)
-        RETURN_IF_FAILED(oDecoder.GetElementValue(m_ddlTemplateDataId.f32Value, &inputData));
-
+            tensorImage = this->ConvertToTensor(inputImage, m_sImageFormat.m_ui32Height, m_sImageFormat.m_ui32Width);
+        }
     }
-
-    // Do the Processing
-    tFloat32 outputData = inputData * 0.001;
-
-    object_ptr<ISample> pWriteSample;
-
-    if (IS_OK(alloc_sample(pWriteSample)))
-    {
-
-        auto oCodec = m_templateDataSampleFactory.MakeCodecFor(pWriteSample);
-
-        RETURN_IF_FAILED(oCodec.SetElementValue(m_ddlTemplateDataId.f32Value, outputData));
-
-    }
-    m_oWriter << pWriteSample << flush << trigger;
 
     RETURN_NOERROR;
+}
+
+Tensor cTensorFlowTemplate::ConvertToTensor(Mat cameraImg, int inputHeight, int inputWidth)
+{
+    Tensor inputImg(tensorflow::DT_FLOAT, tensorflow::TensorShape({1,inputHeight,inputWidth,3}));
+    auto inputImageMapped = inputImg.tensor<float, 4>();
+    auto start = std::chrono::system_clock::now();
+
+    //Copy all the data over
+    for (int y = 0; y < inputHeight; ++y) {
+        const float* source_row = ((float*)cameraImg.data) + (y * inputWidth * 3);
+        for (int x = 0; x < inputWidth; ++x) {
+            const float* source_pixel = source_row + (x * 3);
+            inputImageMapped(0, y, x, 0) = source_pixel[2];
+            inputImageMapped(0, y, x, 1) = source_pixel[1];
+            inputImageMapped(0, y, x, 2) = source_pixel[0];
+        }
+    }
+    auto end = std::chrono::system_clock::now();
+
+    return inputImg;
 }
