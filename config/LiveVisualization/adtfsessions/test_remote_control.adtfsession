@@ -17,6 +17,6 @@
     <property_set/>
     <name>default_graph</name>
   </adtfgraph>
-  <active_streaming_graph>rc_streaming_graph</active_streaming_graph>
-  <active_filter_graph>rc_filter_graph</active_filter_graph>
+  <active_streaming_graph>LS_stream_graph</active_streaming_graph>
+  <active_filter_graph>LS_filter_graph</active_filter_graph>
 </session>

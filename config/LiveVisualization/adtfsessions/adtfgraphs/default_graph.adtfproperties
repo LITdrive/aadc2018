@@ -1260,6 +1260,104 @@
           <properties/>
         </property_set>
         <property_set>
+          <name>streaming_graphs/LS_stream_graph/streaminggraphdock/Filter Graph Dock</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>streaming_graphs/LS_stream_graph</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/LS_filter_graph</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>streaming_graphs/LS_stream_graph/streaming_dock_out_ports/steering_out</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>streaming_graphs/LS_stream_graph/streaming_dock_out_ports/speed_out</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>streaming_graphs/LS_stream_graph/streaming_sinks/Arduino Actuator_1</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>streaming_graphs/LS_stream_graph/connections/Filter Graph Dock.steering_out_Arduino Actuator_1.steering</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>streaming_graphs/LS_stream_graph/streaming_sinks/Arduino Actuator_1/input_pins/steering</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>streaming_graphs/LS_stream_graph/connections/Filter Graph Dock.speed_out_Arduino Actuator_1.speed</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>streaming_graphs/LS_stream_graph/streaming_sinks/Arduino Actuator_1/input_pins/speed</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/LS_filter_graph/streaming_out_ports/steering_out</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/LS_filter_graph/streaming_out_ports/speed_out</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/LS_filter_graph/filters/LIT Car Controller</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/LS_filter_graph/connections/LIT Car Controller.steering_steering_out.</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/LS_filter_graph/filters/LIT Car Controller/output_pins/steering</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/LS_filter_graph/filters/LIT Car Controller/output_pins/speed</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/LS_filter_graph/sample_streams/Sample Stream</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/LS_filter_graph/connections/LIT Car Controller.speed_Sample Stream.</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/LS_filter_graph/filters/LITD_Safety_Speed_Limit_cf</name>
+          <properties>
+            <property>
+              <name>trigger/MAX speed allowed</name>
+              <value>8</value>
+              <type>tFloat32</type>
+            </property>
+          </properties>
+        </property_set>
+        <property_set>
+          <name>graphs/LS_filter_graph/connections/Sample Stream._LITD_Safety_Speed_Limit_cf.input</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/LS_filter_graph/filters/LITD_Safety_Speed_Limit_cf/input_pins/input</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/LS_filter_graph/connections/LITD_Safety_Speed_Limit_cf.output_speed_out.</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/LS_filter_graph/filters/LITD_Safety_Speed_Limit_cf/output_pins/output</name>
+          <properties/>
+        </property_set>
+        <property_set>
           <name>services/kernel.service.adtf</name>
           <properties/>
         </property_set>

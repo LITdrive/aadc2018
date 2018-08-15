@@ -14,22 +14,23 @@ THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS AS IS AND ANY EXPRESS OR I
 **********************************************************************/
 
 #include "stdafx.h"
-#include "TemplateFilter.h"
+#include "LITD_Safety_Speed_Limit.h"
 
 
 ADTF_TRIGGER_FUNCTION_FILTER_PLUGIN(CID_TEMPLATEFILTER_DATA_TRIGGERED_FILTER,
-    "TemplateDataFilter",
-    cTemplateFilter,
+    "LITD_Safety_Speed_Limit_cf",
+    cLITD_Safety_Speed_Limit,
     adtf::filter::pin_trigger({"input"}));
 
 
-cTemplateFilter::cTemplateFilter()
+cLITD_Safety_Speed_Limit::cLITD_Safety_Speed_Limit()
 {
+    RegisterPropertyVariable("MAX speed allowed", maxspeed);
     //DO NOT FORGET TO LOAD MEDIA DESCRIPTION SERVICE IN ADTF3 AND CHOOSE aadc.description
     object_ptr<IStreamType> pTypeTemplateData;
-    if IS_OK(adtf::mediadescription::ant::create_adtf_default_stream_type_from_service("tTemplateData", pTypeTemplateData, m_templateDataSampleFactory))
+    if IS_OK(adtf::mediadescription::ant::create_adtf_default_stream_type_from_service("tSignalValue", pTypeTemplateData, m_templateDataSampleFactory))
     {
-        adtf_ddl::access_element::find_index(m_templateDataSampleFactory, cString("f32Value"), m_ddlTemplateDataId.f32Value);
+        adtf_ddl::access_element::find_index(m_templateDataSampleFactory, cString("f32Value"), m_ddlSignalValueId.value);
     }
     else
     {
@@ -38,18 +39,19 @@ cTemplateFilter::cTemplateFilter()
 
     Register(m_oReader, "input" , pTypeTemplateData);
     Register(m_oWriter, "output", pTypeTemplateData);
+
 }
 
 
 //implement the Configure function to read ALL Properties
-tResult cTemplateFilter::Configure()
+tResult cLITD_Safety_Speed_Limit::Configure()
 {
     RETURN_NOERROR;
 }
 
-tResult cTemplateFilter::Process(tTimeStamp tmTimeOfTrigger)
+tResult cLITD_Safety_Speed_Limit::Process(tTimeStamp tmTimeOfTrigger)
 {
-/*
+
     object_ptr<const ISample> pReadSample;
 
     tFloat32 inputData;
@@ -61,12 +63,20 @@ tResult cTemplateFilter::Process(tTimeStamp tmTimeOfTrigger)
         RETURN_IF_FAILED(oDecoder.IsValid());
 
         // retrieve the values (using convenience methods that return a variant)
-        RETURN_IF_FAILED(oDecoder.GetElementValue(m_ddlTemplateDataId.f32Value, &inputData));
+        RETURN_IF_FAILED(oDecoder.GetElementValue(m_ddlSignalValueId.value, &inputData));
 
     }
 
     // Do the Processing
-    tFloat32 outputData = inputData * 0.001;
+    tFloat32 outputData = inputData;
+    if (outputData > maxspeed)
+     {
+         outputData = maxspeed;
+     }
+      else if(outputData < MIN_SPEED_ALLOWED)
+      {
+         outputData = MIN_SPEED_ALLOWED;
+      }
 
     object_ptr<ISample> pWriteSample;
 
@@ -75,10 +85,10 @@ tResult cTemplateFilter::Process(tTimeStamp tmTimeOfTrigger)
 
         auto oCodec = m_templateDataSampleFactory.MakeCodecFor(pWriteSample);
 
-        RETURN_IF_FAILED(oCodec.SetElementValue(m_ddlTemplateDataId.f32Value, outputData));
+        RETURN_IF_FAILED(oCodec.SetElementValue(m_ddlSignalValueId.value, outputData));
 
     }
     m_oWriter << pWriteSample << flush << trigger;
-    */
+
     RETURN_NOERROR;
 }

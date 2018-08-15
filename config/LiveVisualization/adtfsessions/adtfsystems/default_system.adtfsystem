@@ -234,6 +234,18 @@
     <plugin>
       <url>$(BIN_DIR)/lit_car_controller.adtfplugin</url>
     </plugin>
+    <plugin>
+      <url>$(BIN_DIR)/litd_speedlimit_filter.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(BIN_DIR)/mq_sensor_streamer.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(BIN_DIR)/template_filter.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(BIN_DIR)/litd_safety_speed_limit_filter.adtfplugin</url>
+    </plugin>
   </plugins>
   <debug_plugins>
     <plugin>
@@ -331,6 +343,18 @@
     </plugin>
     <plugin>
       <url>$(BIN_DIR)/debug/lit_car_controller.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(BIN_DIR)/debug/litd_speedlimit_filter.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(BIN_DIR)/debug/mq_sensor_streamer.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(BIN_DIR)/debug/template_filter.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(BIN_DIR)/debug/litd_safety_speed_limit_filter.adtfplugin</url>
     </plugin>
   </debug_plugins>
   <services>

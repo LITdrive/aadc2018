@@ -221,8 +221,8 @@ tResult cCarControllerFilter::ToggleLights(int buttonId)
 {
     switch (buttonId)
     {
-        case 0: // Head
-            this->SendThrottle(-10);
+        case 0: // Go
+            this->SendThrottle(10);
             break;
         case 1: // Brake
             this->SendThrottle(0);

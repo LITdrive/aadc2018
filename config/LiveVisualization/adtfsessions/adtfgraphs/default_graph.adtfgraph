@@ -1057,6 +1057,136 @@
       <streaming_interface_in_ports/>
       <streaming_interface_out_ports/>
     </graph>
+    <graph>
+      <name>LS_filter_graph</name>
+      <filters>
+        <filter>
+          <name>LIT Car Controller</name>
+          <class_id>lit_carcontroler.filter.user.aadc.cid</class_id>
+          <input_pins/>
+          <output_pins>
+            <pin>
+              <name>steering</name>
+            </pin>
+            <pin>
+              <name>speed</name>
+            </pin>
+          </output_pins>
+          <runners/>
+          <init_priority>0</init_priority>
+          <binding_servers/>
+          <binding_clients/>
+        </filter>
+        <filter>
+          <name>LITD_Safety_Speed_Limit_cf</name>
+          <class_id>litd_safety_speed_limit_filter.filter.user.aadc.cid</class_id>
+          <input_pins>
+            <pin>
+              <name>input</name>
+            </pin>
+          </input_pins>
+          <output_pins>
+            <pin>
+              <name>output</name>
+            </pin>
+          </output_pins>
+          <runners/>
+          <init_priority>0</init_priority>
+          <binding_servers/>
+          <binding_clients/>
+        </filter>
+      </filters>
+      <subgraphs/>
+      <input_data_ports/>
+      <output_data_ports/>
+      <input_interface_ports/>
+      <output_interface_ports/>
+      <output_runner_ports/>
+      <input_runner_ports/>
+      <streaming_in_ports/>
+      <streaming_out_ports>
+        <streaming_out_port>
+          <name>steering_out</name>
+          <portname>steering_out</portname>
+        </streaming_out_port>
+        <streaming_out_port>
+          <name>speed_out</name>
+          <portname>speed_out</portname>
+        </streaming_out_port>
+      </streaming_out_ports>
+      <sample_streams>
+        <sample_stream>
+          <name>Sample Stream</name>
+          <class_id>default_sample_stream.streaming.adtf.cid</class_id>
+        </sample_stream>
+      </sample_streams>
+      <active_runners/>
+      <binding_proxys/>
+      <connections>
+        <connection>
+          <name>LIT Car Controller.steering_steering_out.</name>
+          <source_connector_path>
+            <connector>steering</connector>
+            <component>LIT Car Controller</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector/>
+            <component>steering_out</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>LIT Car Controller.speed_Sample Stream.</name>
+          <source_connector_path>
+            <connector>speed</connector>
+            <component>LIT Car Controller</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector/>
+            <component>Sample Stream</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>Sample Stream._LITD_Safety_Speed_Limit_cf.input</name>
+          <source_connector_path>
+            <connector/>
+            <component>Sample Stream</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector>input</connector>
+            <component>LITD_Safety_Speed_Limit_cf</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>LITD_Safety_Speed_Limit_cf.output_speed_out.</name>
+          <source_connector_path>
+            <connector>output</connector>
+            <component>LITD_Safety_Speed_Limit_cf</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector/>
+            <component>speed_out</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+      </connections>
+      <streaming_interface_in_ports/>
+      <streaming_interface_out_ports/>
+    </graph>
   </graphs>
   <streaming_graphs>
     <streaming_graph>
@@ -2419,6 +2549,77 @@
           <destination_connector_path>
             <connector>basler_rgb</connector>
             <component>Filter Graph Dock</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+      </connections>
+      <binding_proxys/>
+      <streaming_dock_interface_in_ports/>
+      <streaming_dock_interface_out_ports/>
+      <streaming_dock_runner_in_ports/>
+    </streaming_graph>
+    <streaming_graph>
+      <name>LS_stream_graph</name>
+      <streaming_sources/>
+      <streaming_dock_in_ports/>
+      <streaming_dock_out_ports>
+        <sample_stream>
+          <name>steering_out</name>
+          <class_id>default_sample_stream.streaming.adtf.cid</class_id>
+        </sample_stream>
+        <sample_stream>
+          <name>speed_out</name>
+          <class_id>default_sample_stream.streaming.adtf.cid</class_id>
+        </sample_stream>
+      </streaming_dock_out_ports>
+      <streaming_sinks>
+        <streaming_sink>
+          <name>Arduino Actuator_1</name>
+          <class_id>arduino_actuator.streaming_sink.base.aadc.cid</class_id>
+          <input_pins>
+            <pin>
+              <name>steering</name>
+            </pin>
+            <pin>
+              <name>speed</name>
+            </pin>
+          </input_pins>
+          <output_pins/>
+          <runners/>
+          <init_priority>0</init_priority>
+          <binding_servers/>
+          <binding_clients/>
+        </streaming_sink>
+      </streaming_sinks>
+      <sample_streams/>
+      <connections>
+        <connection>
+          <name>Filter Graph Dock.steering_out_Arduino Actuator_1.steering</name>
+          <source_connector_path>
+            <connector>steering_out</connector>
+            <component>Filter Graph Dock</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector>steering</connector>
+            <component>Arduino Actuator_1</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>Filter Graph Dock.speed_out_Arduino Actuator_1.speed</name>
+          <source_connector_path>
+            <connector>speed_out</connector>
+            <component>Filter Graph Dock</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector>speed</connector>
+            <component>Arduino Actuator_1</component>
             <portbindingobject/>
           </destination_connector_path>
           <priority>0</priority>

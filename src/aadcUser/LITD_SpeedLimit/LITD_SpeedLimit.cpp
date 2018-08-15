@@ -14,71 +14,52 @@ THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS AS IS AND ANY EXPRESS OR I
 **********************************************************************/
 
 #include "stdafx.h"
-#include "TemplateFilter.h"
+#include "LITD_SpeedLimit.h"
 
 
 ADTF_TRIGGER_FUNCTION_FILTER_PLUGIN(CID_TEMPLATEFILTER_DATA_TRIGGERED_FILTER,
-    "TemplateDataFilter",
-    cTemplateFilter,
+    "LITD_SpeedLimit_cf",
+    cLITD_SpeedLimit,
     adtf::filter::pin_trigger({"input"}));
 
 
-cTemplateFilter::cTemplateFilter()
-{
-    //DO NOT FORGET TO LOAD MEDIA DESCRIPTION SERVICE IN ADTF3 AND CHOOSE aadc.description
-    object_ptr<IStreamType> pTypeTemplateData;
-    if IS_OK(adtf::mediadescription::ant::create_adtf_default_stream_type_from_service("tTemplateData", pTypeTemplateData, m_templateDataSampleFactory))
+cLITD_SpeedLimit::cLITD_SpeedLimit()
+{    //Get Media Descriptions
+    object_ptr<IStreamType> pTypeSignalValue;
+    if IS_OK(adtf::mediadescription::ant::create_adtf_default_stream_type_from_service("tSignalValue", pTypeSignalValue, m_signalDataSampleFactory))
     {
-        adtf_ddl::access_element::find_index(m_templateDataSampleFactory, cString("f32Value"), m_ddlTemplateDataId.f32Value);
+        //(adtf_ddl::access_element::find_index(m_SignalValueSampleFactory, cString("ui32ArduinoTimestamp"), m_ddlSignalValueId.timeStamp));
+        (adtf_ddl::access_element::find_index(m_signalDataSampleFactory, cString("f32Value"), m_ddlSignalValueId.value));
+        LOG_INFO("constructor reachedd");
     }
     else
     {
-        LOG_WARNING("No mediadescription for tTemplateData found!");
+        LOG_INFO("No mediadescription for tSignalValue found!");
     }
-
-    Register(m_oReader, "input" , pTypeTemplateData);
-    Register(m_oWriter, "output", pTypeTemplateData);
+    LOG_INFO("registering pin reached");
+    //Register(m_oInputMeasWheelsteer, "input steer", pTypeSignalValue);
+    //Register(m_oInputMeasWheelSpeed, "input speed", pTypeSignalValue);
+    //Register(m_oOutputWheelSpeed, "output speed", pTypeSignalValue);
+    //Register(m_oOutputWheelsteer, "output steer", pTypeSignalValue);
+    LOG_INFO("registering pin done");
 }
 
 
 //implement the Configure function to read ALL Properties
-tResult cTemplateFilter::Configure()
+tResult cLITD_SpeedLimit::Configure()
 {
+    LOG_INFO("Configuration reached");
+    RETURN_IF_FAILED(_runtime->GetObject(m_pClock));
+    LOG_INFO("Configuration done");
     RETURN_NOERROR;
+
 }
 
-tResult cTemplateFilter::Process(tTimeStamp tmTimeOfTrigger)
+tResult cLITD_SpeedLimit::Process(tTimeStamp tmTimeOfTrigger)
 {
-/*
-    object_ptr<const ISample> pReadSample;
 
-    tFloat32 inputData;
+    LOG_INFO("process reached");
 
-    if (IS_OK(m_oReader.GetLastSample(pReadSample)))
-    {
-        auto oDecoder = m_templateDataSampleFactory.MakeDecoderFor(*pReadSample);
 
-        RETURN_IF_FAILED(oDecoder.IsValid());
-
-        // retrieve the values (using convenience methods that return a variant)
-        RETURN_IF_FAILED(oDecoder.GetElementValue(m_ddlTemplateDataId.f32Value, &inputData));
-
-    }
-
-    // Do the Processing
-    tFloat32 outputData = inputData * 0.001;
-
-    object_ptr<ISample> pWriteSample;
-
-    if (IS_OK(alloc_sample(pWriteSample)))
-    {
-
-        auto oCodec = m_templateDataSampleFactory.MakeCodecFor(pWriteSample);
-
-        RETURN_IF_FAILED(oCodec.SetElementValue(m_ddlTemplateDataId.f32Value, outputData));
-
-    }
-    m_oWriter << pWriteSample << flush << trigger;
-    */
     RETURN_NOERROR;
 }
