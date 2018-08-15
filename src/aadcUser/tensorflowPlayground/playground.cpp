@@ -290,7 +290,7 @@ int main(int argc, char* argv[]) {
   string input_layer = "input";
   string output_layer = "InceptionV3/Predictions/Reshape_1";
   bool self_test = false;
-  string root_dir = "";
+  string root_dir = "/home/aadc/AADC/src/aadcUser/tensorflowPlayground/";
   std::vector<Flag> flag_list = {
       Flag("image", &image, "image to be processed"),
       Flag("graph", &graph, "graph to be executed"),
@@ -368,7 +368,8 @@ int main(int argc, char* argv[]) {
   }
 
   // Do something interesting with the results we've generated.
-  Status print_status = PrintTopLabels(outputs, labels);
+  string labels_path = tensorflow::io::JoinPath(root_dir, labels);
+  Status print_status = PrintTopLabels(outputs, labels_path);
   if (!print_status.ok()) {
     LOG(ERROR) << "Running print failed: " << print_status;
     return -1;
