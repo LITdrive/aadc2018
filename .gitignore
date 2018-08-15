@@ -18,3 +18,5 @@ CMakeLists.txt.user*
 
 # Visual Studio Code
 .vscode/
+
+.ipynb_checkpoints/
