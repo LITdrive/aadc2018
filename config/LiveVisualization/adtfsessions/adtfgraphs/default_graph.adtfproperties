@@ -1311,6 +1311,18 @@
           <name>services/signal_scope_view.ui_service.adtf_disptb</name>
           <properties/>
         </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/filters/TensorFlowTemplate_cf</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/connections/stream_marker_detector._TensorFlowTemplate_cf.input</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/filters/TensorFlowTemplate_cf/input_pins/input</name>
+          <properties/>
+        </property_set>
       </property_sets>
     </property_package>
   </property_packages>

@@ -231,6 +231,9 @@
     <plugin>
       <url>$(ADTF_DIR)/addons/displaytoolbox/bin/signal_scope_view.adtfplugin</url>
     </plugin>
+    <plugin>
+      <url>$(BIN_DIR)/tensorflowtemplate_filter.adtfplugin</url>
+    </plugin>
   </plugins>
   <debug_plugins>
     <plugin>
@@ -325,6 +328,9 @@
     </plugin>
     <plugin>
       <url>$(ADTF_DIR)/addons/displaytoolbox/bin/debug/signal_scope_view.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(BIN_DIR)/tensorflowtemplate_filter.adtfplugin</url>
     </plugin>
   </debug_plugins>
   <services>

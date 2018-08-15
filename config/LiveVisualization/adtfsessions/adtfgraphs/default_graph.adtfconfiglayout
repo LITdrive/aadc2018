@@ -215,8 +215,8 @@
         <layout_set>
           <name>graphs/default_filter_graph/streaming_in_ports/basler_rgb</name>
           <boundary>
-            <x>42</x>
-            <y>154</y>
+            <x>25</x>
+            <y>164</y>
             <width>0</width>
             <height>0</height>
           </boundary>
@@ -1473,12 +1473,12 @@
         <layout_set>
           <name>graphs/default_filter_graph/sample_streams/stream_marker_detector</name>
           <boundary>
-            <x>611</x>
-            <y>163</y>
+            <x>550</x>
+            <y>189</y>
             <width>0</width>
             <height>0</height>
           </boundary>
-          <selected>false</selected>
+          <selected>true</selected>
           <connection_layout>
             <name/>
             <centerLineIsManual>true</centerLineIsManual>
@@ -9344,8 +9344,8 @@
         <layout_set>
           <name>graphs/default_filter_graph/subgraphs/camera_visualication</name>
           <boundary>
-            <x>777</x>
-            <y>167</y>
+            <x>785</x>
+            <y>203</y>
             <width>154</width>
             <height>94</height>
           </boundary>
@@ -10278,6 +10278,57 @@
         </layout_set>
         <layout_set>
           <name>layout_packages/default/graph_additionals/streaming_graphs/camera_calib_graph/notices/686049AB-A60C-4BBB-8774-068F66ECDAF2/pointer</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/default_filter_graph/filters/TensorFlowTemplate_cf</name>
+          <boundary>
+            <x>605</x>
+            <y>402</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/default_filter_graph/connections/stream_marker_detector._TensorFlowTemplate_cf.input</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/default_filter_graph/filters/TensorFlowTemplate_cf/input_pins/input</name>
           <boundary>
             <x>0</x>
             <y>0</y>
