@@ -24,8 +24,7 @@ adtf_create_plugindescription(
 
 # Link your application with other libraries
 target_link_libraries(${PROJECT_NAME} LINK_PUBLIC ${OpenCV_LIBS})
-target_link_libraries(${PROJECT_NAME} LINK_PUBLIC ${TENSORFLOW_LIBS})
-target_link_libraries(${PROJECT_NAME} LINK_PUBLIC ${Protobuf_LIBRARIES})
+target_link_libraries(${PROJECT_NAME} LINK_PUBLIC ${Protobuf_LIBRARIES} -Wl,--allow-multiple-definition -Wl,--whole-archive ${TENSORFLOW_LIBS} -Wl,--allow-multiple-definition -Wl,--whole-archive)
 
 #this is to add a folder within the ADTF solution
 set_property(TARGET ${PROJECT_NAME} PROPERTY FOLDER user)
