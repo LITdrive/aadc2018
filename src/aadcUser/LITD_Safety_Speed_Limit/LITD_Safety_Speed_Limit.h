@@ -17,8 +17,7 @@ THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS AS IS AND ANY EXPRESS OR I
 
 //*************************************************************************************************
 #define CID_TEMPLATEFILTER_DATA_TRIGGERED_FILTER "litd_safety_speed_limit_filter.filter.user.aadc.cid"
-#define MAX_SPEED_ALLOWED 10
-#define MIN_SPEED_ALLOWED 0
+
 
 using namespace adtf_util;
 using namespace ddl;
@@ -40,7 +39,7 @@ private:
     } m_ddlSignalValueId;
 
     adtf::base::property_variable<tFloat32> maxspeed = 10;
-
+    float speed_config = 0;
     /*! The template data sample factory */
     adtf::mediadescription::cSampleCodecFactory m_templateDataSampleFactory;
 

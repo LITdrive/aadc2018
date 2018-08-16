@@ -46,6 +46,7 @@ cLITD_Safety_Speed_Limit::cLITD_Safety_Speed_Limit()
 //implement the Configure function to read ALL Properties
 tResult cLITD_Safety_Speed_Limit::Configure()
 {
+    speed_config = maxspeed;
     RETURN_NOERROR;
 }
 
@@ -69,13 +70,15 @@ tResult cLITD_Safety_Speed_Limit::Process(tTimeStamp tmTimeOfTrigger)
 
     // Do the Processing
     tFloat32 outputData = inputData;
-    if (outputData > maxspeed)
+    if (outputData > speed_config)
      {
-         outputData = maxspeed;
+         outputData = speed_config;
+         LOG_INFO("SPEED LIMIT IS %f",speed_config);
      }
-      else if(outputData < MIN_SPEED_ALLOWED)
+      else if(outputData < -speed_config)
       {
-         outputData = MIN_SPEED_ALLOWED;
+         outputData = -speed_config;
+         LOG_INFO("SPEED LIMIT REVERSE IS %f",-speed_config);
       }
 
     object_ptr<ISample> pWriteSample;

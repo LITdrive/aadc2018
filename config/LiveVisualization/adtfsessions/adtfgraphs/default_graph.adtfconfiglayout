@@ -10364,7 +10364,7 @@
         <layout_set>
           <name>graphs/LS_filter_graph/filters/LIT Car Controller</name>
           <boundary>
-            <x>0</x>
+            <x>2</x>
             <y>222</y>
             <width>0</width>
             <height>0</height>
@@ -11078,8 +11078,8 @@
         <layout_set>
           <name>graphs/LS_filter_graph/streaming_out_ports/speed_out</name>
           <boundary>
-            <x>452</x>
-            <y>318</y>
+            <x>513</x>
+            <y>376</y>
             <width>0</width>
             <height>0</height>
           </boundary>
@@ -12268,12 +12268,12 @@
         <layout_set>
           <name>graphs/LS_filter_graph/filters/LITD_Safety_Speed_Limit_cf</name>
           <boundary>
-            <x>194</x>
-            <y>390</y>
+            <x>217</x>
+            <y>369</y>
             <width>0</width>
             <height>0</height>
           </boundary>
-          <selected>false</selected>
+          <selected>true</selected>
           <connection_layout>
             <name/>
             <centerLineIsManual>true</centerLineIsManual>
@@ -12359,6 +12359,40 @@
             <height>0</height>
           </boundary>
           <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/LS_filter_graph/filters/Marker Detector</name>
+          <boundary>
+            <x>328</x>
+            <y>125</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>true</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/LS_filter_graph/filters/Marker Detector_1</name>
+          <boundary>
+            <x>125</x>
+            <y>24</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>true</selected>
           <connection_layout>
             <name/>
             <centerLineIsManual>true</centerLineIsManual>

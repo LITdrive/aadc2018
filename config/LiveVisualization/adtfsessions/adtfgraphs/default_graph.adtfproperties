@@ -1336,7 +1336,7 @@
           <properties>
             <property>
               <name>trigger/MAX speed allowed</name>
-              <value>8</value>
+              <value>15</value>
               <type>tFloat32</type>
             </property>
           </properties>

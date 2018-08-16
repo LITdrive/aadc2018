@@ -50,5 +50,4 @@ add_subdirectory(playground)
 add_subdirectory(MQSensorStreamer)
 add_subdirectory(LIT_CarController)
 
-add_subdirectory(LITD_SpeedLimit)
 add_subdirectory(LITD_Safety_Speed_Limit)
