@@ -270,30 +270,6 @@
           <properties/>
         </property_set>
         <property_set>
-          <name>graphs/default_filter_graph/streaming_out_ports/head_light</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/streaming_out_ports/turn_signal_left</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/streaming_out_ports/turn_signal_right</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/streaming_out_ports/brake_light</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/streaming_out_ports/reverse_light</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/streaming_out_ports/hazard_light</name>
-          <properties/>
-        </property_set>
-        <property_set>
           <name>streaming_graphs/default_streaming_graph/streaming_dock_out_ports/head_light</name>
           <properties/>
         </property_set>
@@ -496,70 +472,6 @@
         </property_set>
         <property_set>
           <name>graphs/devel_filter_graph/filters/Edge Detection/input_pins/video</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/filters/Car Controller</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/connections/Car Controller.steering_steering_out.</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/filters/Car Controller/output_pins/steering</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/filters/Car Controller/output_pins/speed</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/connections/Car Controller.brake_light_brake_light.</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/filters/Car Controller/output_pins/brake_light</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/connections/Car Controller.reverse_light_reverse_light.</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/filters/Car Controller/output_pins/reverse_light</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/connections/Car Controller.head_light_head_light.</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/filters/Car Controller/output_pins/head_light</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/connections/Car Controller.turn_signal_left_turn_signal_left.</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/filters/Car Controller/output_pins/turn_signal_left</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/connections/Car Controller.turn_signal_right_turn_signal_right.</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/filters/Car Controller/output_pins/turn_signal_right</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/connections/Car Controller.hazard_light_hazard_light.</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/filters/Car Controller/output_pins/hazard_light</name>
           <properties/>
         </property_set>
         <property_set>
@@ -1268,14 +1180,6 @@
           <properties/>
         </property_set>
         <property_set>
-          <name>graphs/default_filter_graph/connections/Car Controller.speed_Sample Stream_1.</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/connections/Sample Stream_1._speed_out.</name>
-          <properties/>
-        </property_set>
-        <property_set>
           <name>graphs/default_filter_graph/filters/Marker Positioning</name>
           <properties>
             <property>
@@ -1295,6 +1199,104 @@
         </property_set>
         <property_set>
           <name>graphs/default_filter_graph/filters/Marker Positioning/input_pins/imu</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/connections/Sample Stream._Marker Positioning.road_sign_ext</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/connections/iner_meas_unit._Marker Positioning.imu</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/filters/LIT Car Controller</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/filters/LITD_Safety_Speed_Limit_cf</name>
+          <properties>
+            <property>
+              <name>trigger/MAX speed allowed</name>
+              <value>15.000000</value>
+              <type>tFloat32</type>
+            </property>
+          </properties>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/connections/LIT Car Controller.steering_steering_out.</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/connections/LIT Car Controller.speed_Sample Stream_1.</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/connections/Sample Stream_1._LITD_Safety_Speed_Limit_cf.input</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/filters/LIT Car Controller/output_pins/steering</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/filters/LIT Car Controller/output_pins/speed</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/filters/LITD_Safety_Speed_Limit_cf/input_pins/input</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/filters/LITD_Safety_Speed_Limit_cf/output_pins/output</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/sample_streams/Sample Stream_2</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/connections/LITD_Safety_Speed_Limit_cf.output_Sample Stream_2.</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/connections/Sample Stream_2._speed_out.</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/filters/ConverterWheels</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/connections/wheel_right._ConverterWheels.wheel_right</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/connections/wheel_left._ConverterWheels.wheel_left</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/filters/ConverterWheels/input_pins/wheel_right</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/filters/ConverterWheels/input_pins/wheel_left</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/filters/ConverterWheels/output_pins/vehicle_speed</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/sample_streams/Sample Stream_3</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/connections/ConverterWheels.vehicle_speed_Sample Stream_3.</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/connections/Sample Stream_3._Marker Positioning.speed</name>
           <properties/>
         </property_set>
         <property_set>
@@ -1347,18 +1349,6 @@
         </property_set>
         <property_set>
           <name>services/signal_scope_view.ui_service.adtf_disptb</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/connections/Sample Stream._Marker Positioning.road_sign_ext</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/connections/Sample Stream_1._Marker Positioning.speed</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/connections/iner_meas_unit._Marker Positioning.imu</name>
           <properties/>
         </property_set>
       </property_sets>

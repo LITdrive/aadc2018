@@ -145,6 +145,9 @@
       <url>/home/aadc/share/adtf/_install/linux64/bin/car_controller.adtfplugin</url>
     </plugin>
     <plugin>
+      <url>/home/aadc/share/adtf/_install/linux64/bin/marker_positioning.adtfplugin</url>
+    </plugin>
+    <plugin>
       <url>$(ADTF_DIR)/bin/default_core_objects.adtfplugin</url>
     </plugin>
     <plugin>
@@ -232,7 +235,16 @@
       <url>$(ADTF_DIR)/addons/displaytoolbox/bin/signal_scope_view.adtfplugin</url>
     </plugin>
     <plugin>
-      <url>/home/aadc/share/adtf/_install/linux64/bin/marker_positioning.adtfplugin</url>
+      <url>/home/aadc/share/adtf/_install/linux64/bin/lit_car_controller.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>/home/aadc/share/adtf/_install/linux64/bin/litd_safety_speed_limit_filter.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>/home/aadc/share/adtf/_install/linux64/bin/wheel_speed_controller.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>/home/aadc/share/adtf/_install/linux64/bin/converter_wheels.adtfplugin</url>
     </plugin>
   </plugins>
   <debug_plugins>
@@ -241,6 +253,9 @@
     </plugin>
     <plugin>
       <url>/home/aadc/share/adtf/_install/linux64/bin/debug/car_controller.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>/home/aadc/share/adtf/_install/linux64/bin/debug/marker_positioning.adtfplugin</url>
     </plugin>
     <plugin>
       <url>$(ADTF_DIR)/bin/debug/default_core_objects.adtfplugin</url>
@@ -330,7 +345,16 @@
       <url>$(ADTF_DIR)/addons/displaytoolbox/bin/debug/signal_scope_view.adtfplugin</url>
     </plugin>
     <plugin>
-      <url>/home/aadc/share/adtf/_install/linux64/bin/debug/marker_positioning.adtfplugin</url>
+      <url>/home/aadc/share/adtf/_install/linux64/bin/debug/lit_car_controller.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>/home/aadc/share/adtf/_install/linux64/bin/debug/litd_safety_speed_limit_filter.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>/home/aadc/share/adtf/_install/linux64/bin/debug/wheel_speed_controller.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>/home/aadc/share/adtf/_install/linux64/bin/debug/converter_wheels.adtfplugin</url>
     </plugin>
   </debug_plugins>
   <services>
