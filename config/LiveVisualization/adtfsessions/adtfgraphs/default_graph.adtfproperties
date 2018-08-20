@@ -511,10 +511,6 @@
           <properties/>
         </property_set>
         <property_set>
-          <name>graphs/default_filter_graph/connections/Car Controller.speed_speed_out.</name>
-          <properties/>
-        </property_set>
-        <property_set>
           <name>graphs/default_filter_graph/filters/Car Controller/output_pins/speed</name>
           <properties/>
         </property_set>
@@ -1260,6 +1256,48 @@
           <properties/>
         </property_set>
         <property_set>
+          <name>graphs/default_filter_graph/sample_streams/Sample Stream</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/connections/marker_detection.road_sign_ext_Sample Stream.</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/sample_streams/Sample Stream_1</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/connections/Car Controller.speed_Sample Stream_1.</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/connections/Sample Stream_1._speed_out.</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/filters/Marker Positioning</name>
+          <properties>
+            <property>
+              <name>MarkerPos/Roadsign File</name>
+              <value>../../../../configuration_files/roadSigns.xml</value>
+              <type>cFilename</type>
+            </property>
+          </properties>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/filters/Marker Positioning/input_pins/road_sign_ext</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/filters/Marker Positioning/input_pins/speed</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/filters/Marker Positioning/input_pins/imu</name>
+          <properties/>
+        </property_set>
+        <property_set>
           <name>services/kernel.service.adtf</name>
           <properties/>
         </property_set>
@@ -1309,6 +1347,18 @@
         </property_set>
         <property_set>
           <name>services/signal_scope_view.ui_service.adtf_disptb</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/connections/Sample Stream._Marker Positioning.road_sign_ext</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/connections/Sample Stream_1._Marker Positioning.speed</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/connections/iner_meas_unit._Marker Positioning.imu</name>
           <properties/>
         </property_set>
       </property_sets>
