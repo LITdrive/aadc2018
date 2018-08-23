@@ -17,6 +17,14 @@ ZeroMQ is a low-overhead, low-latency, high-speed IPC library, which is used for
     mkdir build; cd build
     cmake ..
     make
+	
+On Windows, do the following:
+
+	cd C:\SDKs
+	git clone https://github.com/zeromq/libzmq.git
+	md build; cd build
+	cmake -G "Visual Studio 14 2015 Win64" ..
+	cmake --build . --target INSTALL --config Release
 
 ## Structure
 
