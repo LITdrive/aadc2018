@@ -9,12 +9,31 @@
 /_build_demo_ide
 /_install
 
+# CMake
+CMakeCache.txt
+cmake-build-*/
+CMakeFiles/
+
 # CLion
 .idea/
-cmake-build-*/
 
 # QtCreator
 CMakeLists.txt.user*
 
 # Visual Studio Code
 .vscode/
+
+# Visual Studio
+.vs/
+cmake_install.cmake
+*.sln
+*.user
+*.vcxproj
+*.filters
+*.VC.db
+*.VC.opendb
+
+# Doxygen
+doxygen.cfg
+CMakeDoxyfile.in
+CMakeDoxygenDefaults.cmake
