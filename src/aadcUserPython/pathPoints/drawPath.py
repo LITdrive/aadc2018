@@ -4,8 +4,8 @@ import numpy as np
 import pandas as pd
 
 # CONFIG this Suff here ;) ######################################
-MAP_LENGTH = 5020 #in mm
-MAP_HIGHT = 4020 #in mm
+MAP_LENGTH = 5.020 #in m
+MAP_HIGHT = 4.020 #in m
 mapImg = 'ourMap.jpg'
 #################################################################
 
@@ -16,12 +16,20 @@ points = []
 # is overkill for your purposes
 def draw_line(startx,starty):
         ax = plt.gca()
-        xy = plt.ginput(1)
-        x = [startx,xy[0][0]]
-        y = [starty,xy[0][1]]
-        line = ax.plot(x,y, picker=5) # note that picker=5 means a click within 5 pixels will "pick" the Line2D object
-        #txt = ax.text(x+5,y+5,str(len(points)),color='r')
+        #xy = plt.ginput(1)
+        #draw_point(xy[0][0],xy[0][1])
+        if len(points)>1:
+            x = [startx,points[-2][0]]
+            y = [starty,points[-2][1]]
+            line = ax.plot(x,y,c='b', picker=5) # note that picker=5 means a click within 5 pixels will "pick" the Line2D object
         ax.figure.canvas.draw()     
+
+def draw_point(x,y):
+    if (x>0)and (y>0) and (x <= MAP_LENGTH) and (y <= MAP_HIGHT	):
+         points.append([x,y])
+    poi = ax.plot(x,y,'.y')
+    txt = ax.text(x+MAP_LENGTH*0.005,y,str(len(points)),color='r')
+    ax.figure.canvas.draw()
 
 def onclick(event):
     """
@@ -37,50 +45,22 @@ def onclick(event):
     if event.dblclick:
         if event.button == 1:
             # Draw line
+            draw_point(event.xdata,event.ydata)
             draw_line(event.xdata,event.ydata) # here you click on the plot
-            points.append([event.xdata,event.ydata])
-        elif event.button == 3:
-            # Write to figure
-            plt.figtext(3, 8, 'boxed italics text in data coords', style='italic', bbox={'facecolor':'red', 'alpha':0.5, 'pad':10})
-            circ = plt.Circle((event.xdata, event.ydata), radius=0.07, color='g', picker = True)
-            ax.add_patch(circ)
-            ax.figure.canvas.draw()
         else:
             pass # Do nothing
-
-
-def onpick(event):    
-    """
-    Handles the pick event - if an object has been picked, store a
-    reference to it.  We do this by simply adding a reference to it
-    named 'stored_pick' to the axes object.  Note that in python we
-    can dynamically add an attribute variable (stored_pick) to an 
-    existing object - even one that is produced by a library as in this
-    case
-    """
-    this_artist = event.artist #the picked object is available as event.artist
-    # print(this_artist) #For debug just to show you which object is picked
-    plt.gca().picked_object = this_artist
 
 def on_key(event):
     """
     Function to be bound to the key press event
-    If the key pressed is delete and there is a picked object,
-    remove that object from the canvas
     """
-    if event.key == u'delete':
-        ax = plt.gca()
-        if ax.picked_object:
-            ax.picked_object.remove()
-            ax.picked_object = None
-            ax.figure.canvas.draw()
     if event.key == 's':
         print('Saving points')
         print(points)
         df = pd.DataFrame()
         df['x']=[p[0] for p in points]
         df['y']=[p[1] for p in points]
-        df.to_csv('points.csv',header=None,index=False) 
+        df.to_csv('points.csv',header=None,index=True,sep=',') 
 
 fig, ax = plt.subplots()
 
@@ -95,7 +75,7 @@ ax.imshow(np.rot90(np.rot90(img)),origin='lower', extent=[0,MAP_LENGTH,0,MAP_HIG
 #a keypress - test if it's delete and if so, remove the picked object.
 #The functions (defined above) bound to the events implement this logic
 connection_id = fig.canvas.mpl_connect('button_press_event', onclick)
-fig.canvas.mpl_connect('pick_event', onpick)
+
 cid = fig.canvas.mpl_connect('key_press_event', on_key)
 
 #set the size of the matplotlib figure in data units, so that it doesn't
