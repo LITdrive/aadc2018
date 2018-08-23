@@ -614,8 +614,8 @@ tResult cMarkerPos::sendPositionStruct(const tTimeStamp &timeOfFix, const tFloat
     RETURN_IF_FAILED(oCodec.SetElementValue(m_ddlPositionIndex.speed, f32Speed));
     RETURN_IF_FAILED(oCodec.SetElementValue(m_ddlPositionIndex.heading, f32Heading));
 
-    //LOG_INFO(cString::Format("sendPositionStruct: %.3f %.3f %.3f %.3f %.3f", f32X, f32Y,
-        //f32Radius, f32Heading, f32Speed).GetPtr());
+    LOG_INFO(cString::Format("sendPositionStruct: %.3f %.3f %.3f %.3f %.3f", f32X, f32Y,
+        f32Radius, f32Heading, f32Speed).GetPtr());
 
     // the sample buffer lock is released in the destructor of oCodec
     m_oWriter << pSample << flush << trigger;
