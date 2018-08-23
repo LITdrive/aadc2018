@@ -41,6 +41,21 @@ cBirdsEyeView::cBirdsEyeView()
     {
         return ChangeType(m_oReader, m_sImageFormat, *pType.Get());
     });
+    //Init transformation matirx
+    Point2f src_vertices[4];
+    src_vertices[0] = Point2f(572,528);
+    src_vertices[1] = Point2f(654,528);
+    src_vertices[2] = Point2f(766,636);
+    src_vertices[3] = Point2f(469,636);
+    
+    Point2f dst_vertices[4];
+    dst_vertices[0] = Point2f( 41.3333f,  33.3333f);
+    dst_vertices[1] = Point2f(105.3333f,  33.3333f);
+    dst_vertices[2] = Point2f(105.3333f, 193.3333f);
+    dst_vertices[3] = Point2f( 41.3333f, 193.3333f);
+
+    M = getPerspectiveTransform(src_vertices, dst_vertices);
+
 }
 
 tResult cBirdsEyeView::Configure()
@@ -66,22 +81,8 @@ tResult cBirdsEyeView::Process(tTimeStamp tmTimeOfTrigger)
             Mat inputImage = Mat(cv::Size(m_sImageFormat.m_ui32Width, m_sImageFormat.m_ui32Height),
                                    CV_8UC3, const_cast<unsigned char*>(static_cast<const unsigned char*>(pReadBuffer->GetPtr())));
 
-            Point2f src_vertices[4];
-            src_vertices[0] = Point2f(584,494);
-            src_vertices[1] = Point2f(642,494);
-            src_vertices[2] = Point2f(748,593);
-            src_vertices[3] = Point2f(478,593);
-
-            Point2f dst_vertices[4];
-            dst_vertices[0] = Point2f(21.33333397f, -22.33333588f);
-            dst_vertices[1] = Point2f(85.33333588f, -22.33333588f);
-            dst_vertices[2] = Point2f(85.33333588f, 195.66665649f);
-            dst_vertices[3] = Point2f(21.33333397f, 195.66665649f);
-
-            Mat M = getPerspectiveTransform(src_vertices, dst_vertices);
-            Mat dst(192, 96, CV_8UC3);
+            Mat dst(192, 128, CV_8UC3);
             warpPerspective(inputImage, dst, M, dst.size(), INTER_LINEAR, BORDER_CONSTANT);
-            LOG_INFO("%d,%d \t %d, %d",dst.size[0],dst.size[1],inputImage.size[0],inputImage.size[1]);
             outputImage = dst;
         }
     }

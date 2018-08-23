@@ -50,6 +50,9 @@ private:
 
     size_t lastImageFormat = 0;
 
+    /*! The Transformation Matrix */
+    Mat M;
+    
 public:
 
     /*! Default constructor. */
