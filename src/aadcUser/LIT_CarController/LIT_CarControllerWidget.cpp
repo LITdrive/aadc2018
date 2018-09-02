@@ -74,21 +74,26 @@ void cCarControllerWidget::keyPressEvent(QKeyEvent* event)
 		}
 
 		// drive keys
+		// register every key-press directly and override the release timestamp
 		if (key == Qt::Key_Up)
 		{
 			m_throttleType = eForward;
+			m_tmLastKeyReleaseTimestamp[UP] = KEY_PRESS_OVERRIDE_TIMESTAMP;
 		}
 		else if (key == Qt::Key_Left)
 		{
 			m_steeringType = eLeft;
+			m_tmLastKeyReleaseTimestamp[LEFT] = KEY_PRESS_OVERRIDE_TIMESTAMP;
 		}
 		else if (key == Qt::Key_Right)
 		{
 			m_steeringType = eRight;
+			m_tmLastKeyReleaseTimestamp[RIGHT] = KEY_PRESS_OVERRIDE_TIMESTAMP;
 		}
 		else if (key == Qt::Key_Down)
 		{
 			m_throttleType = eBackward;
+			m_tmLastKeyReleaseTimestamp[DOWN] = KEY_PRESS_OVERRIDE_TIMESTAMP;
 		}
 
 		// update gui
@@ -110,25 +115,24 @@ void cCarControllerWidget::keyReleaseEvent(QKeyEvent* event)
 	{
 		// emit arrow-key release signals
 		const int key = event->key();
+
+		// save the timestamp of a key release and check in the updateSignals()
+		// method, if the key was long enough released
 		if (key == Qt::Key_Up)
 		{
-			m_throttleType = eStop;
-			displaySpeed(0);
+			m_tmLastKeyReleaseTimestamp[UP] = GetTime();
 		}
 		else if (key == Qt::Key_Left)
 		{
-			m_steeringType = eStraight;
-			displaySteering(0);
+			m_tmLastKeyReleaseTimestamp[LEFT] = GetTime();
 		}
 		else if (key == Qt::Key_Right)
 		{
-			m_steeringType = eStraight;
-			displaySteering(0);
+			m_tmLastKeyReleaseTimestamp[RIGHT] = GetTime();
 		}
 		else if (key == Qt::Key_Down)
 		{
-			m_throttleType = eStop;
-			displaySpeed(0);
+			m_tmLastKeyReleaseTimestamp[DOWN] = GetTime();
 		}
 	}
 }
@@ -138,6 +142,24 @@ void cCarControllerWidget::updateSignals()
 	// ctrl is our "dead men key" because it can be polled easily
 	if (Qt::ControlModifier == qApp->queryKeyboardModifiers())
 	{
+		// only reset a key (stop throttle or steering) if the key release event happened at least MIN_DEBOUNCE_TIMEOUT [ms]
+		// away and there was no key press in between (this fixes an issue with the no machine remote session)
+		tTimeStamp now = GetTime();
+		if ((now - m_tmLastKeyReleaseTimestamp[UP] > MIN_DEBOUNCE_TIMEOUT && m_throttleType == eForward) ||
+			(now - m_tmLastKeyReleaseTimestamp[DOWN] > MIN_DEBOUNCE_TIMEOUT && m_throttleType == eBackward))
+		{
+			m_throttleType = eStop;
+			displaySpeed(0);
+		}
+
+		if ((now - m_tmLastKeyReleaseTimestamp[LEFT] > MIN_DEBOUNCE_TIMEOUT && m_steeringType == eLeft) ||
+			(now - m_tmLastKeyReleaseTimestamp[RIGHT] > MIN_DEBOUNCE_TIMEOUT && m_steeringType == eRight))
+		{
+			m_steeringType = eStraight;
+			displaySteering(0);
+		}
+
+		// continuously send throttle
 		switch (m_throttleType)
 		{
 		case eForward:
@@ -149,9 +171,9 @@ void cCarControllerWidget::updateSignals()
 		case eStop:
 		default:
 			emit sendSpeed(0);
-			LOG_INFO("throttle default case");
 		}
 
+		// continuously send steering
 		switch (m_steeringType)
 		{
 		case eLeft:
@@ -163,7 +185,6 @@ void cCarControllerWidget::updateSignals()
 		case eStraight:
 		default:
 			emit sendSteering(0);
-			LOG_INFO("steering default case");
 		}
 	}
 	else

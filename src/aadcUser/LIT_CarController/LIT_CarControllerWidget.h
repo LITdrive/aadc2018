@@ -33,6 +33,18 @@ THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS AS IS AND ANY EXPRESS OR I
 #define KEY_ANGLE_INC						Qt::Key_D
 #define KEY_ANGLE_DEC						Qt::Key_A
 
+// when releasing a key, wait at least for this amount of time before we update the state [ms]
+#define MIN_DEBOUNCE_TIMEOUT 200
+
+#define KEY_PRESS_OVERRIDE_TIMESTAMP std::numeric_limits<int64_t>::max()
+
+// key-specific indexes in arrays
+#define UP 0
+#define DOWN 1
+#define RIGHT 2
+#define LEFT 3
+
+
 class cCarControllerWidget : public QWidget, public Ui_CarControllerUi
 {
 Q_OBJECT
@@ -69,6 +81,10 @@ private:
 
 	tFloat32 m_currentSpeed = SPEED_DEFAULT_VALUE;
 	tFloat32 m_currentSteering = STEERING_OFFSET_DEFAULT_VALUE;
+
+	// debounce-fix for no machine remote desktop
+	tTimeStamp m_tmLastKeyPressTimestamp[4] = {};
+	tTimeStamp m_tmLastKeyReleaseTimestamp[4] = {};
 
 	Ui_CarControllerUi* m_ui;
 	QTimer m_timer;
