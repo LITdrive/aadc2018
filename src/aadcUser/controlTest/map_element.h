@@ -4,9 +4,7 @@
 #include "Eigen/Dense"
 #include "Pose2d.h"
 #include "virtual_point.h"
-
-const double MAX_SPEED_LIMIT = 1.0;
-const double MAX_SPEED_LIMIT_ARC = 1.0;
+#include "constants.h"
 
 enum class MapElementType
 {
@@ -47,7 +45,9 @@ class MapElement
     Point2d getCenterPoint() const;
     Point2d getEndPoint() const;
     double getRadius() const;
+    double getCurvature() const;
     double getLength() const;
+    double getSpeedLimit() const;
     int getSegmentKey() const;
 
   private:

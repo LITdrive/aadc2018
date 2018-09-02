@@ -19,20 +19,29 @@ if(CMAKE_VERSION VERSION_LESS "2.8.11")
   include_directories(${OpenCV_INCLUDE_DIRS})
 endif()
 
+if(CMAKE_COMPILER_IS_GNUCXX)
+    add_definitions(-std=gnu++0x)
+endif()
+
+
 include_directories(${OpenCV_INCLUDE_DIRS})
 
 # Tell cmake we will need dlib.  This command will pull in dlib and compile it
 # into your project.  Note that you don't need to compile or install dlib.  All
 # cmake needs is the dlib source code folder and it will take care of everything.
-add_subdirectory(dlib dlib_build)
+#add_subdirectory(dlib dlib_build)
 
 # Declare the executable target built from your sources
 #add_executable(${PROJECT_NAME} controlTest.cpp model_predictive_control.h model_predictive_control.cpp)
-add_executable(${PROJECT_NAME} map_generator_test.cpp 
+add_executable(${PROJECT_NAME} #map_generator_test.cpp 
+							   virtual_point_mover_test.cpp
                                map_generator.cpp
                                map_element.cpp
                                Pose2d.cpp
-                               virtual_point.cpp)
+                               virtual_point.cpp
+                               speed_generator.cpp
+                               virtual_point_mover.cpp
+                               )
 
 install(TARGETS ${PROJECT_NAME} DESTINATION bin/application CONFIGURATIONS RelWithDebInfo Release)
 
@@ -40,4 +49,4 @@ install(TARGETS ${PROJECT_NAME} DESTINATION bin/debug/application CONFIGURATIONS
 
 # Link your application with OpenCV libraries
 target_link_libraries(${PROJECT_NAME} ${OpenCV_LIBS})
-target_link_libraries(${PROJECT_NAME} dlib::dlib )
+#target_link_libraries(${PROJECT_NAME} dlib::dlib )

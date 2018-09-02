@@ -32,7 +32,7 @@ void MapGenerator::plot(cv::Mat& img, double pixelPerMeter) const
   double yMin = std::numeric_limits<double>::max();
   double yMax = -std::numeric_limits<double>::max();
 
-  for(auto element : m_elements)
+  for(MapElement element : m_elements)
   {
     if(xMin > element.getStartPoint()(0))
     {
@@ -86,7 +86,7 @@ void MapGenerator::plot(cv::Mat& img, double pixelPerMeter) const
   }
   imgSizeX = img.size().width;
 
-  for(auto element : m_elements)
+  for(MapElement element : m_elements)
   {
     if(element.getType() == MapElementType::LINE)
     {

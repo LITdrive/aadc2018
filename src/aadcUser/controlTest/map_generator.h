@@ -1,5 +1,3 @@
-//------------------- hpp Part
-
 #pragma once
 
 #include <vector>

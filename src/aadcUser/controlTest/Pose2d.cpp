@@ -8,7 +8,7 @@ Pose2d::Pose2d()
 }
 
 Pose2d::Pose2d(double x, double y, double angle)
-: m_translation(Eigen::Vector2d(x,y)),
+: m_translation(Vector2d(x,y)),
   m_rotation(angle)
 {
 }
@@ -37,8 +37,8 @@ double Pose2d::getLongitudinalDisplacement(const Pose2d& referencePose) const
 {
   double displacement = 0.0;
 
-  auto point = getPoint2d();
-  auto referencePoint = referencePose.getPoint2d();
+  Point2d point = getPoint2d();
+  Point2d referencePoint = referencePose.getPoint2d();
 
   if(point == referencePoint)
   {
@@ -60,8 +60,8 @@ double Pose2d::getLateralDisplacement(const Pose2d& referencePose) const
 {
   double displacement = 0.0;
 
-  auto point = getPoint2d();
-  auto referencePoint = referencePose.getPoint2d();
+  Point2d point = getPoint2d();
+  Point2d referencePoint = referencePose.getPoint2d();
 
   if(point == referencePoint)
   {

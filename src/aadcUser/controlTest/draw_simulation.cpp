@@ -2,12 +2,35 @@
 #include "draw_simulation.h"
 
 
-DrawSimulation::DrawSimulation();
-void DrawSimulation::setMap(MapElements mapElements);
-void DrawSimulation::getMapSize();
-void DrawSimulation::setPixelPerMeter();
-void DrawSimulation::drawMap(cv::Mat img&);
-void DrawSimulation::drawCar(cv::Mat img&, double x, double y, double heading, double steerAngle);
+DrawSimulation::DrawSimulation()
+{
+
+}
+
+void DrawSimulation::setMap(MapElements mapElements)
+{
+
+}
+
+void DrawSimulation::getMapSize()
+{
+
+}
+
+void DrawSimulation::setPixelPerMeter()
+{
+
+}
+
+void DrawSimulation::drawMap(cv::Mat img&)
+{
+
+}
+
+void DrawSimulation::drawCar(cv::Mat img&, double x, double y, double heading, double steerAngle)
+{
+
+}
 
 outline = np.matrix([[-BACKTOWHEEL, (LENGTH - BACKTOWHEEL), (LENGTH - BACKTOWHEEL), -BACKTOWHEEL, -BACKTOWHEEL],
                      [WIDTH / 2, WIDTH / 2, - WIDTH / 2, -WIDTH / 2, WIDTH / 2]])
