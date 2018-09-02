@@ -25,6 +25,9 @@ CMakeLists.txt.user*
 
 # Visual Studio
 .vs/
+Debug/
+Release/
+*_autogen/
 cmake_install.cmake
 *.sln
 *.user
