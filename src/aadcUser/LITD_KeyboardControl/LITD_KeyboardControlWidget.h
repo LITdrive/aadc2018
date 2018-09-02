@@ -15,7 +15,7 @@ THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS AS IS AND ANY EXPRESS OR I
 
 #pragma once
 #include "stdafx.h"
-#include "ui_LIT_car_controller.h"
+#include "ui_litd_keyboard_control.h"
 
 #define SPEED_DEFAULT_VALUE					5.0f
 #define SPEED_MAX_VALUE						100.0f
@@ -45,7 +45,7 @@ THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS AS IS AND ANY EXPRESS OR I
 #define LEFT 3
 
 
-class cCarControllerWidget : public QWidget, public Ui_CarControllerUi
+class cKeyboardControlWidget : public QWidget, public Ui_KeyboardControlUi
 {
 Q_OBJECT
 
@@ -86,7 +86,7 @@ private:
 	tTimeStamp m_tmLastKeyPressTimestamp[4] = {};
 	tTimeStamp m_tmLastKeyReleaseTimestamp[4] = {};
 
-	Ui_CarControllerUi* m_ui;
+	Ui_KeyboardControlUi* m_ui;
 	QTimer m_timer;
 
 protected:
@@ -97,7 +97,7 @@ protected:
 
 
 public:
-	cCarControllerWidget(QWidget* parent = 0, tInt32 updateInterval = 50);
+	cKeyboardControlWidget(QWidget* parent = 0, tInt32 updateInterval = 50);
 
-	~cCarControllerWidget();
+	~cKeyboardControlWidget();
 };

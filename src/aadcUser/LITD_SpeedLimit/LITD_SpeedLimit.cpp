@@ -18,48 +18,80 @@ THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS AS IS AND ANY EXPRESS OR I
 
 
 ADTF_TRIGGER_FUNCTION_FILTER_PLUGIN(CID_TEMPLATEFILTER_DATA_TRIGGERED_FILTER,
-    "LITD_SpeedLimit_cf",
-    cLITD_SpeedLimit,
+    "LITD Speed Limit",
+    cSpeedLimit,
     adtf::filter::pin_trigger({"input"}));
 
 
-cLITD_SpeedLimit::cLITD_SpeedLimit()
-{    //Get Media Descriptions
-    object_ptr<IStreamType> pTypeSignalValue;
-    if IS_OK(adtf::mediadescription::ant::create_adtf_default_stream_type_from_service("tSignalValue", pTypeSignalValue, m_signalDataSampleFactory))
+cSpeedLimit::cSpeedLimit()
+{
+    RegisterPropertyVariable("MAX speed allowed", maxspeed);
+    //DO NOT FORGET TO LOAD MEDIA DESCRIPTION SERVICE IN ADTF3 AND CHOOSE aadc.description
+    object_ptr<IStreamType> pTypeTemplateData;
+    if IS_OK(adtf::mediadescription::ant::create_adtf_default_stream_type_from_service("tSignalValue", pTypeTemplateData, m_templateDataSampleFactory))
     {
-        //(adtf_ddl::access_element::find_index(m_SignalValueSampleFactory, cString("ui32ArduinoTimestamp"), m_ddlSignalValueId.timeStamp));
-        (adtf_ddl::access_element::find_index(m_signalDataSampleFactory, cString("f32Value"), m_ddlSignalValueId.value));
-        LOG_INFO("constructor reachedd");
+        adtf_ddl::access_element::find_index(m_templateDataSampleFactory, cString("f32Value"), m_ddlSignalValueId.value);
     }
     else
     {
-        LOG_INFO("No mediadescription for tSignalValue found!");
+        LOG_WARNING("No mediadescription for tTemplateData found!");
     }
-    LOG_INFO("registering pin reached");
-    //Register(m_oInputMeasWheelsteer, "input steer", pTypeSignalValue);
-    //Register(m_oInputMeasWheelSpeed, "input speed", pTypeSignalValue);
-    //Register(m_oOutputWheelSpeed, "output speed", pTypeSignalValue);
-    //Register(m_oOutputWheelsteer, "output steer", pTypeSignalValue);
-    LOG_INFO("registering pin done");
+
+    Register(m_oReader, "input" , pTypeTemplateData);
+    Register(m_oWriter, "output", pTypeTemplateData);
+
 }
 
 
 //implement the Configure function to read ALL Properties
-tResult cLITD_SpeedLimit::Configure()
+tResult cSpeedLimit::Configure()
 {
-    LOG_INFO("Configuration reached");
-    RETURN_IF_FAILED(_runtime->GetObject(m_pClock));
-    LOG_INFO("Configuration done");
+    speed_config = maxspeed;
     RETURN_NOERROR;
-
 }
 
-tResult cLITD_SpeedLimit::Process(tTimeStamp tmTimeOfTrigger)
+tResult cSpeedLimit::Process(tTimeStamp tmTimeOfTrigger)
 {
 
-    LOG_INFO("process reached");
+    object_ptr<const ISample> pReadSample;
 
+    tFloat32 inputData;
+
+    if (IS_OK(m_oReader.GetLastSample(pReadSample)))
+    {
+        auto oDecoder = m_templateDataSampleFactory.MakeDecoderFor(*pReadSample);
+
+        RETURN_IF_FAILED(oDecoder.IsValid());
+
+        // retrieve the values (using convenience methods that return a variant)
+        RETURN_IF_FAILED(oDecoder.GetElementValue(m_ddlSignalValueId.value, &inputData));
+
+    }
+
+    // Do the Processing
+    tFloat32 outputData = inputData;
+    if (outputData > speed_config)
+     {
+         outputData = speed_config;
+         LOG_INFO("SPEED LIMIT IS %f",speed_config);
+     }
+      else if(outputData < -speed_config)
+      {
+         outputData = -speed_config;
+         LOG_INFO("SPEED LIMIT REVERSE IS %f",-speed_config);
+      }
+
+    object_ptr<ISample> pWriteSample;
+
+    if (IS_OK(alloc_sample(pWriteSample)))
+    {
+
+        auto oCodec = m_templateDataSampleFactory.MakeCodecFor(pWriteSample);
+
+        RETURN_IF_FAILED(oCodec.SetElementValue(m_ddlSignalValueId.value, outputData));
+
+    }
+    m_oWriter << pWriteSample << flush << trigger;
 
     RETURN_NOERROR;
 }

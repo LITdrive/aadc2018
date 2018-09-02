@@ -13,10 +13,10 @@ THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS AS IS AND ANY EXPRESS OR I
 
 **********************************************************************/
 
-#include "LIT_CarControllerWidget.h"
+#include "LITD_KeyboardControlWidget.h"
 
-cCarControllerWidget::cCarControllerWidget(QWidget* parent, tInt32 updateInterval) : QWidget(parent),
-                                                                                     m_ui(new Ui_CarControllerUi)
+cKeyboardControlWidget::cKeyboardControlWidget(QWidget* parent, tInt32 updateInterval) : QWidget(parent),
+                                                                                         m_ui(new Ui_KeyboardControlUi)
 {
 	m_ui->setupUi(this);
 
@@ -26,17 +26,17 @@ cCarControllerWidget::cCarControllerWidget(QWidget* parent, tInt32 updateInterva
 	m_timer.start();
 }
 
-cCarControllerWidget::~cCarControllerWidget()
+cKeyboardControlWidget::~cKeyboardControlWidget()
 {
 	delete m_ui;
 }
 
-void cCarControllerWidget::displaySpeed(tFloat32 value)
+void cKeyboardControlWidget::displaySpeed(tFloat32 value)
 {
 	m_ui->lcdNumber_throttle->display(value);
 }
 
-void cCarControllerWidget::displaySteering(tFloat32 value)
+void cKeyboardControlWidget::displaySteering(tFloat32 value)
 {
 	m_ui->lcdNumber_steering->display(value);
 }
@@ -44,7 +44,7 @@ void cCarControllerWidget::displaySteering(tFloat32 value)
 // forward declaration
 tTimeStamp GetTime();
 
-void cCarControllerWidget::keyPressEvent(QKeyEvent* event)
+void cKeyboardControlWidget::keyPressEvent(QKeyEvent* event)
 {
 	// only consider initial key presses
 	if (!event->isAutoRepeat())
@@ -108,7 +108,7 @@ void cCarControllerWidget::keyPressEvent(QKeyEvent* event)
 	}
 }
 
-void cCarControllerWidget::keyReleaseEvent(QKeyEvent* event)
+void cKeyboardControlWidget::keyReleaseEvent(QKeyEvent* event)
 {
 	// only consider initial key presses
 	if (!event->isAutoRepeat())
@@ -137,7 +137,7 @@ void cCarControllerWidget::keyReleaseEvent(QKeyEvent* event)
 	}
 }
 
-void cCarControllerWidget::updateSignals()
+void cKeyboardControlWidget::updateSignals()
 {
 	// ctrl is our "dead men key" because it can be polled easily
 	if (Qt::ControlModifier == qApp->queryKeyboardModifiers())
@@ -195,13 +195,13 @@ void cCarControllerWidget::updateSignals()
 	}
 }
 
-void cCarControllerWidget::mousePressEvent(QMouseEvent* event)
+void cKeyboardControlWidget::mousePressEvent(QMouseEvent* event)
 {
 	// a simple click will not set the focus correctly ...
 	setFocus();
 }
 
-void cCarControllerWidget::focusOutEvent(QFocusEvent* event)
+void cKeyboardControlWidget::focusOutEvent(QFocusEvent* event)
 {
 	// force speed to zero
 	m_throttleType = eStop;

@@ -13,13 +13,13 @@ THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS AS IS AND ANY EXPRESS OR I
 
 **********************************************************************/
 
-#include "LIT_CarControllerFilter.h"
+#include "LITD_KeyboardControlFilter.h"
 #include "ADTF3_helper.h"
 //*************************************************************************************************
 
-ADTF_PLUGIN("LIT Car Controller Plugin", cCarControllerFilter);
+ADTF_PLUGIN("LITD Keyboard Control Plugin", cKeyboardControlFilter);
 
-cCarControllerFilter::cCarControllerFilter()
+cKeyboardControlFilter::cKeyboardControlFilter()
 {
 	RegisterPropertyVariable("update interval [msec]", m_f64updateInterval);
 
@@ -42,9 +42,9 @@ cCarControllerFilter::cCarControllerFilter()
 	create_pin(*this, m_oOutputSpeedController, "speed", pTypeSignalValue);
 }
 
-QWidget* cCarControllerFilter::CreateView()
+QWidget* cKeyboardControlFilter::CreateView()
 {
-	m_pUiFileWidget = new cCarControllerWidget(nullptr, m_f64updateInterval);
+	m_pUiFileWidget = new cKeyboardControlWidget(nullptr, m_f64updateInterval);
 
 	connect(m_pUiFileWidget, SIGNAL(sendSteering(tFloat32)), this, SLOT(SendSteering(tFloat32)));
 	connect(m_pUiFileWidget, SIGNAL(sendSpeed(tFloat32)), this, SLOT(SendSpeed(tFloat32)));
@@ -52,25 +52,25 @@ QWidget* cCarControllerFilter::CreateView()
 	return m_pUiFileWidget;
 }
 
-tVoid cCarControllerFilter::ReleaseView()
+tVoid cKeyboardControlFilter::ReleaseView()
 {
 	delete m_pUiFileWidget;
 	m_pUiFileWidget = nullptr;
 }
 
-tResult cCarControllerFilter::OnIdle()
+tResult cKeyboardControlFilter::OnIdle()
 {
 	std::lock_guard<std::mutex> oGuard(m_oMutex);
 	RETURN_NOERROR;
 }
 
-tResult cCarControllerFilter::OnTimer()
+tResult cKeyboardControlFilter::OnTimer()
 {
 	std::lock_guard<std::mutex> oGuard(m_oMutex);
 	RETURN_NOERROR;
 }
 
-tResult cCarControllerFilter::Init(tInitStage eStage)
+tResult cKeyboardControlFilter::Init(tInitStage eStage)
 {
 	RETURN_IF_FAILED(adtf::ui::cQtUIFilter::Init(eStage));
 	RETURN_IF_FAILED(_runtime->GetObject(m_pClock));
@@ -79,7 +79,7 @@ tResult cCarControllerFilter::Init(tInitStage eStage)
 
 /* MOVEMENT */
 
-tResult cCarControllerFilter::SendSteering(tFloat32 value)
+tResult cKeyboardControlFilter::SendSteering(tFloat32 value)
 {
 	std::lock_guard<std::mutex> oGuard(m_oMutex);
 	transmitSignalValue(m_oOutputSteeringController, m_pClock->GetStreamTime(), m_SignalValueSampleFactory,
@@ -87,7 +87,7 @@ tResult cCarControllerFilter::SendSteering(tFloat32 value)
 	RETURN_NOERROR;
 }
 
-tResult cCarControllerFilter::SendSpeed(tFloat32 value)
+tResult cKeyboardControlFilter::SendSpeed(tFloat32 value)
 {
 	std::lock_guard<std::mutex> oGuard(m_oMutex);
 	transmitSignalValue(m_oOutputSpeedController, m_pClock->GetStreamTime(), m_SignalValueSampleFactory,

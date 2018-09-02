@@ -17,13 +17,13 @@ THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS AS IS AND ANY EXPRESS OR I
 
 #include "stdafx.h"
 
-#define CID_CAR_CONTROLLER  "lit_carcontroler.filter.user.aadc.cid"
+#define CID_KEYBOARD_CONTROL  "litd_keyboard_control.filter.user.aadc.cid"
 
 /*! forward declaration */
-class cCarControllerWidget;
+class cKeyboardControlWidget;
 
 /*! the main class for the car controller filter. */
-class cCarControllerFilter : public QObject, virtual public cQtUIFilter
+class cKeyboardControlFilter : public QObject, virtual public cQtUIFilter
 {
 Q_OBJECT
 
@@ -48,7 +48,7 @@ public slots:
 	tResult SendSpeed(tFloat32 value);
 
 public:
-	ADTF_CLASS_ID_NAME(cCarControllerFilter, CID_CAR_CONTROLLER, "LIT Car Controller");
+	ADTF_CLASS_ID_NAME(cKeyboardControlFilter, CID_KEYBOARD_CONTROL, "LITD Keyboard Control");
 
 	ADTF_CLASS_DEPENDENCIES(REQUIRE_INTERFACE(adtf::ui::ant::IQtXSystem),
 		REQUIRE_INTERFACE(adtf::services::IReferenceClock));
@@ -71,7 +71,7 @@ private:
 	cSampleCodecFactory m_SignalValueSampleFactory;
 
 	/*! The user interface file widget */
-	cCarControllerWidget* m_pUiFileWidget = nullptr;
+	cKeyboardControlWidget* m_pUiFileWidget = nullptr;
 
 	/*! The mutex */
 	std::mutex m_oMutex;
@@ -85,10 +85,10 @@ private:
 public:
 
 	/*! Default constructor. */
-	cCarControllerFilter();
+	cKeyboardControlFilter();
 
 	/*! Destructor. */
-	virtual ~cCarControllerFilter() = default;
+	virtual ~cKeyboardControlFilter() = default;
 
 protected: // Implement cBaseQtFilter
 	QWidget* CreateView() override;

@@ -1,4 +1,4 @@
-﻿/*********************************************************************
+/*********************************************************************
 Copyright (c) 2018
 Audi Autonomous Driving Cup. All rights reserved.
 
@@ -15,8 +15,20 @@ THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS AS IS AND ANY EXPRESS OR I
 
 #pragma once
 
-//*************************************************************************************************
-#define CID_TEMPLATEFILTER_DATA_TRIGGERED_FILTER "litd_safety_speed_limit_filter.filter.user.aadc.cid"
+#include <iomanip>      // std::setw
+
+#include <QMainWindow>
+#include <QtWidgets>
+#include <QtCore/QCoreApplication>
+
+#include <QtGui/QOpenGLContext>
+#include <QtGui/QOpenGLPaintDevice>
+#include <QtGui/QPainter>
+
+#include <adtf_filtersdk.h>
+
+//always include filtersdk, systemsdk or streaming3 sdk BEFORE adtfui!!
+#include <adtf_ui.h>
 
 
 using namespace adtf_util;
@@ -26,52 +38,9 @@ using namespace adtf::base;
 using namespace adtf::streaming;
 using namespace adtf::mediadescription;
 using namespace adtf::filter;
-using namespace std;
+using namespace adtf::ui;
+using namespace adtf::filter::ant;
 
-class cLITD_Safety_Speed_Limit : public cTriggerFunction
-{
-private:
-    /*! Media Descriptions. */
-    struct tSignalValueId
-    {
-        tSize timeStamp;
-        tSize value;
-    } m_ddlSignalValueId;
-
-    adtf::base::property_variable<tFloat32> maxspeed = 10;
-    float speed_config = 0;
-    /*! The template data sample factory */
-    adtf::mediadescription::cSampleCodecFactory m_templateDataSampleFactory;
-
-    /*! Reader of an InPin. */
-    cPinReader m_oReader;
-
-
-    /*! Writer to an OutPin. */
-    cPinWriter m_oWriter;
-
-public:
-
-    /*! Default constructor. */
-    cLITD_Safety_Speed_Limit();
-
-    /*! Destructor. */
-    virtual ~cLITD_Safety_Speed_Limit() = default;
-
-    /**
-    * Overwrites the Configure
-    * This is to Read Properties prepare your Trigger Function
-    */
-    tResult Configure() override;
-    /**
-    * Overwrites the Process
-    * You need to implement the Reading and Writing of Samples within this function
-    * MIND: Do Reading until the Readers queues are empty or use the IPinReader::GetLastSample()
-    * This FUnction will be called if the Run() of the TriggerFunction was called.
-    */
-    tResult Process(tTimeStamp tmTimeOfTrigger) override;
-
-};
-
-
-//*************************************************************************************************
+//workaround for not "self-contained" qt includes (DW support ticket : #1854)
+#include "LITD_KeyboardControlFilter.h"
+#include "LITD_KeyboardControlWidget.h"

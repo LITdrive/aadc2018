@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.10.0)
 
-project(lit_car_controller)
+project(litd_keyboard_control)
 
 if (NOT TARGET adtf::ui)
     find_package(ADTF COMPONENTS filtersdk ui)
@@ -16,11 +16,11 @@ adtf_use_qt(Widgets Gui)
 INCLUDE_DIRECTORIES( ${Boost_INCLUDE_DIR} )
 
 set (HEADERS    stdafx.h
-					    LIT_CarControllerFilter.h
-						LIT_CarControllerWidget.h )
+				LITD_KeyboardControlFilter.h
+				LITD_KeyboardControlWidget.h )
 set (SOURCES
-					  LIT_CarControllerFilter.cpp
-					  LIT_CarControllerWidget.cpp)
+				LITD_KeyboardControlFilter.cpp
+				LITD_KeyboardControlWidget.cpp)
 
 
 # Instruct CMake to run moc automatically when needed.
@@ -30,7 +30,7 @@ set (CMAKE_AUTORCC ON)
 
 #uncomment if CMAKE_AUTOMOC/UIC is disabled
 #ui/MainWindow.ui 
-set (UI_SOURCE LIT_car_controller.ui)
+set (UI_SOURCE litd_keyboard_control.ui)
 
 adtf_add_filter(${PROJECT_NAME}
 				${HEADERS}

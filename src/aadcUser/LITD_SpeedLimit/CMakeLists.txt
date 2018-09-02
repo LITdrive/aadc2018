@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.10.0)
 
-project(litd_speedlimit_filter)
+project(litd_speed_limit)
 
 include_directories(${OpenCV_INCLUDE_DIRS})
 
