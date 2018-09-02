@@ -40,3 +40,6 @@ cmake_install.cmake
 doxygen.cfg
 CMakeDoxyfile.in
 CMakeDoxygenDefaults.cmake
+
+# Jupyter Notebook
+.ipynb_checkpoints/
