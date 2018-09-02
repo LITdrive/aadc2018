@@ -19,6 +19,10 @@ project(cpp11test)
 #  include_directories(${OpenCV_INCLUDE_DIRS})
 #endif()
 
+if(CMAKE_COMPILER_IS_GNUCXX)
+    add_definitions(-std=gnu++0x)
+endif()
+
 # Declare the executable target built from your sources
 add_executable(${PROJECT_NAME} cpp_11_test.cpp)
 
@@ -28,4 +32,4 @@ install(TARGETS ${PROJECT_NAME} DESTINATION bin/application CONFIGURATIONS RelWi
 install(TARGETS ${PROJECT_NAME} DESTINATION bin/debug/application CONFIGURATIONS Debug)
 
 # Link your application with OpenCV libraries
-target_link_libraries(${PROJECT_NAME} ${OpenCV_LIBS})
+#target_link_libraries(${PROJECT_NAME} ${OpenCV_LIBS})
