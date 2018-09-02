@@ -55,5 +55,5 @@ adtf_create_plugindescription(
         "adtf_xsystem")
 
 #this is to add a folder within the ADTF solution
-set_property(TARGET ${PROJECT_NAME} PROPERTY FOLDER helper)
-set_property(TARGET ${PROJECT_NAME}_pdgen PROPERTY FOLDER helper)
+set_property(TARGET ${PROJECT_NAME} PROPERTY FOLDER user)
+set_property(TARGET ${PROJECT_NAME}_pdgen PROPERTY FOLDER user)
