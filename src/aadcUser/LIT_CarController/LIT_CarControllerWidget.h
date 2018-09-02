@@ -17,48 +17,71 @@ THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS AS IS AND ANY EXPRESS OR I
 #include "stdafx.h"
 #include "ui_LIT_car_controller.h"
 
+#define SPEED_DEFAULT_VALUE					5.0f
+#define SPEED_MAX_VALUE						100.0f
+#define SPEED_MIN_VALUE						0.0f
+#define SPEED_INCREMENT_VALUE				0.5f
+
+#define STEERING_OFFSET_DEFAULT_VALUE		50.0f
+#define STEERING_OFFSET_MAX_VALUE			100.0f
+#define STEERING_OFFSET_MIN_VALUE			0.0f
+#define STEERING_OFFSET_INCREMENT_VALUE		10.0f
+
+// keys for speed angle change
+#define KEY_SPEED_INC						Qt::Key_W
+#define KEY_SPEED_DEC						Qt::Key_S
+#define KEY_ANGLE_INC						Qt::Key_D
+#define KEY_ANGLE_DEC						Qt::Key_A
+
 class cCarControllerWidget : public QWidget, public Ui_CarControllerUi
 {
-    Q_OBJECT
+Q_OBJECT
 
-signals:
-    void keyReceived(int value);
-    void steeringReceived(int value);
-    void throttleReceived(int value);
-    void buttonClicked(int button);
-    void sendpressUp();
-    void sendpressDown();
-    void sendpressLeft();
-    void sendpressRight();
-    void sendreleaseUp();
-    void sendreleaseDown();
-    void sendreleaseLeft();
-    void sendreleaseRight();
+signals :
+	void sendSpeed(tFloat32 value);
+	void sendSteering(tFloat32 value);
 
 public slots:
-    void setSpeed(int value);
-    void setSteering(int value);
-    void update();
+	void updateSignals();
 
 public:
-    QButtonGroup * getRCButtonGroup();
+	void displaySpeed(tFloat32 value);
+	void displaySteering(tFloat32 value);
 
 private:
-    /*! The user interface */
-    Ui_CarControllerUi *m_ui;
-    QTimer m_timer;
 
+	enum eThrottleType
+	{
+		eStop = 0,
+		eForward = 1,
+		eBackward = 2
+	};
+
+	enum eSteeringType
+	{
+		eStraight = 0,
+		eLeft = 1,
+		eRight = 2
+	};
+
+	eThrottleType m_throttleType = eStop;
+	eSteeringType m_steeringType = eStraight;
+
+	tFloat32 m_currentSpeed = SPEED_DEFAULT_VALUE;
+	tFloat32 m_currentSteering = STEERING_OFFSET_DEFAULT_VALUE;
+
+	Ui_CarControllerUi* m_ui;
+	QTimer m_timer;
 
 protected:
-    void mousePressEvent(QMouseEvent *event);
-    void focusOutEvent(QFocusEvent* event);
-    void keyPressEvent(QKeyEvent *event);
-    void keyReleaseEvent(QKeyEvent* event);
+	void keyPressEvent(QKeyEvent* event);
+	void keyReleaseEvent(QKeyEvent* event);
+	void mousePressEvent(QMouseEvent* event);
+	void focusOutEvent(QFocusEvent* event);
 
 
 public:
-    cCarControllerWidget(QWidget *parent = 0);
+	cCarControllerWidget(QWidget* parent = 0, tInt32 updateInterval = 50);
 
-    ~cCarControllerWidget();
+	~cCarControllerWidget();
 };
-

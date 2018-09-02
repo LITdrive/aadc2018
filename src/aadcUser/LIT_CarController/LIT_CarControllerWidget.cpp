@@ -15,101 +15,179 @@ THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS AS IS AND ANY EXPRESS OR I
 
 #include "LIT_CarControllerWidget.h"
 
-cCarControllerWidget::cCarControllerWidget(QWidget *parent) : QWidget(parent), m_ui(new Ui_CarControllerUi)
+cCarControllerWidget::cCarControllerWidget(QWidget* parent, tInt32 updateInterval) : QWidget(parent),
+                                                                                     m_ui(new Ui_CarControllerUi)
 {
-    m_ui->setupUi(this);
+	m_ui->setupUi(this);
 
-    // Rearrange buttons id 0...5 for lights
-    m_ui->buttonGroup_RC->setId(m_ui->buttonGroup_RC->buttons().at(0), 0); // Head
-    m_ui->buttonGroup_RC->setId(m_ui->buttonGroup_RC->buttons().at(1), 1); // Brake
-    
-    m_timer.setInterval(50);
-    connect(&m_timer, SIGNAL(timeout()), this, SLOT(update()));
-    m_timer.start();
+	// check the key state rapidly
+	m_timer.setInterval(updateInterval);
+	connect(&m_timer, SIGNAL(timeout()), this, SLOT(updateSignals()));
+	m_timer.start();
 }
-
 
 cCarControllerWidget::~cCarControllerWidget()
 {
-    delete m_ui;
+	delete m_ui;
 }
 
-void cCarControllerWidget::setSpeed(int value)
+void cCarControllerWidget::displaySpeed(tFloat32 value)
 {
-
+	m_ui->lcdNumber_throttle->display(value);
 }
 
-void cCarControllerWidget::setSteering(int value)
+void cCarControllerWidget::displaySteering(tFloat32 value)
 {
-
+	m_ui->lcdNumber_steering->display(value);
 }
 
-void cCarControllerWidget::keyPressEvent(QKeyEvent* event) {
-    if (!event->isAutoRepeat()) {
-        emit keyReceived((int)event->key());
+// forward declaration
+tTimeStamp GetTime();
 
-        int key = event->key();
-        if (key == 16777235) {
-            // UP
-            emit sendpressUp();
-            LOG_INFO("KeyboardRemote: Up Press");
-        } else if (key == 16777234) {
-            // LEFT
-            emit sendpressLeft();
-            LOG_INFO("KeyboardRemote: Left Press");
-        } else if (key == 16777236) {
-            // Right
-            emit sendpressRight();
-            LOG_INFO("KeyboardRemote: Right Press");
-        } else if (key == 16777237) {
-            // DOWN
-            emit sendpressDown();
-            LOG_INFO("KeyboardRemote: Down Press");
-        }
-    }
-}
-
-void cCarControllerWidget::keyReleaseEvent(QKeyEvent* event) {
-    if (!event->isAutoRepeat()) {
-        //        emit keyReceived((int)event->key());
-
-        int key = event->key();
-        if (key == 16777235) {
-            // UP
-            emit sendreleaseUp();
-            LOG_INFO("KeyboardRemote: Up Realease");
-        } else if (key == 16777234) {
-            // LEFT
-            emit sendreleaseLeft();
-            LOG_INFO("KeyboardRemote: Left Release");
-        } else if (key == 16777236) {
-            // Right
-            emit sendreleaseRight();
-            LOG_INFO("KeyboardRemote: Right Release");
-        } else if (key == 16777237) {
-            // DOWN
-            emit sendreleaseDown();
-            LOG_INFO("KeyboardRemote: Down Release");
-        }
-    }
-}
-
-QButtonGroup* cCarControllerWidget::getRCButtonGroup()
+void cCarControllerWidget::keyPressEvent(QKeyEvent* event)
 {
-    return m_ui->buttonGroup_RC;
+	// only consider initial key presses
+	if (!event->isAutoRepeat())
+	{
+		const int key = event->key();
+
+		// W, A, S, D keys for changing the speed
+		if (key == KEY_SPEED_INC)
+		{
+			m_currentSpeed = std::min(m_currentSpeed + SPEED_INCREMENT_VALUE,
+			                          SPEED_MAX_VALUE);
+		}
+		else if (key == KEY_SPEED_DEC)
+		{
+			m_currentSpeed = std::max(-SPEED_MAX_VALUE,
+			                          m_currentSpeed - SPEED_INCREMENT_VALUE);
+		}
+		else if (key == KEY_ANGLE_INC)
+		{
+			m_currentSteering = std::min(m_currentSteering + STEERING_OFFSET_INCREMENT_VALUE,
+			                             STEERING_OFFSET_MAX_VALUE);
+		}
+		else if (key == KEY_ANGLE_DEC)
+		{
+			m_currentSteering = std::min(-STEERING_OFFSET_MAX_VALUE,
+			                             m_currentSteering + STEERING_OFFSET_INCREMENT_VALUE);
+		}
+
+		// drive keys
+		if (key == Qt::Key_Up)
+		{
+			m_throttleType = eForward;
+		}
+		else if (key == Qt::Key_Left)
+		{
+			m_steeringType = eLeft;
+		}
+		else if (key == Qt::Key_Right)
+		{
+			m_steeringType = eRight;
+		}
+		else if (key == Qt::Key_Down)
+		{
+			m_throttleType = eBackward;
+		}
+
+		// update gui
+		if (m_throttleType != eStop)
+		{
+			displaySpeed(m_currentSpeed);
+		}
+		if (m_steeringType != eStraight)
+		{
+			displaySteering(m_currentSteering);
+		}
+	}
 }
 
-void cCarControllerWidget::update()
+void cCarControllerWidget::keyReleaseEvent(QKeyEvent* event)
 {
-
+	// only consider initial key presses
+	if (!event->isAutoRepeat())
+	{
+		// emit arrow-key release signals
+		const int key = event->key();
+		if (key == Qt::Key_Up)
+		{
+			m_throttleType = eStop;
+			displaySpeed(0);
+		}
+		else if (key == Qt::Key_Left)
+		{
+			m_steeringType = eStraight;
+			displaySteering(0);
+		}
+		else if (key == Qt::Key_Right)
+		{
+			m_steeringType = eStraight;
+			displaySteering(0);
+		}
+		else if (key == Qt::Key_Down)
+		{
+			m_throttleType = eStop;
+			displaySpeed(0);
+		}
+	}
 }
 
-void cCarControllerWidget::mousePressEvent(QMouseEvent* event) {
-    // printf("\nMouse in board");
-    setFocus();
+void cCarControllerWidget::updateSignals()
+{
+	// ctrl is our "dead men key" because it can be polled easily
+	if (Qt::ControlModifier == qApp->queryKeyboardModifiers())
+	{
+		switch (m_throttleType)
+		{
+		case eForward:
+			emit sendSpeed(m_currentSpeed);
+			break;
+		case eBackward:
+			emit sendSpeed(-m_currentSpeed);
+			break;
+		case eStop:
+		default:
+			emit sendSpeed(0);
+			LOG_INFO("throttle default case");
+		}
+
+		switch (m_steeringType)
+		{
+		case eLeft:
+			emit sendSteering(-m_currentSteering);
+			break;
+		case eRight:
+			emit sendSteering(m_currentSteering);
+			break;
+		case eStraight:
+		default:
+			emit sendSteering(0);
+			LOG_INFO("steering default case");
+		}
+	}
+	else
+	{
+		// stop if the "dead men key" is not pressed
+		emit sendSpeed(0);
+		emit sendSteering(0);
+	}
 }
 
-void cCarControllerWidget::focusOutEvent(QFocusEvent* event){
-    emit sendreleaseRight(); // reset steering = 0
-    emit sendreleaseDown(); // reset speed = 0
+void cCarControllerWidget::mousePressEvent(QMouseEvent* event)
+{
+	// a simple click will not set the focus correctly ...
+	setFocus();
+}
+
+void cCarControllerWidget::focusOutEvent(QFocusEvent* event)
+{
+	// force speed to zero
+	m_throttleType = eStop;
+	m_steeringType = eStraight;
+}
+
+tTimeStamp GetTime()
+{
+	return adtf_util::cHighResTimer::GetTime();
 }

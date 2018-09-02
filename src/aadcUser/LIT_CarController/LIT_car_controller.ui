@@ -14,7 +14,7 @@
    <string>Widget</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="2" column="0">
+   <item row="1" column="0">
     <widget class="QFrame" name="frame">
      <property name="minimumSize">
       <size>
@@ -31,24 +31,6 @@
      <layout class="QGridLayout" name="gridLayout_5">
       <item row="1" column="1">
        <widget class="QLCDNumber" name="lcdNumber_steering"/>
-      </item>
-      <item row="0" column="0">
-       <widget class="QLabel" name="label_throttle">
-        <property name="font">
-         <font>
-          <pointsize>16</pointsize>
-          <weight>75</weight>
-          <italic>true</italic>
-          <bold>true</bold>
-         </font>
-        </property>
-        <property name="text">
-         <string>Throttle</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-       </widget>
       </item>
       <item row="0" column="1">
        <widget class="QLabel" name="label_steering">
@@ -71,59 +53,43 @@
       <item row="1" column="0">
        <widget class="QLCDNumber" name="lcdNumber_throttle"/>
       </item>
+      <item row="0" column="0">
+       <widget class="QLabel" name="label_throttle">
+        <property name="font">
+         <font>
+          <pointsize>16</pointsize>
+          <weight>75</weight>
+          <italic>true</italic>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="text">
+         <string>Throttle</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
      </layout>
     </widget>
    </item>
-   <item row="1" column="0">
-    <widget class="QTabWidget" name="tabWidget">
-     <property name="currentIndex">
-      <number>0</number>
+   <item row="0" column="0">
+    <widget class="QLabel" name="label_lights">
+     <property name="font">
+      <font>
+       <pointsize>18</pointsize>
+       <weight>75</weight>
+       <italic>true</italic>
+       <bold>true</bold>
+      </font>
      </property>
-     <widget class="QWidget" name="tab_2">
-      <attribute name="title">
-       <string>Lights</string>
-      </attribute>
-      <layout class="QGridLayout" name="gridLayout_2">
-       <item row="1" column="0">
-        <widget class="QPushButton" name="pushButton_Enable">
-         <property name="text">
-          <string>Enable RC</string>
-         </property>
-         <attribute name="buttonGroup">
-          <string notr="true">buttonGroup_RC</string>
-         </attribute>
-        </widget>
-       </item>
-       <item row="1" column="1">
-        <widget class="QPushButton" name="pushButton_Disable">
-         <property name="text">
-          <string>Disable RC</string>
-         </property>
-         <attribute name="buttonGroup">
-          <string notr="true">buttonGroup_RC</string>
-         </attribute>
-        </widget>
-       </item>
-       <item row="0" column="0" colspan="2">
-        <widget class="QLabel" name="label_lights">
-         <property name="font">
-          <font>
-           <pointsize>18</pointsize>
-           <weight>75</weight>
-           <italic>true</italic>
-           <bold>true</bold>
-          </font>
-         </property>
-         <property name="text">
-          <string>RC Car Control</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignCenter</set>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </widget>
+     <property name="text">
+      <string>Keyboard Control</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
     </widget>
    </item>
   </layout>
@@ -131,7 +97,4 @@
  <layoutdefault spacing="6" margin="11"/>
  <resources/>
  <connections/>
- <buttongroups>
-  <buttongroup name="buttonGroup_RC"/>
- </buttongroups>
 </ui>
