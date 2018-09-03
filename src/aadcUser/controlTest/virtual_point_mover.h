@@ -10,6 +10,8 @@
 class VirtualPointMover
 {
   public:
+    EIGEN_MAKE_ALIGNED_OPERATOR_NEW;
+
     VirtualPointMover();
 
     void   updateStep(double dtime);

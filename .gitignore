@@ -25,6 +25,9 @@ CMakeLists.txt.user*
 
 # Visual Studio
 .vs/
+Debug/
+Release/
+*_autogen/
 cmake_install.cmake
 *.sln
 *.user
@@ -37,3 +40,6 @@ cmake_install.cmake
 doxygen.cfg
 CMakeDoxyfile.in
 CMakeDoxygenDefaults.cmake
+
+# Jupyter Notebook
+.ipynb_checkpoints/

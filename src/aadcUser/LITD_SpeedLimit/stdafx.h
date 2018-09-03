@@ -1,3 +1,4 @@
+#pragma once
 /**********************************************************************
 Copyright (c)
 Audi Autonomous Driving Cup. All rights reserved.
@@ -13,30 +14,22 @@ THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS “AS IS” AND ANY EXPRESS OR
 
 
 **********************************************************************
-* $Author:: spie#$  $Date:: 2017-05-15 10:33:38#$ $Rev:: 63228   $
+* $Author:: hart#$  $Date:: 2017-05-19 08:12:10#$ $Rev:: 63515   $
 **********************************************************************/
 
-#ifndef __STD_INCLUDES_HEADER
-#define __STD_INCLUDES_HEADER
 
-#include <adtf_platform_inc.h>
-#include <adtf_plugin_sdk.h>
-using namespace adtf;
 
-#include <adtf_graphics.h>
-using namespace adtf_graphics;
 
-#include <QtGui/QtGui>
-#include <QtCore/QtCore>
+#pragma once
+
 #ifdef WIN32
-#ifdef _DEBUG
-#pragma comment(lib, "qtmaind.lib")
-#pragma comment(lib, "qtcored4.lib")
-#pragma comment(lib, "qtguid4.lib")
-#else // _DEBUG
-#pragma comment(lib, "qtmain.lib")
-#pragma comment(lib, "qtcore4.lib")
-#pragma comment(lib, "qtgui4.lib")
+#include <windows.h>
 #endif
-#endif
-#endif // __STD_INCLUDES_HEADER
+
+//adtf
+#include <adtf3.h>
+#include <adtf_platform_inc.h>
+#include <a_utils_platform_inc.h>
+#include <adtf_systemsdk.h>
+
+using namespace std;

@@ -13,6 +13,7 @@
 class MapGenerator
 {
   public:
+    EIGEN_MAKE_ALIGNED_OPERATOR_NEW;
     MapGenerator();
     void generateLine(const Point2d& startPoint, const Point2d& endPoint);
     void generateArc(Orientation orientation, const Point2d& startPoint, const Point2d& centerPoint, const Point2d& endPoint);

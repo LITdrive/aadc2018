@@ -97,12 +97,19 @@ VirtualPoint MapElement::getVirtualPointAtDistance(double distance) const
   {
     Point2d startPoint = m_startPoint;
     Point2d endPoint = m_endPoint;
-    Point2d test = endPoint - startPoint;
-//    Vector2d direction = test;
-    Vector2d directionUnitTangent = test / m_length;
+    double xs = startPoint(0);
+    double xe = endPoint(0);
+    double x = xe - xs;
+    double y = endPoint(1) - startPoint(1);
+    x /= m_length;
+    y /= m_length;
 
+//    Point2d test = endPoint - startPoint;
+//    Vector2d direction = test;
+//    Vector2d directionUnitTangent = test / m_length;
+    Vector2d directionUnitTangent(x, y);
     Point2d pointAtDistance = m_startPoint + (directionUnitTangent * distance);
-    double angle = atan2(test(1), test(0));
+    double angle = atan2(y, x);
     Pose2d pose2dAtDistance(pointAtDistance(0), pointAtDistance(1), angle);
 
     x = pose2dAtDistance.getX();
