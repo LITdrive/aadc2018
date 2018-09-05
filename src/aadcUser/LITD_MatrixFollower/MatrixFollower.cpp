@@ -18,8 +18,8 @@ THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS AS IS AND ANY EXPRESS OR I
 #include "ADTF3_OpenCV_helper.h"
 
 
-ADTF_TRIGGER_FUNCTION_FILTER_PLUGIN(CID_COPENCVTEMPLATE_DATA_TRIGGERED_FILTER,
-                                    "MatrixFollower_cf",
+ADTF_TRIGGER_FUNCTION_FILTER_PLUGIN(CID_LITD_MATRIXFOLLOWER_DATA_TRIGGERED_FILTER,
+                                    "LITD_MatrixFollower",
                                     cMatrixFollower,
                                     adtf::filter::pin_trigger({ "input" }));
 
@@ -34,15 +34,23 @@ cMatrixFollower::cMatrixFollower()
     //Register input pin
     Register(m_oReader, "i_BirdsEyeImg", pType);
 
-    //Register output pins
-    Register(m_oSpeedWriter, "o_Speed", pType);
-    Register(m_oSteeringWriter, "o_Steering", pType);
-
     //register callback for type changes
     m_oReader.SetAcceptTypeCallback([this](const adtf::ucom::ant::iobject_ptr<const adtf::streaming::ant::IStreamType>& pType) -> tResult
     {
         return ChangeType(m_oReader, m_sImageFormat, *pType.Get());
     });
+
+    object_ptr<IStreamType> pTypeSignalValue;
+    if(IS_OK(adtf::mediadescription::ant::create_adtf_default_stream_type_from_service("tSignalValue", pTypeSignalValue, m_SignalValueSampleFactory))) {
+        (adtf_ddl::access_element::find_index(m_SignalValueSampleFactory, cString("ui32ArduinoTimestamp"), m_ddlSignalValueId.timeStamp));
+        (adtf_ddl::access_element::find_index(m_SignalValueSampleFactory, cString("f32Value"), m_ddlSignalValueId.value));
+    } else {
+        LOG_INFO("No mediadescription for tUltrasonicStruct found!");
+    }
+
+    //Register output pins
+    Register(m_oSteeringWriter, "steering", pTypeSignalValue);
+    Register(m_oSpeedWriter, "speed", pTypeSignalValue);
 
     // generating bitmask path
     m_Path = imread(PATH_TO_PATH);

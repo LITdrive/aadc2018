@@ -13,11 +13,11 @@ THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS AS IS AND ANY EXPRESS OR I
 
 **********************************************************************/
 
-
+#include "stdafx.h"
 #pragma once
 
 //*************************************************************************************************
-#define CID_COPENCVTEMPLATE_DATA_TRIGGERED_FILTER "litd_matrixfollower.filter.user.aadc.cid"
+#define CID_LITD_MATRIXFOLLOWER_DATA_TRIGGERED_FILTER "litd_matrixfollower.filter.user.aadc.cid"
 #define SEARCH_SPACE_SIZE 30
 #define CUTOUT_X 50
 #define CUTOUT_Y 20
@@ -39,6 +39,15 @@ using namespace cv;
 class cMatrixFollower : public cTriggerFunction
 {
 private:
+
+    struct tSignalValueId
+    {
+        tSize timeStamp;
+        tSize value;
+    } m_ddlSignalValueId;
+
+    /*! The signal value sample factory */
+    cSampleCodecFactory m_SignalValueSampleFactory;
 
     //Pins
     /*! Reader of an InPin. */
