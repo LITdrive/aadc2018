@@ -13,7 +13,7 @@ THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS AS IS AND ANY EXPRESS OR I
 
 **********************************************************************/
 
-#include "stdafx.h"
+//#include "stdafx.h"
 #pragma once
 
 //*************************************************************************************************
@@ -21,8 +21,6 @@ THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS AS IS AND ANY EXPRESS OR I
 #define SEARCH_SPACE_SIZE 30
 #define CUTOUT_X 50
 #define CUTOUT_Y 20
-char* PATH_TO_MAP = "~/share/adtf/data/scaledMap.png";
-char* PATH_TO_PATH = "~/share/adtf/data/scaledMapssw.png";
 
 using namespace adtf_util;
 using namespace ddl;
@@ -39,7 +37,11 @@ using namespace cv;
 class cMatrixFollower : public cTriggerFunction
 {
 private:
-
+    
+    
+    char* PATH_TO_MAP = "~/share/adtf/data/scaledMap.png";
+    char* PATH_TO_PATH = "~/share/adtf/data/scaledMapssw.png";
+    
     struct tSignalValueId
     {
         tSize timeStamp;
@@ -57,14 +59,14 @@ private:
     cPinWriter m_oSpeedWriter;
 
     //Stream Formats
-        /*! The input format */
+    /*! The input format */
     adtf::streaming::tStreamImageFormat m_sImageFormat;
 
     /*! The clock */
     object_ptr<adtf::services::IReferenceClock> m_pClock;
 
     //Localization
-    FineLocator m_locator = FineLocator(PATH_TO_MAP);
+    //FineLocator m_locator = FineLocator(PATH_TO_MAP);
 
     //Path
     Mat m_Path;

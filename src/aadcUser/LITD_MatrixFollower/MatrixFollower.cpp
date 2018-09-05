@@ -21,7 +21,7 @@ THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS AS IS AND ANY EXPRESS OR I
 ADTF_TRIGGER_FUNCTION_FILTER_PLUGIN(CID_LITD_MATRIXFOLLOWER_DATA_TRIGGERED_FILTER,
                                     "LITD_MatrixFollower",
                                     cMatrixFollower,
-                                    adtf::filter::pin_trigger({ "input" }));
+                                    adtf::filter::pin_trigger({ "i_BirdsEyeImg" }));
 
 cMatrixFollower::cMatrixFollower()
 {
@@ -59,15 +59,15 @@ cMatrixFollower::cMatrixFollower()
 
 tResult cMatrixFollower::Configure()
 {
-    //get clock object
+    /*//get clock object
     RETURN_IF_FAILED(_runtime->GetObject(m_pClock));
-    
+    */
     RETURN_NOERROR;
 }
 
 tResult cMatrixFollower::Process(tTimeStamp tmTimeOfTrigger)
 {
-    object_ptr<const ISample> pReadSample;
+    /*object_ptr<const ISample> pReadSample;
 
     while (IS_OK(m_oReader.GetNextSample(pReadSample)))
     {
@@ -124,6 +124,6 @@ tResult cMatrixFollower::Process(tTimeStamp tmTimeOfTrigger)
 
         }
     }
-    
+    */   
     RETURN_NOERROR;
 }

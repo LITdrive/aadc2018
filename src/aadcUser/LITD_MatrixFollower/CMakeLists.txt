@@ -1,12 +1,12 @@
 cmake_minimum_required(VERSION 3.10.0)
 
-project(matrixfollower_filter)
+project(litd_matrixfollower_filter)
 
 include_directories(${OpenCV_INCLUDE_DIRS})
 
 set (SOURCEFILES    	stdafx.h
-                        FineLocator.h
-                        FineLocator.cpp
+                        #FineLocator.h
+                        #FineLocator.cpp
 						MatrixFollower.h
 						MatrixFollower.cpp)
 
