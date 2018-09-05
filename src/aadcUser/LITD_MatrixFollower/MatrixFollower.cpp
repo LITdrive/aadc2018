@@ -72,7 +72,7 @@ tResult cMatrixFollower::Process(tTimeStamp tmTimeOfTrigger)
                                    CV_8UC3, const_cast<unsigned char*>(static_cast<const unsigned char*>(pReadBuffer->GetPtr())));
 
             //Do the localization
-            Point2i newLoc = m_locator.localize(bvImage, Point2i(x + int(vel*sin(heading)), y +int(vel*cos(heading))), SEARCH_SPACE_SIZE);
+            Point2i newLoc = m_locator.localize(bvImage, heading, Point2i(x + int(vel*sin(heading)), y +int(vel*cos(heading))), SEARCH_SPACE_SIZE);
             int x_new = newLoc.x ,y_new = newLoc.y;
 
             // Estimate new Velocity and Heading
@@ -111,8 +111,8 @@ tResult cMatrixFollower::Process(tTimeStamp tmTimeOfTrigger)
 
             Mat mult_mat = Mat(mult_vec);
 
-            double value = sum(m_PathCut_Out*mult_mat);
-            LOG_INFO(value);
+            Scalar value = sum(m_PathCutOut*mult_mat);
+            LOG_INFO( value[0]);
 
         }
     }

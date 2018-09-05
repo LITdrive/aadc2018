@@ -32,6 +32,7 @@ THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS “AS IS” AND ANY EXPRESS OR
 #include <opencv2/opencv.hpp>
 #include <stdlib.h>
 #include <math.h>
+#include "FineLocator.h"
 
 using namespace std;
 using namespace cv;
