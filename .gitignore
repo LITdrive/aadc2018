@@ -27,6 +27,7 @@ CMakeLists.txt.user*
 .vs/
 Debug/
 Release/
+*.dir/
 *_autogen/
 cmake_install.cmake
 *.sln
@@ -35,6 +36,8 @@ cmake_install.cmake
 *.filters
 *.VC.db
 *.VC.opendb
+*.tlog
+*.lastbuildstate
 
 # Doxygen
 doxygen.cfg
