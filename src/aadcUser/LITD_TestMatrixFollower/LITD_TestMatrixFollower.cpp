@@ -86,7 +86,7 @@ tResult cLITD_TestMatrixFollower::Process(tTimeStamp tmTimeOfTrigger)
             Mat bvImage;
             cvtColor(inputImage, bvImage, COLOR_BGR2RGB);
             //Do the localization
-            Point2i newLoc = m_locator.localize(bvImage, heading, Point2i(x + int(vel*cos(heading)), y +int(vel*sin(heading))), SEARCH_SPACE_SIZE);
+            Point2i newLoc = m_locator.localize(bvImage, heading, Point2i(x + int(vel*cos(heading)), y + int(vel*sin(heading))), SEARCH_SPACE_SIZE);
             int x_new = newLoc.x ,y_new = newLoc.y;
 
             //cout << endl << endl << x_new << "\t" << y_new << endl << endl;
@@ -95,10 +95,12 @@ tResult cLITD_TestMatrixFollower::Process(tTimeStamp tmTimeOfTrigger)
             int x_diff = x_new - x;
             int y_diff = y_new - y;
             vel = sqrt(x_diff*x_diff + y_diff*y_diff);
-            heading += atan2(y_diff, x_diff);
-            //Set new position
-            x = x_new;
-            y = y_new;
+            if(vel > VELOCITY_DEADBAND){
+                heading = heading*0.9 + 0.1*atan2(y_diff, -x_diff);
+                //Set new position
+                x = x_new;
+                y = y_new;
+            }
             LOG_INFO("%d\t %d\t %lf\t %lf",x_new, y_new, vel, heading);
             //cutout new steering information
             Mat car_coord_shift = Mat::eye(3,3, CV_32F);
@@ -136,25 +138,13 @@ tResult cLITD_TestMatrixFollower::Process(tTimeStamp tmTimeOfTrigger)
             value = value / m_PathBitMask.size[1]; //Normalize to rowcount
             value = value / ((CUTOUT_X/2+1)*CUTOUT_X/4); // Normalize to max
             /*Scalar value = sum(m_PathBitMask*mult_mat.t());*/
-            LOG_INFO("%lf",float(int(value*90)));
+            LOG_INFO("%d", int(value*90));
 
             transmitSignalValue(m_oSteeringWriter, m_pClock->GetStreamTime(), m_SignalValueSampleFactory,
 	                    m_ddlSignalValueId.timeStamp, 0, m_ddlSignalValueId.value, float(int(value*90)));
             transmitSignalValue(m_oSpeedWriter, m_pClock->GetStreamTime(), m_SignalValueSampleFactory,
 	                    m_ddlSignalValueId.timeStamp, 0, m_ddlSignalValueId.value, 12);
         }
-    }
-
-    //Write processed Image to Output Pin
-    if (!outputImage.empty())
-    {
-        //update output format if matrix size does not fit to
-        if (outputImage.total() * outputImage.elemSize() != m_sImageFormat.m_szMaxByteSize)
-        {
-            setTypeFromMat(m_oWriter, outputImage);
-        }
-        // write to pin
-        writeMatToPin(m_oWriter, outputImage, m_pClock->GetStreamTime());
     }
     
     RETURN_NOERROR;

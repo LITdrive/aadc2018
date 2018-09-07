@@ -21,6 +21,9 @@ THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS AS IS AND ANY EXPRESS OR I
 #define SEARCH_SPACE_SIZE 20
 #define CUTOUT_X 50
 #define CUTOUT_Y 20
+#define VELOCITY_DEADBAND 3.0f
+
+#include "stdafx.h"
 
 using namespace adtf_util;
 using namespace ddl;
