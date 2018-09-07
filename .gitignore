@@ -22,6 +22,9 @@ CMakeLists.txt.user*
 
 # Visual Studio Code
 .vscode/
+*/aadcBase/build/
+*/aadcDemo/build/
+*/aadcUser/build/
 
 # Visual Studio
 .vs/
