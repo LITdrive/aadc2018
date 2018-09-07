@@ -7,27 +7,32 @@
 #include "map_element.h"
 
 
-
 class DrawSimulation
 {
-  public:
+public:
     DrawSimulation();
     void setMap(MapElements mapElements);
-    void getMapSize();
-    void setPixelPerMeter();
-    void drawMap(cv::Mat img&);
-    void drawCar(cv::Mat img&, double x, double y, double heading, double steerAngle);
+    std::pair<double,double> getMapSize(){ return m_mapSize;}
+    void setPixelPerMeter(double ppm){m_pixelPerMeter = ppm;}
+    double getPixelPerMeter() { return m_pixelPerMeter;}
 
-    double m_windowHeight;
-    double m_windowWidth;
+    void drawMap(cv::Mat& img);
+    void drawCar(cv::Mat& img, double x, double y, double heading, double steerAngle);
+
+    int m_windowHeight;
+    int m_windowWidth;
     double m_pixelPerMeter;
-    cv::Point m_wheelRearLeft;
-    cv::Point m_wheelRearRight;
-    cv::Point m_wheelFrontLeft;
-    cv::Point m_wheelFrontRight;
+    cv::Point m_offsetWheelRearLeft;
+    cv::Point m_offsetWheelRearRight;
+    cv::Point m_offsetWheelFrontLeft;
+    cv::Point m_offsetWheelFrontRight;
+    cv::Point m_offsetOutlineRearLeft;
+    cv::Point m_offsetOutlineRearRight;
+    cv::Point m_offsetOutlineFrontLeft;
+    cv::Point m_offsetOutlineFrontRight;
     std::pair<double,double> m_mapSize;
-    double y; //y - coordinate
-    double k; //curvature
-    double h; //heading
+private:
+    MapElements m_elems;
+    int m2px(double m);
 };
 
