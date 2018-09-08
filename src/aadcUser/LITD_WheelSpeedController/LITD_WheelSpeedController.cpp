@@ -35,18 +35,22 @@ ADTF_TRIGGER_FUNCTION_FILTER_PLUGIN(CID_WHEELSPEEDCONTROLLER_DATA_TRIGGERED_FILT
 cWheelSpeedController::cWheelSpeedController()
 {
     //Register Properties
-        //RegisterPropertyVariable("wheel circumference in meter", m_f32wheelCircumference);
-    RegisterPropertyVariable("proportional factor for PID Controller ", m_f64PIDKp               );
+    //RegisterPropertyVariable("wheel circumference in meter", m_f32wheelCircumference);
+	RegisterPropertyVariable("dynamic properties path", m_properties_file);
+
+	// managed by dynamic properties from a file
+    /*RegisterPropertyVariable("proportional factor for PID Controller ", m_f64PIDKp               );
     RegisterPropertyVariable("integral factor for PID Controller", m_f64PIDKi                    );
     RegisterPropertyVariable("differential factor for PID Controller", m_f64PIDKd                );
     RegisterPropertyVariable("sampletime for the pid controller [ms]", m_f64PIDSampleTime             );
-    RegisterPropertyVariable("the minimum output value for the controller [%]", m_f64PIDMinimumOutput);
-    RegisterPropertyVariable("the maximum output value for the controller [%]", m_f64PIDMaximumOutput);
-    RegisterPropertyVariable("show debug output", m_bShowDebug                                   );
     RegisterPropertyVariable("input factor for PT1", m_f64PT1OutputFactor                        );
     RegisterPropertyVariable("time constant for pt1 controller", m_f64PT1TimeConstant            );
     RegisterPropertyVariable("set point is multiplied with this factor", m_f64PT1CorrectionFactor);
-    RegisterPropertyVariable("gain factor for PT1 controller", m_f64PT1Gain                      );
+    RegisterPropertyVariable("gain factor for PT1 controller", m_f64PT1Gain                      );*/
+
+	RegisterPropertyVariable("the minimum output value for the controller [%]", m_f64PIDMinimumOutput);
+	RegisterPropertyVariable("the maximum output value for the controller [%]", m_f64PIDMaximumOutput);
+	RegisterPropertyVariable("show debug output", m_bShowDebug);
     RegisterPropertyVariable("controller type", m_i32ControllerMode                              );
 
     
@@ -79,6 +83,10 @@ tResult cWheelSpeedController::Configure()
     m_f64LastSpeedValue = 0;
     m_f64accumulatedVariable = 0;
 
+	// load properties file for dynamic properties
+	m_properties = new FilePropertiesObserver(static_cast<string>(cString(m_properties_file)));
+	m_properties->ReloadProperties();
+
     RETURN_IF_FAILED(_runtime->GetObject(m_pClock));
 
     RETURN_NOERROR;
@@ -89,6 +97,16 @@ tResult cWheelSpeedController::Configure()
 /// Readers queue. So make sure the execution of this funtion will read ALL Samples of ALL Readers until the queues are empty.
 tResult cWheelSpeedController::Process(tTimeStamp tmTimeOfTrigger)
 {
+	m_properties->TriggerPropertiesReload(80); // reload the file every 2 seconds with a 25 msec timer
+	m_f64PIDKp = m_properties->GetFloat("pid_p");
+	m_f64PIDKi = m_properties->GetFloat("pid_i");
+	m_f64PIDKd = m_properties->GetFloat("pid_d");
+	m_f64PIDSampleTime = m_properties->GetFloat("pid_sampletime");
+	m_f64PT1OutputFactor = m_properties->GetFloat("pt1_output_factor");
+	m_f64PT1TimeConstant = m_properties->GetFloat("pt1_time_constant");
+	m_f64PT1CorrectionFactor = m_properties->GetFloat("pt1_correction_factor");
+	m_f64PT1Gain = m_properties->GetFloat("pt1_gain");
+
     // Setpoint value speed
     object_ptr<const ISample> pSetWheelSpeedSample;
 
