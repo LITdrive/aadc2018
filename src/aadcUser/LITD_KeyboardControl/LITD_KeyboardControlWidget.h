@@ -17,24 +17,11 @@ THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS AS IS AND ANY EXPRESS OR I
 #include "stdafx.h"
 #include "ui_litd_keyboard_control.h"
 
-#define SPEED_DEFAULT_VALUE					5.0f
-#define SPEED_MAX_VALUE						100.0f
-#define SPEED_MIN_VALUE						0.0f
-#define SPEED_INCREMENT_VALUE				0.5f
-
-#define STEERING_OFFSET_DEFAULT_VALUE		50.0f
-#define STEERING_OFFSET_MAX_VALUE			100.0f
-#define STEERING_OFFSET_MIN_VALUE			0.0f
-#define STEERING_OFFSET_INCREMENT_VALUE		10.0f
-
 // keys for speed angle change
 #define KEY_SPEED_INC						Qt::Key_W
 #define KEY_SPEED_DEC						Qt::Key_S
 #define KEY_ANGLE_INC						Qt::Key_D
 #define KEY_ANGLE_DEC						Qt::Key_A
-
-// when releasing a key, wait at least for this amount of time before we update the state [ms]
-#define MIN_DEBOUNCE_TIMEOUT 200
 
 #define KEY_PRESS_OVERRIDE_TIMESTAMP std::numeric_limits<int64_t>::max()
 
@@ -44,6 +31,8 @@ THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS AS IS AND ANY EXPRESS OR I
 #define RIGHT 2
 #define LEFT 3
 
+/*! forward declaration */
+class cKeyboardControlFilter;
 
 class cKeyboardControlWidget : public QWidget, public Ui_KeyboardControlUi
 {
@@ -57,8 +46,8 @@ public slots:
 	void updateSignals();
 
 public:
-	void displaySpeed(tFloat32 value);
-	void displaySteering(tFloat32 value);
+	void displaySpeed(tFloat32 value) const;
+	void displaySteering(tFloat32 value) const;
 
 private:
 
@@ -79,14 +68,15 @@ private:
 	eThrottleType m_throttleType = eStop;
 	eSteeringType m_steeringType = eStraight;
 
-	tFloat32 m_currentSpeed = SPEED_DEFAULT_VALUE;
-	tFloat32 m_currentSteering = STEERING_OFFSET_DEFAULT_VALUE;
+	tFloat64 m_currentSpeed;
+	tFloat64 m_currentSteering;
 
 	// debounce-fix for no machine remote desktop
 	tTimeStamp m_tmLastKeyPressTimestamp[4] = {};
 	tTimeStamp m_tmLastKeyReleaseTimestamp[4] = {};
 
 	Ui_KeyboardControlUi* m_ui;
+	cKeyboardControlFilter* m_filter;
 	QTimer m_timer;
 
 protected:
@@ -97,7 +87,7 @@ protected:
 
 
 public:
-	cKeyboardControlWidget(QWidget* parent = 0, tInt32 updateInterval = 50);
+	cKeyboardControlWidget(QWidget* parent = 0, cKeyboardControlFilter* filter = 0);
 
 	~cKeyboardControlWidget();
 };

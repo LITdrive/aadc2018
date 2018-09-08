@@ -79,9 +79,6 @@ private:
 	/*! The reference clock */
 	object_ptr<adtf::services::IReferenceClock> m_pClock;
 
-	/*! The update interval of the QT GUI timer (to check for key presses) */
-	property_variable<tFloat64> m_f64updateInterval = 50;
-
 public:
 
 	/*! Default constructor. */
@@ -89,6 +86,24 @@ public:
 
 	/*! Destructor. */
 	virtual ~cKeyboardControlFilter() = default;
+
+	/*! speed values */
+	property_variable<tFloat64> m_speed_default_value = 0.1f;
+	property_variable<tFloat64> m_speed_max_value = 0.8f;
+	property_variable<tFloat64> m_speed_min_value = 0.0f;
+	property_variable<tFloat64> m_speed_increment_value = 0.01f;
+
+	/*! steering values */
+	property_variable<tFloat64> m_steering_offset_default_value = 50.0f;
+	property_variable<tFloat64> m_steering_offset_max_value = 100.0f;
+	property_variable<tFloat64> m_steering_offset_min_value = 0.0f;
+	property_variable<tFloat64> m_steering_offset_increment_value = 10.0f;
+
+	/*! The update interval of the QT GUI timer (to check for key presses) */
+	property_variable<tFloat64> m_update_interval = 50;
+
+	/*! when releasing a key, wait at least for this amount of time before we update the state [ms] */
+	property_variable<tInt> m_min_debounce_timeout = 200;
 
 protected: // Implement cBaseQtFilter
 	QWidget* CreateView() override;
