@@ -182,6 +182,34 @@ else(NOT RPLIDAR_INCLUDE_DIRS OR NOT RPLIDAR_LIBS)
 	message(STATUS "RPLidar lib found. RPLidar root is ${RPLIDAR_ROOT}, Lib is ${RPLIDAR_LIBS}")
 endif(NOT RPLIDAR_INCLUDE_DIRS OR NOT RPLIDAR_LIBS)
 
+#-------------------------------------------------------
+#-------ZeroMQ------------------------------------------
+#-------------------------------------------------------
+
+if(UNIX)
+	set(ZMQ_DIR "/opt/libzmq")
+	set(ZMQ_LIBRARY_DIRS "${ZMQ_DIR}/build/lib")
+else(UNIX)
+	set(ZMQ_DIR "C:/SDK/libzmq")
+	set(ZMQ_LIBRARY_DIRS "${ZMQ_DIR}/build/lib/Release")
+endif(UNIX)
+
+set(ZMQ_INCLUDE_DIRS "${ZMQ_DIR}/include")
+
+FIND_LIBRARY(ZMQ_LIBS NAMES
+		libzmq.a
+		libzmq-v140-mt-4_3_1
+		PATHS
+		"${ZMQ_LIBRARY_DIRS}"
+		)
+
+if (ZMQ_LIBS)
+	message(STATUS "Found ZeroMQ. ZeroMQ lib dir is: ${ZMQ_LIBRARY_DIRS}")
+	set(AADC_ZMQ_FOUND TRUE)
+else (ZMQ_LIBS)
+	message(FATAL_ERROR "ZeroMQ libs not found under ${ZMQ_LIBRARY_DIRS} (follow instructions in the README!)")
+endif (ZMQ_LIBS)
+
 #------------------------------------------------------------------	
 #--------Tools for Doc---------------------------------------------
 #------------------------------------------------------------------

@@ -22,10 +22,6 @@ THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS �AS IS� AND ANY EXPRES
 
 #pragma once
 
-#ifdef WIN32
-#include <windows.h>
-#endif
-
 //adtf
 #include <adtf3.h>
 #include <adtf_platform_inc.h>
@@ -33,7 +29,7 @@ THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS �AS IS� AND ANY EXPRES
 #include <adtf_systemsdk.h>
 
 #include <opencv2/opencv.hpp>
-#include "zmq.hpp"
+#include <zmq.hpp>
 #include <stdlib.h>
 
 using namespace std;
