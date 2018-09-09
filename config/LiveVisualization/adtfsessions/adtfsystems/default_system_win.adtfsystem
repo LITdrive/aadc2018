@@ -393,5 +393,10 @@
       <objectid>signal_scope_view.ui_service.adtf_disptb</objectid>
       <runlevel>session</runlevel>
     </service>
+    <service>
+      <classid>zeromq.service.adtf.cid</classid>
+      <objectid>zeromq.service.adtf</objectid>
+      <runlevel>system</runlevel>
+    </service>
   </services>
 </system>

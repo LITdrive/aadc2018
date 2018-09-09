@@ -43,9 +43,13 @@ include(${AADC_DIR}/AADCConfigVersion.cmake)
 include_directories(${AADC_DIR}/include)
 include_directories(${CMAKE_INSTALL_INCLUDE})
 
+# system services
+add_subdirectory(services)
 
+# utilities
 add_subdirectory(utils/properties)
 
+# filters
 add_subdirectory(OpenCVTemplate)
 add_subdirectory(TemplateFilter)
 add_subdirectory(playground)
