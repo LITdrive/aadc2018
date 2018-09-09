@@ -17,6 +17,7 @@ THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS AS IS AND ANY EXPRESS OR I
 
 //*************************************************************************************************
 #define CID_MQSENSORSTREAMER_DATA_TRIGGERED_FILTER "mq_sensor_streamer.filter.user.aadc.cid"
+#include "../services/zeromq/zeromq_service_intf.h"
 
 using namespace adtf_util;
 using namespace ddl;
@@ -40,9 +41,15 @@ private:
     /*! The input format */
     adtf::streaming::tStreamImageFormat m_sImageFormat;
 
-    /*! ZeroMQ context and publisher */
-    zmq::context_t* m_context;
+	/*! ZeroMQ context service */
+	object_ptr<IZeroMQService> m_zeromq_service;
+
+	/*! ZeroMQ publisher */
     zmq::socket_t* m_publisher;
+
+public:
+	ADTF_CLASS_ID_NAME(cMQSensorStreamer, CID_MQSENSORSTREAMER_DATA_TRIGGERED_FILTER, "LITD MQ Sensor Streamer");
+	ADTF_CLASS_DEPENDENCIES(REQUIRE_INTERFACE(IZeroMQService));
 
 public:
 
