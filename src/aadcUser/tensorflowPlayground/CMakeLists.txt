@@ -27,4 +27,4 @@ install(TARGETS ${PROJECT_NAME} DESTINATION bin/application CONFIGURATIONS RelWi
 install(TARGETS ${PROJECT_NAME} DESTINATION bin/debug/application CONFIGURATIONS Debug)
 
 # Link your application with tensorflow libraries
-target_link_libraries(${PROJECT_NAME} ${Protobuf_LIBRARIES} -Wl,--allow-multiple-definition -Wl,--whole-archive ${TENSORFLOW_LIBS} -Wl,--allow-multiple-definition -Wl,--whole-archive)
+target_link_libraries(${PROJECT_NAME} LINK_PUBLIC ${Protobuf_LIBRARIES} ${TENSORFLOW_LIBS} )
