@@ -24,6 +24,8 @@ ADTF_TRIGGER_FUNCTION_FILTER_PLUGIN(CID_COPENCVTEMPLATE_DATA_TRIGGERED_FILTER,
                                     cLITD_TestMatrixFollower,
                                     adtf::filter::pin_trigger({ "input" }));
 
+double rad2grad(double x);
+
 cLITD_TestMatrixFollower::cLITD_TestMatrixFollower()
 {
 
@@ -71,7 +73,8 @@ tResult cLITD_TestMatrixFollower::Process(tTimeStamp tmTimeOfTrigger)
     Mat outputImage;
 
     while (IS_OK(m_oReader.GetNextSample(pReadSample)))
-    {	
+    {
+        //ignore 20 first images because of camer adjustment
         if(imgcnt<30){imgcnt++;continue;}
         object_ptr_shared_locked<const ISampleBuffer> pReadBuffer;
         //lock read buffer
@@ -86,7 +89,7 @@ tResult cLITD_TestMatrixFollower::Process(tTimeStamp tmTimeOfTrigger)
             Mat bvImage;
             cvtColor(inputImage, bvImage, COLOR_BGR2RGB);
             //Do the localization
-            Point2i newLoc = m_locator.localize(bvImage, heading, Point2i(x + int(vel*cos(heading)), y + int(vel*sin(heading))), SEARCH_SPACE_SIZE);
+            Point2i newLoc = m_locator.localize(bvImage, heading, Point2i(x + int(vel*sin(heading)), y + int(vel*cos(heading))), SEARCH_SPACE_SIZE);
             int x_new = newLoc.x ,y_new = newLoc.y;
 
             //cout << endl << endl << x_new << "\t" << y_new << endl << endl;
@@ -94,9 +97,9 @@ tResult cLITD_TestMatrixFollower::Process(tTimeStamp tmTimeOfTrigger)
             // Estimate new Velocity and Heading
             int x_diff = x_new - x;
             int y_diff = y_new - y;
-            vel = sqrt(x_diff*x_diff + y_diff*y_diff);
+            vel = 0.8*vel + 0.2*sqrt(x_diff*x_diff + y_diff*y_diff);
             if(vel > VELOCITY_DEADBAND){
-                heading = heading*0.9 + 0.1*atan2(y_diff, -x_diff);
+                heading = heading*0.9 + 0.1*atan2(y_diff, x_diff);
                 //Set new position
                 x = x_new;
                 y = y_new;
@@ -108,7 +111,7 @@ tResult cLITD_TestMatrixFollower::Process(tTimeStamp tmTimeOfTrigger)
             car_coord_shift.at<float>(1, 2) = -y;
             // map rotation -> car rotation
             Mat car_rot = Mat::eye(3,3, CV_32F);
-            Mat rot = getRotationMatrix2D(Point2f(0, 0), -heading, 1.0f);
+            Mat rot = getRotationMatrix2D(Point2f(0, 0), rad2grad(-heading), 1.0f);
             rot(Rect(0,0,2,2)).copyTo(car_rot(Rect(0,0,2,2)));
             // car location -> picture location
             Mat offset = Mat::eye(3,3, CV_32F);
@@ -136,7 +139,7 @@ tResult cLITD_TestMatrixFollower::Process(tTimeStamp tmTimeOfTrigger)
                 }
             }
             value = value / m_PathBitMask.size[1]; //Normalize to rowcount
-            value = value / ((CUTOUT_X/2+1)*CUTOUT_X/4); // Normalize to max
+            value = value / ((CUTOUT_X/2.0 + 1)*CUTOUT_X/4); // Normalize to max
             /*Scalar value = sum(m_PathBitMask*mult_mat.t());*/
             LOG_INFO("%d", int(value*90));
 
@@ -148,4 +151,8 @@ tResult cLITD_TestMatrixFollower::Process(tTimeStamp tmTimeOfTrigger)
     }
     
     RETURN_NOERROR;
+}
+
+double rad2grad(double x){
+    return x*M_PI/180.0;
 }
