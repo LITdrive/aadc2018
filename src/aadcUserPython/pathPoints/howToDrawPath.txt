@@ -1,0 +1,11 @@
+This file opens the ourMap.jpg file, draws it accoring to the set scale within the python file, 
+and lets you select points which it then saves in a csv.
+
+How to:
+
+1) open the terminal, and type: python prawPath.py
+2) double click to set a point
+3) once a second point is created, a line is drawn between them
+4) draw all the points you want the car to drive, in the coresponding order
+5) press 's' to save the points as csv named 'points.csv'
+6) it also let's you save the figure as jpg ;)

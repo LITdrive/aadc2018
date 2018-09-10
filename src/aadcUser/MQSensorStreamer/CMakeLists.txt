@@ -5,15 +5,17 @@ project(mq_sensor_streamer)
 # find libzmq
 if(UNIX)
 	set(ZMQ_DIR "/opt/libzmq")
+	set(ZMQ_LIBRARY_DIRS "${ZMQ_DIR}/build/lib")
 else(UNIX)
 	set(ZMQ_DIR "C:/SDK/libzmq")
+	set(ZMQ_LIBRARY_DIRS "${ZMQ_DIR}/build/lib/Release")
 endif(UNIX)
 
-set(ZMQ_LIBRARY_DIRS "${ZMQ_DIR}/build/lib")
 set(ZMQ_INCLUDE_DIRS "${ZMQ_DIR}/include")
 
 FIND_LIBRARY(ZMQ_LIBS NAMES
 		libzmq.a
+		libzmq-v140-mt-4_3_1
 		PATHS
 		"${ZMQ_LIBRARY_DIRS}"
 		)
