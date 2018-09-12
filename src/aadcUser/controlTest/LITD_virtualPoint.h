@@ -4,11 +4,11 @@
 #include "Eigen/Dense"
 #include "Pose2d.h"
 
-class VirtualPoint
+class LITD_virtualPoint
 {
   public:
-    VirtualPoint();
-    VirtualPoint(double x, double y, double k, double h);
+    LITD_virtualPoint();
+    LITD_virtualPoint(double x, double y, double k, double h);
     Pose2d getPose2d() const;
     std::string toString() const;
 
