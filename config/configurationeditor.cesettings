@@ -32,10 +32,10 @@
         <url>$(ADTF_DIR)/addons/*/src/examples/bin/debug/*.adtfplugin</url>
       </plugin_directory>
       <plugin_directory>
-        <url>/home/aadc/AADC/_install/linux64/bin/*.adtfplugin</url>
+        <url>$(PROJECT_ROOT)/_install/linux64/bin/*.adtfplugin</url>
       </plugin_directory>
       <plugin_directory>
-        <url>/home/aadc/AADC/_install/linux64/bin/debug/*.adtfplugin</url>
+        <url>$(PROJECT_ROOT)/_install/linux64/bin/debug/*.adtfplugin</url>
       </plugin_directory>
     </plugin_directories>
   </plugin_settings>
@@ -76,5 +76,5 @@
       </launcher>
     </launchers>
   </launch_settings>
-  <last_opened_project>/home/aadc/AADC/config/LiveVisualization/LiveVisualization.adtfproject</last_opened_project>
+  <last_opened_project>/home/aadc/share/adtf/config/LiveVisualization/LiveVisualization.adtfproject</last_opened_project>
 </settings>

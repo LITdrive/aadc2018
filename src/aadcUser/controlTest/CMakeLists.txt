@@ -41,6 +41,7 @@ add_executable(${PROJECT_NAME} #map_generator_test.cpp
                                virtual_point.cpp
                                speed_generator.cpp
                                virtual_point_mover.cpp
+                               virtual_car.cpp
                                )
 
 install(TARGETS ${PROJECT_NAME} DESTINATION bin/application CONFIGURATIONS RelWithDebInfo Release)
