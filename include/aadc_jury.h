@@ -16,7 +16,7 @@ THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS “AS IS” AND ANY EXPRESS OR
 * $Author:: spiesra $  $Date:: 2017-05-11 16:43:59#$ $Rev:: 63082   $
 **********************************************************************/
 
-//#pragma once
+#pragma once
 
 #include <string>
 #include <vector>

@@ -35,10 +35,10 @@ include_directories(${OpenCV_INCLUDE_DIRS})
 #add_executable(${PROJECT_NAME} controlTest.cpp model_predictive_control.h model_predictive_control.cpp)
 add_executable(${PROJECT_NAME} #map_generator_test.cpp 
                                LITD_controlTest.cpp
-                               LITD_virtualPoint.cpp
-                               LITD_mapElementStraight.cpp
-                               LITD_mapElementCurve.cpp
-                               LITD_map.cpp
+                               LITD_VirtualPoint.cpp
+                               LITD_MapElementStraight.cpp
+                               LITD_MapElementCurve.cpp
+                               LITD_Map.cpp
                                Pose2d.cpp
                                )
 
