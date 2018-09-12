@@ -1,12 +1,12 @@
 ﻿#include <math.h>
-#include "LITD_virtualPoint.h"
+#include "LITD_VirtualPoint.h"
 
-LITD_virtualPoint::LITD_virtualPoint()
-: LITD_virtualPoint(0.0, 0.0, 0.0, 0.0)
+LITD_VirtualPoint::LITD_VirtualPoint()
+: LITD_VirtualPoint(0.0, 0.0, 0.0, 0.0)
 {
 }
 
-LITD_virtualPoint::LITD_virtualPoint(double x, double y, double k, double h)
+LITD_VirtualPoint::LITD_VirtualPoint(double x, double y, double k, double h)
 : x(x),
   y(y),
   k(k),
@@ -14,12 +14,12 @@ LITD_virtualPoint::LITD_virtualPoint(double x, double y, double k, double h)
 {
 }
 
-Pose2d LITD_virtualPoint::getPose2d() const
+Pose2d LITD_VirtualPoint::getPose2d() const
 {
   return Pose2d(x, y, h);
 }
 
-std::string LITD_virtualPoint::toString() const
+std::string LITD_VirtualPoint::toString() const
 {
   std::stringstream ss;
   ss << "[x ";

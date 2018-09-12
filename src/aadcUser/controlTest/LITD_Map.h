@@ -1,5 +1,5 @@
 /*****************************************************************************************
- * LITD_map / Virtual Point mover. 
+ * LITD_Map / Virtual Point mover. 
  * This class is used to create a track for the car to follow.
  * 
  *****************************************************************************************/
@@ -15,29 +15,29 @@
 
 #include <aadc_jury.h>
 
-#include "LITD_virtualPoint.h"
-#include "LITD_mapElement.h"
-#include "LITD_mapElementStraight.h"
-#include "LITD_mapElementCurve.h"
+#include "LITD_VirtualPoint.h"
+#include "LITD_MapElement.h"
+#include "LITD_MapElementStraight.h"
+#include "LITD_MapElementCurve.h"
 
 using namespace std;
 
 typedef enum { MAP_ENOERR, MAP_EUNKOWN, MAP_EINVAL, MAP_ENOELEM } LITD_map_error_t;
 
 
-class LITD_map
+class LITD_Map
 {
 public:
 
     static string strerr(LITD_map_error_t err);
 
-    LITD_map();
+    LITD_Map();
     /* Function to check if the map-generator is in an error-state. */
     LITD_map_error_t getMapState();
     /* This function returns the next point on the map. Always call getMapState to check if the returned Value is valid! */
-    LITD_virtualPoint getNormalPoint(LITD_virtualPoint &point);
+    LITD_VirtualPoint getNormalPoint(LITD_VirtualPoint &point);
     /* Returns the distance in m, normally to the driving lane. Left is positive */
-    double getPointOffset(LITD_virtualPoint &point);
+    double getPointOffset(LITD_VirtualPoint &point);
     /* Set the drive maneuver that should be driven as soon as possible. This value is NOT reset automatically. Defaults to STRAIGHT */
     void selectNextManeuver(aadc::jury::maneuver maneuver);
     /* Returns the drive maneuiver that is currently driven. */
@@ -51,9 +51,9 @@ public:
 
 protected:
     LITD_map_error_t state;
-    std::size_t findElementIndex(LITD_virtualPoint &point);
+    std::size_t findElementIndex(LITD_VirtualPoint &point);
 
-    std::vector<LITD_mapElement*> map_elements;
+    std::vector<LITD_MapElement*> map_elements;
     std::size_t map_index_current;
 
     aadc::jury::maneuver man_set;

@@ -1,7 +1,7 @@
-#include "LITD_mapElementCurve.h"
+#include "LITD_MapElementCurve.h"
 #include "math_utilities.h"
 
-LITD_mapElementCurve::LITD_mapElementCurve(double fence_x_min, double fence_x_max, double fence_y_min, double fence_y_max, LITD_mapElementCurve_corner_t curve_corner, double curve_radius) {
+LITD_MapElementCurve::LITD_MapElementCurve(double fence_x_min, double fence_x_max, double fence_y_min, double fence_y_max, LITD_mapElementCurve_corner_t curve_corner, double curve_radius) {
     valid=true;
     if(curve_corner<=CURVE_CORNER_INVAL || curve_corner>=CURVE_CORNER_MAX || curve_radius<=0.0 || curve_radius>=(fence_x_max-fence_x_min) || curve_radius>=(fence_y_max-fence_y_min)) {
         valid=false;
@@ -21,7 +21,7 @@ LITD_mapElementCurve::LITD_mapElementCurve(double fence_x_min, double fence_x_ma
     }
 }
 
-LITD_virtualPoint LITD_mapElementCurve::getNormalPoint(LITD_virtualPoint &point) {
+LITD_VirtualPoint LITD_MapElementCurve::getNormalPoint(LITD_VirtualPoint &point) {
     double x=point.x,x0;
     double y=point.y,y0;
     double h=wrapTo2Pi<double>(point.h);
@@ -72,38 +72,38 @@ LITD_virtualPoint LITD_mapElementCurve::getNormalPoint(LITD_virtualPoint &point)
 
     
 
-    return LITD_virtualPoint(x0+dx,y0+dy,0.0,angle);
+    return LITD_VirtualPoint(x0+dx,y0+dy,0.0,angle);
 }
 
-double LITD_mapElementCurve::getPointOffset(LITD_virtualPoint &point) {
+double LITD_MapElementCurve::getPointOffset(LITD_VirtualPoint &point) {
     double x=point.x;
     double y=point.y;
     double h=wrapTo2Pi<double>(point.h);
     return 0.0;
 }
 
-bool LITD_mapElementCurve::isInElement(LITD_virtualPoint &point) {
+bool LITD_MapElementCurve::isInElement(LITD_VirtualPoint &point) {
     double x=point.x;
     double y=point.y;
     //Returns false if: x is out of x range and y is out of y range.
     return x<=x_max && x>=x_min && y<=y_max && y>=y_min;
 }
 
-aadc::jury::maneuver LITD_mapElementCurve::selectDriveManeuver(aadc::jury::maneuver maneuver) {
+aadc::jury::maneuver LITD_MapElementCurve::selectDriveManeuver(aadc::jury::maneuver maneuver) {
     /* Curves do technically make turns, but in this manner they do not have a selection, so the maneuver is straight. */
     return aadc::jury::maneuver_straight;
 }
 
-double LITD_mapElementCurve::getSpeedAdvisory() {
+double LITD_MapElementCurve::getSpeedAdvisory() {
     /* Curve speed advisory is dynamically calculated from the radius. */
     return speed_advisory;
 }
 
-double LITD_mapElementCurve::getSpeedLimit() {
+double LITD_MapElementCurve::getSpeedLimit() {
     /* The curve speed limit is also calculated from the radius */
     return speed_limit;
 }
 
-bool LITD_mapElementCurve::isValid() {
+bool LITD_MapElementCurve::isValid() {
     return valid;
 }

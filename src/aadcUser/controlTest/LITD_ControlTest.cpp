@@ -6,8 +6,8 @@
 #include <opencv2/opencv.hpp>
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
-#include "LITD_virtualPoint.h"
-#include "LITD_map.h"
+#include "LITD_VirtualPoint.h"
+#include "LITD_Map.h"
 
 
 #define PIXEL_PER_METER 100
@@ -118,7 +118,7 @@ int main()
 
 */
 
-  LITD_map map;
+  LITD_Map map;
   //Vertical straight between x 0->2
   if(map.addStraightElement(0.0, 2.0, -0.5, 0.5, 0.0, false)!=MAP_ENOERR) {
     std::cout << "Error adding straight element 0/0->2/0" << std::endl;
@@ -156,11 +156,11 @@ int main()
 
   //Point2d cp(0.0,0.0);
 
-  LITD_virtualPoint cp(0.0,0.0,0.0,0.0);
+  LITD_VirtualPoint cp(0.0,0.0,0.0,0.0);
 
   double carSpeed=0.1;
 
-  LITD_virtualPoint vp, vp_old;
+  LITD_VirtualPoint vp, vp_old;
 
   while(running) {
     std::cout << "Loop start: x=" << cp.x << " y=" << cp.y << " h=" << cp.h << std::endl;
