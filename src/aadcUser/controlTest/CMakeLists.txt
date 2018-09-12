@@ -34,12 +34,13 @@ include_directories(${OpenCV_INCLUDE_DIRS})
 # Declare the executable target built from your sources
 #add_executable(${PROJECT_NAME} controlTest.cpp model_predictive_control.h model_predictive_control.cpp)
 add_executable(${PROJECT_NAME} #map_generator_test.cpp 
-                               LITD_controlTest.cpp
+                               LITD_ControlTest.cpp
                                LITD_VirtualPoint.cpp
                                LITD_MapElementStraight.cpp
                                LITD_MapElementCurve.cpp
                                LITD_Map.cpp
                                Pose2d.cpp
+                               LITD_VirtualCar.cpp
                                )
 
 install(TARGETS ${PROJECT_NAME} DESTINATION bin/application CONFIGURATIONS RelWithDebInfo Release)

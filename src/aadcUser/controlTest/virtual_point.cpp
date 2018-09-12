@@ -19,6 +19,11 @@ Pose2d VirtualPoint::getPose2d() const
   return Pose2d(x, y, h);
 }
 
+Vector2d VirtualPoint::getVector2d() const
+{
+    return Vector2d(x, y);
+}
+
 std::string VirtualPoint::toString() const
 {
   std::stringstream ss;

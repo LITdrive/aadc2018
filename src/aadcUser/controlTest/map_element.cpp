@@ -99,8 +99,8 @@ VirtualPoint MapElement::getVirtualPointAtDistance(double distance) const
     Point2d endPoint = m_endPoint;
     double xs = startPoint(0);
     double xe = endPoint(0);
-    double x = xe - xs;
-    double y = endPoint(1) - startPoint(1);
+    x = xe - xs;
+    y = endPoint(1) - startPoint(1);
     x /= m_length;
     y /= m_length;
 
@@ -120,6 +120,12 @@ VirtualPoint MapElement::getVirtualPointAtDistance(double distance) const
   else if(m_type == MapElementType::ARC)
   {
     double startAngle = wrapTo2Pi(atan2(m_startPoint(1) - m_centerPoint(1), m_startPoint(0) - m_centerPoint(0)));
+    /*std::cout << "Start angle before wrapto2pi: "<< atan2(m_startPoint(1) - m_centerPoint(1), m_startPoint(0) - m_centerPoint(0))  << std::endl;
+    std::cout << "Start angle: "<< startAngle  << std::endl;
+    std::cout << "startpoint y: "<< m_startPoint(1)  << std::endl;
+    std::cout << "centerpiont y: "<< m_centerPoint(1)  << std::endl;
+    std::cout << "startpoint x: "<< m_startPoint(0)  << std::endl;
+    std::cout << "centerpiont x: "<< m_centerPoint(0)  << std::endl;*/
     double angle = startAngle;
     double dAngle = distance / m_radius;
     if(m_orientation == Orientation::CW)
@@ -135,6 +141,8 @@ VirtualPoint MapElement::getVirtualPointAtDistance(double distance) const
 
     double dx = m_radius * cos(angle);
     double dy = m_radius * sin(angle);
+    std::cout << "dx: "<< dx  << std::endl;
+    std::cout << "dy: "<< dy  << std::endl;
     double angleOfTangent = startAngle;
     double angleOfStartTangent = startAngle;
     if(m_orientation == Orientation::CW)
@@ -158,29 +166,9 @@ VirtualPoint MapElement::getVirtualPointAtDistance(double distance) const
     h = wrapToPi<double>(angleOfTangent);
     k = m_curvature;
 
-    if(m_orientation == Orientation::CW)
-    {
-      y = - y;
-      k = - k;
-      h = - h;
-    }
-
-    // rotate x and y
-    double sinth = sin(angleOfStartTangent);
-    double costh = cos(angleOfStartTangent);
-    double xt = x;
-    double yt = y;
-    x = costh * xt - sinth * yt;
-    y = sinth * xt + costh * yt;
-//    xt = dx;
-//    yt = dy;
-//    dx = costh * xt - sinth * yt;
-//    dy = sinth * xt + costh * yt;
 
 
-//    x = x + m_startPoint(0);
-//    y = y + m_startPoint(1);
-    h = wrapToPi<double>(h + angleOfStartTangent);
+
   }
   VirtualPoint vp(x,y,k,h);
   return vp;

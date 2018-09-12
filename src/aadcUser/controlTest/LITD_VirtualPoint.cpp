@@ -19,6 +19,12 @@ Pose2d LITD_VirtualPoint::getPose2d() const
   return Pose2d(x, y, h);
 }
 
+
+Vector2d LITD_VirtualPoint::getVector2d() const
+{
+    return Vector2d(x, y);
+}
+
 std::string LITD_VirtualPoint::toString() const
 {
   std::stringstream ss;

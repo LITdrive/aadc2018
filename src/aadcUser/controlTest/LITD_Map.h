@@ -51,10 +51,10 @@ public:
 
 protected:
     LITD_map_error_t state;
-    std::size_t findElementIndex(LITD_VirtualPoint &point);
+    void findElementIndex(LITD_VirtualPoint &point);
 
     std::vector<LITD_MapElement*> map_elements;
-    std::size_t map_index_current;
+    int64_t map_index_current;
 
     aadc::jury::maneuver man_set;
     aadc::jury::maneuver man_cur;

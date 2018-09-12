@@ -91,7 +91,7 @@ LITD_map_error_t LITD_Map::addCurveElement(double fence_x_min, double fence_x_ma
     return MAP_EINVAL;
 }
 
-std::size_t LITD_Map::findElementIndex(LITD_VirtualPoint &point) {
+void LITD_Map::findElementIndex(LITD_VirtualPoint &point) {
     std::size_t last=map_elements.size();
     map_index_current=-1;
     std::cout << "Searching for point x=" << point.x << " y= " << point.y << std::endl; 
@@ -100,7 +100,7 @@ std::size_t LITD_Map::findElementIndex(LITD_VirtualPoint &point) {
             std::cout << "Found element with index " << i << std::endl;
             map_index_current=i;
             man_cur=map_elements[i]->selectDriveManeuver(man_set);
-            return i;
+            return;
         }
     }
     man_cur=aadc::jury::maneuver::manuever_undefined;
@@ -108,5 +108,5 @@ std::size_t LITD_Map::findElementIndex(LITD_VirtualPoint &point) {
         state=MAP_ENOELEM;
     }
     std::cout << "Found no element!!" << std::endl;
-    return 0;
+    return;
 }

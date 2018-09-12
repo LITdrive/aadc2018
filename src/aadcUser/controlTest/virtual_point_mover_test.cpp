@@ -8,6 +8,7 @@
 #include <opencv2/highgui/highgui.hpp>
 #include "map_generator.h"
 #include "virtual_point_mover.h"
+#include "virtual_car.h"
 
 //using namespace std;
 //using namespace dlib;
@@ -78,6 +79,15 @@ int main()
   double dtime = 0.02;
   cv::namedWindow( "VirtualPointMoverTest", cv::WINDOW_AUTOSIZE );// Create a window for display.
 
+  virtualCar vCar;
+  //vCar();
+
+  std::cout << "Car: " << std::endl;
+  std::cout << "x: " << vCar.carPosition.x << std::endl;
+  std::cout << "y: " << vCar.carPosition.y << std::endl;
+   
+   //while(1);
+
   while(!stopSimulation)
   {
     vpMover.updateStep(dtime);
@@ -88,17 +98,45 @@ int main()
     std::cout << "Actual Speed: " << speed << " SteerAngle: " << delta
               << " VP: " << vp.toString() << std::endl;
 
+
+
     cv::Mat img(1000, 1000, CV_8UC3, cv::Scalar::all(255));
     img = mapImg;
-    cv::Point car(vp.x * pixelPerMeter + border * pixelPerMeter, img.size().height - (vp.y * pixelPerMeter +  border * pixelPerMeter));
-    cv::circle(img, car, 5, cv::Scalar::all(0));
+    cv::Point virtualPoint(vp.x * pixelPerMeter + border * pixelPerMeter, img.size().height - (vp.y * pixelPerMeter +  border * pixelPerMeter));
+    cv::circle(img, virtualPoint, 5, cv::Scalar::all(0));
 
-    cv::imshow("VirtualPointMoverTest", img);                   // Show our image inside it.
+    
 
-    if(cv::waitKey(10) > 0)
+    
+    //while(1){
+    double rad2degree = 180.0 / M_PI;
+    vCar.updateStep(vp, dtime);
+
+    std::cout << "Actual virtualpoint: " << std::endl;
+    std::cout << "x: " << vp.x << std::endl;
+    std::cout << "y: " << vp.y << std::endl;
+
+    std::cout << "Calculated Parameters: " << std::endl;
+    std::cout << "x: " << vCar.carPosition.x << std::endl;
+    std::cout << "y: " << vCar.carPosition.y << std::endl;
+    std::cout << "h: " << vCar.carPosition.h << "(" << + vCar.carPosition.h* rad2degree << "°)"<< std::endl;
+
+    std::cout << "Distance to point: " << vCar.e << std::endl;
+    std::cout << "Theta: " << vCar.theta_c << std::endl;
+    std::cout << "Car Speed: " << vCar.carSpeed << std::endl;
+    std::cout << "Steering angle: " << vCar.carSteeringAngle << "(" << + vCar.carSteeringAngle* rad2degree << "°)"<< std::endl;
+
+    cv::Point car(vCar.carPosition.x * pixelPerMeter + border * pixelPerMeter, img.size().height - (vCar.carPosition.y * pixelPerMeter +  border * pixelPerMeter));
+    cv::circle(img, car, 5, cv::Scalar::all(0), -1);
+
+    cv::imshow("VirtualPointMoverTest", img); 
+    while(cv::waitKey()==0); 
+                      // Show our image inside it.
+   // }
+    /*if(cv::waitKey(10) > 0)
     {
       stopSimulation = true;
-    }
+    }*/
 
 //    usleep(10000);
 
