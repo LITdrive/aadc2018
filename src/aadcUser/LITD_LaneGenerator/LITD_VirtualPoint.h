@@ -2,14 +2,14 @@
 
 #include <vector>
 #include "Eigen/Dense"
-#include "Pose2d.h"
+#include "math_utilities.h"
 
-class VirtualPoint
+class LITD_VirtualPoint
 {
   public:
-    VirtualPoint();
-    VirtualPoint(double x, double y, double k, double h);
-    Pose2d getPose2d() const;
+    LITD_VirtualPoint();
+    LITD_VirtualPoint(double x, double y, double k, double h);
+    Vector2d getVector2d() const;
     std::string toString() const;
 
     double x; //x - coordinate

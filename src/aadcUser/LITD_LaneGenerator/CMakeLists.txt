@@ -2,7 +2,7 @@
 cmake_minimum_required(VERSION 2.8)
 
 # Define project name
-project(controlTest)
+project(LITD_LaneGenerator)
 
 # Find OpenCV, you may need to set OpenCV_DIR variable
 # to the absolute path to the directory containing OpenCVConfig.cmake file
@@ -28,11 +28,15 @@ add_subdirectory(dlib dlib_build)
 
 # Declare the executable target built from your sources
 #add_executable(${PROJECT_NAME} controlTest.cpp model_predictive_control.h model_predictive_control.cpp)
-add_executable(${PROJECT_NAME} map_generator_test.cpp 
-                               map_generator.cpp
-                               map_element.cpp
-                               Pose2d.cpp
-                               virtual_point.cpp)
+add_executable(${PROJECT_NAME} #map_generator_test.cpp 
+                               LITD_ControlTest.cpp
+                               LITD_VirtualPoint.cpp
+                               LITD_MapElementStraight.cpp
+                               LITD_MapElementDoubleStraight.cpp
+                               LITD_MapElementCurve.cpp
+                               LITD_MapElementDoubleCurve.cpp
+                               LITD_Map.cpp
+                               )
 
 install(TARGETS ${PROJECT_NAME} DESTINATION bin/application CONFIGURATIONS RelWithDebInfo Release)
 
