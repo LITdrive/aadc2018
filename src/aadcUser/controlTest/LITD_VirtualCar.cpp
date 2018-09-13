@@ -54,7 +54,7 @@ LITD_VirtualPoint LITD_VirtualCar::updateStep(LITD_VirtualPoint vp, double dtime
 
     for (int i=0; i<SIM_STEPS; i++){
     
-        std::cout << "h: " << carPosition.h << std::endl;
+        //std::cout << "h: " << carPosition.h << std::endl;
         carPosition.h += tan(carSteeringAngle)/CAR_AXIS_DIST * carSpeed * dtime/SIM_STEPS;
         carPosition.x += cos(carPosition.h) * carSpeed * dtime/SIM_STEPS;
         carPosition.y += sin(carPosition.h) * carSpeed * dtime/SIM_STEPS;

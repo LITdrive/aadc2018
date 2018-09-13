@@ -25,52 +25,15 @@ LITD_MapElementStraight::LITD_MapElementStraight(double fence_x_min, double fenc
         is_y=straight_is_y;
     }
 }
-/*
-LITD_VirtualPoint LITD_MapElementStraight::getVirtualPointAtDistance(double distance) {
 
-    return LITD_VirtualPoint(0.0,0.0,0.0,0.0);
-}
-*/
-/*
-bool LITD_MapElementStraight::isDistanceInElement(double distance) {
-    return false;
-}
-*/
 LITD_VirtualPoint LITD_MapElementStraight::getNormalPoint(LITD_VirtualPoint &point) {
     double x=point.x;
     double y=point.y;
     double h=wrapTo2Pi<double>(point.h);
     if(is_y) {
-        if(h<M_PI) {
-            return LITD_VirtualPoint(cord, y, 0.0, M_PI/2.0);
-        } else {
-            return LITD_VirtualPoint(cord, y, 0.0, 3.0*M_PI/2.0);
-        }
+        return LITD_VirtualPoint(cord, y, 0.0, angle_sel);
     } else {
-        if(h>3.0*M_PI/2.0 || h<M_PI/2.0) {
-            return LITD_VirtualPoint(x, cord, 0.0, 0.0);
-        } else {
-            return LITD_VirtualPoint(x, cord, 0.0, M_PI);
-        }
-    }
-}
-
-double LITD_MapElementStraight::getPointOffset(LITD_VirtualPoint &point) {
-    double x=point.x;
-    double y=point.y;
-    double h=wrapTo2Pi<double>(point.h);
-    if(is_y) {
-        if(h<M_PI) {
-            return cord-x;
-        } else {
-            return x-cord;
-        }
-    } else {
-        if(h<M_PI/2 || h>M_PI/2*3) {
-            return y-cord;
-        } else {
-            return cord-y;
-        }
+        return LITD_VirtualPoint(x, cord, 0.0, angle_sel);
     }
 }
 
@@ -83,6 +46,25 @@ bool LITD_MapElementStraight::isInElement(LITD_VirtualPoint &point) {
 
 aadc::jury::maneuver LITD_MapElementStraight::selectDriveManeuver(aadc::jury::maneuver maneuver) {
     return aadc::jury::maneuver_straight;
+}
+
+bool LITD_MapElementStraight::selectDriveLane(LITD_VirtualPoint &point) {
+    //This does nothing for a single lane element.
+    double h=wrapTo2Pi<double>(point.h);
+    if(is_y) {
+        if(h<M_PI) {
+            angle_sel = M_PI/2.0;
+        } else {
+            angle_sel = 3.0*M_PI/2.0;
+        }
+    } else {
+        if(h<M_PI/2 || h>M_PI/2*3) {
+            angle_sel=0.0;
+        } else {
+            angle_sel=M_PI;
+        }        
+    }
+    return true;
 }
 
 double LITD_MapElementStraight::getSpeedAdvisory() {

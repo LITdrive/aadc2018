@@ -37,7 +37,9 @@ add_executable(${PROJECT_NAME} #map_generator_test.cpp
                                LITD_ControlTest.cpp
                                LITD_VirtualPoint.cpp
                                LITD_MapElementStraight.cpp
+                               LITD_MapElementDoubleStraight.cpp
                                LITD_MapElementCurve.cpp
+                               LITD_MapElementDoubleCurve.cpp
                                LITD_Map.cpp
                                Pose2d.cpp
                                LITD_VirtualCar.cpp

@@ -1,6 +1,8 @@
 #include "LITD_MapElementCurve.h"
 #include "math_utilities.h"
 
+#include <iostream>
+
 LITD_MapElementCurve::LITD_MapElementCurve(double fence_x_min, double fence_x_max, double fence_y_min, double fence_y_max, LITD_mapElementCurve_corner_t curve_corner, double curve_radius) {
     valid=true;
     if(curve_corner<=CURVE_CORNER_INVAL || curve_corner>=CURVE_CORNER_MAX || curve_radius<=0.0 || curve_radius>=(fence_x_max-fence_x_min) || curve_radius>=(fence_y_max-fence_y_min)) {
@@ -50,36 +52,32 @@ LITD_VirtualPoint LITD_MapElementCurve::getNormalPoint(LITD_VirtualPoint &point)
     }
     x-=x0;
     y-=y0;
-    angle=atan2(y,x);
+    angle=wrapTo2Pi<double>(atan2(y,x));
+
+    std::cout << "curve angle is " << angle << " dx=" << x << " dy=" << y << std::endl;
 
     double dx=radius*cos(angle);
     double dy=radius*sin(angle);
 
     if(angle<M_PI) {
-        if(h<angle && h>(angle-M_PI)) {
+        if(h<angle || h>(angle+M_PI)) {
             angle-=M_PI_2;
         } else {
             angle+=M_PI_2;
         }
     } else {
-        if(h>angle && h<(angle+M_PI)) {
+        if(h>=angle || h<(angle-M_PI)) {
             angle+=M_PI_2;
         } else {
             angle-=M_PI_2;
         }
     }
+    std::cout << "Angle before wrapping is " << angle << std::endl;
     angle=wrapTo2Pi<double>(angle);
 
     
 
     return LITD_VirtualPoint(x0+dx,y0+dy,0.0,angle);
-}
-
-double LITD_MapElementCurve::getPointOffset(LITD_VirtualPoint &point) {
-    double x=point.x;
-    double y=point.y;
-    double h=wrapTo2Pi<double>(point.h);
-    return 0.0;
 }
 
 bool LITD_MapElementCurve::isInElement(LITD_VirtualPoint &point) {
@@ -92,6 +90,11 @@ bool LITD_MapElementCurve::isInElement(LITD_VirtualPoint &point) {
 aadc::jury::maneuver LITD_MapElementCurve::selectDriveManeuver(aadc::jury::maneuver maneuver) {
     /* Curves do technically make turns, but in this manner they do not have a selection, so the maneuver is straight. */
     return aadc::jury::maneuver_straight;
+}
+
+bool LITD_MapElementCurve::selectDriveLane(LITD_VirtualPoint &point) {
+    //Nothing to select here, as the angle has to be calculated for every time.
+    return true;
 }
 
 double LITD_MapElementCurve::getSpeedAdvisory() {

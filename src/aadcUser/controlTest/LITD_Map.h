@@ -16,9 +16,11 @@
 #include <aadc_jury.h>
 
 #include "LITD_VirtualPoint.h"
-#include "LITD_MapElement.h"
+#include "LITD_MapElement.h" 
 #include "LITD_MapElementStraight.h"
+#include "LITD_MapElementDoubleStraight.h"
 #include "LITD_MapElementCurve.h"
+#include "LITD_MapElementDoubleCurve.h"
 
 using namespace std;
 
@@ -36,8 +38,6 @@ public:
     LITD_map_error_t getMapState();
     /* This function returns the next point on the map. Always call getMapState to check if the returned Value is valid! */
     LITD_VirtualPoint getNormalPoint(LITD_VirtualPoint &point);
-    /* Returns the distance in m, normally to the driving lane. Left is positive */
-    double getPointOffset(LITD_VirtualPoint &point);
     /* Set the drive maneuver that should be driven as soon as possible. This value is NOT reset automatically. Defaults to STRAIGHT */
     void selectNextManeuver(aadc::jury::maneuver maneuver);
     /* Returns the drive maneuiver that is currently driven. */
@@ -47,7 +47,10 @@ public:
     double getSpeedLimit();
 
     LITD_map_error_t addStraightElement(double fence_x_min, double fence_x_max, double fence_y_min, double fence_y_max, double straight_cord, bool straight_is_y);
+    LITD_map_error_t addDoubleStraightElement(double fence_x_min, double fence_x_max, double fence_y_min, double fence_y_max, double straight_cord_1, double straight_cord_2, bool straight_is_y);
     LITD_map_error_t addCurveElement(double fence_x_min, double fence_x_max, double fence_y_min, double fence_y_max, LITD_mapElementCurve_corner_t curve_corner, double curve_radius);
+    LITD_map_error_t addDoubleCurveElement(double fence_x_min, double fence_x_max, double fence_y_min, double fence_y_max, LITD_mapElementCurve_corner_t curve_corner, double curve_radius_1, double curve_radius_2);
+
 
 protected:
     LITD_map_error_t state;
