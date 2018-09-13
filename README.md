@@ -25,6 +25,29 @@ On Windows, do the following:
 	md build; cd build
 	cmake -G "Visual Studio 14 2015 Win64" ..
 	cmake --build . --target INSTALL --config Release
+	
+### FFTW
+
+FFTW is a library for computing the discrete Fourier transform (DFT) in one or more dimensions, used on the microphone samples.
+
+    cd /opt
+	sudo wget http://www.fftw.org/fftw-3.3.8.tar.gz -O /tmp/fftw.tar.gz
+	sudo mkdir fftw
+	sudo tar -xzf /tmp/fftw.tar.gz -C fftw
+    sudo chown -R aadc:aadc fftw
+    cd /opt/fftw/fftw-3.3.8
+    mkdir build; cd build
+    cmake ..
+    make
+	echo '/opt/fftw/fftw-3.3.8/build/' | sudo tee /etc/ld.so.conf.d/fftw.conf	
+	sudo ldconfig
+	
+On Windows, download the 64 bit binaries from [here](ftp://ftp.fftw.org/pub/fftw/fftw-3.3.5-dll64.zip), extract the contents to `C:\SDK\fftw\fftw-3.3.5-dll64` and execute the following commands in a VS2015 Developer Console (to generate the `*.lib` files from the `*.dll` files):
+
+	cd C:\SDK\fftw\fftw-3.3.5-dll64
+	lib /machine:x64 /def:libfftw3f-3.def
+	lib /machine:x64 /def:libfftw3-3.def
+	lib /machine:x64 /def:libfftw3l-3.def
 
 ## Structure
 

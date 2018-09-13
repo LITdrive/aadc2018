@@ -182,6 +182,38 @@ else(NOT RPLIDAR_INCLUDE_DIRS OR NOT RPLIDAR_LIBS)
 	message(STATUS "RPLidar lib found. RPLidar root is ${RPLIDAR_ROOT}, Lib is ${RPLIDAR_LIBS}")
 endif(NOT RPLIDAR_INCLUDE_DIRS OR NOT RPLIDAR_LIBS)
 
+#-------------------------------------------------------
+#-------FFTW--------------------------------------------
+#-------------------------------------------------------
+
+if(UNIX)
+	set(FFTW_DIR "/opt/fftw/fftw-3.3.8")
+	set(FFTW_LIBRARY_DIRS "${FFTW_DIR}/build")
+else(UNIX)
+	set(FFTW_DIR "C:/SDK/fftw/fftw-3.3.5-dll64")
+	set(FFTW_LIBRARY_DIRS ${FFTW_DIR})
+endif(UNIX)
+
+if(UNIX)
+	set(FFTW_INCLUDE_DIRS "${FFTW_DIR}/api")
+else(UNIX)
+	set(FFTW_INCLUDE_DIRS ${FFTW_DIR})
+endif(UNIX)
+
+FIND_LIBRARY(FFTW_LIBS NAMES
+	fftw3
+	libfftw3-3
+	PATHS
+	"${FFTW_LIBRARY_DIRS}"
+	)
+
+if (FFTW_LIBS)
+	message(STATUS "Found FFTW. FFTW lib dir is: ${FFTW_LIBRARY_DIRS}")
+	set(AADC_FFTW_FOUND TRUE)
+else (FFTW_LIBS)
+	message(FATAL_ERROR "FFTW libs not found under ${FFTW_LIBRARY_DIRS} (follow instructions in the README!)")
+endif (FFTW_LIBS)
+
 #------------------------------------------------------------------	
 #--------Tools for Doc---------------------------------------------
 #------------------------------------------------------------------
