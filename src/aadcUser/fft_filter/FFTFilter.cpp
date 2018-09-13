@@ -30,15 +30,6 @@ fftw_plan fft_plan;
 ///C-TOR that maps the local m_oRunnable to the RunTrigger of cTutorialDataCalculator
 cFFTFilter::cFFTFilter() : m_oRunnable([this](tTimeStamp tmTime) -> tResult {return RunTrigger(tmTime); })
 {
-	fft_in = (tFloat64*)fftw_malloc(sizeof(tFloat64) * NUMBER_OF_FFT_INPUT_SAMPLES);
-	fft_out = (fftw_complex*)fftw_malloc(sizeof(fftw_complex) * NUMBER_OF_FFT_OUTPUT_SAMPLES);
-	
-	for (tInt i = 0; i < NUMBER_OF_FFT_OUTPUT_SAMPLES; i++)
-	{
-		frequency[i] = FREQUENCY_SAMPLING / NUMBER_OF_FFT_INPUT_SAMPLES*i;
-	}
-
-	fft_plan = fftw_plan_dft_r2c_1d(NUMBER_OF_FFT_INPUT_SAMPLES, fft_in, fft_out, FFTW_MEASURE);
 }
 
 ///This function can be executed in various stages
@@ -47,7 +38,10 @@ cFFTFilter::cFFTFilter() : m_oRunnable([this](tTimeStamp tmTime) -> tResult {ret
 ///StagePostConnect:
 tResult cFFTFilter::Init(tInitStage eInitStage)
 {
+	LOG_INFO("Data Triggered FFT Filter Init Called");
+
 	RETURN_IF_FAILED(cFilterBase::Init(eInitStage));
+	
 	if (eInitStage == tInitStage::StageFirst)
 	{
 		//===================================================================
@@ -77,6 +71,15 @@ tResult cFFTFilter::Init(tInitStage eInitStage)
 		// (was the IPinEventSink within ADTF 2... now this must be defined explicitly via InnerPipe !
 		RETURN_IF_FAILED(create_inner_pipe(*this, { "in1", "tutorial_runner" }));
 
+		fft_in = (tFloat64*)fftw_malloc(sizeof(tFloat64) * NUMBER_OF_FFT_INPUT_SAMPLES);
+		fft_out = (fftw_complex*)fftw_malloc(sizeof(fftw_complex) * NUMBER_OF_FFT_OUTPUT_SAMPLES);
+
+		for (tInt i = 0; i < NUMBER_OF_FFT_OUTPUT_SAMPLES; i++)
+		{
+			frequency[i] = FREQUENCY_SAMPLING / NUMBER_OF_FFT_INPUT_SAMPLES*i;
+		}
+
+		fft_plan = fftw_plan_dft_r2c_1d(NUMBER_OF_FFT_INPUT_SAMPLES, fft_in, fft_out, FFTW_MEASURE);
 
 	}
 	else if (eInitStage == tInitStage::StagePreConnect)
@@ -107,16 +110,19 @@ tResult cFFTFilter::RunTrigger(tTimeStamp tmTimeofActivation)
 	if (IS_OK(m_oReader.GetLastSample(pReadSample)))
 	{
 		RETURN_IF_FAILED(read_from_sample(*pReadSample, fft_in[sample_index]));
+		// LOG_INFO(cString::Format("Data Triggered FFT Filter sample %f at index %d read", sample_index, fft_in[sample_index]));
 		sample_index++;
 
 		if (sample_index >= WINDOW_LENGTH)
 		{
 			for(tInt i = sample_index; i < NUMBER_OF_FFT_INPUT_SAMPLES; i++)
 			{
+				LOG_INFO("Data triggered FFT Filter zero padding");
 				fft_in[i] = 0;
 			}
 
 			// FFT berechnen
+			LOG_INFO("Data triggered FFT Filter calculating FFT");
 			fftw_execute(fft_plan);
 			
 			// Berechnung Betragsgang (reellwertig) aus komplexwertigem Spektrum 
@@ -131,6 +137,11 @@ tResult cFFTFilter::RunTrigger(tTimeStamp tmTimeofActivation)
 				{
 					fft_out_abs[i] = sqrt(pow(fft_out[i][REAL] / WINDOW_LENGTH, 2) + pow(fft_out[i][IMAG] / WINDOW_LENGTH, 2));
 				}
+			}
+
+			for (tInt i = 0; i < NUMBER_OF_FFT_OUTPUT_SAMPLES; i++)
+			{
+				LOG_INFO(cString::Format("Data Triggered FFT Filter amplitude %f at frequency %f Hz", fft_out_abs[i], frequency[i]));
 			}
 
 			// Write

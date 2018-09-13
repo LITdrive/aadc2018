@@ -5,8 +5,8 @@
 #define REAL 0
 #define IMAG 1
 #define FREQUENCY_SAMPLING 44100															// Hz
-#define WINDOW_LENGTH 44000																	// Window Length
-#define NUMBER_OF_FFT_INPUT_SAMPLES pow(2, ceil(std::log(WINDOW_LENGTH) / std::log(2)))
+#define WINDOW_LENGTH 1000																	// Window Length
+#define NUMBER_OF_FFT_INPUT_SAMPLES (tInt)(pow(2, ceil(std::log(WINDOW_LENGTH) / std::log(2))))
 #define NUMBER_OF_FFT_OUTPUT_SAMPLES (tInt)(NUMBER_OF_FFT_INPUT_SAMPLES/2 + 1)
 
 using namespace adtf_util;

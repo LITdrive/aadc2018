@@ -6,7 +6,7 @@
 
 #define FREQUENCY_SAMPLING 44100															// Hz
 #define FREQUENCY_SIGNAL 1000																// Hz
-#define BUFFER_SIZE 44000
+#define BUFFER_SIZE 1000
 
 ADTF_PLUGIN("Audio Sampling Plugin", cAudioSampleStreamingSource);
 
@@ -24,34 +24,34 @@ cAudioSampleStreamingSource::cAudioSampleStreamingSource()
 
 tResult cAudioSampleStreamingSource::Construct()
 {
-	LOG_INFO("Construct of audio sample streaming source was called");
+	//LOG_INFO("Construct of audio sample streaming source was called");
 
 	RETURN_IF_FAILED(cSampleStreamingSource::Construct());
 
 	//ALSA Parameter setzen
 	/*if ((err = snd_pcm_open(&capture_handle, argv[1], SND_PCM_STREAM_CAPTURE, 0)) < 0)
 	{
-		LOG_INFO("Cannot open audio device");
+		//LOG_INFO("Cannot open audio device");
 	}
 
 	if ((err = snd_pcm_hw_params_malloc(&hw_params)) < 0)
 	{
-		LOG_INFO("cannot allocate hardware parameter structure");
+		//LOG_INFO("cannot allocate hardware parameter structure");
 	}
 
 	if ((err = snd_pcm_hw_params_any(capture_handle, hw_params)) < 0)
 	{
-		LOG_INFO("cannot initialize hardware parameter structure");
+		//LOG_INFO("cannot initialize hardware parameter structure");
 	}
 
 	if ((err = snd_pcm_hw_params_set_access(capture_handle, hw_params, SND_PCM_ACCESS_RW_INTERLEAVED)) < 0)
 	{
-		LOG_INFO("cannot set access type");
+		//LOG_INFO("cannot set access type");
 	}
 
 	if ((err = snd_pcm_hw_params_set_format(capture_handle, hw_params, SND_PCM_FORMAT_S16_LE)) < 0)
 	{
-		LOG_INFO("cannot set sample format");
+		//LOG_INFO("cannot set sample format");
 	}
 
 	if ((err = snd_pcm_hw_params_set_rate_near(capture_handle, hw_params, 44100, 0)) < 0)
@@ -61,19 +61,19 @@ tResult cAudioSampleStreamingSource::Construct()
 
 	if ((err = snd_pcm_hw_params_set_channels(capture_handle, hw_params, 1)) < 0)
 	{
-		LOG_INFO("cannot set channel count");
+		//LOG_INFO("cannot set channel count");
 	}
 
 	if ((err = snd_pcm_hw_params(capture_handle, hw_params)) < 0)
 	{
-		LOG_INFO("cannot set parameters");
+		//LOG_INFO("cannot set parameters");
 	}
 
 	snd_pcm_hw_params_free(hw_params);
 
 	if ((err = snd_pcm_prepare(capture_handle)) < 0)
 	{
-		LOG_INFO("cannot prepare audio interface for use");
+		//LOG_INFO("cannot prepare audio interface for use");
 	}*/
 
 	// Create a stream type with the given media description.
@@ -101,7 +101,7 @@ tResult cAudioSampleStreamingSource::StartStreaming()
 		RETURN_ERROR_DESC(ERR_UNEXPECTED, "Audio Sample Streaming Source Unable to create kernel timer");
 	}
 
-	LOG_INFO("Writing audio samples...");
+	//LOG_INFO("Writing audio samples...");
 
 	RETURN_NOERROR;
 }
@@ -114,7 +114,7 @@ tResult cAudioSampleStreamingSource::StopStreaming()
 
 tResult cAudioSampleStreamingSource::RequestPin(const tChar * strName, const iobject_ptr<const IStreamType>& pType, iobject_ptr<IOutPin>& pOutPin)
 {
-	LOG_INFO("RequestPin was called, but it is not implemented for audio sample streaming source!");
+	//LOG_INFO("RequestPin was called, but it is not implemented for audio sample streaming source!");
 
 	RETURN_NOERROR;
 }
@@ -126,7 +126,7 @@ tVoid cAudioSampleStreamingSource::TimerFunc()
 	// Non-interleaved reading
 	/*if((err = snd_pcm_readn(capture_handle, buf, BUFFER_SIZE)) != BUFFER_SIZE)
 	{
-			LOG_INFO("read from audio interface failed");		
+			//LOG_INFO("read from audio interface failed");		
 	}*/
 	
 
@@ -142,13 +142,13 @@ tVoid cAudioSampleStreamingSource::TimerFunc()
 
 	// We log the generated value to the console just until we have a streaming sink that
 	// can handle it for us.
-	LOG_INFO(cString::Format("Reading audio sample: %d", audio_sample));
+	//LOG_INFO(cString::Format("Cosine sample at index %d: %f", sample_index, audio_sample));
 
 	// Create a new sample
 	object_ptr<ISample> pWriteSample;
 	tResult res = alloc_sample(pWriteSample, m_pClock->GetStreamTime());
 	if (res.IsFailed()) {
-		LOG_INFO("Could not allocate RAM for sample, sorry!");
+		//LOG_INFO("Could not allocate RAM for sample, sorry!");
 		return;
 	}
 
@@ -160,7 +160,7 @@ tVoid cAudioSampleStreamingSource::TimerFunc()
 		res = ddl::access_element::find_index(m_oCodecFactorySimple, "cValue", m_nValueElementIndex);
 
 		if (res.IsFailed()) {
-			LOG_INFO("Could not find element >>cValue<< in DDL, sorry!");
+			//LOG_INFO("Could not find element >>cValue<< in DDL, sorry!");
 			return;
 		}
 
@@ -168,7 +168,7 @@ tVoid cAudioSampleStreamingSource::TimerFunc()
 		res = oCodec.SetElementValue(m_nValueElementIndex, payload);
 
 		if (res.IsFailed()) {
-			LOG_INFO("Could not set cValue in DDL, sorry!");
+			//LOG_INFO("Could not set cValue in DDL, sorry!");
 			return;
 		}
 		// The sample buffer lock is released in the destructor of oCodec
