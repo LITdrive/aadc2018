@@ -21,14 +21,14 @@ LITD_VirtualCar::LITD_VirtualCar()
 //returns the new position of the car after dtime
 LITD_VirtualPoint LITD_VirtualCar::updateStep(LITD_VirtualPoint vp, double dtime)
 {
-
+    double rad2degree = 180.0 / M_PI; 
     //vector between car and virtualpoint
     Vector2d diff = vp.getVector2d() - carPosition.getVector2d();
 
     //calc sign to steer in direction of road
     int sign = 1;
     double diff_heading_abs = wrapTo2Pi(atan2(diff(1), diff(0)));
-    if(diff_heading_abs< wrapTo2Pi(carPosition.h)){
+    if(wrapTo2Pi(diff_heading_abs - wrapTo2Pi(vp.h))> 4.712 ){
         sign = -1;
     }
     //calc new direction
@@ -44,11 +44,11 @@ LITD_VirtualPoint LITD_VirtualCar::updateStep(LITD_VirtualPoint vp, double dtime
 
     //Debug Messages
     std::cout << "-----------------------" << std::endl;
-    std::cout << "point heading : " << vp.h << std::endl;
-    std::cout << "car heading: " << carPosition.h << std::endl;
-    std::cout << "diff heading: " << diff_heading_abs << std::endl;
+    std::cout << "point heading : " << vp.h << "(" << rad2degree * vp.h << "°)" << std::endl;
+    std::cout << "car heading: " << carPosition.h << "(" << rad2degree * carPosition.h << "°)" << std::endl;
+    std::cout << "diff heading: " << diff_heading_abs << "(" << rad2degree * diff_heading_abs << "°)" << std::endl;
     std::cout << "e: " << e << std::endl;
-    std::cout << "Theta_C: " << theta_c << std::endl;
+    std::cout << "Theta_C: " << theta_c << "(" << rad2degree * theta_c << "°)" << std::endl;
     std::cout << "-----------------------" << std::endl;
 
 

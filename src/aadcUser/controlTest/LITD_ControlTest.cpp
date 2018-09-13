@@ -11,7 +11,7 @@
 #include "LITD_VirtualCar.h"
 
 
-#define PIXEL_PER_METER 100
+#define PIXEL_PER_METER 80
 #define DTIME 0.1
 
 
@@ -87,8 +87,8 @@ int main()
 
     usleep(10000);
 
-    if(cv::waitKey(10)>0) {
-      running=false;
+    while(cv::waitKey() == 0) {
+      //running=false;
     }
   }
   while(1) {
