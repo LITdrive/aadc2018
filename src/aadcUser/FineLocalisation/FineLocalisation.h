@@ -12,7 +12,7 @@ Redistribution and use in source and binary forms, with or without modification,
 THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS AS IS AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL AUDI AG OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 **********************************************************************/
-
+#include "stdafx.h"
 
 #pragma once
 
@@ -38,9 +38,19 @@ private:
     //Pins
     /*! Reader of an InPin. */
     cPinReader m_oReader;
+    cPinReader m_oVPReader;
     /*! Writer to an OutPin. */
-    cPinWriter m_oWriter;
+    cPinWriter m_oVPWriter;
+    struct tVirtualPointId
+    {
+        tSize f64x;
+        tSize f64y;
+        tSize f64Heading;
+        tSize f64Speed;
+    } m_ddlVirtualPointId;
 
+    /*! The signal value sample factory */
+    cSampleCodecFactory m_VirtualPointSampleFactory;
     //Stream Formats
         /*! The input format */
     adtf::streaming::tStreamImageFormat m_sImageFormat;
@@ -48,6 +58,8 @@ private:
     /*! The clock */
     object_ptr<adtf::services::IReferenceClock> m_pClock;
 
+
+    tVirtualPointId currentVP;
 
 
 public:

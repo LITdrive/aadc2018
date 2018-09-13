@@ -32,14 +32,27 @@ cFineLocalisation::cFineLocalisation()
     set_stream_type_image_format(*pType, m_sImageFormat);
 
     //Register input pin
-    Register(m_oReader, "input", pType);
+    Register(m_oReader, "inBirdsEye", pType);
+
+    object_ptr<IStreamType> pTypeVirtualPoint;
+    if IS_OK(adtf::mediadescription::ant::create_adtf_default_stream_type_from_service("tVirtualPoint", pTypeVirtualPoint, m_VirtualPointSampleFactory)) {
+        (adtf_ddl::access_element::find_index(m_VirtualPointSampleFactory, cString("f64x"), m_ddlVirtualPointId.f64x));
+        (adtf_ddl::access_element::find_index(m_VirtualPointSampleFactory, cString("f64y"), m_ddlVirtualPointId.f64y));
+        (adtf_ddl::access_element::find_index(m_VirtualPointSampleFactory, cString("f64Heading"), m_ddlVirtualPointId.f64Heading));
+        (adtf_ddl::access_element::find_index(m_VirtualPointSampleFactory, cString("f64Speed"), m_ddlVirtualPointId.f64Speed));
+    } else {
+        LOG_INFO("No mediadescription for tVirtualPoint found!");
+    }
+    //Register input pin
+    Register(m_oVPReader, "inVirtualPoint", pTypeVirtualPoint);
+
     //Register output pin
-    Register(m_oWriter, "output", pType);
+    Register(m_oVPWriter, "outVitrtualPoint", pTypeVirtualPoint);
 
     //register callback for type changes
     m_oReader.SetAcceptTypeCallback([this](const adtf::ucom::ant::iobject_ptr<const adtf::streaming::ant::IStreamType>& pType) -> tResult
     {
-        return ChangeType(m_oReader, m_sImageFormat, *pType.Get(), m_oWriter);
+        return ChangeType(m_oReader, m_sImageFormat, *pType.Get());
     });
 }
 
@@ -54,7 +67,9 @@ tResult cFineLocalisation::Configure()
 tResult cFineLocalisation::Process(tTimeStamp tmTimeOfTrigger)
 {
     object_ptr<const ISample> pReadSample;
-    Mat outputImage;
+    double x, y, heading, speed;
+
+    if(IS_OK())
 
     while (IS_OK(m_oReader.GetNextSample(pReadSample)))
     {
@@ -63,24 +78,25 @@ tResult cFineLocalisation::Process(tTimeStamp tmTimeOfTrigger)
         if (IS_OK(pReadSample->Lock(pReadBuffer)))
         {
             //create a opencv matrix from the media sample buffer
-            Mat inputImage = Mat(cv::Size(m_sImageFormat.m_ui32Width, m_sImageFormat.m_ui32Height),
+            Mat bvImage = Mat(cv::Size(m_sImageFormat.m_ui32Width, m_sImageFormat.m_ui32Height),
                                    CV_8UC3, const_cast<unsigned char*>(static_cast<const unsigned char*>(pReadBuffer->GetPtr())));
 
-            //Do the image processing and copy to destination image buffer
-            Canny(inputImage, outputImage, 100, 200);// Detect Edges
-        }
-    }
 
-    //Write processed Image to Output Pin
-    if (!outputImage.empty())
-    {
-        //update output format if matrix size does not fit to
-        if (outputImage.total() * outputImage.elemSize() != m_sImageFormat.m_szMaxByteSize)
-        {
-            setTypeFromMat(m_oWriter, outputImage);
+
+            object_ptr<ISample> pWriteSample;
+
+            RETURN_IF_FAILED(alloc_sample(pWriteSample, m_pClock->GetStreamTime()));
+            {
+                auto oCodec = m_VirtualPointSampleFactory.MakeCodecFor(pWriteSample);
+
+                RETURN_IF_FAILED(oCodec.SetElementValue(m_ddlVirtualPointId.f64x, x));
+                RETURN_IF_FAILED(oCodec.SetElementValue(m_ddlVirtualPointId.f64y, y));
+                RETURN_IF_FAILED(oCodec.SetElementValue(m_ddlVirtualPointId.f64Heading, heading));
+                RETURN_IF_FAILED(oCodec.SetElementValue(m_ddlVirtualPointId.f64Speed, speed));
+            }
+
+            m_oVPWriter << pWriteSample << flush << trigger;
         }
-        // write to pin
-        writeMatToPin(m_oWriter, outputImage, m_pClock->GetStreamTime());
     }
     
     RETURN_NOERROR;
