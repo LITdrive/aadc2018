@@ -14,11 +14,6 @@ LITD_VirtualPoint::LITD_VirtualPoint(double x, double y, double k, double h)
 {
 }
 
-Pose2d LITD_VirtualPoint::getPose2d() const
-{
-  return Pose2d(x, y, h);
-}
-
 
 Vector2d LITD_VirtualPoint::getVector2d() const
 {

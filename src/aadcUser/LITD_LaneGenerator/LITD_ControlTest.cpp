@@ -8,7 +8,6 @@
 #include <opencv2/highgui/highgui.hpp>
 #include "LITD_VirtualPoint.h"
 #include "LITD_Map.h"
-#include "LITD_VirtualCar.h"
 
 
 #define PIXEL_PER_METER 100
@@ -92,12 +91,6 @@ int main()
   cv::Mat mapImg(800, 800, CV_8UC3, cv::Scalar::all(255));
 
   cv::namedWindow( "VirtualPointMoverTest", cv::WINDOW_AUTOSIZE );// Create a window for display.
-
-  LITD_VirtualCar vCar;
-
-  std::cout << "Car: " << std::endl;
-  std::cout << "x: " << vCar.carPosition.x << std::endl;
-  std::cout << "y: " << vCar.carPosition.y << std::endl;
 
   bool running=true;
 

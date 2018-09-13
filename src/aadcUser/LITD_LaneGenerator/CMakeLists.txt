@@ -2,7 +2,7 @@
 cmake_minimum_required(VERSION 2.8)
 
 # Define project name
-project(controlTest)
+project(LITD_LaneGenerator)
 
 # Find OpenCV, you may need to set OpenCV_DIR variable
 # to the absolute path to the directory containing OpenCVConfig.cmake file
@@ -41,8 +41,6 @@ add_executable(${PROJECT_NAME} #map_generator_test.cpp
                                LITD_MapElementCurve.cpp
                                LITD_MapElementDoubleCurve.cpp
                                LITD_Map.cpp
-                               Pose2d.cpp
-                               LITD_VirtualCar.cpp
                                )
 
 install(TARGETS ${PROJECT_NAME} DESTINATION bin/application CONFIGURATIONS RelWithDebInfo Release)

@@ -1,7 +1,6 @@
 #ifndef LITD_MAPELEMENT_H
 #define LITD_MAPELEMENT_H
 
-#include "Pose2d.h"
 #include "LITD_VirtualPoint.h"
 #include <aadc_jury.h>
 

@@ -2,6 +2,27 @@
 
 #pragma once
 #include <cmath>
+#include <vector>
+#include "Eigen/Eigen"
+#include "Eigen/Dense"
+#include "Eigen/Geometry"
+#include "Eigen/StdVector"
+
+/*********************************************************************
+ * Point2d
+ *********************************************************************/
+using Point2d = Eigen::Vector2d;
+
+using Points2d = std::vector<Point2d, Eigen::aligned_allocator<Point2d>>;
+
+/*********************************************************************
+ * Vector2d
+ *********************************************************************/
+/// \brief 2D Vector
+using Vector2d = Eigen::Vector2d;
+
+/// \brief Vector of 2D Vectors
+using Vectors2d = std::vector<Vector2d, Eigen::aligned_allocator<Vector2d>>;
 
 /// \brief Inline function for the square of a number.
 /// \param x Number to square
