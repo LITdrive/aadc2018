@@ -41,6 +41,7 @@ private:
     cPinReader m_oVPReader;
     /*! Writer to an OutPin. */
     cPinWriter m_oVPWriter;
+
     struct tVirtualPointId
     {
         tSize f64x;
@@ -58,9 +59,7 @@ private:
     /*! The clock */
     object_ptr<adtf::services::IReferenceClock> m_pClock;
 
-
-    tVirtualPointId currentVP;
-
+    tFloat64 x, y, speed, heading;
 
 public:
 

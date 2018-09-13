@@ -66,10 +66,18 @@ tResult cFineLocalisation::Configure()
 
 tResult cFineLocalisation::Process(tTimeStamp tmTimeOfTrigger)
 {
-    object_ptr<const ISample> pReadSample;
-    double x, y, heading, speed;
+    object_ptr<const ISample> pReadSample, pVPReadSample;
 
-    if(IS_OK())
+    if(IS_OK(m_oVPReader.GetNextSample(pVPReadSample))) {
+        auto oDecoder = m_VirtualPointSampleFactory.MakeDecoderFor(*pVPReadSample);
+
+        RETURN_IF_FAILED(oDecoder.IsValid());
+
+        RETURN_IF_FAILED(oDecoder.GetElementValue(m_ddlVirtualPointId.f64x, &x));
+        RETURN_IF_FAILED(oDecoder.GetElementValue(m_ddlVirtualPointId.f64y, &y));
+        RETURN_IF_FAILED(oDecoder.GetElementValue(m_ddlVirtualPointId.f64Heading, &heading));
+        RETURN_IF_FAILED(oDecoder.GetElementValue(m_ddlVirtualPointId.f64Speed, &speed));
+    }
 
     while (IS_OK(m_oReader.GetNextSample(pReadSample)))
     {
@@ -78,10 +86,8 @@ tResult cFineLocalisation::Process(tTimeStamp tmTimeOfTrigger)
         if (IS_OK(pReadSample->Lock(pReadBuffer)))
         {
             //create a opencv matrix from the media sample buffer
-            Mat bvImage = Mat(cv::Size(m_sImageFormat.m_ui32Width, m_sImageFormat.m_ui32Height),
-                                   CV_8UC3, const_cast<unsigned char*>(static_cast<const unsigned char*>(pReadBuffer->GetPtr())));
-
-
+            /*Mat bvImage = Mat(cv::Size(m_sImageFormat.m_ui32Width, m_sImageFormat.m_ui32Height),
+                                   CV_8UC3, const_cast<unsigned char*>(static_cast<const unsigned char*>(pReadBuffer->GetPtr())));*/
 
             object_ptr<ISample> pWriteSample;
 
