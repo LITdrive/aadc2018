@@ -15,7 +15,8 @@ class LITD_VirtualPoint
 
     double x; //x - coordinate
     double y; //y - coordinate
-    double k; //curvature
+    double k;
+    double speed; //curvature
     double h; //heading
 };
 

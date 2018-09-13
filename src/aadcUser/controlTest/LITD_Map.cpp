@@ -61,16 +61,17 @@ aadc::jury::maneuver LITD_Map::getCurrentManeuver() {
 
 double LITD_Map::getSpeedAdvisory() {
     if(map_index_current<0 || map_index_current>=map_elements.size()) {
-        return map_elements[map_index_current]->getSpeedAdvisory();
+        return 0.0;
     }
-    return 0.0;
+    return map_elements[map_index_current]->getSpeedAdvisory();
 }
 
 double LITD_Map::getSpeedLimit() {
     if(map_index_current<0 || map_index_current>=map_elements.size()) {
-        return map_elements[map_index_current]->getSpeedLimit();
+       return 0.0;
     }
-    return 0.0;
+    
+    return map_elements[map_index_current]->getSpeedLimit();
 }
 
 LITD_map_error_t LITD_Map::addStraightElement(double fence_x_min, double fence_x_max, double fence_y_min, double fence_y_max, double straight_cord, bool straight_is_y) {

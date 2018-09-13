@@ -13,7 +13,7 @@
 
 #define PIXEL_PER_METER 80
 #define DTIME 0.1
-
+#define STRAIGHT_SPEED 0.5
 
 
 int main()
@@ -62,7 +62,7 @@ int main()
 
 
   LITD_VirtualPoint vp;
-
+  
   while(running) {
     std::cout << "Loop start: x=" << vCar.carPosition.x << " y=" << vCar.carPosition.y << " h=" << vCar.carPosition.h << std::endl;
     double offset = map.getPointOffset(vCar.carPosition);
@@ -80,7 +80,8 @@ int main()
 
     cv::Point car(mapImg.size().width/2+PIXEL_PER_METER*vCar.carPosition.x, mapImg.size().height/2 - PIXEL_PER_METER*vCar.carPosition.y);
     cv::circle(mapImg, car, 2, cv::Scalar::all(0), -1);
-
+    
+    vp.speed = STRAIGHT_SPEED * map.getSpeedAdvisory();
     vCar.updateStep(vp, DTIME);
 
     cv::imshow("VirtualPointMoverTest", mapImg);                   // Show our image inside it.

@@ -12,15 +12,48 @@ LITD_VirtualCar::LITD_VirtualCar()
     carPosition.x = 0.0;
     carPosition.y = -0.2;
     carPosition.h = 0.0;
-    carSpeed = 0.1;
+    carSpeed = 0.0;
 
-    stanleyGain = 0.8;
+    stanleyGain = 1.5;
+    vKp = 0.1;
+    vKi =0.5;
+
+    vpOld.x = carPosition.x;
+    vpOld.y = carPosition.y;
+    vIntegrate = 0.0;
+}
+
+double LITD_VirtualCar::getActSpeed(LITD_VirtualPoint vp, double dtime){
+    double distance = (carPosition.getVector2d() - vpOld.getVector2d()).norm();
+    std::cout << "Distance : " << distance << std::endl;
+    vpOld = carPosition;
+    double actSpeed = distance / dtime;
+    return actSpeed;
+}
+
+void LITD_VirtualCar::speedRegulator(LITD_VirtualPoint vp, double dtime){
+    double actSpeed = getActSpeed(vp, dtime);
+    double diff = vp.speed - actSpeed;
+    vIntegrate += diff;
+
+    carSpeed = vKp * diff + vKi * dtime * vIntegrate;
+
+    std::cout << "-----------------------" << std::endl;
+    std::cout << "Vp speed : " << vp.speed << std::endl;
+    std::cout << "Act Speed : " << actSpeed << std::endl;
+    std::cout << "Speed_diff : " << diff << std::endl;
+    std::cout << "Integrate val: " << vIntegrate << std::endl;
+    std::cout << "carspeed: " << carSpeed  << std::endl;
+    std::cout << "-----------------------" << std::endl;
 }
 
 //Params: position of otpimum point, delta time step
 //returns the new position of the car after dtime
 LITD_VirtualPoint LITD_VirtualCar::updateStep(LITD_VirtualPoint vp, double dtime)
 {
+
+    
+
     double rad2degree = 180.0 / M_PI; 
     //vector between car and virtualpoint
     Vector2d diff = vp.getVector2d() - carPosition.getVector2d();
@@ -49,8 +82,8 @@ LITD_VirtualPoint LITD_VirtualCar::updateStep(LITD_VirtualPoint vp, double dtime
     std::cout << "diff heading: " << diff_heading_abs << "(" << rad2degree * diff_heading_abs << "°)" << std::endl;
     std::cout << "e: " << e << std::endl;
     std::cout << "Theta_C: " << theta_c << "(" << rad2degree * theta_c << "°)" << std::endl;
-    std::cout << "-----------------------" << std::endl;
-
+    
+    
 
     for (int i=0; i<SIM_STEPS; i++){
     
@@ -60,7 +93,11 @@ LITD_VirtualPoint LITD_VirtualCar::updateStep(LITD_VirtualPoint vp, double dtime
         carPosition.y += sin(carPosition.h) * carSpeed * dtime/SIM_STEPS;
     }
 
-
+    std::cout << "new car pos x: " << carPosition.x << std::endl;
+    std::cout << "new car pos y: " << carPosition.y << std::endl;
+    std::cout << "-----------------------" << std::endl;
+ 
+ speedRegulator(vp, dtime);
     //calc next point of front axis
     LITD_VirtualPoint newFrontAxisPoint;
     //newFrontAxisPoint.x = carPosition.x+ cos(theta_c) * carSpeed  * dtime;

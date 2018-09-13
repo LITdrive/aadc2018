@@ -14,15 +14,28 @@ public:
 
 
 //private:
+
+    void speedRegulator(LITD_VirtualPoint vp, double dtime);
+    double getActSpeed(LITD_VirtualPoint vp, double dtime);
+
     double carSpeed;
     double carSteeringAngle;
     LITD_VirtualPoint carPosition;
     //SpeedGenerator speedGenerator;
 
-    double stanleyGain;
-
     double e;
     double theta_c;
+
+    //Controller Params
+    double stanleyGain;
+    double vKp;
+    double vKi;
+
+    //PI variables
+    double vIntegrate;
+
+    //Simulation variables
+    LITD_VirtualPoint vpOld;
 };
 
 #endif // LITD_VIRTUALCAR_H
