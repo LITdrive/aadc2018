@@ -18,12 +18,13 @@ THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS AS IS AND ANY EXPRESS OR I
 
 
 ADTF_TRIGGER_FUNCTION_FILTER_PLUGIN(CID_LANE_GENERATOR_DATA_TRIGGERED_FILTER,
-                                    "LaneGenerator_cf",
+                                    "LITD_LaneGenerator",
                                     LITD_LaneGenerator,
                                     adtf::filter::pin_trigger({ "input" }));
 
 LITD_LaneGenerator::LITD_LaneGenerator()
 {
+    LOG_INFO("Initializing LITD_LaneGenerator");
     object_ptr<IStreamType> pTypeVirtualPoint;
     if IS_OK(adtf::mediadescription::ant::create_adtf_default_stream_type_from_service("tVirtualPoint", pTypeVirtualPoint, m_VirtualPointSampleFactory)) {
         (adtf_ddl::access_element::find_index(m_VirtualPointSampleFactory, cString("f64x"), m_ddlVirtualPointId.f64x));
@@ -33,6 +34,78 @@ LITD_LaneGenerator::LITD_LaneGenerator()
     } else {
         LOG_ERROR("No mediadescription for tVirtualPoint found!");
     }
+
+    LOG_INFO("Generating lane map...");
+
+   //Vertical straight between x 0->2
+  /*
+  if(map.addStraightElement(0.0, 2.0, -0.5, 0.5, 0.0, false)!=MAP_ENOERR) {
+    LOG_ERROR("Error adding straight element 0/0->2/0");
+  }
+  */
+  if(map.addDoubleStraightElement(0.0, 2.0, -0.5, 0.5, -0.2, 0.2, false)!=MAP_ENOERR) {
+    LOG_ERROR("Error adding straight element 0/0->2/0");
+  }
+  /*
+  if(map.addCurveElement(2.0, 3.5, -0.5, 1.0, CURVE_CORNER_UL, 1.0)!=MAP_ENOERR) {
+    LOG_ERROR("Error adding curve element 2/0->3/1");
+  }
+  */
+  if(map.addDoubleCurveElement(2.0, 3.5, -0.5, 1.0, CURVE_CORNER_UL, 0.8, 1.2)!=MAP_ENOERR) {
+    LOG_ERROR("Error adding curve element 2/0->3/1");
+  }
+  /*
+  if(map.addStraightElement(2.5, 3.5, 1.0, 3.0, 3.0, true)!=MAP_ENOERR) {
+    LOG_ERROR("Error adding straight element 3/1->3/3");
+  }
+  */
+
+  if(map.addDoubleStraightElement(2.5, 3.5, 1.0, 3.0, 2.8, 3.2, true)!=MAP_ENOERR) {
+    LOG_ERROR("Error adding straight element 3/1->3/3");
+  }
+  /*
+  if(map.addCurveElement(2.0, 3.5, 3.0, 4.5, CURVE_CORNER_LL, 1.0)!=MAP_ENOERR) {
+    LOG_ERROR("Error adding curve element 3/3->2/4");
+  }
+  */
+  if(map.addDoubleCurveElement(2.0, 3.5, 3.0, 4.5, CURVE_CORNER_LL, 0.8, 1.2)!=MAP_ENOERR) {
+    LOG_ERROR("Error adding curve element 3/3->2/4");
+  }
+  /*
+  if(map.addStraightElement(0.0, 2.0, 3.5, 4.5, 4.0, false)!=MAP_ENOERR) {
+    LOG_ERROR("Error adding straight element 2/4->0/4");
+  }
+  */
+  if(map.addDoubleStraightElement(0.0, 2.0, 3.5, 4.5, 3.8, 4.2, false)!=MAP_ENOERR) {
+    LOG_ERROR("Error adding straight element 2/4->0/4");
+  }
+  /*
+  if(map.addCurveElement(-1.5, 0.0, 3.0, 4.5, CURVE_CORNER_LR, 1.0)!=MAP_ENOERR) {
+    LOG_ERROR("Error adding curve element 0/4->-1/3");
+  }
+  */
+  if(map.addDoubleCurveElement(-1.5, 0.0, 3.0, 4.5, CURVE_CORNER_LR, 0.8, 1.2)!=MAP_ENOERR) {
+    LOG_ERROR("Error adding curve element 0/4->-1/3");
+  }
+  /*
+  if(map.addStraightElement(-1.5, -0.5, 1.0, 3.0, -1.0, true)!=MAP_ENOERR) {
+    LOG_ERROR("Error adding straight element -1/3->-1/1");
+  }  
+  */
+  if(map.addDoubleStraightElement(-1.5, -0.5, 1.0, 3.0, -1.2, -0.8, true)!=MAP_ENOERR) {
+    LOG_ERROR("Error adding straight element -1/3->-1/1");
+  }
+  /*
+  if(map.addCurveElement(-1.5, 0.0, -0.5, 1.0, CURVE_CORNER_UR, 1.0)!=MAP_ENOERR) {
+    LOG_ERROR("Error adding curve element -1/1->0/0");
+  }
+  */
+  if(map.addDoubleCurveElement(-1.5, 0.0, -0.5, 1.0, CURVE_CORNER_UR, 0.8, 1.2)!=MAP_ENOERR) {
+    LOG_ERROR("Error adding curve element -1/1->0/0");
+  }   
+
+    LOG_INFO("Lane map generation complete!");
+
     //Register input pin
     Register(m_oVPReader, "inVirtualPoint", pTypeVirtualPoint);
 

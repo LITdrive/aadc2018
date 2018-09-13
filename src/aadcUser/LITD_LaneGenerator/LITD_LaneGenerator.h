@@ -13,6 +13,7 @@ THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS AS IS AND ANY EXPRESS OR I
 
 **********************************************************************/
 #include "stdafx.h"
+#include "LITD_Map.h"
 
 #pragma once
 
@@ -27,7 +28,6 @@ using namespace adtf::streaming;
 using namespace adtf::mediadescription;
 using namespace adtf::filter;
 using namespace std;
-using namespace cv;
 
 
 /*! the main class of the open cv template. */
@@ -57,6 +57,8 @@ private:
     object_ptr<adtf::services::IReferenceClock> m_pClock;
 
     tFloat64 x, y, speed, heading;
+
+    LITD_Map map;
 
 public:
 
