@@ -24,9 +24,8 @@ LITD_MapElementCurve::LITD_MapElementCurve(double fence_x_min, double fence_x_ma
 }
 
 LITD_VirtualPoint LITD_MapElementCurve::getNormalPoint(LITD_VirtualPoint &point) {
-    double x=point.x,x0;
-    double y=point.y,y0;
-    double h=wrapTo2Pi<double>(point.h);
+    double x=point.x,x0=0.0;
+    double y=point.y,y0=0.0;
 
     double angle;
 
@@ -49,6 +48,11 @@ LITD_VirtualPoint LITD_MapElementCurve::getNormalPoint(LITD_VirtualPoint &point)
             x0=x_max;
             y0=y_max;
             break;
+        case CURVE_CORNER_INVAL:
+        case CURVE_CORNER_MAX:
+        default:
+            std::cout << "WARNING: curve corner is invalid!!" << std::endl;
+            break;
     }
     x-=x0;
     y-=y0;
@@ -58,25 +62,9 @@ LITD_VirtualPoint LITD_MapElementCurve::getNormalPoint(LITD_VirtualPoint &point)
 
     double dx=radius*cos(angle);
     double dy=radius*sin(angle);
-
-    if(angle<M_PI) {
-        if(h<angle || h>(angle+M_PI)) {
-            angle-=M_PI_2;
-        } else {
-            angle+=M_PI_2;
-        }
-    } else {
-        if(h>=angle || h<(angle-M_PI)) {
-            angle+=M_PI_2;
-        } else {
-            angle-=M_PI_2;
-        }
-    }
+    angle+=angle_sel;
     std::cout << "Angle before wrapping is " << angle << std::endl;
     angle=wrapTo2Pi<double>(angle);
-
-    
-
     return LITD_VirtualPoint(x0+dx,y0+dy,0.0,angle);
 }
 
@@ -93,7 +81,59 @@ aadc::jury::maneuver LITD_MapElementCurve::selectDriveManeuver(aadc::jury::maneu
 }
 
 bool LITD_MapElementCurve::selectDriveLane(LITD_VirtualPoint &point) {
-    //Nothing to select here, as the angle has to be calculated for every time.
+    double x=point.x,x0=0.0;
+    double y=point.y,y0=0.0;
+    double h=wrapTo2Pi<double>(point.h);
+
+    double angle;
+
+    std::cout << "DoubleCurve selecting lane: ";
+
+    switch(corner) {
+        case CURVE_CORNER_LL:
+            x0=x_min;
+            y0=y_min;
+            break;     
+        case CURVE_CORNER_LR:
+            x0=x_max;
+            y0=y_min;
+            break;
+
+        case CURVE_CORNER_UL:
+            x0=x_min;
+            y0=y_max;
+            break;
+
+        case CURVE_CORNER_UR:
+            x0=x_max;
+            y0=y_max;
+            break;
+        case CURVE_CORNER_INVAL:
+        case CURVE_CORNER_MAX:
+        default:
+            std::cout << "WARNING: curve corner is invalid!!" << std::endl;
+            break;
+    }
+    x-=x0;
+    y-=y0;
+    angle=wrapTo2Pi<double>(atan2(y,x));
+
+    std::cout << "curve angle is " << angle << " dx=" << x << " dy=" << y;
+
+    if(angle<M_PI) {
+        if(h<angle || h>(angle+M_PI)) {
+            angle_sel=-M_PI_2;
+        } else {
+            angle_sel=M_PI_2;
+        }
+    } else {
+        if(h>=angle || h<(angle-M_PI)) {
+            angle_sel=M_PI_2;
+        } else {
+            angle_sel=-M_PI_2;
+        }
+    }
+    std::cout <<"; selected angle: " << angle_sel << std::endl;
     return true;
 }
 

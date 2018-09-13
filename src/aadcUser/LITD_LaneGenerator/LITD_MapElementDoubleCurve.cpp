@@ -25,9 +25,8 @@ LITD_MapElementDoubleCurve::LITD_MapElementDoubleCurve(double fence_x_min, doubl
 }
 
 LITD_VirtualPoint LITD_MapElementDoubleCurve::getNormalPoint(LITD_VirtualPoint &point) {
-    double x=point.x,x0;
-    double y=point.y,y0;
-    double h=wrapTo2Pi<double>(point.h);
+    double x=point.x,x0=0.0;
+    double y=point.y,y0=0.0;
 
     double angle;
 
@@ -49,6 +48,11 @@ LITD_VirtualPoint LITD_MapElementDoubleCurve::getNormalPoint(LITD_VirtualPoint &
         case CURVE_CORNER_UR:
             x0=x_max;
             y0=y_max;
+            break;
+        case CURVE_CORNER_INVAL:
+        case CURVE_CORNER_MAX:
+        default:
+            std::cout << "WARNING: curve corner is invalid!!" << std::endl;
             break;
     }
     x-=x0;
@@ -78,8 +82,8 @@ aadc::jury::maneuver LITD_MapElementDoubleCurve::selectDriveManeuver(aadc::jury:
 }
 
 bool LITD_MapElementDoubleCurve::selectDriveLane(LITD_VirtualPoint &point) {
-    double x=point.x,x0;
-    double y=point.y,y0;
+    double x=point.x,x0=0.0;
+    double y=point.y,y0=0.0;
     double h=wrapTo2Pi<double>(point.h);
 
     double angle;
@@ -104,6 +108,11 @@ bool LITD_MapElementDoubleCurve::selectDriveLane(LITD_VirtualPoint &point) {
         case CURVE_CORNER_UR:
             x0=x_max;
             y0=y_max;
+            break;
+        case CURVE_CORNER_INVAL:
+        case CURVE_CORNER_MAX:
+        default:
+            std::cout << "WARNING: curve corner is invalid!!" << std::endl;
             break;
     }
     x-=x0;

@@ -29,7 +29,7 @@ LITD_map_error_t LITD_Map::getMapState() {
 
 LITD_VirtualPoint LITD_Map::getNormalPoint(LITD_VirtualPoint &point) {
     //Check if we do have a point and if this point is valid.
-    if(map_index_current<0 || map_index_current>=map_elements.size() || !map_elements[map_index_current]->isInElement(point)) {
+    if(map_index_current<0 || map_index_current>=(int64_t)map_elements.size() || !map_elements[map_index_current]->isInElement(point)) {
         findElementIndex(point);
     }
     if(map_index_current>=0) {
@@ -48,14 +48,14 @@ aadc::jury::maneuver LITD_Map::getCurrentManeuver() {
 }
 
 double LITD_Map::getSpeedAdvisory() {
-    if(map_index_current<0 || map_index_current>=map_elements.size()) {
+    if(map_index_current<0 || map_index_current>=(int64_t)map_elements.size()) {
         return map_elements[map_index_current]->getSpeedAdvisory();
     }
     return 0.0;
 }
 
 double LITD_Map::getSpeedLimit() {
-    if(map_index_current<0 || map_index_current>=map_elements.size()) {
+    if(map_index_current<0 || map_index_current>=(int64_t)map_elements.size()) {
         return map_elements[map_index_current]->getSpeedLimit();
     }
     return 0.0;

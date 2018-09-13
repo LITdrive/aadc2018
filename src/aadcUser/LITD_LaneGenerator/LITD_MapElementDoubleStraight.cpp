@@ -36,7 +36,6 @@ LITD_MapElementDoubleStraight::LITD_MapElementDoubleStraight(double fence_x_min,
 LITD_VirtualPoint LITD_MapElementDoubleStraight::getNormalPoint(LITD_VirtualPoint &point) {
     double x=point.x;
     double y=point.y;
-    double h=wrapTo2Pi<double>(point.h);
     if(is_y) {
         return LITD_VirtualPoint(cord_sel, y, 0.0, angle_sel);
     } else {

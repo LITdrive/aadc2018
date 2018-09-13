@@ -27,7 +27,7 @@ public:
 protected:
     bool valid;
     LITD_mapElementCurve_corner_t corner;
-    double x_min, x_max, y_min, y_max, radius;
+    double x_min, x_max, y_min, y_max, radius, angle_sel;
     double speed_advisory, speed_limit;
 };
 
