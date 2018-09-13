@@ -3,6 +3,7 @@
 //
 
 #include "FineLocator.h"
+#include "stdafx.h"
 
 FineLocator::FineLocator(char *pathToScaledMap) {
     scaledMap = imread(pathToScaledMap);
@@ -12,6 +13,10 @@ FineLocator::~FineLocator() {
     scaledMap.release();
 }
 
+float rad2grad(float x){
+    return (float)(x*M_PI/180.0f);
+}
+
 Point2i FineLocator::localize(Mat img_bv, float theta, Point2i pos, int size) {
     // left upper corner of map -> car location
     Mat car_coord_shift = Mat::eye(3,3, CV_32F);
@@ -19,17 +24,17 @@ Point2i FineLocator::localize(Mat img_bv, float theta, Point2i pos, int size) {
     car_coord_shift.at<float>(1, 2) = -pos.y;
     // map rotation -> car rotation
     Mat car_rot = Mat::eye(3,3, CV_32F);
-    Mat rot = getRotationMatrix2D(Point2f(0, 0), -theta, 1.0f);
-    rot.copyTo(car_rot(Rect_<int>(0,0,1,2)));
+    Mat rot = getRotationMatrix2D(Point2f(0, 0), rad2grad(-theta), 1.0f);
+    rot(Rect(0,0,2,2)).copyTo(car_rot(Rect(0,0,2,2)));
     // car location -> picture location
     Mat offset = Mat::eye(3,3, CV_32F);
     offset.at<float>(0, 2) += img_bv.size[0]/2.f + size/2.f;
-    offset.at<float>(1, 2) += img_bv.size[1] + size/2.f;  //TODO check if size[1] == 192 etc.
+    offset.at<float>(1, 2) += img_bv.size[1] + size/2.f;
     // combine in reverse order
     Mat combined = offset*car_rot*car_coord_shift;
-    combined = combined(Rect_<int>(0,0,1,2)); // only select the Affine Part of the Transformation
+    combined = combined(Rect(0,0,3,2)).clone(); // only select the Affine Part of the Transformation
     Mat search_space;
-    warpAffine(scaledMap, search_space ,combined, Size(img_bv.size[0] + size, img_bv.size[1] + size), INTER_LINEAR, BORDER_REPLICATE);
+    warpAffine(scaledMap, search_space ,combined, Size(img_bv.size[1] + size, img_bv.size[0] + size), INTER_LINEAR, BORDER_REPLICATE);
     Mat search_result;
     matchTemplate(search_space, img_bv, search_result, TM_CCOEFF_NORMED);
     double mi, ma;
@@ -39,9 +44,4 @@ Point2i FineLocator::localize(Mat img_bv, float theta, Point2i pos, int size) {
     invertAffineTransform(combined, reverse);
     Mat location_global = reverse*Mat(Vec3f(mal.x + img_bv.size[0]/2.f, mal.y + img_bv.size[1], 1));
     return Point2i(location_global.at<float>(0,0),location_global.at<float>(0,1));
-
-}
-
-float rad2grad(float x){
-    return (float)(x*M_PI/180.0f);
 }
