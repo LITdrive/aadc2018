@@ -12,12 +12,14 @@ Redistribution and use in source and binary forms, with or without modification,
 THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS AS IS AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL AUDI AG OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 **********************************************************************/
-#include "stdafx.h"
 
 #pragma once
+#include "stdafx.h"
+#include "FineLocator.h"
 
 //*************************************************************************************************
 #define CID_CBIRDS_EYE_VIEW_DATA_TRIGGERED_FILTER "finelocalisation_filter.filter.user.aadc.cid"
+#define SEARCH_RADIUS 20
 
 using namespace adtf_util;
 using namespace ddl;
@@ -53,13 +55,16 @@ private:
     /*! The signal value sample factory */
     cSampleCodecFactory m_VirtualPointSampleFactory;
     //Stream Formats
-        /*! The input format */
+    /*! The input format */
+
     adtf::streaming::tStreamImageFormat m_sImageFormat;
 
     /*! The clock */
     object_ptr<adtf::services::IReferenceClock> m_pClock;
 
     tFloat64 x, y, speed, heading;
+
+    FineLocator locator;
 
 public:
 

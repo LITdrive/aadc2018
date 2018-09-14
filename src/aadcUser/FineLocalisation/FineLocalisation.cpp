@@ -16,6 +16,7 @@ THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS AS IS AND ANY EXPRESS OR I
 #include "stdafx.h"
 #include "FineLocalisation.h"
 #include "ADTF3_OpenCV_helper.h"
+#include "FineLocator.h"
 
 
 ADTF_TRIGGER_FUNCTION_FILTER_PLUGIN(CID_CBIRDS_EYE_VIEW_DATA_TRIGGERED_FILTER,
@@ -47,7 +48,7 @@ cFineLocalisation::cFineLocalisation()
     Register(m_oVPReader, "inVirtualPoint", pTypeVirtualPoint);
 
     //Register output pin
-    Register(m_oVPWriter, "outVitrtualPoint", pTypeVirtualPoint);
+    Register(m_oVPWriter, "outVirtualPoint", pTypeVirtualPoint);
 
     //register callback for type changes
     m_oReader.SetAcceptTypeCallback([this](const adtf::ucom::ant::iobject_ptr<const adtf::streaming::ant::IStreamType>& pType) -> tResult
@@ -86,17 +87,18 @@ tResult cFineLocalisation::Process(tTimeStamp tmTimeOfTrigger)
         if (IS_OK(pReadSample->Lock(pReadBuffer)))
         {
             //create a opencv matrix from the media sample buffer
-            /*Mat bvImage = Mat(cv::Size(m_sImageFormat.m_ui32Width, m_sImageFormat.m_ui32Height),
-                                   CV_8UC3, const_cast<unsigned char*>(static_cast<const unsigned char*>(pReadBuffer->GetPtr())));*/
+            Mat bvImage = Mat(cv::Size(m_sImageFormat.m_ui32Width, m_sImageFormat.m_ui32Height),
+                                   CV_8UC3, const_cast<unsigned char*>(static_cast<const unsigned char*>(pReadBuffer->GetPtr())));
 
+            Point2f location = locator.localize(bvImage, heading, Point2i(x, y), SEARCH_RADIUS);
             object_ptr<ISample> pWriteSample;
 
             RETURN_IF_FAILED(alloc_sample(pWriteSample, m_pClock->GetStreamTime()));
             {
                 auto oCodec = m_VirtualPointSampleFactory.MakeCodecFor(pWriteSample);
 
-                RETURN_IF_FAILED(oCodec.SetElementValue(m_ddlVirtualPointId.f64x, x));
-                RETURN_IF_FAILED(oCodec.SetElementValue(m_ddlVirtualPointId.f64y, y));
+                RETURN_IF_FAILED(oCodec.SetElementValue(m_ddlVirtualPointId.f64x, location.x));
+                RETURN_IF_FAILED(oCodec.SetElementValue(m_ddlVirtualPointId.f64y, location.y));
                 RETURN_IF_FAILED(oCodec.SetElementValue(m_ddlVirtualPointId.f64Heading, heading));
                 RETURN_IF_FAILED(oCodec.SetElementValue(m_ddlVirtualPointId.f64Speed, speed));
             }
