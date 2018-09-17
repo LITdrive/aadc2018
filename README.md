@@ -25,6 +25,50 @@ On Windows, do the following:
 	md build; cd build
 	cmake -G "Visual Studio 14 2015 Win64" ..
 	cmake --build . --target INSTALL --config Release
+	
+### Tensorflow 1.8.0
+Download archive from [google drive](https://drive.google.com/open?id=1CMnu1d_IwQAnup0BKL_es4i4T6XQRdqB), extract and copy to `/opt/tensorflow/1.8.0`
+
+Pass information to ADTF:
+
+    sudo touch /etc/ld.so.conf.d/tensorflow.conf
+    sudo gedit /etc/ld.so.conf.d/tensorflow.conf
+    
+Write `/opt/tensorflow/1.8.0/lib` inside the file, save and close
+
+Reload the lookup table:
+    
+    sudo ldconfig
+ 
+
+### Eigen 3.3.4
+Download archive from [google drive](https://drive.google.com/open?id=1CMnu1d_IwQAnup0BKL_es4i4T6XQRdqB), extract and copy to `/opt/eigen/3.3.4`
+
+### Protobuf 3.5.0
+prepare environment
+
+    sudo apt-get install autoconf automake libtool curl make g++ unzip
+    
+To get the source, download release for cpp v3.5 format .tar.gz or .zip packages in the release page:
+       https://github.com/google/protobuf/releases/latest
+
+unzip, go to unzipped folder and execute:
+
+    ./configure
+    make
+    make check
+    sudo make install
+    sudo ldconfig # refresh shared library cache.
+
+### Nvidia driver 396.xx
+    
+    sudo add-apt-repository ppa:graphics-drivers/ppa
+    sudo apt update
+    sudo apt install nvidia-396
+    
+restart machine and check with 
+
+    nvidia-smi
 
 ## Structure
 
