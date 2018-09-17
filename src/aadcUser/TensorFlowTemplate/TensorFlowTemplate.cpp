@@ -22,6 +22,24 @@ ADTF_TRIGGER_FUNCTION_FILTER_PLUGIN(CID_COPENCVTEMPLATE_DATA_TRIGGERED_FILTER,
                                     cTensorFlowTemplate,
                                     adtf::filter::pin_trigger({ "input" }));
 
+static int TestTensorFlow() {
+    Scope root = Scope::NewRootScope();
+    // Matrix A = [3 2; -1 0]
+    auto A = Const(root, { {3.f, 2.f}, {-1.f, 0.f} });
+    // Vector b = [3 5]
+    auto b = Const(root, { {3.f, 5.f} });
+    // v = Ab^T
+    auto v = MatMul(root.WithOpName("v"), A, b, MatMul::TransposeB(true));
+    std::vector<Tensor> outputs;
+    ClientSession session(root);
+    // Run and fetch v
+    TF_CHECK_OK(session.Run({v}, &outputs));
+    // Expect outputs[0] == [19; -3]
+    LOG(INFO) << outputs[0].matrix<float>();
+
+    return 0;
+}
+
 cTensorFlowTemplate::cTensorFlowTemplate()
 {
     //create and set inital input format type
@@ -36,9 +54,9 @@ cTensorFlowTemplate::cTensorFlowTemplate()
 
     //register callback for type changes
     m_oReader.SetAcceptTypeCallback([this](const adtf::ucom::ant::iobject_ptr<const adtf::streaming::ant::IStreamType>& pType) -> tResult
-                                    {
-                                        return ChangeType(m_oReader, m_sImageFormat, *pType.Get(), m_oWriter);
-                                    });
+    {
+        return ChangeType(m_oReader, m_sImageFormat, *pType.Get(), m_oWriter);
+    });
 
 }
 
@@ -65,31 +83,8 @@ tResult cTensorFlowTemplate::Process(tTimeStamp tmTimeOfTrigger)
             //create a opencv matrix from the media sample buffer
             Mat inputImage = Mat(cv::Size(m_sImageFormat.m_ui32Width, m_sImageFormat.m_ui32Height),
                                  CV_8UC3, const_cast<unsigned char*>(static_cast<const unsigned char*>(pReadBuffer->GetPtr())));
-
-            tensorImage = this->ConvertToTensor(inputImage, m_sImageFormat.m_ui32Height, m_sImageFormat.m_ui32Width);
         }
     }
 
     RETURN_NOERROR;
-}
-
-Tensor cTensorFlowTemplate::ConvertToTensor(Mat cameraImg, int inputHeight, int inputWidth)
-{
-    Tensor inputImg(tensorflow::DT_FLOAT, tensorflow::TensorShape({1,inputHeight,inputWidth,3}));
-    auto inputImageMapped = inputImg.tensor<float, 4>();
-    auto start = std::chrono::system_clock::now();
-
-    //Copy all the data over
-    for (int y = 0; y < inputHeight; ++y) {
-        const float* source_row = ((float*)cameraImg.data) + (y * inputWidth * 3);
-        for (int x = 0; x < inputWidth; ++x) {
-            const float* source_pixel = source_row + (x * 3);
-            inputImageMapped(0, y, x, 0) = source_pixel[2];
-            inputImageMapped(0, y, x, 1) = source_pixel[1];
-            inputImageMapped(0, y, x, 2) = source_pixel[0];
-        }
-    }
-    auto end = std::chrono::system_clock::now();
-
-    return inputImg;
 }

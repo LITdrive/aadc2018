@@ -31,12 +31,9 @@ using namespace std;
 // used to read image form camera sensor, is there another way to do this?
 using namespace cv;
 
-// These are all common classes it's handy to reference with no namespace.
-using tensorflow::Flag;
-using tensorflow::Tensor;
-using tensorflow::Status;
-using tensorflow::string;
-using tensorflow::int32;
+// Tensorflow.
+using namespace tensorflow;
+using namespace tensorflow::ops;
 
 /*! the main class of the open cv template. */
 class cTensorFlowTemplate : public cTriggerFunction
@@ -78,10 +75,6 @@ public:
     * This FUnction will be called if the Run() of the TriggerFunction was called.
     */
     tResult Process(tTimeStamp tmTimeOfTrigger) override;
-
-
-    Tensor ConvertToTensor(Mat cameraImg, int inputHeight, int inputWidth) ;
-
 };
 
 

@@ -24,6 +24,28 @@
 
 using namespace tensorflow;
 
+// TODO: Not working, implement
+//Tensor cTensorFlowTemplate::ConvertToTensor(Mat cameraImg, int inputHeight, int inputWidth)
+//{
+//    Tensor inputImg(tensorflow::DT_FLOAT, tensorflow::TensorShape({1,inputHeight,inputWidth,3}));
+//    auto inputImageMapped = inputImg.tensor<float, 4>();
+//    auto start = std::chrono::system_clock::now();
+//
+//    //Copy all the data over
+//    for (int y = 0; y < inputHeight; ++y) {
+//        const float* source_row = ((float*)cameraImg.data) + (y * inputWidth * 3);
+//        for (int x = 0; x < inputWidth; ++x) {
+//            const float* source_pixel = source_row + (x * 3);
+//            inputImageMapped(0, y, x, 0) = source_pixel[2];
+//            inputImageMapped(0, y, x, 1) = source_pixel[1];
+//            inputImageMapped(0, y, x, 2) = source_pixel[0];
+//        }
+//    }
+//    auto end = std::chrono::system_clock::now();
+//
+//    return inputImg;
+//}
+
 static Status ReadEntireFile(tensorflow::Env* env, const string& filename,
                              Tensor* output) {
     tensorflow::uint64 file_size = 0;

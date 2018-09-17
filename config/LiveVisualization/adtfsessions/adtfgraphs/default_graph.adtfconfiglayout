@@ -1478,7 +1478,7 @@
             <width>0</width>
             <height>0</height>
           </boundary>
-          <selected>true</selected>
+          <selected>false</selected>
           <connection_layout>
             <name/>
             <centerLineIsManual>true</centerLineIsManual>
@@ -10296,12 +10296,12 @@
         <layout_set>
           <name>graphs/default_filter_graph/filters/TensorFlowTemplate_cf</name>
           <boundary>
-            <x>605</x>
-            <y>402</y>
+            <x>597</x>
+            <y>404</y>
             <width>0</width>
             <height>0</height>
           </boundary>
-          <selected>false</selected>
+          <selected>true</selected>
           <connection_layout>
             <name/>
             <centerLineIsManual>true</centerLineIsManual>
@@ -10329,6 +10329,57 @@
         </layout_set>
         <layout_set>
           <name>graphs/default_filter_graph/filters/TensorFlowTemplate_cf/input_pins/input</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/default_filter_graph/filters/NewTensorFlowTemplate_cf</name>
+          <boundary>
+            <x>587</x>
+            <y>372</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>true</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/default_filter_graph/connections/stream_marker_detector._NewTensorFlowTemplate_cf.input</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/default_filter_graph/filters/NewTensorFlowTemplate_cf/input_pins/input</name>
           <boundary>
             <x>0</x>
             <y>0</y>
