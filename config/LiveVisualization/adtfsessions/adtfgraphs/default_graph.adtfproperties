@@ -1101,27 +1101,7 @@
           <properties/>
         </property_set>
         <property_set>
-          <name>graphs/devel_filter_graph/filters/OpenCV Edge Detection</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/devel_filter_graph/connections/image._OpenCV Edge Detection.input</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/devel_filter_graph/filters/OpenCV Edge Detection/input_pins/input</name>
-          <properties/>
-        </property_set>
-        <property_set>
           <name>graphs/devel_filter_graph/sample_streams/stream_edge_video</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/devel_filter_graph/connections/OpenCV Edge Detection.output_stream_edge_video.</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/devel_filter_graph/filters/OpenCV Edge Detection/output_pins/output</name>
           <properties/>
         </property_set>
         <property_set>
@@ -1257,6 +1237,250 @@
         </property_set>
         <property_set>
           <name>graphs/camera_calib/filters/Camera Calibration/input_pins/video_rgb</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>streaming_graphs/devel_streaming_graph/streaming_sources/Jury Communication TCP Receiver</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>streaming_graphs/devel_streaming_graph/streaming_sinks/Jury Communication TCP Sender</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>streaming_graphs/devel_streaming_graph/streaming_sources/Jury Communication TCP Receiver/binding_servers/socket</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>streaming_graphs/devel_streaming_graph/streaming_sinks/Jury Communication TCP Sender/binding_clients/socket</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>streaming_graphs/devel_streaming_graph/binding_proxys/Binding Proxy</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>streaming_graphs/devel_streaming_graph/connections/Jury Communication TCP Receiver.socket_Binding Proxy.</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>streaming_graphs/devel_streaming_graph/connections/Binding Proxy._Jury Communication TCP Sender.socket</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/devel_filter_graph/filters/Driver Module</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>streaming_graphs/devel_streaming_graph/streaming_sources/Jury Communication TCP Receiver/output_pins/maneuver_list</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>streaming_graphs/devel_streaming_graph/streaming_sources/Jury Communication TCP Receiver/output_pins/jury_struct</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>streaming_graphs/devel_streaming_graph/streaming_dock_in_ports/maneuver_list</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>streaming_graphs/devel_streaming_graph/connections/Jury Communication TCP Receiver.maneuver_list_Filter Graph Dock.maneuver_list</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>streaming_graphs/devel_streaming_graph/streaming_dock_in_ports/jury_struct</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/devel_filter_graph/streaming_in_ports/maneuver_list</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/devel_filter_graph/streaming_in_ports/jury_struct</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/devel_filter_graph/connections/jury_struct._Driver Module.jury_struct</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/devel_filter_graph/filters/Driver Module/input_pins/jury_struct</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/devel_filter_graph/connections/maneuver_list._Driver Module.maneuver_list</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/devel_filter_graph/filters/Driver Module/input_pins/maneuver_list</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/devel_filter_graph/streaming_out_ports/driver_struct</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/devel_filter_graph/connections/Driver Module.driver_struct_driver_struct.</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/devel_filter_graph/filters/Driver Module/output_pins/driver_struct</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>streaming_graphs/devel_streaming_graph/connections/Jury Communication TCP Receiver.jury_struct_Filter Graph Dock.jury_struct</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>streaming_graphs/devel_streaming_graph/streaming_dock_out_ports/driver_struct</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>streaming_graphs/devel_streaming_graph/connections/Filter Graph Dock.driver_struct_Jury Communication TCP Sender.driver_struct</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>streaming_graphs/devel_streaming_graph/streaming_sinks/Jury Communication TCP Sender/input_pins/driver_struct</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>streaming_graphs/devel_streaming_graph/streaming_sources/Microphone</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/devel_filter_graph/filters/Audio Visualization</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/devel_filter_graph/streaming_in_ports/audio</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/devel_filter_graph/connections/audio._Audio Visualization.audio</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/devel_filter_graph/filters/Audio Visualization/input_pins/audio</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>streaming_graphs/devel_streaming_graph/streaming_dock_in_ports/audio</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>streaming_graphs/devel_streaming_graph/connections/Microphone.audio_Filter Graph Dock.audio</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>streaming_graphs/devel_streaming_graph/streaming_sources/Microphone/output_pins/audio</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/filters/ConverterWheels</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/connections/wheel_left._ConverterWheels.wheel_left</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/filters/ConverterWheels/input_pins/wheel_left</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/connections/wheel_right._ConverterWheels.wheel_right</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/filters/ConverterWheels/input_pins/wheel_right</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/filters/ConverterWheels/output_pins/vehicle_speed</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>streaming_graphs/devel_streaming_graph/streaming_sinks/Arduino Emergency Lights</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>streaming_graphs/devel_streaming_graph/streaming_dock_out_ports/speed_measured</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>streaming_graphs/devel_streaming_graph/connections/Filter Graph Dock.speed_measured_Arduino Emergency Lights.speed</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>streaming_graphs/devel_streaming_graph/streaming_sinks/Arduino Emergency Lights/input_pins/speed</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/devel_filter_graph/streaming_out_ports/Vehicle Speed</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/devel_filter_graph/filters/ConverterWheels</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/devel_filter_graph/connections/ConverterWheels.vehicle_speed_Vehicle Speed.</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/devel_filter_graph/filters/ConverterWheels/output_pins/vehicle_speed</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/devel_filter_graph/streaming_in_ports/wheel_left</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/devel_filter_graph/connections/wheel_left._ConverterWheels.wheel_left</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/devel_filter_graph/filters/ConverterWheels/input_pins/wheel_left</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/devel_filter_graph/streaming_in_ports/wheel_right</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/devel_filter_graph/connections/wheel_right._ConverterWheels.wheel_right</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/devel_filter_graph/filters/ConverterWheels/input_pins/wheel_right</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>streaming_graphs/devel_streaming_graph/streaming_sources/Arduino EgoMotion Sensor</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>streaming_graphs/devel_streaming_graph/streaming_dock_in_ports/wheel_left</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>streaming_graphs/devel_streaming_graph/streaming_dock_in_ports/wheel_right</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>streaming_graphs/devel_streaming_graph/connections/Arduino EgoMotion Sensor.wheel_left_Filter Graph Dock.wheel_left</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>streaming_graphs/devel_streaming_graph/streaming_sources/Arduino EgoMotion Sensor/output_pins/wheel_left</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>streaming_graphs/devel_streaming_graph/connections/Arduino EgoMotion Sensor.wheel_right_Filter Graph Dock.wheel_right</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>streaming_graphs/devel_streaming_graph/streaming_sources/Arduino EgoMotion Sensor/output_pins/wheel_right</name>
           <properties/>
         </property_set>
         <property_set>

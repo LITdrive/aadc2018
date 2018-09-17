@@ -1,3 +1,4 @@
 add_subdirectory(CarController)
 add_subdirectory(SensorVisualization)
 add_subdirectory(SignalValueGenerator)
+add_subdirectory(AudioVisualization)

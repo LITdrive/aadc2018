@@ -145,6 +145,9 @@
       <url>$(BIN_DIR)/laser_scanner.adtfplugin</url>
     </plugin>
     <plugin>
+      <url>$(BIN_DIR)/jury_communication_tcp.adtfplugin</url>
+    </plugin>
+    <plugin>
       <url>$(BIN_DIR)/arduino_actuator.adtfplugin</url>
     </plugin>
     <plugin>
@@ -214,6 +217,9 @@
     </plugin>
     <plugin>
       <url>$(BIN_DIR)/debug/laser_scanner.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(BIN_DIR)/debug/jury_communication_tcp.adtfplugin</url>
     </plugin>
     <plugin>
       <url>$(BIN_DIR)/debug/arduino_actuator.adtfplugin</url>
