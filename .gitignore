@@ -49,3 +49,5 @@ CMakeDoxygenDefaults.cmake
 
 # Jupyter Notebook
 .ipynb_checkpoints/
+
+src/aadcUser/tensorflowPlayground/data
