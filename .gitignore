@@ -22,9 +22,16 @@ CMakeLists.txt.user*
 
 # Visual Studio Code
 .vscode/
+*/aadcBase/build/
+*/aadcDemo/build/
+*/aadcUser/build/
 
 # Visual Studio
 .vs/
+Debug/
+Release/
+*.dir/
+*_autogen/
 cmake_install.cmake
 *.sln
 *.user
@@ -32,8 +39,13 @@ cmake_install.cmake
 *.filters
 *.VC.db
 *.VC.opendb
+*.tlog
+*.lastbuildstate
 
 # Doxygen
 doxygen.cfg
 CMakeDoxyfile.in
 CMakeDoxygenDefaults.cmake
+
+# Jupyter Notebook
+.ipynb_checkpoints/

@@ -16,9 +16,8 @@ THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS AS IS AND ANY EXPRESS OR I
 #pragma once
 
 //*************************************************************************************************
-#define CID_TEMPLATEFILTER_DATA_TRIGGERED_FILTER "litd_speedlimit_filter.filter.user.aadc.cid"
-#define MAX_SPEED_ALLOWED 10
-#define MIN_SPEED_ALLOWED  0
+#define CID_TEMPLATEFILTER_DATA_TRIGGERED_FILTER "litd_speed_limit.filter.user.aadc.cid"
+
 
 using namespace adtf_util;
 using namespace ddl;
@@ -29,37 +28,35 @@ using namespace adtf::mediadescription;
 using namespace adtf::filter;
 using namespace std;
 
-class cLITD_SpeedLimit : public cTriggerFunction
+class cSpeedLimit : public cTriggerFunction
 {
 private:
-    /*! A signal value identifier. */
+    /*! Media Descriptions. */
     struct tSignalValueId
     {
         tSize timeStamp;
         tSize value;
     } m_ddlSignalValueId;
 
-    /*! The signal value sample factory */
-    adtf::mediadescription::cSampleCodecFactory m_signalDataSampleFactory;
+    adtf::base::property_variable<tFloat32> maxspeed = 10;
+    float speed_config = 0;
+    /*! The template data sample factory */
+    adtf::mediadescription::cSampleCodecFactory m_templateDataSampleFactory;
 
     /*! Reader of an InPin. */
-    cPinReader m_oInputMeasWheelSpeed;
-    /*! Reader of an InPin. */
-    cPinReader m_oInputMeasWheelsteer;
+    cPinReader m_oReader;
+
+
     /*! Writer to an OutPin. */
-    cPinWriter m_oOutputWheelSpeed;
-    /*! Writer to an OutPin. */
-    cPinWriter m_oOutputWheelsteer;
-    /*! The clock */
-    object_ptr<adtf::services::IReferenceClock> m_pClock;
+    cPinWriter m_oWriter;
 
 public:
 
     /*! Default constructor. */
-    cLITD_SpeedLimit();
+    cSpeedLimit();
 
     /*! Destructor. */
-    virtual ~cLITD_SpeedLimit() = default;
+    virtual ~cSpeedLimit() = default;
 
     /**
     * Overwrites the Configure

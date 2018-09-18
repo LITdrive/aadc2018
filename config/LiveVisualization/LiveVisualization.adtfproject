@@ -42,12 +42,6 @@
       <property_set/>
       <name>camera_calibration</name>
     </project_file>
-    <project_file>
-      <url>./adtfsessions/test_remote_control.adtfsession</url>
-      <properties_url/>
-      <property_set/>
-      <name>test_remote_control</name>
-    </project_file>
   </session_files>
   <graph_files>
     <project_file>
