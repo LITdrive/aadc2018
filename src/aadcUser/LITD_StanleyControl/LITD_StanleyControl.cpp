@@ -29,6 +29,10 @@ ADTF_TRIGGER_FUNCTION_FILTER_PLUGIN(CID_TEMPLATEFILTER_DATA_TRIGGERED_FILTER,
     cStanleyControl,
     adtf::filter::pin_trigger({"input"}));
 
+void cStanleyControl::mapSteeringAngle(){
+    carSteeringValue = maxAngle/carSteeringAngle * 100;
+}
+
 
 void cStanleyControl::calcSteeringAngle(){
     double rad2degree = 180.0 / M_PI;
@@ -68,6 +72,14 @@ cStanleyControl::cStanleyControl()
     object_ptr<IStreamType> pTypeVirtualPoint;
     object_ptr<IStreamType> pTypeTemplateData;
 
+    RegisterPropertyVariable("dynamic properties path", m_properties_file);
+
+    // load properties file for dynamic properties
+	m_properties = new FilePropertiesObserver(static_cast<string>(cString(m_properties_file)));
+	m_properties->ReloadProperties();
+
+
+
     if IS_OK(adtf::mediadescription::ant::create_adtf_default_stream_type_from_service("tVirtualPoint", pTypeVirtualPoint, m_VirtualPointSampleFactory)) {
         (adtf_ddl::access_element::find_index(m_VirtualPointSampleFactory, cString("f64x"), m_ddlVirtualPointId.f64x));
         (adtf_ddl::access_element::find_index(m_VirtualPointSampleFactory, cString("f64y"), m_ddlVirtualPointId.f64y));
@@ -94,6 +106,11 @@ tResult cStanleyControl::Process(tTimeStamp tmTimeOfTrigger)
 
     object_ptr<const ISample> pReadSampleIst;
     object_ptr<const ISample> pReadSampleSoll;
+
+    m_properties->TriggerPropertiesReload(80); // reload the file every 2 seconds with a 25 msec timer
+	stanleyGain = m_properties->GetFloat("stanley_gain");
+    maxAngle = m_properties->GetFloat("max_angle");
+	
     
     
     if(IS_OK(m_oVPReaderIst.GetNextSample(pReadSampleIst))) {
@@ -126,6 +143,15 @@ tResult cStanleyControl::Process(tTimeStamp tmTimeOfTrigger)
     // Do the Processing
     calcSteeringAngle();
 
+    if(carSteeringAngle < - 45){
+        LOG_INFO("Steering angle truncated to -45°!");
+        carSteeringAngle = -45;
+    } else if ( carSteeringAngle > 45){
+        LOG_INFO("Steering angle truncated to 45°!");
+         carSteeringAngle = 45;
+    }
+
+
     object_ptr<ISample> pWriteSample;
 
     if (IS_OK(alloc_sample(pWriteSample)))
@@ -133,7 +159,7 @@ tResult cStanleyControl::Process(tTimeStamp tmTimeOfTrigger)
 
         auto oCodec = m_VirtualPointSampleFactory.MakeCodecFor(pWriteSample);
 
-        RETURN_IF_FAILED(oCodec.SetElementValue(m_ddlStanleyOutputDataId.f64Value, carSteeringAngle));
+        RETURN_IF_FAILED(oCodec.SetElementValue(m_ddlStanleyOutputDataId.f64Value, carSteeringValue));
 
     }
     m_oWriter << pWriteSample << flush << trigger;

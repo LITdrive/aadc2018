@@ -16,6 +16,7 @@ THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS AS IS AND ANY EXPRESS OR I
 #pragma once
 
 #include "LITD_VirtualPoint.h"
+#include "../utils/properties/FilePropertiesObserver.h"
 
 //*************************************************************************************************
 #define CID_TEMPLATEFILTER_DATA_TRIGGERED_FILTER "template_filter.filter.user.aadc.cid"
@@ -36,6 +37,7 @@ class cStanleyControl : public cTriggerFunction
 private:
 
     void calcSteeringAngle();
+    void mapSteeringAngle();
 
     /*! Media Descriptions. */
     struct tVirtualPointId
@@ -62,13 +64,19 @@ private:
     cPinWriter m_oWriter;
 
     tFloat64 carX, carY, carHeading, carSpeed, sollX, sollY, sollHeading, sollSpeed;
-    tFloat64 carSteeringAngle;
+    tFloat64 carSteeringAngle, carSteeringValue;
 
     LITD_VirtualPoint vp;
     LITD_VirtualPoint carPosition;
 
     //controller params
     double stanleyGain = 1.5;
+    double maxAngle = 45;
+
+    property_variable<cFilename> m_properties_file = cFilename("../../../../configuration_files/properties/stanleycontrol_pid.ini");
+	FilePropertiesObserver* m_properties;
+    property_variable<tBool>       m_bShowDebug = tFalse;
+
 
 public:
 
