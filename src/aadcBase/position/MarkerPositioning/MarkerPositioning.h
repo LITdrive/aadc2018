@@ -15,6 +15,9 @@ THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS AS IS AND ANY EXPRESS OR I
 
 #pragma once
 
+#define _USE_MATH_DEFINES
+#include <math.h>
+
 #define CID_CMARKERPOS_DATA_TRIGGERED_FILTER "marker_positioning.filter.base.aadc.cid"
 using namespace adtf_util;
 using namespace ddl;
@@ -26,9 +29,6 @@ using namespace adtf::filter;
 using namespace std;
 using namespace cv;
 
-#ifndef M_PI
-#define M_PI 3.14159265358979323846
-#endif
 
 #define RAD2DEG 180/M_PI
 #define DEG2RAD M_PI/180
@@ -67,8 +67,10 @@ class cMarkerPositioning : public cTriggerFunction
 {
 private:
 
+
     /*! configuration file for markers  */
     adtf::base::property_variable<cFilename> m_roadSignFile = cFilename("roadSigns.xml");
+
 
     /*! speed scale */
     adtf::base::property_variable<tFloat32> m_f32SpeedScale = 1.0f;
@@ -85,6 +87,9 @@ private:
     cPinReader m_oReaderSpeed;
     /*! Reader of an InPin IMU. */
     cPinReader m_oReaderIMU;
+
+    /*! pin reader for the road sign file */
+    cPinReader m_roadSignMapData;
 
     /*! Writer to an OutPin. */
     cPinWriter m_oWriter;
@@ -260,6 +265,13 @@ public:
     /*! Default constructor. */
     cMarkerPositioning();
 
+    /*!
+     * Parse the road sign file.
+     *
+     * \param   oDOM    The dom.
+     */
+    tResult ParseRoadSignFile(cDOM& oDOM);
+
     /*! Destructor. */
     virtual ~cMarkerPositioning() = default;
 
@@ -268,6 +280,18 @@ public:
     * This is to Read Properties prepare your Trigger Function
     */
     tResult Configure() override;
+    /**
+    Reset Filter covariances
+    **/
+    tVoid ResetFilter();
+    /*!
+     * Process the road sign file.
+     *
+     * \param   tmTimeOfTrigger The time time of trigger.
+     * \param   sample          The sample.
+     */
+    tResult ProcessRoadSignFile(tInt64 tmTimeOfTrigger, const ISample& sample);
+
     /**
     * Overwrites the Process
     * You need to implement the Reading and Writing of Samples within this function

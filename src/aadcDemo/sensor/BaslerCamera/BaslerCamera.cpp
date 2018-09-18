@@ -32,7 +32,7 @@ cBaslerCamera::cBaslerCamera()
     RegisterPropertyVariable("streamWidth [Pixel]", m_streamWidth);
     RegisterPropertyVariable("streamHeight [Pixel]", m_streamHeight);
     RegisterPropertyVariable("brightness", m_brightness);
-    RegisterPropertyVariable("frame_delay [ms]", m_nFrameDelay);
+    RegisterPropertyVariable("frame_delay [micro s]", m_nFrameDelay);
     RegisterPropertyVariable("ROI xOffset [Pixel]", m_xOffset);
     RegisterPropertyVariable("ROI yOffset [Pixel]", m_yOffset);
     RegisterPropertyVariable("ROI width [Pixel]", m_width);
