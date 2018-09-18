@@ -35,20 +35,25 @@ cFineLocalisation::cFineLocalisation()
     //Register input pin
     Register(m_oReader, "inBirdsEye", pType);
 
-    object_ptr<IStreamType> pTypeVirtualPoint;
-    if IS_OK(adtf::mediadescription::ant::create_adtf_default_stream_type_from_service("tVirtualPoint", pTypeVirtualPoint, m_VirtualPointSampleFactory)) {
-        (adtf_ddl::access_element::find_index(m_VirtualPointSampleFactory, cString("f64x"), m_ddlVirtualPointId.f64x));
-        (adtf_ddl::access_element::find_index(m_VirtualPointSampleFactory, cString("f64y"), m_ddlVirtualPointId.f64y));
-        (adtf_ddl::access_element::find_index(m_VirtualPointSampleFactory, cString("f64Heading"), m_ddlVirtualPointId.f64Heading));
-        (adtf_ddl::access_element::find_index(m_VirtualPointSampleFactory, cString("f64Speed"), m_ddlVirtualPointId.f64Speed));
-    } else {
-        LOG_INFO("No mediadescription for tVirtualPoint found!");
+    object_ptr<IStreamType> pTypePositionData;
+    if IS_OK(adtf::mediadescription::ant::create_adtf_default_stream_type_from_service("tPosition", pTypePositionData, m_PositionSampleFactory))
+    {
+        adtf_ddl::access_element::find_index(m_PositionSampleFactory, "f32x", m_ddlPositionIndex.x);
+        adtf_ddl::access_element::find_index(m_PositionSampleFactory, "f32y", m_ddlPositionIndex.y);
+        adtf_ddl::access_element::find_index(m_PositionSampleFactory, "f32radius", m_ddlPositionIndex.radius);
+        adtf_ddl::access_element::find_index(m_PositionSampleFactory, "f32speed", m_ddlPositionIndex.speed);
+        adtf_ddl::access_element::find_index(m_PositionSampleFactory, "f32heading", m_ddlPositionIndex.heading);
     }
+    else
+    {
+        LOG_WARNING("No mediadescription for tPosition found!");
+    }
+
     //Register input pin
-    Register(m_oVPReader, "inVirtualPoint", pTypeVirtualPoint);
+    Register(m_oPosReader, "inPosition", pTypePositionData);
 
     //Register output pin
-    Register(m_oVPWriter, "outVirtualPoint", pTypeVirtualPoint);
+    Register(m_oPosWriter, "outPosition", pTypePositionData);
 
     //register callback for type changes
     m_oReader.SetAcceptTypeCallback([this](const adtf::ucom::ant::iobject_ptr<const adtf::streaming::ant::IStreamType>& pType) -> tResult
@@ -81,6 +86,7 @@ tResult cFineLocalisation::Configure()
     affineMat[1][0] = mat10;
     affineMat[1][1] = mat11;
     affineMat[1][2] = mat12;
+    pmt = PixelMetricTransformer(affineMat);
     RETURN_NOERROR;
 }
 
@@ -88,15 +94,15 @@ tResult cFineLocalisation::Process(tTimeStamp tmTimeOfTrigger)
 {
     object_ptr<const ISample> pReadSample, pVPReadSample;
 
-    if(IS_OK(m_oVPReader.GetNextSample(pVPReadSample))) {
-        auto oDecoder = m_VirtualPointSampleFactory.MakeDecoderFor(*pVPReadSample);
+    if(IS_OK(m_oPosReader.GetNextSample(pVPReadSample))) {
+        auto oDecoder = m_PositionSampleFactory.MakeDecoderFor(*pVPReadSample);
 
         RETURN_IF_FAILED(oDecoder.IsValid());
 
-        RETURN_IF_FAILED(oDecoder.GetElementValue(m_ddlVirtualPointId.f64x, &x));
-        RETURN_IF_FAILED(oDecoder.GetElementValue(m_ddlVirtualPointId.f64y, &y));
-        RETURN_IF_FAILED(oDecoder.GetElementValue(m_ddlVirtualPointId.f64Heading, &heading));
-        RETURN_IF_FAILED(oDecoder.GetElementValue(m_ddlVirtualPointId.f64Speed, &speed));
+        RETURN_IF_FAILED(oDecoder.GetElementValue(m_ddlPositionIndex.x, &x));
+        RETURN_IF_FAILED(oDecoder.GetElementValue(m_ddlPositionIndex.y, &y));
+        RETURN_IF_FAILED(oDecoder.GetElementValue(m_ddlPositionIndex.heading, &heading));
+        RETURN_IF_FAILED(oDecoder.GetElementValue(m_ddlPositionIndex.speed, &speed));
     }
 
     while (IS_OK(m_oReader.GetNextSample(pReadSample)))
@@ -116,15 +122,15 @@ tResult cFineLocalisation::Process(tTimeStamp tmTimeOfTrigger)
 
             RETURN_IF_FAILED(alloc_sample(pWriteSample, m_pClock->GetStreamTime()));
             {
-                auto oCodec = m_VirtualPointSampleFactory.MakeCodecFor(pWriteSample);
+                auto oCodec = m_PositionSampleFactory.MakeCodecFor(pWriteSample);
 
-                RETURN_IF_FAILED(oCodec.SetElementValue(m_ddlVirtualPointId.f64x, m_loc[0]));
-                RETURN_IF_FAILED(oCodec.SetElementValue(m_ddlVirtualPointId.f64y, m_loc[1]));
-                RETURN_IF_FAILED(oCodec.SetElementValue(m_ddlVirtualPointId.f64Heading, heading));
-                RETURN_IF_FAILED(oCodec.SetElementValue(m_ddlVirtualPointId.f64Speed, speed));
+                RETURN_IF_FAILED(oCodec.SetElementValue(m_ddlPositionIndex.x, m_loc[0]));
+                RETURN_IF_FAILED(oCodec.SetElementValue(m_ddlPositionIndex.y, m_loc[1]));
+                RETURN_IF_FAILED(oCodec.SetElementValue(m_ddlPositionIndex.heading, heading));
+                RETURN_IF_FAILED(oCodec.SetElementValue(m_ddlPositionIndex.speed, speed));
             }
 
-            m_oVPWriter << pWriteSample << flush << trigger;
+            m_oPosWriter << pWriteSample << flush << trigger;
         }
     }
     
