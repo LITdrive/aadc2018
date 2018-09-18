@@ -15,6 +15,7 @@ THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS AS IS AND ANY EXPRESS OR I
 
 #include "stdafx.h"
 #include "LITD_LaneGenerator.h"
+#include "LITD_VirtualPoint.h"
 
 
 ADTF_TRIGGER_FUNCTION_FILTER_PLUGIN(CID_LANE_GENERATOR_DATA_TRIGGERED_FILTER,
@@ -43,16 +44,16 @@ LITD_LaneGenerator::LITD_LaneGenerator()
     LOG_ERROR("Error adding straight element 0/0->2/0");
   }
   */
-  if(map.addDoubleStraightElement(0.0, 2.0, -0.5, 0.5, -0.2, 0.2, false)!=MAP_ENOERR) {
-    LOG_ERROR("Error adding straight element 0/0->2/0");
+  if(map.addDoubleStraightElement(1.0, 4.07, 0.0, 1.0, 0.3, 0.775, false)!=MAP_ENOERR) {
+    LOG_ERROR("Error adding straight element 1/0->4/1");
   }
   /*
   if(map.addCurveElement(2.0, 3.5, -0.5, 1.0, CURVE_CORNER_UL, 1.0)!=MAP_ENOERR) {
     LOG_ERROR("Error adding curve element 2/0->3/1");
   }
   */
-  if(map.addDoubleCurveElement(2.0, 3.5, -0.5, 1.0, CURVE_CORNER_UL, 0.8, 1.2)!=MAP_ENOERR) {
-    LOG_ERROR("Error adding curve element 2/0->3/1");
+  if(map.addDoubleCurveElement(4.07, 5.0, 0.0, 1.0, CURVE_CORNER_UL, 0.225, 0.7)!=MAP_ENOERR) {
+    LOG_ERROR("Error adding curve element 4/0->5/1");
   }
   /*
   if(map.addStraightElement(2.5, 3.5, 1.0, 3.0, 3.0, true)!=MAP_ENOERR) {
@@ -60,15 +61,15 @@ LITD_LaneGenerator::LITD_LaneGenerator()
   }
   */
 
-  if(map.addDoubleStraightElement(2.5, 3.5, 1.0, 3.0, 2.8, 3.2, true)!=MAP_ENOERR) {
-    LOG_ERROR("Error adding straight element 3/1->3/3");
+  if(map.addDoubleStraightElement(4.07, 5.0, 1.0, 2.0, 4.3, 4.75, true)!=MAP_ENOERR) {
+    LOG_ERROR("Error adding straight element 4/1->5/2");
   }
   /*
   if(map.addCurveElement(2.0, 3.5, 3.0, 4.5, CURVE_CORNER_LL, 1.0)!=MAP_ENOERR) {
     LOG_ERROR("Error adding curve element 3/3->2/4");
   }
   */
-  if(map.addDoubleCurveElement(2.0, 3.5, 3.0, 4.5, CURVE_CORNER_LL, 0.8, 1.2)!=MAP_ENOERR) {
+  if(map.addDoubleCurveElement(3.0, 5.0, 2.0, 4.0, CURVE_CORNER_LL, 1.3, 1.75)!=MAP_ENOERR) {
     LOG_ERROR("Error adding curve element 3/3->2/4");
   }
   /*
@@ -76,23 +77,23 @@ LITD_LaneGenerator::LITD_LaneGenerator()
     LOG_ERROR("Error adding straight element 2/4->0/4");
   }
   */
-  if(map.addDoubleStraightElement(0.0, 2.0, 3.5, 4.5, 3.8, 4.2, false)!=MAP_ENOERR) {
-    LOG_ERROR("Error adding straight element 2/4->0/4");
+  if(map.addDoubleStraightElement(2.1, 3.0, 3.0, 4.0, 3.25, 3.7, false)!=MAP_ENOERR) {
+    LOG_ERROR("Error adding straight element 2/3->3/4");
   }
   /*
   if(map.addCurveElement(-1.5, 0.0, 3.0, 4.5, CURVE_CORNER_LR, 1.0)!=MAP_ENOERR) {
     LOG_ERROR("Error adding curve element 0/4->-1/3");
   }
   */
-  if(map.addDoubleCurveElement(-1.5, 0.0, 3.0, 4.5, CURVE_CORNER_LR, 0.8, 1.2)!=MAP_ENOERR) {
-    LOG_ERROR("Error adding curve element 0/4->-1/3");
+  if(map.addDoubleCurveElement(0.0, 2.11, 2.0, 4.0, CURVE_CORNER_LR, 1.25, 1.75)!=MAP_ENOERR) {
+    LOG_ERROR("Error adding curve element Lower-left corner");
   }
   /*
   if(map.addStraightElement(-1.5, -0.5, 1.0, 3.0, -1.0, true)!=MAP_ENOERR) {
     LOG_ERROR("Error adding straight element -1/3->-1/1");
   }  
   */
-  if(map.addDoubleStraightElement(-1.5, -0.5, 1.0, 3.0, -1.2, -0.8, true)!=MAP_ENOERR) {
+  if(map.addDoubleStraightElement(1.0, 2.0, 0.0, 1.0, 0.33, 0.8, true)!=MAP_ENOERR) {
     LOG_ERROR("Error adding straight element -1/3->-1/1");
   }
   /*
@@ -100,8 +101,8 @@ LITD_LaneGenerator::LITD_LaneGenerator()
     LOG_ERROR("Error adding curve element -1/1->0/0");
   }
   */
-  if(map.addDoubleCurveElement(-1.5, 0.0, -0.5, 1.0, CURVE_CORNER_UR, 0.8, 1.2)!=MAP_ENOERR) {
-    LOG_ERROR("Error adding curve element -1/1->0/0");
+  if(map.addDoubleCurveElement(0.0, 1.0, 0.0, 1.0, CURVE_CORNER_UR, 0.225, 0.67)!=MAP_ENOERR) {
+    LOG_ERROR("Error adding curve element upper right corner");
   }   
 
     LOG_INFO("Lane map generation complete!");
@@ -136,9 +137,19 @@ tResult LITD_LaneGenerator::Process(tTimeStamp tmTimeOfTrigger)
     RETURN_IF_FAILED_DESC(oDecoder.GetElementValue(m_ddlVirtualPointId.f64Heading, &heading), "GetElementValue for heading failed!");
     RETURN_IF_FAILED_DESC(oDecoder.GetElementValue(m_ddlVirtualPointId.f64Speed, &speed), "GetElementValue for speed failed!");
 
-
-    
-
+    LITD_VirtualPoint vp(x,y,0.0,heading);
+    LITD_VirtualPoint np=map.getNormalPoint(vp);
+    double spd=map.getSpeedAdvisory();
+    LITD_map_error_t err=map.getMapState();
+    if(err!=MAP_ENOERR) {
+      LOG_ERROR("LaneGenerator (x=%lf; y=%lf; heading=%lf) is in invalid state: \"%s\" Resetting speed!", static_cast<double>(x),static_cast<double>(y),static_cast<double>(heading),map.strerr(err).c_str());
+      speed=0.0;
+    } else {
+      speed=spd;
+      x=np.x;
+      y=np.y;
+      heading=np.h;
+    }
 
     object_ptr<ISample> pWriteSample;
 
