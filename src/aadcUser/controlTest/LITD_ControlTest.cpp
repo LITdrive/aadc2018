@@ -83,6 +83,10 @@ int main()
     
     vp.speed = STRAIGHT_SPEED * map.getSpeedAdvisory();
     vCar.updateStep(vp, DTIME);
+  //C++: void circle(InputOutputArray img, Point center, int radius, const Scalar& color, int thickness=1, int lineType=LINE_8, int shift=0 )
+  //C++: void line  (InputOutputArray img, Point pt1, Point pt2, const Scalar& color, int thickness=1, int lineType=LINE_8, int shift=0 )
+    cv::Point backPoint(mapImg.size().width/2+PIXEL_PER_METER*vCar.carBackPosition.x, mapImg.size().height/2 - PIXEL_PER_METER*vCar.carBackPosition.y);
+    cv::line(mapImg,car, backPoint, cv::Scalar::all(0), 1);
 
     cv::imshow("VirtualPointMoverTest", mapImg);                   // Show our image inside it.
 

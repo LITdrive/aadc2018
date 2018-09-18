@@ -17,10 +17,13 @@ public:
 
     void speedRegulator(LITD_VirtualPoint vp, double dtime);
     double getActSpeed(LITD_VirtualPoint vp, double dtime);
+    void calculateBackPos();
+    void calculateFrontkPos();
 
     double carSpeed;
     double carSteeringAngle;
-    LITD_VirtualPoint carPosition;
+    LITD_VirtualPoint carPosition; //front axis
+    LITD_VirtualPoint carBackPosition; //back axis
     //SpeedGenerator speedGenerator;
 
     double e;

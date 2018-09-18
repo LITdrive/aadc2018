@@ -55,11 +55,7 @@
 //
 //}
 
-int main()
-{
-  double pixelPerMeter = 100.0;
-  double border = 1.0;
-  std::cout << "started MapGenerator Test.." << std::endl;
+int drawMap(){
   MapGenerator mapGenerator;
   mapGenerator.generateLine(Point2d(1.0, 0.0), Point2d(3.0, 0.0));
   mapGenerator.generateArc(Orientation::CCW, Point2d(3.0, 0.0), Point2d(3.0, 1.0), Point2d(4.0, 1.0));
@@ -71,6 +67,14 @@ int main()
   mapGenerator.generateArc(Orientation::CCW, Point2d(0.0, 1.0), Point2d(1.0, 1.0), Point2d(1.0, 0.0));
   cv::Mat mapImg(1000, 1000, CV_8UC3, cv::Scalar::all(255));
   mapGenerator.plot(mapImg, pixelPerMeter);
+}
+
+int main()
+{
+  double pixelPerMeter = 100.0;
+  double border = 1.0;
+  std::cout << "started MapGenerator Test.." << std::endl;
+  drawMap();
 
   VirtualPointMover vpMover;
   vpMover.setMapElements(mapGenerator.getMapElements());

@@ -14,6 +14,8 @@ LITD_VirtualCar::LITD_VirtualCar()
     carPosition.h = 0.0;
     carSpeed = 0.0;
 
+    calculateBackPos(); 
+
     stanleyGain = 1.5;
     vKp = 0.1;
     vKi =0.5;
@@ -21,6 +23,26 @@ LITD_VirtualCar::LITD_VirtualCar()
     vpOld.x = carPosition.x;
     vpOld.y = carPosition.y;
     vIntegrate = 0.0;
+}
+
+void LITD_VirtualCar::calculateBackPos(){
+    double dx = cos(carPosition.h)*CAR_AXIS_DIST;
+    double dy = sin(carPosition.h)*CAR_AXIS_DIST;
+
+    carBackPosition.x = carPosition.x - dx;
+    carBackPosition.y = carPosition.y - dy;
+    carBackPosition.h = carPosition.h;
+
+}
+
+void LITD_VirtualCar::calculateFrontkPos(){
+    double dx = cos(carPosition.h)*CAR_AXIS_DIST;
+    double dy = sin(carPosition.h)*CAR_AXIS_DIST;
+
+    carPosition.x = carBackPosition.x + dx;
+    carPosition.y = carBackPosition.y + dy;
+    carPosition.h = carBackPosition.h;
+
 }
 
 double LITD_VirtualCar::getActSpeed(LITD_VirtualPoint vp, double dtime){
@@ -73,8 +95,15 @@ LITD_VirtualPoint LITD_VirtualCar::updateStep(LITD_VirtualPoint vp, double dtime
     theta_c =  wrapTo2Pi(vp.h) - wrapTo2Pi(carPosition.h);
 
     //calc steering-angle with stanley-approach
-    carSteeringAngle = theta_c + atan2(stanleyGain*e, carSpeed);
+    carSteeringAngle = (theta_c + atan2(stanleyGain*e, carSpeed));
 
+    if(carSteeringAngle < -M_PI/4){
+        carSteeringAngle = -M_PI/4;
+        std::cout << "Steering angle < -45° "  << std::endl;
+    } else if(carSteeringAngle > M_PI/4){
+        carSteeringAngle = M_PI/4;
+        std::cout << "Steering angle > 45° "  << std::endl;
+    }
     //Debug Messages
     std::cout << "-----------------------" << std::endl;
     std::cout << "point heading : " << vp.h << "(" << rad2degree * vp.h << "°)" << std::endl;
@@ -84,18 +113,25 @@ LITD_VirtualPoint LITD_VirtualCar::updateStep(LITD_VirtualPoint vp, double dtime
     std::cout << "Theta_C: " << theta_c << "(" << rad2degree * theta_c << "°)" << std::endl;
     
     
-
+    //Simulate the carposition of the back axis
     for (int i=0; i<SIM_STEPS; i++){
     
         std::cout << "h: " << carPosition.h << std::endl;
-        carPosition.h += tan(carSteeringAngle)/CAR_AXIS_DIST * carSpeed * dtime/SIM_STEPS;
-        carPosition.x += cos(carPosition.h) * carSpeed * dtime/SIM_STEPS;
-        carPosition.y += sin(carPosition.h) * carSpeed * dtime/SIM_STEPS;
+        carBackPosition.h += tan(carSteeringAngle)/CAR_AXIS_DIST * carSpeed * dtime/SIM_STEPS;
+        carBackPosition.x += cos(carPosition.h) * carSpeed * dtime/SIM_STEPS;
+        carBackPosition.y += sin(carPosition.h) * carSpeed * dtime/SIM_STEPS;
     }
+    //calculate the new front axis point
+    calculateFrontkPos();
 
     std::cout << "new car pos x: " << carPosition.x << std::endl;
     std::cout << "new car pos y: " << carPosition.y << std::endl;
+    std::cout << "new car back-pos x: " << carBackPosition.x << std::endl;
+    std::cout << "new car back-pos y: " << carBackPosition.y << std::endl;
+    std::cout << "steering angle: " << carSteeringAngle << "(" << rad2degree * carSteeringAngle << "°)" << std::endl;
     std::cout << "-----------------------" << std::endl;
+
+    //calculateBackPos();
  
  speedRegulator(vp, dtime);
     //calc next point of front axis
