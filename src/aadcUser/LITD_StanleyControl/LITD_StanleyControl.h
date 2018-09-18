@@ -36,17 +36,19 @@ class cStanleyControl : public cTriggerFunction
 {
 private:
 
+    #define rad2degree  180.0 / M_PI;
     void calcSteeringAngle();
     void mapSteeringAngle();
 
     /*! Media Descriptions. */
-    struct tVirtualPointId
+   struct tPositionIndex
     {
-        tSize f64x;
-        tSize f64y;
-        tSize f64Heading;
-        tSize f64Speed;
-    } m_ddlVirtualPointId;
+        tSize x;
+        tSize y;
+        tSize radius;
+        tSize speed;
+        tSize heading;
+    }m_ddlPositionIndex;
 
     struct tStanleyOutputDataId
     {

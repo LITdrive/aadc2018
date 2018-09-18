@@ -35,7 +35,7 @@ void cStanleyControl::mapSteeringAngle(){
 
 
 void cStanleyControl::calcSteeringAngle(){
-    double rad2degree = 180.0 / M_PI;
+    
     //vector between car and virtualpoint
     Vector2d diff = vp.getVector2d() - carPosition.getVector2d();
 
@@ -69,7 +69,7 @@ void cStanleyControl::calcSteeringAngle(){
 cStanleyControl::cStanleyControl()
 {
     //DO NOT FORGET TO LOAD MEDIA DESCRIPTION SERVICE IN ADTF3 AND CHOOSE aadc.description
-    object_ptr<IStreamType> pTypeVirtualPoint;
+    object_ptr<IStreamType> pTypePositionData;
     object_ptr<IStreamType> pTypeTemplateData;
 
     RegisterPropertyVariable("dynamic properties path", m_properties_file);
@@ -80,17 +80,22 @@ cStanleyControl::cStanleyControl()
 
 
 
-    if IS_OK(adtf::mediadescription::ant::create_adtf_default_stream_type_from_service("tVirtualPoint", pTypeVirtualPoint, m_VirtualPointSampleFactory)) {
-        (adtf_ddl::access_element::find_index(m_VirtualPointSampleFactory, cString("f64x"), m_ddlVirtualPointId.f64x));
-        (adtf_ddl::access_element::find_index(m_VirtualPointSampleFactory, cString("f64y"), m_ddlVirtualPointId.f64y));
-        (adtf_ddl::access_element::find_index(m_VirtualPointSampleFactory, cString("f64Heading"), m_ddlVirtualPointId.f64Heading));
-        (adtf_ddl::access_element::find_index(m_VirtualPointSampleFactory, cString("f64Speed"), m_ddlVirtualPointId.f64Speed));
-    } else {
-        LOG_INFO("No mediadescription for tVirtualPoint found!");
+    if IS_OK(adtf::mediadescription::ant::create_adtf_default_stream_type_from_service("tPosition", pTypePositionData, m_VirtualPointSampleFactory))
+    {
+        adtf_ddl::access_element::find_index(m_VirtualPointSampleFactory, "f32x", m_ddlPositionIndex.x);
+        adtf_ddl::access_element::find_index(m_VirtualPointSampleFactory, "f32y", m_ddlPositionIndex.y);
+        adtf_ddl::access_element::find_index(m_VirtualPointSampleFactory, "f32radius", m_ddlPositionIndex.radius);
+        adtf_ddl::access_element::find_index(m_VirtualPointSampleFactory, "f32speed", m_ddlPositionIndex.speed);
+        adtf_ddl::access_element::find_index(m_VirtualPointSampleFactory, "f32heading", m_ddlPositionIndex.heading);
     }
+    else
+    {
+        LOG_WARNING("No mediadescription for tPosition found!");
+    }
+
     //Register input pin
-    Register(m_oVPReaderIst, "inVirtualPoint", pTypeVirtualPoint);
-    Register(m_oVPReaderSoll, "inVirtualPoint", pTypeVirtualPoint);
+    Register(m_oVPReaderIst, "inPosition", pTypePositionData);
+    Register(m_oVPReaderSoll, "inPosition", pTypePositionData);
     Register(m_oWriter, "output", pTypeTemplateData);
 }
 
@@ -118,10 +123,10 @@ tResult cStanleyControl::Process(tTimeStamp tmTimeOfTrigger)
 
         RETURN_IF_FAILED(oDecoder.IsValid());
 
-        RETURN_IF_FAILED(oDecoder.GetElementValue(m_ddlVirtualPointId.f64x, &carX));
-        RETURN_IF_FAILED(oDecoder.GetElementValue(m_ddlVirtualPointId.f64y, &carY));
-        RETURN_IF_FAILED(oDecoder.GetElementValue(m_ddlVirtualPointId.f64Heading, &carHeading));
-        RETURN_IF_FAILED(oDecoder.GetElementValue(m_ddlVirtualPointId.f64Speed, &carSpeed));
+        RETURN_IF_FAILED(oDecoder.GetElementValue(m_ddlPositionIndex.x, &carX));
+        RETURN_IF_FAILED(oDecoder.GetElementValue(m_ddlPositionIndex.y, &carY));
+        RETURN_IF_FAILED(oDecoder.GetElementValue(m_ddlPositionIndex.heading, &carHeading));
+        RETURN_IF_FAILED(oDecoder.GetElementValue(m_ddlPositionIndex.speed, &carSpeed));
 
         carPosition.x = carX;
         carPosition.y = carY;
@@ -131,10 +136,10 @@ tResult cStanleyControl::Process(tTimeStamp tmTimeOfTrigger)
 
         RETURN_IF_FAILED(oDecoder.IsValid());
 
-        RETURN_IF_FAILED(oDecoder.GetElementValue(m_ddlVirtualPointId.f64x, &sollX));
-        RETURN_IF_FAILED(oDecoder.GetElementValue(m_ddlVirtualPointId.f64y, &sollY));
-        RETURN_IF_FAILED(oDecoder.GetElementValue(m_ddlVirtualPointId.f64Heading, &sollHeading));
-        RETURN_IF_FAILED(oDecoder.GetElementValue(m_ddlVirtualPointId.f64Speed, &sollSpeed));
+        RETURN_IF_FAILED(oDecoder.GetElementValue(m_ddlPositionIndex.x, &sollX));
+        RETURN_IF_FAILED(oDecoder.GetElementValue(m_ddlPositionIndex.y, &sollY));
+        RETURN_IF_FAILED(oDecoder.GetElementValue(m_ddlPositionIndex.heading, &sollHeading));
+        RETURN_IF_FAILED(oDecoder.GetElementValue(m_ddlPositionIndex.speed, &sollSpeed));
 
         vp.x = sollX;
         vp.y = sollY;
