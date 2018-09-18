@@ -9,8 +9,8 @@
 
 LITD_VirtualCar::LITD_VirtualCar()
 {
-    carPosition.x = 0.0;
-    carPosition.y = -0.2;
+    carPosition.x = 2.0;
+    carPosition.y = 0.2;
     carPosition.h = 0.0;
     carSpeed = 0.0;
 
@@ -77,40 +77,69 @@ LITD_VirtualPoint LITD_VirtualCar::updateStep(LITD_VirtualPoint vp, double dtime
     
 
     double rad2degree = 180.0 / M_PI; 
-    //vector between car and virtualpoint
-    Vector2d diff = vp.getVector2d() - carPosition.getVector2d();
-
-    //calc sign to steer in direction of road
-    int sign = 1;
-    double diff_heading_abs = wrapTo2Pi(atan2(diff(1), diff(0)));
-    if(wrapTo2Pi(diff_heading_abs - wrapTo2Pi(vp.h))> 4.712 ){
-        sign = -1;
-    }
+    
     //calc new direction
 
-    //calc normal distance of tangent to car (e)
-    e = (vp.getVector2d() - carPosition.getVector2d()).norm() * sign;
+    if(carSpeed > 0){
+        //vector between car and virtualpoint
+        Vector2d diff = vp.getVector2d() - carPosition.getVector2d();
 
-    //calc angle between car heading and point tangent
-    theta_c =  wrapTo2Pi(vp.h) - wrapTo2Pi(carPosition.h);
+        //calc sign to steer in direction of road
+        int sign = 1;
+        double diff_heading_abs = wrapTo2Pi(atan2(diff(1), diff(0)));
+        if(wrapTo2Pi(diff_heading_abs - wrapTo2Pi(vp.h))> 4.712 ){
+            sign = -1;
+        }
+            //calc normal distance of tangent to car (e)
+        e = (vp.getVector2d() - carPosition.getVector2d()).norm() * sign;
 
-    //calc steering-angle with stanley-approach
-    carSteeringAngle = (theta_c + atan2(stanleyGain*e, carSpeed));
+        //calc angle between car heading and point tangent
+        theta_c =  wrapTo2Pi(vp.h) - wrapTo2Pi(carPosition.h);
 
-    if(carSteeringAngle < -M_PI/4){
-        carSteeringAngle = -M_PI/4;
-        std::cout << "Steering angle < -45° "  << std::endl;
-    } else if(carSteeringAngle > M_PI/4){
-        carSteeringAngle = M_PI/4;
-        std::cout << "Steering angle > 45° "  << std::endl;
+        //calc steering-angle with stanley-approach
+        carSteeringAngle = (theta_c + atan2(stanleyGain*e, carSpeed));
+
+        if(carSteeringAngle < -M_PI/4){
+            carSteeringAngle = -M_PI/4;
+            std::cout << "Steering angle < -45° "  << std::endl;
+        } else if(carSteeringAngle > M_PI/4){
+            carSteeringAngle = M_PI/4;
+            std::cout << "Steering angle > 45° "  << std::endl;
+        }
+        //Debug Messages
+        std::cout << "----------forward-------------" << std::endl;
+        std::cout << "point heading : " << vp.h << "(" << rad2degree * vp.h << "°)" << std::endl;
+        std::cout << "car heading: " << carPosition.h << "(" << rad2degree * carPosition.h << "°)" << std::endl;
+        std::cout << "diff heading: " << diff_heading_abs << "(" << rad2degree * diff_heading_abs << "°)" << std::endl;
+        std::cout << "e: " << e << std::endl;
+        std::cout << "Theta_C: " << theta_c << "(" << rad2degree * theta_c << "°)" << std::endl;
+    } else{
+
+        //vector between car and virtualpoint
+        Vector2d diff = carBackPosition.getVector2d() - vp.getVector2d();
+
+        //calc sign to steer in direction of road
+        int sign = 1;
+        double diff_heading_abs = wrapTo2Pi(atan2(diff(1), diff(0)));
+        /*if(wrapTo2Pi(diff_heading_abs - wrapTo2Pi(vp.h))> 4.712 ){
+            sign = -1;
+        }*/
+
+        double b = CAR_AXIS_DIST * 0.8;
+        double epsillon = wrapTo2Pi(carPosition.h - vp.h);
+        double gamma = wrapTo2Pi(diff_heading_abs * (-1));
+
+        carSteeringAngle = atan2(b * sin(gamma + epsillon),(CAR_AXIS_DIST- b * cos(gamma + epsillon)));
+
+        std::cout << "----------backwards-------------" << std::endl;
+        std::cout << "point heading : " << vp.h << "(" << rad2degree * vp.h << "°)" << std::endl;
+        std::cout << "car heading: " << wrapTo2Pi(carPosition.h) << "(" << rad2degree * wrapTo2Pi(carPosition.h) << "°)" << std::endl;
+        std::cout << "diff heading: " << diff_heading_abs << "(" << rad2degree * diff_heading_abs << "°)" << std::endl;
+        std::cout << "epsillon: " << epsillon << "(" << rad2degree * epsillon << "°)" << std::endl;
+        std::cout << "gamma: " << gamma << "(" << rad2degree * gamma << "°)" << std::endl;
+        std::cout << "carSteering Angle: " << carSteeringAngle << "(" << rad2degree * carSteeringAngle << "°)" << std::endl;
     }
-    //Debug Messages
-    std::cout << "-----------------------" << std::endl;
-    std::cout << "point heading : " << vp.h << "(" << rad2degree * vp.h << "°)" << std::endl;
-    std::cout << "car heading: " << carPosition.h << "(" << rad2degree * carPosition.h << "°)" << std::endl;
-    std::cout << "diff heading: " << diff_heading_abs << "(" << rad2degree * diff_heading_abs << "°)" << std::endl;
-    std::cout << "e: " << e << std::endl;
-    std::cout << "Theta_C: " << theta_c << "(" << rad2degree * theta_c << "°)" << std::endl;
+    
     
     
     //Simulate the carposition of the back axis

@@ -86,7 +86,7 @@ aadc::jury::maneuver LITD_MapElementStraight::selectDriveManeuver(aadc::jury::ma
 }
 
 double LITD_MapElementStraight::getSpeedAdvisory() {
-    return 1.0;
+    return -1.0;
 }
 
 double LITD_MapElementStraight::getSpeedLimit() {

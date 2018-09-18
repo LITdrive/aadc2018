@@ -64,9 +64,19 @@ int main()
   LITD_VirtualPoint vp;
   
   while(running) {
+    LITD_VirtualPoint fakePosition = vCar.carPosition;
+    if(vp.speed <0 ){
+      double dx = cos(fakePosition.h)*CAR_AXIS_DIST * 2;
+      double dy = sin(fakePosition.h)*CAR_AXIS_DIST * 2;
+
+      fakePosition.x = fakePosition.x - dx;
+      fakePosition.y = fakePosition.y - dy;
+      
+    }
+
     std::cout << "Loop start: x=" << vCar.carPosition.x << " y=" << vCar.carPosition.y << " h=" << vCar.carPosition.h << std::endl;
-    double offset = map.getPointOffset(vCar.carPosition);
-    vp=map.getNormalPoint(vCar.carPosition);
+    double offset = map.getPointOffset(fakePosition);
+    vp=map.getNormalPoint(fakePosition);
     LITD_map_error_t err = map.getMapState();
     if(err!=MAP_ENOERR) {
       std::cout << "Error while generating new point: " << map.strerr(err) << std::endl;
@@ -75,13 +85,16 @@ int main()
     }
     std::cout << "Got virtual point: x=" << vp.x << " y=" << vp.y << " h=" << vp.h << "Offset=" << offset << std::endl;
 
+   
+    
+    vp.speed = STRAIGHT_SPEED * map.getSpeedAdvisory();
+
     cv::Point street(mapImg.size().width/2+PIXEL_PER_METER*vp.x, mapImg.size().height/2 - PIXEL_PER_METER*vp.y);
     cv::circle(mapImg, street, 5, cv::Scalar::all(0));
 
     cv::Point car(mapImg.size().width/2+PIXEL_PER_METER*vCar.carPosition.x, mapImg.size().height/2 - PIXEL_PER_METER*vCar.carPosition.y);
     cv::circle(mapImg, car, 2, cv::Scalar::all(0), -1);
-    
-    vp.speed = STRAIGHT_SPEED * map.getSpeedAdvisory();
+
     vCar.updateStep(vp, DTIME);
   //C++: void circle(InputOutputArray img, Point center, int radius, const Scalar& color, int thickness=1, int lineType=LINE_8, int shift=0 )
   //C++: void line  (InputOutputArray img, Point pt1, Point pt2, const Scalar& color, int thickness=1, int lineType=LINE_8, int shift=0 )

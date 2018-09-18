@@ -6,7 +6,7 @@
 /* Speed {advisory, limit} is calculated from the radius with a multiplier. */
 
 /* Multiplies the radius with this value to get a relative speed advisory. This value is limited to 1.0 */
-#define LITD_MAPELEMENTCURVE_SPEED_ADVISORY_MULTIPLIER 0.3
+#define LITD_MAPELEMENTCURVE_SPEED_ADVISORY_MULTIPLIER -0.3
 /* Multiplies the radius with this value to get a absolute speed limit */
 #define LITD_MAPELEMENTCURVE_SPEED_LIMIT_MULTIPLIER 1.0
 
