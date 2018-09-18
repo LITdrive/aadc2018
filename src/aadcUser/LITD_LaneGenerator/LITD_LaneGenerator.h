@@ -37,26 +37,27 @@ private:
 
     //Pins
     /*! Reader of an InPin. */
-    cPinReader m_oVPReader;
+    cPinReader m_oPosReader;
     /*! Writer to an OutPin. */
-    cPinWriter m_oVPWriter;
+    cPinWriter m_oPosWriter;
 
-    struct tVirtualPointId
+    struct tPositionIndex
     {
-        tSize f64x;
-        tSize f64y;
-        tSize f64Heading;
-        tSize f64Speed;
-    } m_ddlVirtualPointId;
+        tSize x;
+        tSize y;
+        tSize radius;
+        tSize speed;
+        tSize heading;
+    } m_ddlPositionIndex;
 
     /*! The signal value sample factory */
-    cSampleCodecFactory m_VirtualPointSampleFactory;
+    cSampleCodecFactory m_PositionSampleFactory;
     //Stream Formats
 
     /*! The clock */
     object_ptr<adtf::services::IReferenceClock> m_pClock;
 
-    tFloat64 x, y, speed, heading;
+    tFloat32 x, y, speed, heading;
 
     LITD_Map map;
 

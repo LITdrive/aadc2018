@@ -26,14 +26,14 @@ ADTF_TRIGGER_FUNCTION_FILTER_PLUGIN(CID_LANE_GENERATOR_DATA_TRIGGERED_FILTER,
 LITD_LaneGenerator::LITD_LaneGenerator()
 {
     LOG_INFO("Initializing LITD_LaneGenerator");
-    object_ptr<IStreamType> pTypeVirtualPoint;
-    if IS_OK(adtf::mediadescription::ant::create_adtf_default_stream_type_from_service("tVirtualPoint", pTypeVirtualPoint, m_VirtualPointSampleFactory)) {
-        (adtf_ddl::access_element::find_index(m_VirtualPointSampleFactory, cString("f64x"), m_ddlVirtualPointId.f64x));
-        (adtf_ddl::access_element::find_index(m_VirtualPointSampleFactory, cString("f64y"), m_ddlVirtualPointId.f64y));
-        (adtf_ddl::access_element::find_index(m_VirtualPointSampleFactory, cString("f64Heading"), m_ddlVirtualPointId.f64Heading));
-        (adtf_ddl::access_element::find_index(m_VirtualPointSampleFactory, cString("f64Speed"), m_ddlVirtualPointId.f64Speed));
+    object_ptr<IStreamType> pTypePosition;
+    if IS_OK(adtf::mediadescription::ant::create_adtf_default_stream_type_from_service("tPosition", pTypePosition, m_PositionSampleFactory)) {
+        (adtf_ddl::access_element::find_index(m_PositionSampleFactory, cString("f32x"), m_ddlPositionIndex.x));
+        (adtf_ddl::access_element::find_index(m_PositionSampleFactory, cString("f32y"), m_ddlPositionIndex.y));
+        (adtf_ddl::access_element::find_index(m_PositionSampleFactory, cString("f32heading"), m_ddlPositionIndex.heading));
+        (adtf_ddl::access_element::find_index(m_PositionSampleFactory, cString("f32speed"), m_ddlPositionIndex.speed));
     } else {
-        LOG_ERROR("No mediadescription for tVirtualPoint found!");
+        LOG_ERROR("No mediadescription for tPosition found!");
     }
 
     LOG_INFO("Generating lane map...");
@@ -93,7 +93,7 @@ LITD_LaneGenerator::LITD_LaneGenerator()
     LOG_ERROR("Error adding straight element -1/3->-1/1");
   }  
   */
-  if(map.addDoubleStraightElement(1.0, 2.0, 0.0, 1.0, 0.33, 0.8, true)!=MAP_ENOERR) {
+  if(map.addDoubleStraightElement(0.0, 1.0, 1.0, 2.0, 0.33, 0.8, true)!=MAP_ENOERR) {
     LOG_ERROR("Error adding straight element -1/3->-1/1");
   }
   /*
@@ -108,10 +108,10 @@ LITD_LaneGenerator::LITD_LaneGenerator()
     LOG_INFO("Lane map generation complete!");
 
     //Register input pin
-    Register(m_oVPReader, "inVirtualPoint", pTypeVirtualPoint);
+    Register(m_oPosReader, "tPosition input", pTypePosition);
 
     //Register output pin
-    Register(m_oVPWriter, "outVirtualPoint", pTypeVirtualPoint);
+    Register(m_oPosWriter, "tPosition normal-point", pTypePosition);
 
 }
 
@@ -125,17 +125,17 @@ tResult LITD_LaneGenerator::Configure()
 
 tResult LITD_LaneGenerator::Process(tTimeStamp tmTimeOfTrigger)
 {
-    object_ptr<const ISample> pReadSample, pVPReadSample;
+    object_ptr<const ISample> pReadSample, pPosReadSample;
 
-    RETURN_IF_FAILED_DESC(m_oVPReader.GetNextSample(pVPReadSample), "GetNextSample failed!");
-    auto oDecoder = m_VirtualPointSampleFactory.MakeDecoderFor(*pVPReadSample);
+    RETURN_IF_FAILED_DESC(m_oPosReader.GetNextSample(pPosReadSample), "GetNextSample failed!");
+    auto oDecoder = m_PositionSampleFactory.MakeDecoderFor(*pPosReadSample);
 
     RETURN_IF_FAILED_DESC(oDecoder.IsValid(), "oDecoder isValid failed!");
 
-    RETURN_IF_FAILED_DESC(oDecoder.GetElementValue(m_ddlVirtualPointId.f64x, &x), "GetElementValue for x failed!");
-    RETURN_IF_FAILED_DESC(oDecoder.GetElementValue(m_ddlVirtualPointId.f64y, &y), "GetElementValue for y failed!");
-    RETURN_IF_FAILED_DESC(oDecoder.GetElementValue(m_ddlVirtualPointId.f64Heading, &heading), "GetElementValue for heading failed!");
-    RETURN_IF_FAILED_DESC(oDecoder.GetElementValue(m_ddlVirtualPointId.f64Speed, &speed), "GetElementValue for speed failed!");
+    RETURN_IF_FAILED_DESC(oDecoder.GetElementValue(m_ddlPositionIndex.x, &x), "GetElementValue for x failed!");
+    RETURN_IF_FAILED_DESC(oDecoder.GetElementValue(m_ddlPositionIndex.y, &y), "GetElementValue for y failed!");
+    RETURN_IF_FAILED_DESC(oDecoder.GetElementValue(m_ddlPositionIndex.heading, &heading), "GetElementValue for heading failed!");
+    RETURN_IF_FAILED_DESC(oDecoder.GetElementValue(m_ddlPositionIndex.speed, &speed), "GetElementValue for speed failed!");
 
     LITD_VirtualPoint vp(x,y,0.0,heading);
     LITD_VirtualPoint np=map.getNormalPoint(vp);
@@ -154,14 +154,14 @@ tResult LITD_LaneGenerator::Process(tTimeStamp tmTimeOfTrigger)
     object_ptr<ISample> pWriteSample;
 
     RETURN_IF_FAILED_DESC(alloc_sample(pWriteSample, m_pClock->GetStreamTime()), "alloc_sample failed!");
-    auto oCodec = m_VirtualPointSampleFactory.MakeCodecFor(pWriteSample);
+    auto oCodec = m_PositionSampleFactory.MakeCodecFor(pWriteSample);
 
-    RETURN_IF_FAILED_DESC(oCodec.SetElementValue(m_ddlVirtualPointId.f64x, x), "SetElementValue for x failed!");
-    RETURN_IF_FAILED_DESC(oCodec.SetElementValue(m_ddlVirtualPointId.f64y, y), "SetElementValue for x failed!");
-    RETURN_IF_FAILED_DESC(oCodec.SetElementValue(m_ddlVirtualPointId.f64Heading, heading), "SetElementValue for heading failed!");
-    RETURN_IF_FAILED_DESC(oCodec.SetElementValue(m_ddlVirtualPointId.f64Speed, speed), "SetElementValue for speed failed!");
+    RETURN_IF_FAILED_DESC(oCodec.SetElementValue(m_ddlPositionIndex.x, x), "SetElementValue for x failed!");
+    RETURN_IF_FAILED_DESC(oCodec.SetElementValue(m_ddlPositionIndex.y, y), "SetElementValue for x failed!");
+    RETURN_IF_FAILED_DESC(oCodec.SetElementValue(m_ddlPositionIndex.heading, heading), "SetElementValue for heading failed!");
+    RETURN_IF_FAILED_DESC(oCodec.SetElementValue(m_ddlPositionIndex.speed, speed), "SetElementValue for speed failed!");
 
-    m_oVPWriter << pWriteSample << flush << trigger;
+    m_oPosWriter << pWriteSample << flush << trigger;
     
     RETURN_NOERROR;
 }
