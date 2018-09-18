@@ -55,13 +55,32 @@ cFineLocalisation::cFineLocalisation()
     {
         return ChangeType(m_oReader, m_sImageFormat, *pType.Get());
     });
+
+    RegisterPropertyVariable("AffineMat@00", mat00);
+    RegisterPropertyVariable("AffineMat@01", mat01);
+    RegisterPropertyVariable("AffineMat@02", mat02);
+    RegisterPropertyVariable("AffineMat@10", mat10);
+    RegisterPropertyVariable("AffineMat@11", mat11);
+    RegisterPropertyVariable("AffineMat@12", mat12);
+    RegisterPropertyVariable("Path to Map", mapPath);
+    RegisterPropertyVariable("search space size", propSearchSpaceSize);
+
+
 }
 
 tResult cFineLocalisation::Configure()
 {
     //get clock object
     RETURN_IF_FAILED(_runtime->GetObject(m_pClock));
-    
+    string pathToMap = static_cast<string>(cString(mapPath));
+    locator.setMap(const_cast<char*>(pathToMap.c_str()));
+    searchSpaceSize = propSearchSpaceSize;
+    affineMat[0][0] = mat00;
+    affineMat[0][1] = mat01;
+    affineMat[0][2] = mat02;
+    affineMat[1][0] = mat10;
+    affineMat[1][1] = mat11;
+    affineMat[1][2] = mat12;
     RETURN_NOERROR;
 }
 
@@ -89,16 +108,18 @@ tResult cFineLocalisation::Process(tTimeStamp tmTimeOfTrigger)
             //create a opencv matrix from the media sample buffer
             Mat bvImage = Mat(cv::Size(m_sImageFormat.m_ui32Width, m_sImageFormat.m_ui32Height),
                                    CV_8UC3, const_cast<unsigned char*>(static_cast<const unsigned char*>(pReadBuffer->GetPtr())));
-
-            Point2f location = locator.localize(bvImage, heading, Point2i(x, y), SEARCH_RADIUS);
+            float* px_loc = pmt.toPixel(x, y);
+            float px_x = px_loc[0], px_y = px_loc[1];
+            Point2f location = locator.localize(bvImage, heading, Point2i(px_x, px_y), searchSpaceSize);
             object_ptr<ISample> pWriteSample;
+            float* m_loc = pmt.toMeter(location.x, location.y);
 
             RETURN_IF_FAILED(alloc_sample(pWriteSample, m_pClock->GetStreamTime()));
             {
                 auto oCodec = m_VirtualPointSampleFactory.MakeCodecFor(pWriteSample);
 
-                RETURN_IF_FAILED(oCodec.SetElementValue(m_ddlVirtualPointId.f64x, location.x));
-                RETURN_IF_FAILED(oCodec.SetElementValue(m_ddlVirtualPointId.f64y, location.y));
+                RETURN_IF_FAILED(oCodec.SetElementValue(m_ddlVirtualPointId.f64x, m_loc[0]));
+                RETURN_IF_FAILED(oCodec.SetElementValue(m_ddlVirtualPointId.f64y, m_loc[1]));
                 RETURN_IF_FAILED(oCodec.SetElementValue(m_ddlVirtualPointId.f64Heading, heading));
                 RETURN_IF_FAILED(oCodec.SetElementValue(m_ddlVirtualPointId.f64Speed, speed));
             }

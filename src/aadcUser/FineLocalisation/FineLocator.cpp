@@ -5,6 +5,10 @@
 #include "FineLocator.h"
 #include "stdafx.h"
 
+FineLocator::FineLocator(){
+
+}
+
 FineLocator::FineLocator(char *pathToScaledMap) {
     scaledMap = imread(pathToScaledMap);
 }
@@ -15,6 +19,10 @@ FineLocator::~FineLocator() {
 
 float rad2grad(float x){
     return (float)(x*M_PI/180.0f);
+}
+
+void FineLocator::setMap(char* pathToScaledMap){
+    scaledMap = imread(pathToScaledMap);
 }
 
 Point2i FineLocator::localize(Mat img_bv, float theta, Point2i pos, int size) {
@@ -34,7 +42,7 @@ Point2i FineLocator::localize(Mat img_bv, float theta, Point2i pos, int size) {
     Mat combined = offset*car_rot*car_coord_shift;
     combined = combined(Rect(0,0,3,2)).clone(); // only select the Affine Part of the Transformation
     Mat search_space;
-    warpAffine(scaledMap, search_space ,combined, Size(img_bv.size[1] + size, img_bv.size[0] + size), INTER_LINEAR, BORDER_REPLICATE);
+    warpAffine(scaledMap, search_space, combined, Size(img_bv.size[1] + size, img_bv.size[0] + size), INTER_LINEAR, BORDER_REPLICATE);
     Mat search_result;
     matchTemplate(search_space, img_bv, search_result, TM_CCOEFF_NORMED);
     double mi, ma;

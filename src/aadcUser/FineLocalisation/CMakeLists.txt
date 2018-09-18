@@ -7,6 +7,8 @@ include_directories(${OpenCV_INCLUDE_DIRS})
 set (SOURCEFILES    	stdafx.h 
 						FineLocalisation.h
 						FineLocalisation.cpp
+                        PixelMetricTransformer.h
+                        PixelMetricTransformer.cpp
                         FineLocator.h
                         FineLocator.cpp)
 

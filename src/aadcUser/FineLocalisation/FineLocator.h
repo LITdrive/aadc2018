@@ -16,6 +16,7 @@ private:
 
 public:
     /*! Constructor*/
+    FineLocator();
     FineLocator(char* pathToScaledMap);
 
     /*! Destructor*/
@@ -23,6 +24,8 @@ public:
 
     /*! call localisation*/
     Point2i localize(Mat img_bv, float theta, Point2i pos, int size=20);
+
+    void setMap(char* pathToScaledMap);
 };
 
 

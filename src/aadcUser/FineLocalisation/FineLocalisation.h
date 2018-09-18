@@ -16,6 +16,7 @@ THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS AS IS AND ANY EXPRESS OR I
 #pragma once
 #include "stdafx.h"
 #include "FineLocator.h"
+#include "PixelMetricTransformer.h"
 
 //*************************************************************************************************
 #define CID_CBIRDS_EYE_VIEW_DATA_TRIGGERED_FILTER "finelocalisation_filter.filter.user.aadc.cid"
@@ -65,6 +66,21 @@ private:
     tFloat64 x, y, speed, heading;
 
     FineLocator locator;
+
+    property_variable<tFloat32> mat00 = 7.28597450e-01;
+    property_variable<tFloat32> mat01 = 3.06133382e-03;
+    property_variable<tFloat32> mat02 =-9.49931885e+00;
+    property_variable<tFloat32> mat10 = 3.16077729e-18;
+    property_variable<tFloat32> mat11 = 7.00280112e-01;
+    property_variable<tFloat32> mat12 =-6.30252101e+00;
+    property_variable<cFilename> mapPath = cFilename("/home/aadc/share/adtf/data/scaledMap.png");
+    property_variable<tInt32> propSearchSpaceSize = 20;
+
+    float affineMat [2][3] = {{mat00, mat01, mat02}, {mat10, mat11, mat12}};
+    int searchSpaceSize = 0;
+
+    PixelMetricTransformer pmt = PixelMetricTransformer(affineMat);
+
 
 public:
 
