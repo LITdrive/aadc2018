@@ -2225,20 +2225,6 @@
             </pin>
           </binding_clients>
         </streaming_sink>
-        <streaming_sink>
-          <name>Arduino Emergency Lights</name>
-          <class_id>arduino_emergency_lights.streaming_sink.base.aadc.cid</class_id>
-          <input_pins>
-            <pin>
-              <name>speed</name>
-            </pin>
-          </input_pins>
-          <output_pins/>
-          <runners/>
-          <init_priority>0</init_priority>
-          <binding_servers/>
-          <binding_clients/>
-        </streaming_sink>
       </streaming_sinks>
       <sample_streams/>
       <connections>
@@ -2362,21 +2348,6 @@
           <destination_connector_path>
             <connector>audio</connector>
             <component>Filter Graph Dock</component>
-            <portbindingobject/>
-          </destination_connector_path>
-          <priority>0</priority>
-          <sync>true</sync>
-        </connection>
-        <connection>
-          <name>Filter Graph Dock.speed_measured_Arduino Emergency Lights.speed</name>
-          <source_connector_path>
-            <connector>speed_measured</connector>
-            <component>Filter Graph Dock</component>
-            <portbindingobject/>
-          </source_connector_path>
-          <destination_connector_path>
-            <connector>speed</connector>
-            <component>Arduino Emergency Lights</component>
             <portbindingobject/>
           </destination_connector_path>
           <priority>0</priority>

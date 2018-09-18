@@ -1400,19 +1400,7 @@
           <properties/>
         </property_set>
         <property_set>
-          <name>streaming_graphs/devel_streaming_graph/streaming_sinks/Arduino Emergency Lights</name>
-          <properties/>
-        </property_set>
-        <property_set>
           <name>streaming_graphs/devel_streaming_graph/streaming_dock_out_ports/speed_measured</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>streaming_graphs/devel_streaming_graph/connections/Filter Graph Dock.speed_measured_Arduino Emergency Lights.speed</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>streaming_graphs/devel_streaming_graph/streaming_sinks/Arduino Emergency Lights/input_pins/speed</name>
           <properties/>
         </property_set>
         <property_set>
