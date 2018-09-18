@@ -2884,8 +2884,8 @@
         <layout_set>
           <name>graphs/default_filter_graph/streaming_out_ports/speed_out</name>
           <boundary>
-            <x>1542</x>
-            <y>12</y>
+            <x>1498</x>
+            <y>226</y>
             <width>0</width>
             <height>0</height>
           </boundary>
@@ -10447,10 +10447,10 @@
           </connection_layout>
         </layout_set>
         <layout_set>
-          <name>graphs/default_filter_graph/sample_streams/Sample Stream_1</name>
+          <name>graphs/default_filter_graph/sample_streams/speed_stream</name>
           <boundary>
-            <x>1084</x>
-            <y>53</y>
+            <x>1053</x>
+            <y>160</y>
             <width>0</width>
             <height>0</height>
           </boundary>
@@ -10539,7 +10539,7 @@
             <width>0</width>
             <height>0</height>
           </boundary>
-          <selected>false</selected>
+          <selected>true</selected>
           <connection_layout>
             <name/>
             <centerLineIsManual>true</centerLineIsManual>
@@ -10552,11 +10552,11 @@
           <name>graphs/default_filter_graph/filters/LITD_Safety_Speed_Limit_cf</name>
           <boundary>
             <x>985</x>
-            <y>211</y>
+            <y>210</y>
             <width>0</width>
             <height>0</height>
           </boundary>
-          <selected>false</selected>
+          <selected>true</selected>
           <connection_layout>
             <name/>
             <centerLineIsManual>true</centerLineIsManual>
@@ -10702,7 +10702,7 @@
           </connection_layout>
         </layout_set>
         <layout_set>
-          <name>graphs/default_filter_graph/sample_streams/Sample Stream_2</name>
+          <name>graphs/default_filter_graph/sample_streams/speed_stream_limited</name>
           <boundary>
             <x>1348</x>
             <y>182</y>
@@ -10821,7 +10821,7 @@
           </connection_layout>
         </layout_set>
         <layout_set>
-          <name>graphs/default_filter_graph/sample_streams/Sample Stream_3</name>
+          <name>graphs/default_filter_graph/sample_streams/measured_speed</name>
           <boundary>
             <x>1198</x>
             <y>627</y>
@@ -10856,6 +10856,210 @@
         </layout_set>
         <layout_set>
           <name>graphs/default_filter_graph/connections/Sample Stream_3._Marker Positioning.speed</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/default_filter_graph/filters/LITD Speed Limit</name>
+          <boundary>
+            <x>1082</x>
+            <y>240</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/default_filter_graph/filters/LITD Keyboard Control</name>
+          <boundary>
+            <x>755</x>
+            <y>8</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/default_filter_graph/connections/LITD Speed Limit.output_Sample Stream_2.</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/default_filter_graph/filters/LITD Speed Limit/output_pins/output</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/default_filter_graph/connections/LITD Keyboard Control.speed_LITD Speed Limit.input</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/default_filter_graph/filters/LITD Keyboard Control/output_pins/speed</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/default_filter_graph/filters/LITD Speed Limit/input_pins/input</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/default_filter_graph/sample_streams/Sample Stream_4</name>
+          <boundary>
+            <x>1022</x>
+            <y>126</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>true</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/default_filter_graph/connections/LITD Keyboard Control.steering_steering_out.</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/default_filter_graph/filters/LITD Keyboard Control/output_pins/steering</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/default_filter_graph/connections/LITD Keyboard Control.speed_Sample Stream_1.</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/default_filter_graph/connections/Sample Stream_1._LITD Speed Limit.input</name>
           <boundary>
             <x>0</x>
             <y>0</y>
