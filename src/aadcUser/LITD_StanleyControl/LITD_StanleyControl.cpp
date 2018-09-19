@@ -16,7 +16,7 @@ THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS AS IS AND ANY EXPRESS OR I
 #include "stdafx.h"
 #include "LITD_StanleyControl.h"
 #include "math_utilities.h"
-#include <ADTF3_Helper.h>
+#include <ADTF3_helper.h>
 
 /* notes to check
 [] actual speed has to be in car-struct
@@ -25,17 +25,19 @@ THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS AS IS AND ANY EXPRESS OR I
 */
 
 
-ADTF_TRIGGER_FUNCTION_FILTER_PLUGIN(CID_TEMPLATEFILTER_DATA_TRIGGERED_FILTER,
+ADTF_TRIGGER_FUNCTION_FILTER_PLUGIN(CID_LITD_STANLEY_CONTROL_FILTER,
     "LITD_StanleyControl",
     cStanleyControl,
     adtf::filter::pin_trigger({"inPositionIs", "inPositionSet"}));
 
 void cStanleyControl::mapSteeringAngle(){
-	if (carSteeringAngle == 0) {
-		carSteeringValue = 0;
-	} else {
-		carSteeringValue = maxAngle / carSteeringAngle * 100;
-	}
+    double  rad2degree  = 180.0 / M_PI;
+    if(carSteeringAngle == 0){
+	carSteeringValue = 0;
+    }else{
+      carSteeringValue = (carSteeringAngle * rad2degree) / maxAngle * 100;   
+    }
+
 }
 
 
@@ -59,6 +61,7 @@ void cStanleyControl::calcSteeringAngle(){
 
     //calc steering-angle with stanley-approach
     carSteeringAngle = theta_c + atan2(stanleyGain*e, carSpeed);
+    LOG_INFO("Steering angle in rad : %.2f ", carSteeringAngle);
 
     //Debug Messages
     /*std::cout << "-----------------------" << std::endl;
@@ -69,6 +72,10 @@ void cStanleyControl::calcSteeringAngle(){
     std::cout << "Theta_C: " << theta_c << "(" << rad2degree * theta_c << "°)" << std::endl;
     std::cout << "Steering Angle: " << carSteeringAngle << "(" << rad2degree * carSteeringAngle << "°)" << std::endl;
     std::cout << "-----------------------" << std::endl;*/
+	LOG_INFO("point heading in rad : %.2f ", vp.h);
+        LOG_INFO("car heading in rad : %.2f ", carPosition.h);
+	LOG_INFO("e  : %.2f ", e);
+	LOG_INFO("theta : %.2f ", theta_c);
 
 }
 cStanleyControl::cStanleyControl()
@@ -163,8 +170,11 @@ tResult cStanleyControl::Process(tTimeStamp tmTimeOfTrigger)
     }
 
     // Do the Processing
+    LOG_INFO("Soll x : %.2f, soll y: %.2f ", vp.x, vp.y);
+    LOG_INFO("Ist x : %.2f, Ist y: %.2f ", carPosition.x, carPosition.y);
     calcSteeringAngle();
-	mapSteeringAngle();
+    mapSteeringAngle();
+    LOG_INFO("Steering angle in grad : %.2f ", carSteeringValue);
 
     if(carSteeringAngle < - 45){
         LOG_INFO("Steering angle truncated to -45°!");

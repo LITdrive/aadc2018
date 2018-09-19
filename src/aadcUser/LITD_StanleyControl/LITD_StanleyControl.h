@@ -19,7 +19,7 @@ THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS AS IS AND ANY EXPRESS OR I
 #include "../utils/properties/FilePropertiesObserver.h"
 
 //*************************************************************************************************
-#define CID_TEMPLATEFILTER_DATA_TRIGGERED_FILTER "template_filter.filter.user.aadc.cid"
+#define CID_LITD_STANLEY_CONTROL_FILTER "LITD_StanleyControl.filter.user.aadc.cid"
 
 
 
@@ -36,7 +36,7 @@ class cStanleyControl : public cTriggerFunction
 {
 private:
 
-    #define rad2degree  180.0 / M_PI;
+    
     void calcSteeringAngle();
     void mapSteeringAngle();
 
