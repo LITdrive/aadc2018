@@ -16,6 +16,7 @@ THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS AS IS AND ANY EXPRESS OR I
 #include "stdafx.h"
 #include "LITD_StanleyControl.h"
 #include "math_utilities.h"
+#include <ADTF3_Helper.h>
 
 /* notes to check
 [] actual speed has to be in car-struct
@@ -27,10 +28,14 @@ THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS AS IS AND ANY EXPRESS OR I
 ADTF_TRIGGER_FUNCTION_FILTER_PLUGIN(CID_TEMPLATEFILTER_DATA_TRIGGERED_FILTER,
     "LITD_StanleyControl",
     cStanleyControl,
-    adtf::filter::pin_trigger({"input"}));
+    adtf::filter::pin_trigger({"inPositionIs", "inPositionSet"}));
 
 void cStanleyControl::mapSteeringAngle(){
-    carSteeringValue = maxAngle/carSteeringAngle * 100;
+	if (carSteeringAngle == 0) {
+		carSteeringValue = 0;
+	} else {
+		carSteeringValue = maxAngle / carSteeringAngle * 100;
+	}
 }
 
 
@@ -70,7 +75,7 @@ cStanleyControl::cStanleyControl()
 {
     //DO NOT FORGET TO LOAD MEDIA DESCRIPTION SERVICE IN ADTF3 AND CHOOSE aadc.description
     object_ptr<IStreamType> pTypePositionData;
-    object_ptr<IStreamType> pTypeTemplateData;
+	object_ptr<IStreamType> pTypeSignalValue;
 
     RegisterPropertyVariable("dynamic properties path", m_properties_file);
 
@@ -93,16 +98,28 @@ cStanleyControl::cStanleyControl()
         LOG_WARNING("No mediadescription for tPosition found!");
     }
 
+
+	if IS_OK(adtf::mediadescription::ant::create_adtf_default_stream_type_from_service("tSignalValue", pTypeSignalValue, m_SignalValueSampleFactory))
+	{
+		adtf_ddl::access_element::find_index(m_SignalValueSampleFactory, cString("ui32ArduinoTimestamp"), m_ddlSignalValueId.timeStamp);
+		adtf_ddl::access_element::find_index(m_SignalValueSampleFactory, cString("f32Value"), m_ddlSignalValueId.value);
+	}
+	else
+	{
+		LOG_INFO("No mediadescription for tSignalValue found!");
+	}
+
     //Register input pin
-    Register(m_oVPReaderIst, "inPosition", pTypePositionData);
-    Register(m_oVPReaderSoll, "inPosition", pTypePositionData);
-    Register(m_oWriter, "output", pTypeTemplateData);
+    Register(m_oVPReaderIst, "inPositionIs", pTypePositionData);
+    Register(m_oVPReaderSoll, "inPositionSet", pTypePositionData);
+    Register(m_oWriter, "output", pTypeSignalValue);
 }
 
 
 //implement the Configure function to read ALL Properties
 tResult cStanleyControl::Configure()
 {
+	RETURN_IF_FAILED(_runtime->GetObject(m_pClock));
     RETURN_NOERROR;
 }
 
@@ -118,28 +135,28 @@ tResult cStanleyControl::Process(tTimeStamp tmTimeOfTrigger)
 	
     
     
-    if(IS_OK(m_oVPReaderIst.GetNextSample(pReadSampleIst))) {
-        auto oDecoder = m_VirtualPointSampleFactory.MakeDecoderFor(*pReadSampleIst);
+    if(IS_OK(m_oVPReaderIst.GetLastSample(pReadSampleIst))) {
+        auto oDecoder1 = m_VirtualPointSampleFactory.MakeDecoderFor(*pReadSampleIst);
 
-        RETURN_IF_FAILED(oDecoder.IsValid());
+        RETURN_IF_FAILED(oDecoder1.IsValid());
 
-        RETURN_IF_FAILED(oDecoder.GetElementValue(m_ddlPositionIndex.x, &carX));
-        RETURN_IF_FAILED(oDecoder.GetElementValue(m_ddlPositionIndex.y, &carY));
-        RETURN_IF_FAILED(oDecoder.GetElementValue(m_ddlPositionIndex.heading, &carHeading));
-        RETURN_IF_FAILED(oDecoder.GetElementValue(m_ddlPositionIndex.speed, &carSpeed));
+        RETURN_IF_FAILED(oDecoder1.GetElementValue(m_ddlPositionIndex.x, &carX));
+        RETURN_IF_FAILED(oDecoder1.GetElementValue(m_ddlPositionIndex.y, &carY));
+        RETURN_IF_FAILED(oDecoder1.GetElementValue(m_ddlPositionIndex.heading, &carHeading));
+        RETURN_IF_FAILED(oDecoder1.GetElementValue(m_ddlPositionIndex.speed, &carSpeed));
 
         carPosition.x = carX;
         carPosition.y = carY;
     }
-    if(IS_OK(m_oVPReaderSoll.GetNextSample(pReadSampleSoll))) {
-        auto oDecoder = m_VirtualPointSampleFactory.MakeDecoderFor(*pReadSampleSoll);
+    if(IS_OK(m_oVPReaderSoll.GetLastSample(pReadSampleSoll))) {
+        auto oDecoder2 = m_VirtualPointSampleFactory.MakeDecoderFor(*pReadSampleSoll);
 
-        RETURN_IF_FAILED(oDecoder.IsValid());
+        RETURN_IF_FAILED(oDecoder2.IsValid());
 
-        RETURN_IF_FAILED(oDecoder.GetElementValue(m_ddlPositionIndex.x, &sollX));
-        RETURN_IF_FAILED(oDecoder.GetElementValue(m_ddlPositionIndex.y, &sollY));
-        RETURN_IF_FAILED(oDecoder.GetElementValue(m_ddlPositionIndex.heading, &sollHeading));
-        RETURN_IF_FAILED(oDecoder.GetElementValue(m_ddlPositionIndex.speed, &sollSpeed));
+        RETURN_IF_FAILED(oDecoder2.GetElementValue(m_ddlPositionIndex.x, &sollX));
+        RETURN_IF_FAILED(oDecoder2.GetElementValue(m_ddlPositionIndex.y, &sollY));
+        RETURN_IF_FAILED(oDecoder2.GetElementValue(m_ddlPositionIndex.heading, &sollHeading));
+        RETURN_IF_FAILED(oDecoder2.GetElementValue(m_ddlPositionIndex.speed, &sollSpeed));
 
         vp.x = sollX;
         vp.y = sollY;
@@ -147,6 +164,7 @@ tResult cStanleyControl::Process(tTimeStamp tmTimeOfTrigger)
 
     // Do the Processing
     calcSteeringAngle();
+	mapSteeringAngle();
 
     if(carSteeringAngle < - 45){
         LOG_INFO("Steering angle truncated to -45°!");
@@ -156,18 +174,7 @@ tResult cStanleyControl::Process(tTimeStamp tmTimeOfTrigger)
          carSteeringAngle = 45;
     }
 
+	transmitSignalValue(m_oWriter, m_pClock->GetStreamTime(), m_SignalValueSampleFactory, m_ddlSignalValueId.timeStamp, 0, m_ddlSignalValueId.value, carSteeringValue);
 
-    object_ptr<ISample> pWriteSample;
-
-    if (IS_OK(alloc_sample(pWriteSample)))
-    {
-
-        auto oCodec = m_VirtualPointSampleFactory.MakeCodecFor(pWriteSample);
-
-        RETURN_IF_FAILED(oCodec.SetElementValue(m_ddlStanleyOutputDataId.f64Value, carSteeringValue));
-
-    }
-    m_oWriter << pWriteSample << flush << trigger;
-    
     RETURN_NOERROR;
 }

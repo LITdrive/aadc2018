@@ -50,14 +50,18 @@ private:
         tSize heading;
     }m_ddlPositionIndex;
 
-    struct tStanleyOutputDataId
-    {
-        tSize f64Value;
-    } m_ddlStanleyOutputDataId;
+   /*! The template data sample factory */
+   cSampleCodecFactory m_VirtualPointSampleFactory;
 
+   struct tSignalValueId
+   {
+	   tSize timeStamp;
+	   tSize value;
+   } m_ddlSignalValueId{};
 
-    /*! The template data sample factory */
-    cSampleCodecFactory m_VirtualPointSampleFactory;
+	// signal value
+	cSampleCodecFactory m_SignalValueSampleFactory;
+
 
     /*! Reader of an InPin. */
     cPinReader m_oVPReaderIst;
@@ -65,8 +69,8 @@ private:
     /*! Writer to an OutPin. */
     cPinWriter m_oWriter;
 
-    tFloat64 carX, carY, carHeading, carSpeed, sollX, sollY, sollHeading, sollSpeed;
-    tFloat64 carSteeringAngle, carSteeringValue;
+    tFloat32 carX, carY, carHeading, carSpeed, sollX, sollY, sollHeading, sollSpeed;
+    tFloat32 carSteeringAngle, carSteeringValue;
 
     LITD_VirtualPoint vp;
     LITD_VirtualPoint carPosition;
@@ -78,6 +82,11 @@ private:
     property_variable<cFilename> m_properties_file = cFilename("../../../../configuration_files/properties/stanleycontrol_pid.ini");
 	FilePropertiesObserver* m_properties;
     property_variable<tBool>       m_bShowDebug = tFalse;
+
+
+	/*! clock service */
+	object_ptr<adtf::services::IReferenceClock> m_pClock;
+
 
 
 public:
