@@ -20,8 +20,7 @@ ADTF_PLUGIN(CID_MAP_VISUALIZATION_FILTER, cMapVisualization)
 
 cMapVisualization::cMapVisualization() : adtf::ui::cQtUIFilter(), m_pDisplayWidget(0)
 {
-    //Register OpenDrive file location property
-    RegisterPropertyVariable("OpenDrive Map File", m_mapFile);
+
     //Add position pin from mediadescription
     adtf::ucom::object_ptr<adtf::streaming::IStreamType> pTypePositionData;
     if IS_OK(adtf::mediadescription::ant::create_adtf_default_stream_type_from_service("tPosition", pTypePositionData, m_PositionSampleFactory))
@@ -39,6 +38,15 @@ cMapVisualization::cMapVisualization() : adtf::ui::cQtUIFilter(), m_pDisplayWidg
     //Create Pin
     adtf::ucom::object_ptr<const adtf::streaming::IStreamType> pConstTypePositionData = pTypePositionData;
     adtf::streaming::create_pin(*this, m_oReaderPos, "position", pConstTypePositionData);
+
+    adtf::ucom::object_ptr<adtf::streaming::ant::IStreamType> pTypeDefault = adtf::ucom::make_object_ptr<adtf::streaming::ant::cStreamType>(adtf::streaming::ant::stream_meta_type_anonymous());
+    create_pin(*this, m_oInputOpenDrive, "open_drive", pTypeDefault);
+    m_ShowTrace = tFalse;
+    m_ShowLanes = tFalse;
+
+    //Register Properties
+    RegisterPropertyVariable("Show Driving Path", m_ShowLanes);
+    RegisterPropertyVariable("Show Position Trace", m_ShowTrace);
 }
 
 cMapVisualization::~cMapVisualization()
@@ -58,10 +66,16 @@ QWidget* cMapVisualization::CreateView()
 {
     //Create Widget
     m_pDisplayWidget = new DisplayWidget(nullptr);
+
+    //Create Open Drive reader and read file
+    m_odReader = new ODReader::openDriveReader();
+
+
     //Draw map to widget
-    ShowMap(m_mapFile);
     return m_pDisplayWidget;
 }
+
+
 
 tVoid cMapVisualization::ReleaseView()
 {
@@ -87,33 +101,57 @@ tResult cMapVisualization::OnTimer()
         //Plot if within the graphicsscene
         if (pixX > 0 && pixX < GRAPHICSSCENE_WIDTH && pixY>0 && pixY < GRAPHICSSCENE_HEIGHT)
         {
-            m_pDisplayWidget->PlotPosition(pixX, pixY, f32heading);
+            m_pDisplayWidget->PlotPosition(pixX, pixY, f32heading,m_ShowTrace);
+        }
+    }
+
+    adtf::ucom::object_ptr<const adtf::streaming::ISample> pSampleAnonymous;
+    while (IS_OK(m_oInputOpenDrive.GetNextSample(pSampleAnonymous)))
+    {
+
+        adtf::ucom::ant::object_ptr_shared_locked<const adtf::streaming::ant::ISampleBuffer> pSampleBuffer;
+        RETURN_IF_FAILED(pSampleAnonymous->Lock(pSampleBuffer));
+
+        adtf_util::cString openDriveMapFileString;
+        openDriveMapFileString.SetBuffer(pSampleBuffer->GetSize());
+        memcpy(openDriveMapFileString.GetBuffer(), pSampleBuffer->GetPtr(), pSampleBuffer->GetSize());
+
+        if (openDriveMapFileString.GetBufferSize() > 0)
+        {
+            if (m_odReader->ParseText(openDriveMapFileString.GetBuffer()))
+            {
+                m_pDisplayWidget->ResetScene();
+                ShowMap();
+            }
         }
     }
     RETURN_NOERROR;
 }
 
 
-tResult cMapVisualization::ShowMap(adtf_util::cFilename fileMap)
+tResult cMapVisualization::ShowMap()
 {
-    //Create Absolute path and convert to string
-    fileMap = fileMap.CreateAbsolutePath(".");
-    std::string file = (std::string)fileMap;
-    //Display file name
-    LOG_INFO("File %s", file.c_str());
-    //Create Open Drive reader and read file
-    m_odReader = new ODReader::openDriveReader(file);
     //Check if reader is success
-    LOG_INFO("File Read Error: %d", m_odReader->FileReadErr);
+    if(m_odReader->FileReadErr>0)
+    {
+      LOG_WARNING("File Read Error: %d", m_odReader->FileReadErr);
+      RETURN_NOERROR;
+    }
     //Check the number of roads
     LOG_INFO("Number of roads: %lu", m_odReader->RoadList.size());
     //Find the minimum and maximum X and y points
-    m_minX = 99999999.f, m_maxX = -99999999.f;
-    m_minY = 99999999.f, m_maxY = -99999999.f;
-    for (unsigned int i = 0; i < m_odReader->MapPoints.size(); i++)
+    m_minX = 99999999.0f, m_maxX = -99999999.0f;
+    m_minY = 99999999.0f, m_maxY = -99999999.0f;
+    float m_minZ = 99999999.0f, m_maxZ = -99999999.0f;
+    int num = 5;//Number of points
+    std::vector<ODReader::Pose3D> mapPoints = m_odReader->GetRoadPoints(m_odReader->RoadList,num);
+    std::vector<ODReader::Pose3D> centerPoints = m_odReader->GetRoadPoints(m_odReader->RoadList,num,ODReader::CENTER_POINTS);
+    std::vector<ODReader::Pose3D> borderPoints = m_odReader->GetRoadPoints(m_odReader->RoadList,num,ODReader::BORDER_POINTS);
+    for (unsigned int i = 0; i < borderPoints.size(); i++)
     {
-        float x = m_odReader->MapPoints[i].p.x;
-        float y = m_odReader->MapPoints[i].p.y;
+        float x = borderPoints[i].p.x;
+        float y = borderPoints[i].p.y;
+        float z = borderPoints[i].p.z;
         if (x < m_minX)
         {
             m_minX = x;
@@ -129,6 +167,14 @@ tResult cMapVisualization::ShowMap(adtf_util::cFilename fileMap)
         else if (y > m_maxY)
         {
             m_maxY = y;
+        }
+        if (z < m_minZ)
+        {
+            m_minZ = z;
+        }
+        else if (z > m_maxZ)
+        {
+            m_maxZ = z;
         }
     }
     //Extend the map on either side for displaying points outside the map
@@ -149,25 +195,67 @@ tResult cMapVisualization::ShowMap(adtf_util::cFilename fileMap)
     }
     LOG_INFO("Min x %.3f Max X %.3f Scale X %.3f", m_minX, m_maxX, m_pixelScaleX);
     LOG_INFO("Min Y %.3f Max Y %.3f Scale Y %.3f", m_minY, m_maxY, m_pixelScaleY);
-    //Draw individual roads one by one
-    for (unsigned int i = 0; i < m_odReader->RoadList.size(); i++)
+    LOG_INFO("Min Z %.3f Max Z %.3f", m_minZ, m_maxZ);
+    for (unsigned int j = 0; j < mapPoints.size() - 1; j++)
     {
-        //Get the points from each road
-        std::vector<ODReader::Pose3D> path = m_odReader->GetRoadPoints(m_odReader->RoadList[i]);
-        //Draw line for each point
-        for (unsigned int j = 0; j < path.size() - 1; j++)
-        {//
-          //Convert map coordinates in -x1 to x2 to Pixel 0 to GRAPHICS_WIDTH
-          //Convert map coordinates in y2 to -y1 to Pixel 0 to GRAPHICS_HEIGHT
-          //Note Y direction is flipped as map and pixel is opposite in y-direction
-          //Pixel coordinates
-            float pixX1 = (path[j].p.x - m_minX)*m_pixelScaleX;
-            float pixX2 = (path[j + 1].p.x - m_minX)*m_pixelScaleX;
-            float pixY1 = GRAPHICSSCENE_HEIGHT - (path[j].p.y - m_minY)*m_pixelScaleY;
-            float pixY2 = GRAPHICSSCENE_HEIGHT - (path[j + 1].p.y - m_minY)*m_pixelScaleY;
-            //Send pixel coordinates to draw
-            m_pDisplayWidget->DrawLine(pixX1, pixY1, pixX2, pixY2);
-        }
+      //Convert map coordinates in -x1 to x2 to Pixel 0 to GRAPHICS_WIDTH
+      //Convert map coordinates in y2 to -y1 to Pixel 0 to GRAPHICS_HEIGHT
+      //Note Y direction is flipped as map and pixel is opposite in y-direction
+      //Pixel coordinates
+      float pixX1 = (mapPoints[j].p.x - m_minX)*m_pixelScaleX;
+      float pixX2 = (mapPoints[j + 1].p.x - m_minX)*m_pixelScaleX;
+      float pixY1 = GRAPHICSSCENE_HEIGHT - (mapPoints[j].p.y - m_minY)*m_pixelScaleY;
+      float pixY2 = GRAPHICSSCENE_HEIGHT - (mapPoints[j + 1].p.y - m_minY)*m_pixelScaleY;
+      float zScale = 0;
+      if( fabs(m_maxZ-m_minZ)>0.01 )
+      {
+        zScale=255*(mapPoints[j].p.z - m_minZ)/fabs(m_maxZ-m_minZ);
+      }
+      //Send pixel coordinates to draw
+      if( (j+1)%num !=0 && m_ShowLanes)
+      {
+        m_pDisplayWidget->DrawLine(pixX1, pixY1, pixX2, pixY2,zScale);
+      }
     }
+    for (unsigned int j = 0; j < centerPoints.size() - 1; j++)
+    {
+      //Convert map coordinates in -x1 to x2 to Pixel 0 to GRAPHICS_WIDTH
+      //Convert map coordinates in y2 to -y1 to Pixel 0 to GRAPHICS_HEIGHT
+      //Note Y direction is flipped as map and pixel is opposite in y-direction
+      //Pixel coordinates
+      float pixX1 = (centerPoints[j].p.x - m_minX)*m_pixelScaleX;
+      float pixX2 = (centerPoints[j + 1].p.x - m_minX)*m_pixelScaleX;
+      float pixY1 = GRAPHICSSCENE_HEIGHT - (centerPoints[j].p.y - m_minY)*m_pixelScaleY;
+      float pixY2 = GRAPHICSSCENE_HEIGHT - (centerPoints[j + 1].p.y - m_minY)*m_pixelScaleY;
+      //Send pixel coordinates to draw
+      if( (j+1)%num !=0)
+      {
+        m_pDisplayWidget->DrawLine(pixX1, pixY1, pixX2, pixY2,0,CENTER_LANE);
+      }
+    }
+    for (unsigned int j = 0; j < borderPoints.size() - 1; j++)
+    {
+      //Convert map coordinates in -x1 to x2 to Pixel 0 to GRAPHICS_WIDTH
+      //Convert map coordinates in y2 to -y1 to Pixel 0 to GRAPHICS_HEIGHT
+      //Note Y direction is flipped as map and pixel is opposite in y-direction
+      //Pixel coordinates
+      float pixX1 = (borderPoints[j].p.x - m_minX)*m_pixelScaleX;
+      float pixX2 = (borderPoints[j + 1].p.x - m_minX)*m_pixelScaleX;
+      float pixY1 = GRAPHICSSCENE_HEIGHT - (borderPoints[j].p.y - m_minY)*m_pixelScaleY;
+      float pixY2 = GRAPHICSSCENE_HEIGHT - (borderPoints[j + 1].p.y - m_minY)*m_pixelScaleY;
+      float zScale = 0;
+      if( fabs(m_maxZ-m_minZ)>0.01 )
+      {
+        zScale=255*(borderPoints[j].p.z - m_minZ)/fabs(m_maxZ-m_minZ);
+      }
+      //Send pixel coordinates to draw
+      if( (j+1)%num !=0)
+      {
+        //LOG_INFO("Road %d Point %d Mod %d",m_odReader->RoadList[i].id,j,(j+1)%num);
+        //LOG_INFO("x1 %.3f y1 %.3f x2 %.3f y2 %.3f",mapPoints[j].p.x,mapPoints[j].p.y,mapPoints[j+1].p.x,mapPoints[j+1].p.y);
+        m_pDisplayWidget->DrawLine(pixX1, pixY1, pixX2, pixY2,zScale,BORDER_LANE);
+      }
+    }
+
     RETURN_NOERROR;
 }

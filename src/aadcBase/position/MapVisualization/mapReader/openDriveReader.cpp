@@ -22,575 +22,692 @@ THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS AS IS AND ANY EXPRESS OR I
 #include "openDriveReader.h"
 
 using namespace ODReader;
-openDriveReader::openDriveReader(std::string file)
+openDriveReader::openDriveReader(std::string file,int num)
 {
-
-    BiDirectional = BIDIRECTIONAL;
-    SingleLane = SINGLELANE;
-    Altitude = ALTITUDE;
-    Scale = MAP_SCALE;
-    LaneWidth = (float)LANEWIDTH;
-    LaneWidth = LaneWidth;
-    LoadMap(file);
+#ifndef WIN32
+    //Set to always accept .(dot) as decimal separator
+    std::locale::global(std::locale("en_US.UTF8"));
+#endif
+  //Parameters for MapFormat
+  BiDirectional = BIDIRECTIONAL;
+  SingleLane = SINGLELANE;
+  Altitude = ALTITUDE;
+  Scale = MAP_SCALE;
+  LoadMap(file,num);
 }
 
 openDriveReader::openDriveReader()
 {
-    BiDirectional = BIDIRECTIONAL;
-    SingleLane = SINGLELANE;
-    Altitude = ALTITUDE;
-    Scale = MAP_SCALE;
-    LaneWidth = (float)LANEWIDTH;
-}
-openDriveReader::~openDriveReader()
-{
-
-}
-
-
-void openDriveReader::LoadMap(std::string file, int num)
-{
-    
-    FileName = file.c_str();
 
 #ifndef WIN32
-    std::locale::global(std::locale("en_US.utf8"));
-#endif WIN32
-
-    FileReadErr = Doc.LoadFile(FileName);
-    if (FileReadErr == 0)
-    {
-        //Read Vector
-        RoadListOrg.clear();
-        RoadList.clear();
-        ReadFile(num);
-    }
-    return;
+  //Set to always accept .(dot) as decimal separator
+  std::locale::global(std::locale("en_US.UTF8"));
+#endif
+  //Parameters for MapFormat
+  BiDirectional = BIDIRECTIONAL;
+  SingleLane = SINGLELANE;
+  Altitude = ALTITUDE;
+  Scale = MAP_SCALE;
 }
+
+openDriveReader::~openDriveReader()
+{
+}
+
+bool openDriveReader::ParseText(const char* xml, int num)
+{
+    try
+    {
+        //Error when parsing text
+        FileReadErr = Doc.Parse(xml);
+        //Load doc if there is no error
+        if (FileReadErr == 0)
+        {
+            RoadListOrg.clear();
+            RoadList.clear();
+            ReadFile(num);
+        }
+        return true;
+    }
+    catch (std::string& e)
+    {
+        return false;
+    }
+
+    return false;
+}
+
+bool openDriveReader::LoadMap(std::string file,int num)
+{
+  try
+  {
+    //Error when parsing text
+    FileName = file.c_str();
+    FileReadErr= Doc.LoadFile(FileName);
+    //Load doc if there is no error
+    if(FileReadErr == 0)
+    {
+      RoadListOrg.clear();
+      RoadList.clear();
+      ReadFile(num);
+    }
+    return true;
+  }
+  catch (std::string& e)
+  {
+      return false;
+  }
+  return false;;
+}
+
 
 void openDriveReader::ReadFile(int num)
 {
-
-    
-    XMLNode *pRoot = Doc.FirstChildElement("OpenDRIVE");
-    if (pRoot == NULL)
-    {
-        return;
-    }
-    XMLElement *pRoad = pRoot->FirstChildElement("road");
-    while (pRoad != NULL)
-    {
-        roadElement curRoadElement;
-        curRoadElement.predET = "";
-        curRoadElement.succET = "";
-
-        pRoad->QueryIntAttribute("id", &curRoadElement.id);
-        pRoad->QueryIntAttribute("junction", &curRoadElement.junction);
-        XMLElement *pPredecessor = pRoad->FirstChildElement("link")->FirstChildElement("predecessor");
-        while (pPredecessor != NULL)
-        {
-            curRoadElement.predCP = pPredecessor->Attribute("contactPoint");
-            pPredecessor->QueryIntAttribute("elementId", &curRoadElement.predId);
-            curRoadElement.predET = pPredecessor->Attribute("elementType");
-            pPredecessor = pPredecessor->NextSiblingElement("predecessor");
-        }
-        XMLElement *pSuccessor = pRoad->FirstChildElement("link")->FirstChildElement("successor");
-        while (pSuccessor != NULL)
-        {
-            curRoadElement.succCP = pSuccessor->Attribute("contactPoint");
-            pSuccessor->QueryIntAttribute("elementId", &curRoadElement.succId);
-            curRoadElement.succET = pSuccessor->Attribute("elementType");
-            pSuccessor = pSuccessor->NextSiblingElement("successor");
-        }
-        XMLElement *pGeometry = pRoad->FirstChildElement("planView")->FirstChildElement("geometry");
-        while (pGeometry != NULL)
-        {
-            roadGeometry geometry;
-            pGeometry->QueryFloatAttribute("hdg", &geometry.hdg);
-            pGeometry->QueryFloatAttribute("length", &geometry.length);
-            pGeometry->QueryFloatAttribute("s", &geometry.s);
-            pGeometry->QueryFloatAttribute("x", &geometry.x);
-            pGeometry->QueryFloatAttribute("y", &geometry.y);
-            XMLElement *pParamPoly = pGeometry->FirstChildElement("paramPoly3");
-            while (pParamPoly != NULL)
-            {
-                pParamPoly->QueryFloatAttribute("aU", &geometry.aU);
-                pParamPoly->QueryFloatAttribute("aV", &geometry.aV);
-                pParamPoly->QueryFloatAttribute("bU", &geometry.bU);
-                pParamPoly->QueryFloatAttribute("bV", &geometry.bV);
-                pParamPoly->QueryFloatAttribute("cU", &geometry.cU);
-                pParamPoly->QueryFloatAttribute("cV", &geometry.cV);
-                pParamPoly->QueryFloatAttribute("dU", &geometry.dU);
-                pParamPoly->QueryFloatAttribute("dV", &geometry.dV);
-                curRoadElement.geometry.push_back(geometry);
-                pParamPoly = pParamPoly->NextSiblingElement("paramPoly3");
-            }
-            pGeometry = pGeometry->NextSiblingElement("geometry");
-        }
-        curRoadElement.cost = 99999999999;
-        curRoadElement.nextRoad = -1;
-        curRoadElement.altitude = Altitude;
-        curRoadElement.scale = Scale;
-        curRoadElement.laneSplit = 0.0;
-        RoadListOrg.push_back(curRoadElement);
-        pRoad = pRoad->NextSiblingElement("road");
-    }
-    if (SingleLane == true)
-    {
-        MergeLanes();
-    }
-    else {
-        SplitLanes();
-    }
-    GetNodes();
-    MapPoints = GetRoadPoints(RoadList, num);
-    MapElList = GetMapPoints(RoadList, num);
+  //Load Root element
+  XMLNode *pRoot = Doc.FirstChildElement("OpenDRIVE");
+  if(pRoot == NULL)
+  {
     return;
-}
-
-void openDriveReader::MergeLanes()
-{
-    std::vector<int> removelist;
-    for (int i = 0; i < (int)RoadListOrg.size(); i++)
+  }
+  int roadId = 1;
+  //Load the first road
+  XMLElement *pRoad = pRoot->FirstChildElement("road");
+  //Loop for all available roads
+  while(pRoad != NULL)
+  {
+    roadElement curRoadElement;
+    curRoadElement.predET ="";
+    curRoadElement.succET ="";
+    pRoad->QueryIntAttribute("id",&curRoadElement.id);
+    pRoad->QueryIntAttribute("junction",&curRoadElement.junction);
+    //Loop for all available predecessor
+    XMLElement *pPredecessor = pRoad->FirstChildElement("link")->FirstChildElement("predecessor");
+    while(pPredecessor != NULL)
     {
-        int removeElement = -1;
-        for (int j = i + 1; j < (int)RoadListOrg.size(); j++)
-        {
-            if (RoadListOrg[i].succId == RoadListOrg[j].succId && RoadListOrg[i].predId == RoadListOrg[j].predId)
-            {
-                removeElement = j;
-                removelist.push_back(j);
-            }
-        }
-        //Parallel lane not found,Add the lane
-        if (removeElement == -1)
-        {
-            for (int k = 0; k < (int)removelist.size(); k++) {
-                if (removelist[k] == i)
-                {
-                    removeElement = i;
-                }
-            }
-            if (removeElement == -1)
-            {
-                RoadList.push_back(RoadListOrg[i]);
-            }
-        }
-        else {
-            //if Parallel lane found average the values and add
-            roadGeometry geo1 = RoadListOrg[i].geometry[0];
-            roadGeometry geo2 = RoadListOrg[removeElement].geometry[0];
-            roadElement mergedRoad = RoadListOrg[i];
-            mergedRoad.geometry[0].x = (geo1.x + geo2.x) / 2;
-            mergedRoad.geometry[0].y = (geo1.y + geo2.y) / 2;
-            mergedRoad.geometry[0].hdg = (geo1.hdg + geo2.hdg) / 2;
-            mergedRoad.geometry[0].s = (geo1.s + geo2.s) / 2;
-            mergedRoad.geometry[0].length = (geo1.length + geo2.length) / 2;
-            mergedRoad.geometry[0].aU = (geo1.aU + geo2.aU) / 2;
-            mergedRoad.geometry[0].aV = (geo1.aV + geo2.aV) / 2;
-            mergedRoad.geometry[0].bU = (geo1.bU + geo2.bU) / 2;
-            mergedRoad.geometry[0].bV = (geo1.bV + geo2.bV) / 2;
-            mergedRoad.geometry[0].cU = (geo1.cU + geo2.cU) / 2;
-            mergedRoad.geometry[0].cV = (geo1.cV + geo2.cV) / 2;
-            mergedRoad.geometry[0].dU = (geo1.dU + geo2.dU) / 2;
-            mergedRoad.geometry[0].dV = (geo1.dV + geo2.dV) / 2;
-            RoadList.push_back(mergedRoad);
-        }
+      curRoadElement.predCP = pPredecessor->Attribute("contactPoint");
+      pPredecessor->QueryIntAttribute("elementId",&curRoadElement.predId);
+      curRoadElement.predET = pPredecessor->Attribute("elementType");
+      pPredecessor = pPredecessor->NextSiblingElement("predecessor");
     }
-    return;
-}
-
-void openDriveReader::SplitLanes()
-{
-    for (int i = 0; i < (int)RoadListOrg.size(); i++)
+    //Loop for all available successor
+    XMLElement *pSuccessor = pRoad->FirstChildElement("link")->FirstChildElement("successor");
+    while(pSuccessor != NULL)
     {
-        roadElement el = RoadListOrg[i];
-        if (el.junction != -1)
-        {
-            if (el.id % 2 == 1)
-            {
-                //el.laneSplit = JunctionWidth*el.scale/2;
-            }
-            else {
-                //el.laneSplit = -LaneWidth + JunctionWidth*el.scale;
-            }
-            RoadList.push_back(el);
-        }
-        else
-        {
-            roadElement left = el, right = el;
-            left.laneSplit = LaneWidth;
-            right.laneSplit = -LaneWidth;
-            left.predId = el.succId;
-            left.succId = el.predId;
-            left.predET = el.succET;
-            left.succET = el.predET;
-            left.predCP = el.succCP;
-            left.succCP = el.predCP;
-            RoadList.push_back(left);
-            RoadList.push_back(right);
-        }
+      curRoadElement.succCP = pSuccessor->Attribute("contactPoint");
+      pSuccessor->QueryIntAttribute("elementId",&curRoadElement.succId);
+      curRoadElement.succET = pSuccessor->Attribute("elementType");
+      pSuccessor = pSuccessor->NextSiblingElement("successor");
     }
-}
-
-void openDriveReader::GetNodes()
-{
-
-    for (int i = 0; i < (int)RoadList.size(); i++)
+    //Loop for all available geometry
+    XMLElement *pGeometry = pRoad->FirstChildElement("planView")->FirstChildElement("geometry");
+    while(pGeometry != NULL)
     {
-        std::vector<node> nodeList;
-        int roadid = RoadList[i].id;
-        int predId = RoadList[i].predId;
-        int succId = RoadList[i].succId;
-        const char *succType = RoadList[i].succET;
-        const char *predType = RoadList[i].predET;
-        const char *succContact = RoadList[i].succCP;
-        const char *predContact = RoadList[i].predCP;
-        const char *roadString, *startString, *endString;
-        roadString = "road";
-        startString = "start";
-        endString = "end";
-        if (*predType == *roadString && BiDirectional == true)
-        {
-            node curNode;
-            curNode.id = predId;
-            curNode.contactPoint = predContact;
-            nodeList.push_back(curNode);
-        }
-        else if (BiDirectional == true && (predType) != NULL)
-        {
-            //Go through all road element to find predecessor
-            for (int j = 0; j < (int)RoadList.size(); j++)
-            {
-                roadElement el = RoadList[j];
-                //If not the right junction skip
-                if (el.junction != predId)
-                {
-                    continue;
-                }
-                if (el.succId == roadid && *el.succCP == *startString)
-                {
-                    node curNode;
-                    curNode.id = el.id;
-                    curNode.contactPoint = endString;
-                    nodeList.push_back(curNode);
-                }
-                else if (el.predId == roadid && *el.predCP == *startString)
-                {
-                    node curNode;
-                    curNode.id = el.id;
-                    curNode.contactPoint = startString;
-                    nodeList.push_back(curNode);
-                }
-            }
-        }
-
-        if (*succType == *roadString)
-        {
-            node curNode;
-            curNode.id = succId;
-            curNode.contactPoint = succContact;
-            nodeList.push_back(curNode);
-        }
-        else if (succType != NULL)
-        {
-            //Go through all road element to find successor
-            for (int j = 0; j < (int)RoadList.size(); j++)
-            {
-                roadElement el = RoadList[j];
-
-                if (el.junction != succId)
-                {
-                    continue;
-                }
-                if (el.succId == roadid && *el.succCP != *startString)
-                {
-                    node curNode;
-                    curNode.id = el.id;
-                    curNode.contactPoint = startString;
-                    nodeList.push_back(curNode);
-                }
-                else if (el.predId == roadid && *el.predCP != *startString)
-                {
-                    node curNode;
-                    curNode.id = el.id;
-                    curNode.contactPoint = startString;
-                    nodeList.push_back(curNode);
-                }
-            }
-        }
-        RoadList[i].nodes = nodeList;
+      roadGeometry geometry;
+      pGeometry->QueryFloatAttribute("hdg",&geometry.hdg);
+      pGeometry->QueryFloatAttribute("length",&geometry.length);
+      pGeometry->QueryFloatAttribute("s",&geometry.s);
+      pGeometry->QueryFloatAttribute("x",&geometry.x);
+      pGeometry->QueryFloatAttribute("y",&geometry.y);
+      XMLElement *pParamPoly = pGeometry->FirstChildElement("paramPoly3");
+      //Loop for all available polynomial
+      while(pParamPoly != NULL)
+      {
+        pParamPoly->QueryFloatAttribute("aU",&geometry.aU);
+        pParamPoly->QueryFloatAttribute("aV",&geometry.aV);
+        pParamPoly->QueryFloatAttribute("bU",&geometry.bU);
+        pParamPoly->QueryFloatAttribute("bV",&geometry.bV);
+        pParamPoly->QueryFloatAttribute("cU",&geometry.cU);
+        pParamPoly->QueryFloatAttribute("cV",&geometry.cV);
+        pParamPoly->QueryFloatAttribute("dU",&geometry.dU);
+        pParamPoly->QueryFloatAttribute("dV",&geometry.dV);
+        curRoadElement.geometry.push_back(geometry);
+        pParamPoly = pParamPoly->NextSiblingElement("paramPoly3");
+      }
+      pGeometry = pGeometry->NextSiblingElement("geometry");
     }
-    return;
+    //Loop for all available elevationProfile
+    XMLElement *pElevation = pRoad->FirstChildElement("elevationProfile")->FirstChildElement("elevation");
+    while(pElevation != NULL)
+    {
+      polynomial elevation;
+      pElevation->QueryFloatAttribute("s",&elevation.s);
+      pElevation->QueryFloatAttribute("a",&elevation.a);
+      pElevation->QueryFloatAttribute("b",&elevation.b);
+      pElevation->QueryFloatAttribute("c",&elevation.c);
+      pElevation->QueryFloatAttribute("d",&elevation.d);
+      curRoadElement.elevation.push_back(elevation);
+      pElevation = pElevation->NextSiblingElement("elevation");
+    }
+    //Loop for all available lane offset
+    XMLElement *pLaneOffset = pRoad->FirstChildElement("lanes")->FirstChildElement("laneOffset");
+    while(pLaneOffset != NULL)
+    {
+      polynomial laneOffset;
+      pLaneOffset->QueryFloatAttribute("s",&laneOffset.s);
+      pLaneOffset->QueryFloatAttribute("a",&laneOffset.a);
+      pLaneOffset->QueryFloatAttribute("b",&laneOffset.b);
+      pLaneOffset->QueryFloatAttribute("c",&laneOffset.c);
+      pLaneOffset->QueryFloatAttribute("d",&laneOffset.d);
+      curRoadElement.laneOffset.push_back(laneOffset);
+      pLaneOffset = pLaneOffset->NextSiblingElement("laneOffset");
+    }
+
+    //Loop for all available lane section
+    XMLElement *pLaneSection = pRoad->FirstChildElement("lanes")->FirstChildElement("laneSection");
+    while(pLaneSection != NULL)
+    {
+      //Load left lane
+      XMLElement *pLeft = pLaneSection->FirstChildElement("left");
+      if(pLeft!=NULL)
+      {
+        XMLElement *pLeftLane = pLeft->FirstChildElement("lane");
+        //Loop for all available lanes
+        while(pLeftLane != NULL)
+        {
+          lane leftLane;
+          pLeftLane->QueryIntAttribute("id",&leftLane.id);
+          leftLane.level=pLeftLane->Attribute("level");
+          leftLane.type=pLeftLane->Attribute("type");
+          XMLElement *pLaneWidth = pLeftLane->FirstChildElement("width");
+          //Loop for all available lane width
+          while(pLaneWidth != NULL)
+          {
+            polynomial poly;
+            pLaneWidth->QueryFloatAttribute("sOffset",&poly.s);
+            pLaneWidth->QueryFloatAttribute("a",&poly.a);
+            pLaneWidth->QueryFloatAttribute("b",&poly.b);
+            pLaneWidth->QueryFloatAttribute("c",&poly.c);
+            pLaneWidth->QueryFloatAttribute("d",&poly.d);
+            leftLane.width.push_back(poly);
+            pLaneWidth = pLaneWidth->NextSiblingElement("width");
+          }
+          curRoadElement.leftLane.push_back(leftLane);
+          pLeftLane = pLeftLane->NextSiblingElement("lane");
+        }
+      }
+      //Load Center lane
+      XMLElement *pCenter = pLaneSection->FirstChildElement("center");
+      if(pCenter!=NULL)
+      {
+        //Loop for all available lane center
+        XMLElement *pCenterLane = pCenter->FirstChildElement("lane");
+        while(pCenterLane != NULL)
+        {
+          lane centerLane;
+          pCenterLane->QueryIntAttribute("id",&centerLane.id);
+          centerLane.level=pCenterLane->Attribute("level");
+          centerLane.type=pCenterLane->Attribute("type");
+          curRoadElement.centerLane.push_back(centerLane);
+          pCenterLane = pCenterLane->NextSiblingElement("lane");
+        }
+      }
+      //Load Right lane
+      XMLElement *pRight = pLaneSection->FirstChildElement("right");
+      //Check if there is a left lane
+      if(pRight!=NULL)
+      {
+        //Loop for all available right lane
+        XMLElement *pRightLane = pRight->FirstChildElement("lane");
+        while(pRightLane != NULL)
+        {
+          lane rightLane;
+          pRightLane->QueryIntAttribute("id",&rightLane.id);
+          rightLane.level=pRightLane->Attribute("level");
+          rightLane.type=pRightLane->Attribute("type");
+          XMLElement *pLaneWidth = pRightLane->FirstChildElement("width");
+          //Loop for all available lane width
+          while(pLaneWidth != NULL)
+          {
+            polynomial poly;
+            pLaneWidth->QueryFloatAttribute("sOffset",&poly.s);
+            pLaneWidth->QueryFloatAttribute("a",&poly.a);
+            pLaneWidth->QueryFloatAttribute("b",&poly.b);
+            pLaneWidth->QueryFloatAttribute("c",&poly.c);
+            pLaneWidth->QueryFloatAttribute("d",&poly.d);
+            rightLane.width.push_back(poly);
+            pLaneWidth = pLaneWidth->NextSiblingElement("width");
+          }
+          curRoadElement.rightLane.push_back(rightLane);
+          pRightLane = pRightLane->NextSiblingElement("lane");
+        }
+      }
+      pLaneSection = pLaneSection->NextSiblingElement("laneSection");
+    }
+    curRoadElement.cost = 99999999999;
+    curRoadElement.nextRoad = -1;
+    curRoadElement.altitude = Altitude;
+    curRoadElement.scale = Scale;
+    curRoadElement.laneSplit = 0.0;
+    curRoadElement.pointId = roadId *10000;
+    roadId++;
+    RoadListOrg.push_back(curRoadElement);
+    pRoad = pRoad->NextSiblingElement("road");
+  }
+  RoadList = RoadListOrg;
+  //Store map pose and points
+  MapPoints = GetRoadPoints(RoadList,num);
+  MapElList = GetMapPoints(RoadList,num);
+  return;
+}
+
+std::vector<std::vector<double> > openDriveReader::GetRoadVector(std::vector<roadElement> el,int num,RoadPointType rType,LaneType lane)
+{
+  //Get Road points from roadElement vector
+  std::vector<Pose3D> vect=GetRoadPoints(el,num,rType,lane);
+  //Convert to double
+  std::vector<std::vector<double> > mapDouble;
+  for (unsigned int i = 0; i < vect.size(); i++)
+  {
+    Pose3D pose = vect[i];
+    //To Euler angles
+    Euler e = toEulerianAngle(pose.q);
+    std::vector<double> p;
+    p.push_back(pose.p.x);
+    p.push_back(pose.p.y);
+    p.push_back(pose.p.z);
+    p.push_back(e.pitch);
+    p.push_back(e.roll);
+    p.push_back(e.yaw);
+    mapDouble.push_back(p);
+  }
+  return mapDouble;
+}
+
+std::vector<Pose3D> openDriveReader::GetRoadPoints(std::vector<roadElement> el,int num,RoadPointType rType,LaneType lane)
+{
+  std::vector<Pose3D> vect;
+  //Load road points road Element one by one
+  for (int j=0;j<(int)el.size();j++)
+  {
+    std::vector<Pose3D> points3d= GetRoadPoints(el[j],num,rType,lane);
+    vect.insert(vect.end(),points3d.begin(),points3d.end());
+  }
+  return vect;
+}
+
+std::vector<Pose3D> openDriveReader::GetRoadPoints(roadElement el,int num,RoadPointType rType,LaneType lane)
+{
+  std::vector<Pose3D> lanePoints;
+  std::vector<Pose3D> listTemp;
+  std::vector<float> s,laneOffset;
+  Pose3D pose;
+  float dist = 0.0;
+  //Find cumulative distance and points for center lane
+  for (unsigned int j = 0; j < el.geometry.size(); j++)
+  {
+    roadGeometry geo = el.geometry[j];
+    float curHdg = geo.hdg;
+    dist+=0.0001;
+    for (int i = 0; i <num; i++)
+    {
+      float ds = (float)(i+0.01)/(num-1+0.02);
+      //Find points from parametric polynomial in local coordinate
+      float u = CubicPoly(geo.aU,geo.bU,geo.cU,geo.dU,ds);
+      float v = CubicPoly(geo.aV,geo.bV,geo.cV,geo.dV,ds);
+      //Rotate to global coordinate
+      float newx = RotateCCWX(u,v,geo.hdg);
+      float newy = RotateCCWY(u,v,geo.hdg);
+      //Shift to global coordinate
+      pose.p.x = (geo.x + newx);
+      pose.p.y = (geo.y + newy);
+      //Get the heading change from last point to current point
+      if(i!=0)
+      {
+        float x0 = listTemp[j*num+i-1].p.x, y0 = listTemp[j*num+i-1].p.y;
+        float x1 = pose.p.x, y1 = pose.p.y;
+        dist += sqrt( (y1-y0)*(y1-y0) + (x1-x0)*(x1-x0) );
+        curHdg = atan2(y1-y0,x1-x0);
+      }
+      pose.p.z = el.altitude+getPolynomialValue(el.elevation,dist);
+      pose.q = toQuaternion(0,0,curHdg);
+      //Store line
+      listTemp.push_back(pose);
+      s.push_back(dist);
+    }
+  }
+  //Update pose of center lane
+  listTemp = UpdatePoseHeading(listTemp);
+  //Get lane offset from center lane
+  for (unsigned int j = 0; j < listTemp.size(); j++)
+  {
+    laneOffset.push_back(getPolynomialValue(el.laneOffset,s[j]));
+  }
+  //Get the lane closest to the center lane first
+  std::sort(el.leftLane.begin(),el.leftLane.end());
+  //Store previous lane width for cumulative width
+  std::vector<float> previousLaneWidth (listTemp.size(),0.0);
+  for (unsigned int i = 0; i < el.leftLane.size(); i++)
+  {
+    std::vector<Pose3D> laneP;
+    //Get actual lane point from center point
+    for (unsigned int j = 0; j < listTemp.size(); j++)
+    {
+      float currentWidth = getPolynomialValue(el.leftLane[i].width,s[j]);
+      //Shifting factor for first lane
+      float factor= 0.5;
+      //Do not shift when extracting border point
+      if(rType == BORDER_POINTS)
+      {
+        factor = 0;
+      }
+      //Store the lane width for first lane
+      if(i==0)
+      {
+        previousLaneWidth[j] =laneOffset[j]-currentWidth*factor;
+      }
+      //Find the cumulative road width
+      float widthj= previousLaneWidth[j]+currentWidth;
+      //Store the current width
+      previousLaneWidth[j] =widthj;
+      //Calculate actual point from center(Reference) point
+      Pose3D reference = listTemp[j];
+      Pose3D actual = reference;
+      Euler e =toEulerianAngle(reference.q);
+      float hdg = e.yaw;
+      //Do not shift when extracting center points
+      if(SingleLane || rType == CENTER_POINTS)
+      {
+        widthj=laneOffset[j];
+      }
+      actual.p.x = (reference.p.x+RotateCCWX(0,widthj,hdg)) *el.scale;
+      actual.p.y = (reference.p.y+RotateCCWY(0,widthj,hdg)) *el.scale;
+      actual.p.z *= el.scale;
+      laneP.push_back(actual);
+    }
+    //Update the heading of lane points
+    laneP = UpdatePoseHeading(laneP);
+    //Store the lane points
+    if(lane != RIGHT_LANE)
+    {
+      lanePoints.insert(lanePoints.end(),laneP.begin(),laneP.end());
+    }
+  }
+  //Get the lane closest to the center lane first
+  std::sort(el.rightLane.begin(),el.rightLane.end());
+  //Store previous lane width for cumulative width
+  std::fill(previousLaneWidth.begin(), previousLaneWidth.end(), 0.0);
+  for (unsigned int i = 0; i < el.rightLane.size(); i++)
+  {
+    std::vector<Pose3D> laneP;
+    //Get actual lane point from center point
+    for (unsigned int j = 0; j < listTemp.size(); j++)
+    {
+      float currentWidth = getPolynomialValue(el.rightLane[i].width,s[j]);
+      //Shifting factor for first lane
+      float factor = 0.5;
+      //Do not shift when extracting border point
+      if(rType == BORDER_POINTS)
+      {
+        factor = 0;
+      }
+      //Store the lane width for first lane
+      if(i==0)
+      {
+        previousLaneWidth[j] =laneOffset[j]+currentWidth*factor;
+      }
+      //Find the cumulative road width
+      float widthj= previousLaneWidth[j]-currentWidth;
+      previousLaneWidth[j] = widthj;
+      //Calculate actual point from center(Reference) point
+      Pose3D reference = listTemp[j];
+      Pose3D actual = reference;
+      Euler e =toEulerianAngle(reference.q);
+      float hdg = e.yaw;
+      //Do not shift when extracting center points
+      if( SingleLane || rType == CENTER_POINTS)
+      {
+        widthj=laneOffset[j];
+      }
+      actual.p.x = (reference.p.x+RotateCCWX(0,widthj,hdg)) *el.scale;
+      actual.p.y = (reference.p.y+RotateCCWY(0,widthj,hdg)) *el.scale;
+      actual.p.z *= el.scale;
+      laneP.push_back(actual);
+    }
+    //Update the heading of lane points
+    laneP = UpdatePoseHeading(laneP);
+    //Store the lane points
+    if(lane !=LEFT_LANE)
+    {
+      lanePoints.insert(lanePoints.end(),laneP.begin(),laneP.end());
+    }
+  }
+  return lanePoints;
 }
 
 
-
-Quaternion openDriveReader::toQuaternion(double pitch, double roll, double yaw)
+std::vector<MapElement> openDriveReader::GetMapPoints(std::vector<roadElement> roadlist,int num)
 {
-    Quaternion q;
-    double t0 = std::cos(yaw * 0.5);
-    double t1 = std::sin(yaw * 0.5);
-    double t2 = std::cos(roll * 0.5);
-    double t3 = std::sin(roll * 0.5);
-    double t4 = std::cos(pitch * 0.5);
-    double t5 = std::sin(pitch * 0.5);
-
-    q.w = t0 * t2 * t4 + t1 * t3 * t5;
-    q.x = t0 * t3 * t4 - t1 * t2 * t5;
-    q.y = t0 * t2 * t5 + t1 * t3 * t4;
-    q.z = t1 * t2 * t4 - t0 * t3 * t5;
-    return q;
-}
-
-
-Euler openDriveReader::toEulerianAngle(Quaternion q)
-{
-    Euler a;
-    double ysqr = q.y * q.y;
-
-    // roll (x-axis rotation)
-    double t0 = +2.0 * (q.w * q.x + q.y * q.z);
-    double t1 = +1.0 - 2.0 * (q.x * q.x + ysqr);
-    a.roll = std::atan2(t0, t1);
-
-    // pitch (y-axis rotation)
-    double t2 = +2.0 * (q.w * q.y - q.z * q.x);
-    t2 = ((t2 > 1.0) ? 1.0 : t2);
-    t2 = ((t2 < -1.0) ? -1.0 : t2);
-    a.pitch = std::asin(t2);
-
-    // yaw (z-axis rotation)
-    double t3 = +2.0 * (q.w * q.z + q.x * q.y);
-    double t4 = +1.0 - 2.0 * (ysqr + q.z * q.z);
-    a.yaw = std::atan2(t3, t4);
-    return a;
-}
-
-
-float openDriveReader::CubicPoly(float a1, float b1, float c1, float d1, float ds)
-{
-
-    return (a1 + b1*ds + c1*pow(ds, 2.0) + d1*pow(ds, 3.0));
-}
-
-float openDriveReader::RotateCCWX(float u2, float v2, float hdg2)
-{
-    return (u2*cos(hdg2) - v2*sin(hdg2));
-}
-
-float openDriveReader::RotateCCWY(float u1, float v1, float hdg1)
-{
-    return (u1*sin(hdg1) + v1*cos(hdg1));
-}
-
-float openDriveReader::EuclideanDistance(Pose3D pose1, Pose3D pose2)
-{
-    float x0 = pose1.p.x;
-    float y0 = pose1.p.y;
-    float z0 = pose1.p.z;
-    float x1 = pose2.p.x;
-    float y1 = pose2.p.y;
-    float z1 = pose2.p.z;
-    float d = sqrt((x0 - x1)*(x0 - x1) + (y0 - y1)*(y0 - y1) + (z0 - z1)*(z0 - z1));
-    return d;
+	std::vector<MapElement> vect;
+	int numRoads = roadlist.size();
+  for (int j=0;j<numRoads;j++)
+  {
+		roadElement el = roadlist[j];
+    int laneN = 0;
+    std::vector<Pose3D> roadPoints = GetRoadPoints(el,num,DRIVING_POINTS,LEFT_LANE);
+    #ifdef DEBUG
+    std::cout << "Left lane Id: "<<el.id<<'\n';
+    #endif
+		for (unsigned int i = 0; i < roadPoints.size(); i++)
+		{
+      int lanePointId = (i)%num;
+      int laneNumber = (i)/num;
+			MapElement mapEl;
+      mapEl.id = el.pointId+i+laneNumber*num;
+      #ifdef DEBUG
+      std::cout << "Map point id: "<<mapEl.id<< '\n';
+      #endif
+	    mapEl.poseV.push_back(roadPoints[i].p.x);
+      mapEl.poseV.push_back(roadPoints[i].p.y);
+      mapEl.poseV.push_back(roadPoints[i].p.z);
+      Euler e = toEulerianAngle(roadPoints[i].q);
+      e.yaw = normalizeAngle(e.yaw-M_PI,0);
+      mapEl.poseV.push_back(e.pitch);
+      mapEl.poseV.push_back(e.roll);
+      mapEl.poseV.push_back(e.yaw);
+			if(lanePointId==0)
+			{
+        for (int k = 0; k < numRoads; k++)
+        {
+          roadElement nextEl = roadlist[k];
+          if(el.predId == nextEl.id || el.predId ==nextEl.junction)
+          {
+            if(nextEl.succId == el.id || nextEl.succId ==el.junction ||
+               nextEl.predId == el.id || nextEl.predId ==el.junction  )
+            {
+              int nLeftLanes = nextEl.leftLane.size();
+              int nRightLanes = nextEl.rightLane.size();
+              #ifdef DEBUG
+              std::cout << "checking left lane " <<nextEl.id<< '\n';
+              #endif
+              const char *endString= "end",*startString= "start";
+              if( (*el.predCP==*endString && nextEl.junction==-1) ||
+                  (nextEl.succId==el.id && nextEl.junction!=-1 && nLeftLanes>0))
+              {
+                for (int m = 0; m < nLeftLanes; m++)
+                {
+                  int nextPoint = nextEl.pointId+num*m+num-1;
+                  mapEl.nodes.push_back(nextPoint);
+                  #ifdef DEBUG
+                  std::cout << "Next id: "<<nextPoint<< '\n';
+                  #endif
+                }
+              }
+              if( (*el.predCP==*startString && nextEl.junction==-1) ||
+                 (nextEl.predId==el.id && nextEl.junction!=-1 && nRightLanes>0) )
+              {
+                for (int m = nLeftLanes; m < nLeftLanes+nRightLanes; m++)
+                {
+                  int nextPoint = nextEl.pointId+num*m;
+                  mapEl.nodes.push_back(nextPoint);
+                  #ifdef DEBUG
+                  std::cout << "Next id: "<<nextPoint<< '\n';
+                  #endif
+                }
+              }
+            }
+          }
+        }
+			}
+			else
+			{
+				mapEl.nodes.push_back(mapEl.id-1);
+        #ifdef DEBUG
+        std::cout << "Next id: "<<mapEl.id-1<< '\n';
+        #endif
+			}
+	    vect.push_back(mapEl);
+	  }
+    laneN = roadPoints.size()/num;
+    roadPoints = GetRoadPoints(el,num,DRIVING_POINTS,RIGHT_LANE);
+    #ifdef DEBUG
+    std::cout << "Right Lane: "<<el.id<<'\n';
+    #endif
+    for (unsigned int i = 0; i < roadPoints.size(); i++)
+    {
+      int lanePointId = i%num;
+      int laneNumber = laneN+i/num;
+      //std::cout << "Lane Id: "<<lanePointId<<" laneNumber: "<<laneNumber<< '\n';
+      MapElement mapEl;
+      mapEl.id = el.pointId+i+laneNumber*num;
+      #ifdef DEBUG
+      std::cout << "Map point id: "<<mapEl.id<< '\n';
+      #endif
+      mapEl.poseV.push_back(roadPoints[i].p.x);
+      mapEl.poseV.push_back(roadPoints[i].p.y);
+      mapEl.poseV.push_back(roadPoints[i].p.z);
+      Euler e = toEulerianAngle(roadPoints[i].q);
+      mapEl.poseV.push_back(e.pitch);
+      mapEl.poseV.push_back(e.roll);
+      mapEl.poseV.push_back(e.yaw);
+	    if(lanePointId==(num-1))
+      {
+        for (int k = 0; k < numRoads; k++)
+        {
+          roadElement nextEl = roadlist[k];
+          if(el.succId == nextEl.id || el.succId ==nextEl.junction)
+          {
+            if(nextEl.succId == el.id || nextEl.succId ==el.junction ||
+              nextEl.predId == el.id || nextEl.predId ==el.junction  )
+            {
+              int nLeftLanes = nextEl.leftLane.size();
+              int nRightLanes = nextEl.rightLane.size();
+              #ifdef DEBUG
+              std::cout << "checking right lane " <<nextEl.id<< '\n';
+              #endif
+              const char *endString= "end",*startString= "start";
+              if((*el.succCP==*endString && nextEl.junction==-1) ||
+              (nextEl.succId==el.id && nextEl.junction!=-1 && nLeftLanes>0) )
+              {
+                for (int m = 0; m < nLeftLanes; m++)
+                {
+                  int nextPoint = nextEl.pointId+num*m+num-1;
+                  mapEl.nodes.push_back(nextPoint);
+                  #ifdef DEBUG
+                  std::cout << "Next id: "<<nextPoint<< '\n';
+                  #endif
+                }
+              }
+              if((*el.succCP==*startString && nextEl.junction==-1) ||
+              (nextEl.predId==el.id && nextEl.junction!=-1 && nRightLanes>0) )
+              {
+                for (int m = nLeftLanes; m < nLeftLanes+nRightLanes; m++)
+                {
+                  int nextPoint = nextEl.pointId+num*m;
+                  mapEl.nodes.push_back(nextPoint);
+                  #ifdef DEBUG
+                  std::cout << "Next id: "<<nextPoint<< '\n';
+                  #endif
+                }
+              }
+            }
+          }
+        }
+      }
+      else
+      {
+        mapEl.nodes.push_back(mapEl.id+1);
+        #ifdef DEBUG
+        std::cout << "Next id: "<<mapEl.id+1<< '\n';
+        #endif
+      }
+      vect.push_back(mapEl);
+    }
+  }
+  return vect;
 }
 
 std::vector<Pose3D> openDriveReader::UpdatePoseHeading(std::vector<Pose3D> path)
 {
-    std::vector<Pose3D> list;
-    Pose3D pose;
-    int pathLength = path.size();
-    float h = 0.0;
-    for (int i = 0; i < pathLength; i++)
+  std::vector<Pose3D> list;
+  Pose3D pose;
+  int pathLength = path.size();
+  float pitch=0.0,roll=0.0,yaw=0.0;
+  //Calculate pitch, roll, yaw from previous points
+  for (int i = 0; i < pathLength; i++)
+  {
+    if(i+1!=pathLength)
     {
-        if (i + 1 != pathLength)
-        {
-            float x0 = path[i].p.x, y0 = path[i].p.y;
-            float x1 = path[i + 1].p.x, y1 = path[i + 1].p.y;
-            h = atan2(y1 - y0, x1 - x0);
-        }
-        pose = path[i];
-        pose.q = toQuaternion(0, 0, h);
-        list.push_back(pose);
+      float x0 = path[i].p.x, y0 = path[i].p.y,z0 = path[i].p.z;
+      float x1 = path[i+1].p.x, y1 = path[i+1].p.y,z1 = path[i+1].p.z;
+      pitch = atan2( z1-z0 , x1-x0);
+      pitch = 0;
+      roll = atan2( z1-z0 , y1-y0);
+      roll = 0;
+      yaw = atan2( y1-y0 , x1-x0);
     }
-    return list;
+    pose = path[i];
+    pose.q = toQuaternion(pitch,roll,yaw);
+    list.push_back(pose);
+  }
+  return list;
 }
 
-
-std::vector<Pose3D> openDriveReader::GetRoadPoints(roadElement el, int num)
+float openDriveReader::getPolynomialValue(std::vector<polynomial> prof,float ds)
 {
-    std::vector<Pose3D> list;
-    Pose3D pose;
-    //Finding heading change for lane shifting, Does not affect anything if there is no lane shift
-    float curHeading = 0.0, headingChange = 0.0, lastHeading = 0.0;
-    for (int i = 0; i < num; i++)
+  for (unsigned int i = 0; i < prof.size(); i++)
+  {
+    if(i+1<prof.size())
     {
-        float ds = (float)(i + 0.1) / (num);
-        roadGeometry geo = el.geometry[0];
-        //Find points from parametric polynomial in local coordinate
-        float tempx = CubicPoly(geo.aU, geo.bU, geo.cU, geo.dU, ds);
-        float tempy = CubicPoly(geo.aV, geo.bV, geo.cV, geo.dV, ds);
-        //Split to lane point, use heading change to rotate lane shift
-        float tempLanex = RotateCCWX(0, el.laneSplit / el.scale, headingChange);
-        float tempLaney = RotateCCWY(0, el.laneSplit / el.scale, headingChange);
-        //Rotate to global coordinate
-        float newx = RotateCCWX(tempx + tempLanex, tempy + tempLaney, geo.hdg);
-        float newy = RotateCCWY(tempx + tempLanex, tempy + tempLaney, geo.hdg);
-        //Shift to global coordinate
-        pose.p.x = (geo.x + newx) * el.scale;
-        pose.p.y = (geo.y + newy) * el.scale;
-        pose.p.z = el.altitude;
-        pose.q = toQuaternion(0, 0, geo.hdg);
-        //Store line
-        list.push_back(pose);
-        //Get the heading change from last point to current point
-        if (i != 0)
-        {
-            float x0 = list[i - 1].p.x, y0 = list[i - 1].p.y;
-            float x1 = pose.p.x, y1 = pose.p.y;
-            lastHeading = curHeading;
-            curHeading = atan2(y1 - y0, x1 - x0);;
-            headingChange += normalizeAngle(curHeading - lastHeading, 0);
-            headingChange = normalizeAngle(headingChange, 0);
-        }
-        else
-        {
-            curHeading = geo.hdg;
-        }
+      if(ds>prof[i].s && ds<prof[i+1].s)
+      {
+        return CubicPoly(prof[i].a,prof[i].b,prof[i].c,prof[i].d,ds-prof[i].s);
+      }
     }
-    UpdatePoseHeading(list);
-    return list;
-}
-
-
-
-std::vector<Pose3D> openDriveReader::GetRoadPoints(std::vector<roadElement> el, int num)
-{
-    std::vector<Pose3D> vect;
-    for (int j = 0; j < (int)el.size(); j++)
+    else
     {
-        std::vector<Pose3D> points3d = GetRoadPoints(el[j], num);
-        for (int i = 0; i < (int)points3d.size(); i++) {
-            vect.push_back(points3d[i]);
-        }
+      return CubicPoly(prof[i].a,prof[i].b,prof[i].c,prof[i].d,ds-prof[i].s);
     }
-    return vect;
+  }
+  return 0.0;
 }
 
-std::vector<MapElement> openDriveReader::GetMapPoints(std::vector<roadElement> roadlist, int num)
+float openDriveReader::CubicPoly(float a1,float b1,float c1, float d1, float ds)
 {
-    std::vector<MapElement> vect;
-    int numRoads = roadlist.size();
-    for (int j = 0; j < numRoads; j++)
-    {
-        roadElement el = roadlist[j];
-        for (int i = 0; i < num; i++)
-        {
-            MapElement mapEl;
-            float ds = (float)(i + 1) / (num + 1);
-            roadGeometry geo = el.geometry[0];
-            float tempx = CubicPoly(geo.aU, geo.bU, geo.cU, geo.dU, ds);
-            float tempy = CubicPoly(geo.aV, geo.bV, geo.cV, geo.dV, ds);
-            float newx = RotateCCWX(tempx, tempy, geo.hdg);
-            float newy = RotateCCWY(tempx, tempy, geo.hdg);
-            mapEl.pose.p.x = (geo.x + newx) * el.scale;
-            mapEl.pose.p.y = (geo.y + newy) * el.scale;
-            mapEl.pose.p.z = el.altitude;
-            mapEl.pose.q = toQuaternion(0, 0, geo.hdg);
-            mapEl.roadId = el.id;
-            if (i == 0)
-            {
-                mapEl.nodes.push_back(i + 1 + j*num);
-                if (el.predId == -1)
-                {
-                    break;
-                }
-                for (int k = 0; k < numRoads; k++)
-                {
-                    roadElement preEl = roadlist[k];
-                    if (el.junction != -1 && el.predId == preEl.id)
-                    {
-                        if (preEl.succId == el.junction)
-                        {
-                            mapEl.nodes.push_back(k*num + num - 1);
-                        }
-                        else if (preEl.predId == el.junction)
-                        {
-                            mapEl.nodes.push_back(k*num);
-                        }
-                    }
-                    else if (el.predId == preEl.id || el.predId == preEl.junction)
-                    {
-                        if (preEl.succId == el.id)
-                        {
-                            mapEl.nodes.push_back(k*num + num - 1);
-                        }
-                        else if (preEl.predId == el.id)
-                        {
-                            mapEl.nodes.push_back(k*num);
-                        }
-                    }
-                }
-            }
-            else if (i + 1 == num)
-            {
-                mapEl.nodes.push_back(i - 1 + j*num);
-                if (el.succId == -1)
-                {
-                    break;
-                }
-                for (int k = 0; k < numRoads; k++)
-                {
-                    roadElement preEl = roadlist[k];
-                    if (el.junction != -1 && el.succId == preEl.id)
-                    {
-                        if (preEl.succId == el.junction)
-                        {
-                            mapEl.nodes.push_back(k*num + num - 1);
-                        }
-                        else if (preEl.predId == el.junction)
-                        {
-                            mapEl.nodes.push_back(k*num);
-                        }
-                    }
-                    else if (el.succId == preEl.id || el.succId == preEl.junction)
-                    {
-                        if (preEl.succId == el.id)
-                        {
-                            mapEl.nodes.push_back(k*num + num - 1);
-                        }
-                        else if (preEl.predId == el.id)
-                        {
-                            mapEl.nodes.push_back(k*num);
-                        }
-                    }
-                }
-            }
-            else
-            {
-                mapEl.nodes.push_back(i - 1 + j*num);
-                mapEl.nodes.push_back(i + 1 + j*num);
-            }
-            vect.push_back(mapEl);
-        }
-    }
-    return vect;
+
+    return (a1+b1*ds+c1*pow(ds,2.0)+d1*pow(ds,3.0));
 }
 
-
-
-/*! calculates normalized angle */
-tFloat32 openDriveReader::normalizeAngle(tFloat32 alpha, tFloat32 center)
+float openDriveReader::EuclideanDistance(Pose3D pose1,Pose3D pose2)
 {
-    return mod(alpha - center + M_PI, 2.0*M_PI) + center - M_PI;
+  float x0 = pose1.p.x;
+  float y0 = pose1.p.y;
+  float z0 = pose1.p.z;
+  float x1 = pose2.p.x;
+  float y1 = pose2.p.y;
+  float z1 = pose2.p.z;
+  float d  = sqrt( (x0-x1)*(x0-x1) + (y0-y1)*(y0-y1) + (z0-z1)*(z0-z1) );
+  return d;
 }
 
-/*! calculates modulus after division */
-tFloat32 openDriveReader::mod(tFloat32 x, tFloat32 y)
+float openDriveReader::normalizeAngle(float alpha, float center)
 {
-    tFloat32 r;
-    tFloat32 b_x;
+    return mod(alpha-center+M_PI, 2.0*M_PI) + center-M_PI;
+}
+
+float openDriveReader::mod(float x, float y)
+{
+    float r;
+    float b_x;
     if (y == floor(y))
     {
         return x - floor(x / y) * y;
@@ -615,4 +732,69 @@ tFloat32 openDriveReader::mod(tFloat32 x, tFloat32 y)
             return (r - floor(r)) * y;
         }
     }
+}
+
+
+Quaternion openDriveReader::toQuaternion(double pitch, double roll, double yaw)
+{
+	Quaternion q;
+	double t0 = cos(yaw * 0.5);
+	double t1 = sin(yaw * 0.5);
+	double t2 = cos(roll * 0.5);
+	double t3 = sin(roll * 0.5);
+	double t4 = cos(pitch * 0.5);
+	double t5 = sin(pitch * 0.5);
+
+	q.w = t0 * t2 * t4 + t1 * t3 * t5;
+	q.x = t0 * t3 * t4 - t1 * t2 * t5;
+	q.y = t0 * t2 * t5 + t1 * t3 * t4;
+	q.z = t1 * t2 * t4 - t0 * t3 * t5;
+	return q;
+}
+
+
+Euler openDriveReader::toEulerianAngle(Quaternion q)
+{
+	Euler a;
+	double ysqr = q.y * q.y;
+
+	// roll (x-axis rotation)
+	double t0 = +2.0 * (q.w * q.x + q.y * q.z);
+	double t1 = +1.0 - 2.0 * (q.x * q.x + ysqr);
+	a.roll = atan2(t0, t1);
+
+	// pitch (y-axis rotation)
+	double t2 = +2.0 * (q.w * q.y - q.z * q.x);
+	t2 = ((t2 > 1.0) ? 1.0 : t2);
+	t2 = ((t2 < -1.0) ? -1.0 : t2);
+	a.pitch = asin(t2);
+
+	// yaw (z-axis rotation)
+	double t3 = +2.0 * (q.w * q.z + q.x * q.y);
+	double t4 = +1.0 - 2.0 * (ysqr + q.z * q.z);
+	a.yaw = atan2(t3, t4);
+	return a;
+}
+
+
+
+
+float openDriveReader::RotateCCWX(float u2,float v2, float hdg2)
+{
+    return (u2*cos(hdg2)-v2*sin(hdg2));
+}
+
+float openDriveReader::RotateCCWY(float u1,float v1, float hdg1)
+{
+    return (u1*sin(hdg1)+v1*cos(hdg1));
+}
+
+float openDriveReader::RotateCWX(float u2,float v2, float hdg2)
+{
+    return (u2*cos(hdg2)+v2*sin(hdg2));
+}
+
+float openDriveReader::RotateCWY(float u1,float v1, float hdg1)
+{
+    return (-u1*sin(hdg1)+v1*cos(hdg1));
 }
