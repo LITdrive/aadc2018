@@ -48,14 +48,14 @@ aadc::jury::maneuver LITD_Map::getCurrentManeuver() {
 }
 
 double LITD_Map::getSpeedAdvisory() {
-    if(map_index_current<0 || map_index_current>=(int64_t)map_elements.size()) {
+    if(map_index_current>=0 && map_index_current<(int64_t)map_elements.size()) {
         return map_elements[map_index_current]->getSpeedAdvisory();
     }
     return 0.0;
 }
 
 double LITD_Map::getSpeedLimit() {
-    if(map_index_current<0 || map_index_current>=(int64_t)map_elements.size()) {
+    if(map_index_current>=0 && map_index_current<(int64_t)map_elements.size()) {
         return map_elements[map_index_current]->getSpeedLimit();
     }
     return 0.0;
