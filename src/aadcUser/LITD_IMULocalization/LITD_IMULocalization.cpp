@@ -62,7 +62,7 @@ THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS AS IS AND ANY EXPRESS OR I
 ADTF_TRIGGER_FUNCTION_FILTER_PLUGIN(CID_CMARKERPOS_DATA_TRIGGERED_FILTER,
     "LITD_IMULocalization",
     cLITD_IMULocalization,
-    adtf::filter::pin_trigger({ "imu" , "road_sign_map"}));
+    adtf::filter::pin_trigger({ "imu" }));
 
 
 
@@ -74,7 +74,10 @@ cLITD_IMULocalization::cLITD_IMULocalization()
     RegisterPropertyVariable("Speed Scale", m_f32SpeedScale);
     RegisterPropertyVariable("Camera Offset::Lateral", m_f32CameraOffsetLat);
     RegisterPropertyVariable("Camera Offset::Longitudinal", m_f32CameraOffsetLon);
-    
+
+    RegisterPropertyVariable("x Startposition in m", m_f32XOffset);
+    RegisterPropertyVariable("y Startposition in m", m_f32YOffset); 
+    RegisterPropertyVariable("Heading Startposition in degree", m_f32HeadingOffset);
 
 
     //the imu struct
@@ -147,10 +150,6 @@ cLITD_IMULocalization::cLITD_IMULocalization()
     Register(m_oWriter, "position", pConstTypePositionData);
     //Reset Filter Covariances
     ResetFilter();
-    // initialize translation and rotation vectors
-    m_Tvec = Mat(3, 1, CV_32F, Scalar::all(0));
-    m_Rvec = Mat(3, 1, CV_32F, Scalar::all(0));
-
     // initialize other variables
     m_f32Speed = 0;
     m_f32YawRate = 0;
@@ -167,6 +166,12 @@ cLITD_IMULocalization::cLITD_IMULocalization()
 /*! implements the configure function to read ALL Properties */
 tResult cLITD_IMULocalization::Configure()
 {
+    LOG_INFO("Configure");
+    
+    m_state.at<double>(0) = m_f32XOffset;
+    m_state.at<double>(1) = m_f32YOffset;
+    m_state.at<double>(2) = m_f32HeadingOffset;
+
     RETURN_NOERROR;
 }
 
@@ -175,6 +180,7 @@ tResult cLITD_IMULocalization::Configure()
 /*! funtion will be executed each time a trigger occured */
 tResult cLITD_IMULocalization::Process(tTimeStamp tmTimeOfTrigger)
 {
+    LOG_INFO("Process");
     object_ptr<const ISample> pReadSample;
 
     //LOG_INFO(cString::Format("process: %lu", tmTimeOfTrigger).GetPtr());
@@ -230,6 +236,7 @@ tVoid cLITD_IMULocalization::ResetFilter()
 /*! calculates normalized angle difference */
 tFloat32 cLITD_IMULocalization::angleDiff(tFloat32 angle1, tFloat32 angle2)
 {
+    LOG_INFO("angleDiff");
     // normalization
     angle1 = normalizeAngle(angle1, static_cast<tFloat32>(M_PI));
     angle2 = normalizeAngle(angle2, static_cast<tFloat32>(M_PI));
@@ -241,12 +248,14 @@ tFloat32 cLITD_IMULocalization::angleDiff(tFloat32 angle1, tFloat32 angle2)
 /*! calculates normalized angle */
 tFloat32 cLITD_IMULocalization::normalizeAngle(tFloat32 alpha, tFloat32 center)
 {
+    LOG_INFO("normalizeAngle");
     return mod(alpha - center + static_cast<tFloat32>(M_PI), 2.0f*static_cast<tFloat32>(M_PI)) + center - static_cast<tFloat32>(M_PI);
 }
 
 /*! calculates modulus after division */
 tFloat32 cLITD_IMULocalization::mod(tFloat32 x, tFloat32 y)
 {
+    LOG_INFO("mod");
     tFloat32 r;
     tFloat32 b_x;
     if (y == floor(y))
@@ -320,13 +329,8 @@ tResult cLITD_IMULocalization::ProcessInerMeasUnitSample(tTimeStamp tmTimeOfTrig
 
     m_ui32ArduinoTimestamp = ui32ArduinoTimestamp;
 
-    //LOG_INFO(cString::Format("processInertial: %.6f", m_f32YawRate).GetPtr());
 
-    // filter not initialized
-    if (m_isInitialized == tFalse)
-    {
-        RETURN_NOERROR;
-    }
+    //LOG_INFO(cString::Format("processInertial: %.6f", m_f32YawRate).GetPtr());
 
     // update heading
     tFloat32 hk = static_cast<tFloat32>(m_state.at<double>(2) + (m_f32YawRate*static_cast<tFloat32>(DEG2RAD) + m_state.at<double>(3))*dt);

@@ -49,6 +49,11 @@ private:
     /*! distance to the rear axle */
     adtf::base::property_variable<tFloat32> m_f32CameraOffsetLon = 0.295f;
 
+    //Positioning offsets
+    adtf::base::property_variable<tFloat32> m_f32XOffset = 0.0f;
+    adtf::base::property_variable<tFloat32> m_f32YOffset = 0.0f;
+    adtf::base::property_variable<tFloat32> m_f32HeadingOffset = 0.0f;
+
 
 
     /*! Reader of an InPin speed. */
@@ -122,11 +127,6 @@ private:
     tInt16 m_i16ID;
     /*! Size of the 32 marker */
     tFloat32 m_f32MarkerSize;
-
-    /*! translation vector */
-    Mat m_Tvec;
-    /*! rotation vector */
-    Mat m_Rvec;
 
     /*! The ticks */
     tTimeStamp m_ticks;
