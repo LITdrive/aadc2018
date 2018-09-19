@@ -5,6 +5,7 @@
 #include "LITD_MapElement.h"
 #include "math_utilities.h"
 #include <vector>
+#include <iostream>
 
 #define PARKING_SPOT_WIDTH 0.45 // m
 #define PARKING_SPOT_DEPTH 0.85 // m
@@ -28,14 +29,14 @@ class LITD_MapElementParkingSpot : public LITD_MapElement
 public:
 	/* Contructor with parameters for the element-fence, the street coordinate and an boolean value (false=road is in x-direction, y stays constant, true=road in y-direction, x stays const.) */
 	
-	LITD_MapElementParkingSpot(double fence_x_min, double fence_x_max, double fence_y_min, double fence_y_max, double G_x, double G_y);
+	LITD_MapElementParkingSpot(double fence_x_min, double fence_x_max, double fence_y_min, double fence_y_max, double straight_cord, double G_x, double G_y);
 	virtual LITD_VirtualPoint getNormalPoint(LITD_VirtualPoint &point);
 	bool selectDriveLane(LITD_VirtualPoint & point);
+	void printParkingTrajectory();
+	void printPullOutLeftTrajectory();
 	virtual bool isInElement(LITD_VirtualPoint &point);
 	void calcParkingTrajectory();
 	void calcPullOutLeftTrajectory();
-	virtual void calcParkingTrajectory(LITD_VirtualPoint & point);
-	LITD_MapElementParkingSpot(double fence_x_min, double fence_x_max, double fence_y_min, double fence_y_max, double straight_cord, double G_x, double G_y);
 	virtual aadc::jury::maneuver selectDriveManeuver(aadc::jury::maneuver maneuver);
 	virtual double getSpeedAdvisory();
 	virtual double getSpeedLimit();

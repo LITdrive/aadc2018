@@ -154,7 +154,7 @@ LITD_VirtualPoint LITD_MapElementParkingSpot::getNormalPoint(LITD_VirtualPoint &
 	double y = point.y;
 	double distance;
 	double min_distance = DBL_MAX;
-	int min_distance_index = 0;
+	size_t min_distance_index = 0;
 	double P_min_distance_x;
 	double P_min_distance_y;
 	double P_min_distance_h;
@@ -162,7 +162,7 @@ LITD_VirtualPoint LITD_MapElementParkingSpot::getNormalPoint(LITD_VirtualPoint &
 
 	if (aadc::jury::maneuverToString(selectedManeuver).compare(aadc::jury::maneuverToString(aadc::jury::maneuver_cross_parking)))
 	{
-		double index_last_element = trajectoryPoints.size() - 1;
+		size_t index_last_element = trajectoryPoints.size() - 1;
 
 		if (x > trajectoryPoints[index_last_element].x)
 		{
@@ -246,5 +246,21 @@ bool LITD_MapElementParkingSpot::selectDriveLane(LITD_VirtualPoint &point) {
 	else
 	{
 		return false;
+	}
+}
+
+void LITD_MapElementParkingSpot::printParkingTrajectory()
+{
+	for (std::vector<LITD_VirtualPoint>::size_type i = 0; i < trajectoryPoints.size(); i++)
+	{
+		cout << "x: " << trajectoryPoints[i].x << "; y: " << trajectoryPoints[i].y << endl;
+	}
+}
+
+void LITD_MapElementParkingSpot::printPullOutLeftTrajectory()
+{
+	for (std::vector<LITD_VirtualPoint>::size_type i = 0; i < trajectoryPointsPullOutLeft.size(); i++)
+	{
+		cout << "x: " << trajectoryPointsPullOutLeft[i].x << "; y: " << trajectoryPointsPullOutLeft[i].y << endl;
 	}
 }
