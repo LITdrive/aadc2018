@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.10.0)
 
-project(marker_positioning)
+project(LITD_IMULocalization)
 
 include_directories(${OpenCV_INCLUDE_DIRS})
 
