@@ -32,8 +32,7 @@ private:
     /*! The invalidated */
     std::atomic_bool  m_bInvalidated;
 
-    /*! configuration file for markers  */
-    adtf::base::property_variable<adtf_util::cFilename> m_mapFile;
+
     /*! Scale for map in x and y direction. */
     tFloat32 m_pixelScaleX;
     /*! The pixel scale y coordinate */
@@ -53,6 +52,8 @@ private:
 
     /*! The reader position */
     adtf::filter::cPinReader m_oReaderPos;
+    /*! sample reader List of input maneuvers */
+    adtf::filter::cPinReader     m_oInputOpenDrive;
     /*! The position sample factory */
     adtf::mediadescription::cSampleCodecFactory m_PositionSampleFactory;
 
@@ -60,6 +61,16 @@ private:
     DisplayWidget* m_pDisplayWidget;
     /*! The od reader */
     ODReader::openDriveReader *m_odReader;
+
+
+
+
+    /*! The show lanes */
+    adtf::base::property_variable<tBool> m_ShowLanes;
+
+    /*! The show trace */
+    adtf::base::property_variable<tBool> m_ShowTrace;
+
 
 public:
     /*! Default constructor. */
@@ -78,11 +89,10 @@ private:
     /*!
      * Shows the map.
      *
-     * \param   fileMap The file map.
-     *
      * \return  Standard Result Code.
      */
-    tResult ShowMap(adtf_util::cFilename fileMap);
+    tResult ShowMap();
+
 
 signals:
 
@@ -96,14 +106,7 @@ signals:
      */
     void SendMapData(float x1, float y1, float x2, float y2);
 
-    /*!
-     * Sends a position data.
-     *
-     * \param   x   The x coordinate.
-     * \param   y   The y coordinate.
-     * \param   h   The height.
-     */
-    void SendPositionData(float x, float y, float h);
+
 };
 
 #endif //_ADTF_MEDIA_DESCDISP_FILTER_CLASS_HEADER_

@@ -19,46 +19,26 @@ THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS AS IS AND ANY EXPRESS OR I
 *
 * *******************************************************************/
 
+
 #ifndef _DISPLAY_WIDGET_
 #define _DISPLAY_WIDGET_
 
 #define GRAPHICSSCENE_WIDTH 500
 #define GRAPHICSSCENE_HEIGHT 500
 
-
-/*! A display widget for map visualization widget */
+enum RoadType{
+  CENTER_LANE =0,
+  DRIVING_LANE = 1,
+  BORDER_LANE = 2
+};
 class DisplayWidget : public QWidget
 {
     public:
-
-        /*!
-         * Constructor.
-         *
-         * \param [in,out]  pParent If non-null, the parent.
-         */
         DisplayWidget(QWidget* pParent);
-        
-        /*! Destructor. */
         virtual ~DisplayWidget();
-
-        /*!
-         * Draw line.
-         *
-         * \param   x1  The first x value.
-         * \param   y1  The first y value.
-         * \param   x2  The second x value.
-         * \param   y2  The second y value.
-         */
-        void DrawLine(float x1, float y1, float x2, float y2);
-
-        /*!
-         * Plot position.
-         *
-         * \param   x   The x coordinate.
-         * \param   y   The y coordinate.
-         * \param   h   The height.
-         */
-        void PlotPosition(float x, float y,float h);
+        void ResetScene();
+        void DrawLine(float x1, float y1, float x2, float y2,float zScale,RoadType rType=DRIVING_LANE);
+        void PlotPosition(float x, float y,float h,bool showTrace = false);
 
       private:
 
@@ -95,6 +75,8 @@ class DisplayWidget : public QWidget
 
           //Text for Marker
           QGraphicsTextItem *text;
+
+          QGraphicsSceneWheelEvent *wheel;
 };
 
-#endif 
+#endif //_ADTF_QT_VIDEO_WIDGET_CLASS_HEADER_
