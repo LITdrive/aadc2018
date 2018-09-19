@@ -19,6 +19,7 @@
 #define r_B4 sqrt(pow(VEHICLE_SPACE_BETWEEN_REAR_AXLE_AND_BUMPER, 2) + pow(VEHICLE_TURNING_CYCLE + VEHICLE_WIDTH / 2, 2))
 #define OFFSET_MIN sqrt(pow(VEHICLE_TURNING_CYCLE - VEHICLE_WIDTH / 2, 2) - pow(VEHICLE_TURNING_CYCLE - PARKING_SPOT_WIDTH/2, 2))
 #define OFFSET_MAX DRIVING_LANE_WIDTH - r_B2
+#define OFFSET_STRAIGHT_PULL_OUT_LEFT 0.02 + 0.44 // m
 
 using namespace std;
 
@@ -29,17 +30,21 @@ public:
 	
 	LITD_MapElementParkingSpot(double fence_x_min, double fence_x_max, double fence_y_min, double fence_y_max, double G_x, double G_y);
 	virtual LITD_VirtualPoint getNormalPoint(LITD_VirtualPoint &point);
+	bool selectDriveLane(LITD_VirtualPoint & point);
 	virtual bool isInElement(LITD_VirtualPoint &point);
 	void calcParkingTrajectory();
+	void calcPullOutLeftTrajectory();
 	virtual void calcParkingTrajectory(LITD_VirtualPoint & point);
+	LITD_MapElementParkingSpot(double fence_x_min, double fence_x_max, double fence_y_min, double fence_y_max, double straight_cord, double G_x, double G_y);
 	virtual aadc::jury::maneuver selectDriveManeuver(aadc::jury::maneuver maneuver);
 	virtual double getSpeedAdvisory();
 	virtual double getSpeedLimit();
 	virtual bool isValid();
 protected:
 	bool valid;
-	double x_min, x_max, y_min, y_max, targetPoint_x, targetPoint_y, angleSel;
+	double x_min, x_max, y_min, y_max, targetPoint_x, targetPoint_y, angle_sel, cord;
 	double speedAdvisory;
 	aadc::jury::maneuver selectedManeuver;
-	std::vector<LITD_VirtualPoint> trajectoryPoints;
+	vector<LITD_VirtualPoint> trajectoryPoints;
+	vector<LITD_VirtualPoint> trajectoryPointsPullOutLeft;
 };
