@@ -14,6 +14,10 @@ private:
     /*! The scaled image of the Map*/
     Mat scaledMap;
 
+    float angleMin = 0, angleMax = 0, angleInc  = 1, angleCnt = 1;
+
+    float ret[4] = {0, 0, 0, 0};
+
 public:
     /*! Constructor*/
     FineLocator();
@@ -26,9 +30,11 @@ public:
      *          returns a Point3f with x=x, y=y, z=confidence level
      * */
 
-    Point3f localize(Mat img_bv, float theta, Point2f pos, int size=20);
+    float* localize(Mat img_bv, float theta, Point2f pos, int size=20);
 
     void setMap(char* pathToScaledMap);
+
+    void setAngleSearchSpace(float min, float max, int cnt);
 };
 
 

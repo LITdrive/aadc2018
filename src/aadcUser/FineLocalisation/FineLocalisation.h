@@ -20,7 +20,6 @@ THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS AS IS AND ANY EXPRESS OR I
 
 //*************************************************************************************************
 #define CID_CBIRDS_EYE_VIEW_DATA_TRIGGERED_FILTER "finelocalisation_filter.filter.user.aadc.cid"
-#define SEARCH_RADIUS 20
 
 using namespace adtf_util;
 using namespace ddl;
@@ -89,6 +88,9 @@ private:
     property_variable<tFloat32> headingOffset = 0;
     property_variable<cFilename> mapPath = cFilename("/home/aadc/share/adtf/data/scaledMap.png");
     property_variable<tInt32> propSearchSpaceSize = 20;
+    property_variable<tInt32> angleIterCnt = 10;
+    property_variable<tFloat32> angleRangeMin = -2;
+    property_variable<tFloat32> angleRangeMax =  2;
 
     float affineMat [2][3] = {{mat00, mat01, mat02}, {mat10, mat11, mat12}};
     int searchSpaceSize = 0;

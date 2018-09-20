@@ -136,9 +136,9 @@ tResult cFineLocalisation::Process(tTimeStamp tmTimeOfTrigger)
 
             float px_x = px_loc[0], px_y = px_loc[1];
             //x = x, y = y, z = confidence
-            Point3f location = locator.localize(bvImage, heading, Point2f(px_x, px_y), searchSpaceSize);
+            float* location = locator.localize(bvImage, heading, Point2f(px_x, px_y), searchSpaceSize);
             object_ptr<ISample> pWriteSample;
-            float* m_loc = pmt.toMeter(location.x, location.y);
+            float* m_loc = pmt.toMeter(location[0], location[1]);
 
             RETURN_IF_FAILED(alloc_sample(pWriteSample, m_pClock->GetStreamTime()));
             {
@@ -146,13 +146,13 @@ tResult cFineLocalisation::Process(tTimeStamp tmTimeOfTrigger)
 
                 RETURN_IF_FAILED(oCodec.SetElementValue(m_ddlPositionIndex.x, m_loc[0] - axleToPicture*cos(heading)));
                 RETURN_IF_FAILED(oCodec.SetElementValue(m_ddlPositionIndex.y, m_loc[1] - axleToPicture*sin(heading)));
-                RETURN_IF_FAILED(oCodec.SetElementValue(m_ddlPositionIndex.heading, heading));
+                RETURN_IF_FAILED(oCodec.SetElementValue(m_ddlPositionIndex.heading, heading + location[2]));
                 RETURN_IF_FAILED(oCodec.SetElementValue(m_ddlPositionIndex.speed, speed));
             }
 
             m_oPosWriter << pWriteSample << flush << trigger;
 
-            transmitSignalValue(m_oConfWriter, m_pClock->GetStreamTime(), m_SignalValueSampleFactory, m_ddlSignalValueId.timeStamp, 0, m_ddlSignalValueId.value, location.z);
+            transmitSignalValue(m_oConfWriter, m_pClock->GetStreamTime(), m_SignalValueSampleFactory, m_ddlSignalValueId.timeStamp, 0, m_ddlSignalValueId.value, location[3]);
 
         }
     }
