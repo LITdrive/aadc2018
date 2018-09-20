@@ -4,6 +4,7 @@
 
 #include "FineLocator.h"
 #include "stdafx.h"
+#define WEIGHT_SEARCH_SIZE 1        //1 for 3x3 2 for 5x5 etc.
 
 FineLocator::FineLocator(){
 
@@ -25,7 +26,7 @@ void FineLocator::setMap(char* pathToScaledMap){
     scaledMap = imread(pathToScaledMap);
 }
 
-Point2i FineLocator::localize(Mat img_bv, float theta, Point2i pos, int size) {
+Point3f FineLocator::localize(Mat img_bv, float theta, Point2f pos, int size) {
     // left upper corner of map -> car location
     Mat car_coord_shift = Mat::eye(3,3, CV_32F);
     car_coord_shift.at<float>(0, 2) = -pos.x;
@@ -48,8 +49,18 @@ Point2i FineLocator::localize(Mat img_bv, float theta, Point2i pos, int size) {
     double mi, ma;
     Point mil, mal;
     minMaxLoc(search_result, &mi, &ma, &mil, &mal);
+    float max_loc_weighted_x = 0, max_loc_weighted_y = 0, sum = 0;
+    for(int x_off = -WEIGHT_SEARCH_SIZE; x_off <= WEIGHT_SEARCH_SIZE; x_off++){
+        for(int y_off = -WEIGHT_SEARCH_SIZE; y_off <= WEIGHT_SEARCH_SIZE; y_off++){
+            float curr_res = search_result.at<float>(mal.x + x_off, mal.y + y_off);
+            sum += curr_res;
+            max_loc_weighted_x += (mal.x + x_off)*curr_res;
+            max_loc_weighted_y += (mal.y + y_off)*curr_res;
+        }
+    }
     Mat reverse;
     invertAffineTransform(combined, reverse);
-    Mat location_global = reverse*Mat(Vec3f(mal.x + img_bv.size[0]/2.f, mal.y + img_bv.size[1], 1));
-    return Point2i(location_global.at<float>(0,0),location_global.at<float>(0,1));
+    Mat location_global = reverse*Mat(Vec3f(max_loc_weighted_x/sum + img_bv.size[0]/2.f, max_loc_weighted_y/sum + img_bv.size[1], 1));
+
+    return Point3f(location_global.at<float>(0,0),location_global.at<float>(0,1), ma);
 }

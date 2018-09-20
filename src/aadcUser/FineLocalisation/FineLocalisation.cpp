@@ -19,10 +19,12 @@ THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS AS IS AND ANY EXPRESS OR I
 #include "FineLocator.h"
 
 
+#define DEG2RAD M_PI/180
+
 ADTF_TRIGGER_FUNCTION_FILTER_PLUGIN(CID_CBIRDS_EYE_VIEW_DATA_TRIGGERED_FILTER,
                                     "FineLocalisation_cf",
                                     cFineLocalisation,
-                                    adtf::filter::pin_trigger({ "input" }));
+                                    adtf::filter::pin_trigger({ "inBirdsEye" }));
 
 cFineLocalisation::cFineLocalisation()
 {
@@ -69,6 +71,8 @@ cFineLocalisation::cFineLocalisation()
     RegisterPropertyVariable("AffineMat@12", mat12);
     RegisterPropertyVariable("Path to Map", mapPath);
     RegisterPropertyVariable("search space size", propSearchSpaceSize);
+    RegisterPropertyVariable("distance from back axle to Picture bottom [m]", axleToPicture);
+    RegisterPropertyVariable("offset for Heading [°]", headingOffset);
 
 
 }
@@ -94,7 +98,7 @@ tResult cFineLocalisation::Process(tTimeStamp tmTimeOfTrigger)
 {
     object_ptr<const ISample> pReadSample, pVPReadSample;
 
-    if(IS_OK(m_oPosReader.GetNextSample(pVPReadSample))) {
+    if(IS_OK(m_oPosReader.GetLastSample(pVPReadSample))) {
         auto oDecoder = m_PositionSampleFactory.MakeDecoderFor(*pVPReadSample);
 
         RETURN_IF_FAILED(oDecoder.IsValid());
@@ -102,6 +106,8 @@ tResult cFineLocalisation::Process(tTimeStamp tmTimeOfTrigger)
         RETURN_IF_FAILED(oDecoder.GetElementValue(m_ddlPositionIndex.x, &x));
         RETURN_IF_FAILED(oDecoder.GetElementValue(m_ddlPositionIndex.y, &y));
         RETURN_IF_FAILED(oDecoder.GetElementValue(m_ddlPositionIndex.heading, &heading));
+        //adjust heading for inversion of back camera
+        heading = heading + headingOffset*DEG2RAD;
         RETURN_IF_FAILED(oDecoder.GetElementValue(m_ddlPositionIndex.speed, &speed));
     }
 
@@ -112,11 +118,11 @@ tResult cFineLocalisation::Process(tTimeStamp tmTimeOfTrigger)
         if (IS_OK(pReadSample->Lock(pReadBuffer)))
         {
             //create a opencv matrix from the media sample buffer
-            Mat bvImage = Mat(cv::Size(m_sImageFormat.m_ui32Width, m_sImageFormat.m_ui32Height),
-                                   CV_8UC3, const_cast<unsigned char*>(static_cast<const unsigned char*>(pReadBuffer->GetPtr())));
-            float* px_loc = pmt.toPixel(x, y);
+            Mat bvImage = Mat(cv::Size(m_sImageFormat.m_ui32Width, m_sImageFormat.m_ui32Height), CV_8UC3, const_cast<unsigned char*>(static_cast<const unsigned char*>(pReadBuffer->GetPtr())));
+            float* px_loc = pmt.toPixel(x + axleToPicture*cos(heading), y + axleToPicture*sin(heading));
+
             float px_x = px_loc[0], px_y = px_loc[1];
-            Point2f location = locator.localize(bvImage, heading, Point2i(px_x, px_y), searchSpaceSize);
+            Point3f location = locator.localize(bvImage, heading, Point2i(px_x, px_y), searchSpaceSize);
             object_ptr<ISample> pWriteSample;
             float* m_loc = pmt.toMeter(location.x, location.y);
 
@@ -124,8 +130,8 @@ tResult cFineLocalisation::Process(tTimeStamp tmTimeOfTrigger)
             {
                 auto oCodec = m_PositionSampleFactory.MakeCodecFor(pWriteSample);
 
-                RETURN_IF_FAILED(oCodec.SetElementValue(m_ddlPositionIndex.x, m_loc[0]));
-                RETURN_IF_FAILED(oCodec.SetElementValue(m_ddlPositionIndex.y, m_loc[1]));
+                RETURN_IF_FAILED(oCodec.SetElementValue(m_ddlPositionIndex.x, m_loc[0] - axleToPicture*cos(heading)));
+                RETURN_IF_FAILED(oCodec.SetElementValue(m_ddlPositionIndex.y, m_loc[1] - axleToPicture*sin(heading)));
                 RETURN_IF_FAILED(oCodec.SetElementValue(m_ddlPositionIndex.heading, heading));
                 RETURN_IF_FAILED(oCodec.SetElementValue(m_ddlPositionIndex.speed, speed));
             }

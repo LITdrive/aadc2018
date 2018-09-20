@@ -74,6 +74,8 @@ private:
     property_variable<tFloat32> mat10 = 3.16077729e-18;
     property_variable<tFloat32> mat11 = 7.00280112e-01;
     property_variable<tFloat32> mat12 =-6.30252101e+00;
+    property_variable<tFloat32> axleToPicture = 0.55;
+    property_variable<tFloat32> headingOffset = 0;
     property_variable<cFilename> mapPath = cFilename("/home/aadc/share/adtf/data/scaledMap.png");
     property_variable<tInt32> propSearchSpaceSize = 20;
 
