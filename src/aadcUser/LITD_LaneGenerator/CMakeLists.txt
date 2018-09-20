@@ -40,7 +40,16 @@ add_executable(${PROJECT_NAME} #map_generator_test.cpp
                                LITD_MapElementDoubleStraight.cpp
                                LITD_MapElementCurve.cpp
                                LITD_MapElementDoubleCurve.cpp
+                               LITD_MapElementCrossing.cpp
                                LITD_Map.cpp
+                               LITD_VirtualPoint.h
+                               LITD_MapElementStraight.h
+                               LITD_MapElementDoubleStraight.h
+                               LITD_MapElementCurve.h
+                               LITD_MapElementDoubleCurve.h
+                               LITD_MapElementCrossing.h
+                               LITD_Map.h
+                               math_utilities.h
                                )
 
 install(TARGETS ${PROJECT_NAME} DESTINATION bin/application CONFIGURATIONS RelWithDebInfo Release)
