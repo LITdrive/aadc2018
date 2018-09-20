@@ -180,7 +180,7 @@ tResult cLITD_IMULocalization::Configure()
 /*! funtion will be executed each time a trigger occured */
 tResult cLITD_IMULocalization::Process(tTimeStamp tmTimeOfTrigger)
 {
-    LOG_INFO("Process");
+   // LOG_INFO("Process");
     object_ptr<const ISample> pReadSample;
 
     //LOG_INFO(cString::Format("process: %lu", tmTimeOfTrigger).GetPtr());
@@ -248,14 +248,14 @@ tFloat32 cLITD_IMULocalization::angleDiff(tFloat32 angle1, tFloat32 angle2)
 /*! calculates normalized angle */
 tFloat32 cLITD_IMULocalization::normalizeAngle(tFloat32 alpha, tFloat32 center)
 {
-    LOG_INFO("normalizeAngle");
+    //LOG_INFO("normalizeAngle");
     return mod(alpha - center + static_cast<tFloat32>(M_PI), 2.0f*static_cast<tFloat32>(M_PI)) + center - static_cast<tFloat32>(M_PI);
 }
 
 /*! calculates modulus after division */
 tFloat32 cLITD_IMULocalization::mod(tFloat32 x, tFloat32 y)
 {
-    LOG_INFO("mod");
+    //LOG_INFO("mod");
     tFloat32 r;
     tFloat32 b_x;
     if (y == floor(y))

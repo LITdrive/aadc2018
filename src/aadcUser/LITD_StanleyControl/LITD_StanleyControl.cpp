@@ -150,7 +150,7 @@ tResult cStanleyControl::Process(tTimeStamp tmTimeOfTrigger)
 
     m_properties->TriggerPropertiesReload(80); // reload the file every 2 seconds with a 25 msec timer
 	stanleyGain = m_properties->GetFloat("stanley_gain");
-    maxAngle = m_properties->GetFloat("max_angle");
+    //maxAngle = m_properties->GetFloat("max_angle");
 	
     
     
@@ -204,7 +204,7 @@ tResult cStanleyControl::Process(tTimeStamp tmTimeOfTrigger)
         vp.y = sollY;
     }
 
-    if(carSpeed > 0.0){
+    if(carSpeed > 0.0001){
         // Do the Processing
         LOG_INFO("Soll x : %.2f, soll y: %.2f ", vp.x, vp.y);
         LOG_INFO("Ist x : %.2f, Ist y: %.2f ", carFrontPosition.x, carFrontPosition.y);
@@ -212,7 +212,7 @@ tResult cStanleyControl::Process(tTimeStamp tmTimeOfTrigger)
 
         if(carSteeringAngle < -M_PI/4){
             carSteeringAngle = -M_PI/4;
-            LOG_INFO("Steering angle truncated to -45°!");
+            LOG_INFO("Steering angle truncated to %.2f(-45°)!",carSteeringAngle);
         } else if(carSteeringAngle > M_PI/4){
             carSteeringAngle = M_PI/4;
             LOG_INFO("Steering angle truncated to 45°!");
