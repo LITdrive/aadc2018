@@ -32,11 +32,8 @@ ADTF_TRIGGER_FUNCTION_FILTER_PLUGIN(CID_LITD_STANLEY_CONTROL_FILTER,
 
 void cStanleyControl::mapSteeringAngle(){
     tFloat32  rad2degree  = 180.0 / M_PI;
-    if(carSteeringAngle == 0){
-	carSteeringValue = 0;
-    }else{
-      carSteeringValue = (carSteeringAngle * rad2degree) / maxAngle * -100;   
-    }
+    carSteeringValue = (carSteeringAngle * rad2degree) / maxAngle * (-100);   
+    
 
 }
 
@@ -77,6 +74,8 @@ void cStanleyControl::calcSteeringAngle(){
 	LOG_INFO("e  : %.2f ", e);
 	LOG_INFO("theta : %.2f ", theta_c);
     LOG_INFO("car speed : %.2f ", carSpeed);
+    LOG_INFO("calc : %.2f ", theta_c + atan2(stanleyGain*e, carSpeed));
+    LOG_INFO("gainz : %.2f ", stanleyGain);
 
 }
 cStanleyControl::cStanleyControl()
