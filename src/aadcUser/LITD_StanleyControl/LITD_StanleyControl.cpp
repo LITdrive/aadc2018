@@ -35,7 +35,7 @@ void cStanleyControl::mapSteeringAngle(){
     if(carSteeringAngle == 0){
 	carSteeringValue = 0;
     }else{
-      carSteeringValue = (carSteeringAngle * rad2degree) / maxAngle * 100;   
+      carSteeringValue = (carSteeringAngle * rad2degree) / maxAngle * -100;   
     }
 
 }
@@ -76,6 +76,7 @@ void cStanleyControl::calcSteeringAngle(){
     LOG_INFO("car heading in rad : %.2f ", carPosition.h);
 	LOG_INFO("e  : %.2f ", e);
 	LOG_INFO("theta : %.2f ", theta_c);
+    LOG_INFO("car speed : %.2f ", carSpeed);
 
 }
 cStanleyControl::cStanleyControl()
@@ -169,7 +170,7 @@ tResult cStanleyControl::Process(tTimeStamp tmTimeOfTrigger)
         vp.y = sollY;
     }
 
-    if(carSpeed != 0){
+    if(carSpeed > 0.0){
         // Do the Processing
         LOG_INFO("Soll x : %.2f, soll y: %.2f ", vp.x, vp.y);
         LOG_INFO("Ist x : %.2f, Ist y: %.2f ", carPosition.x, carPosition.y);
