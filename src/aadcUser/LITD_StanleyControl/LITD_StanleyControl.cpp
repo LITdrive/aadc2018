@@ -73,7 +73,7 @@ void cStanleyControl::calcSteeringAngle(){
     std::cout << "Steering Angle: " << carSteeringAngle << "(" << rad2degree * carSteeringAngle << "°)" << std::endl;
     std::cout << "-----------------------" << std::endl;*/
 	LOG_INFO("point heading in rad : %.2f ", vp.h);
-        LOG_INFO("car heading in rad : %.2f ", carPosition.h);
+    LOG_INFO("car heading in rad : %.2f ", carPosition.h);
 	LOG_INFO("e  : %.2f ", e);
 	LOG_INFO("theta : %.2f ", theta_c);
 
@@ -173,17 +173,22 @@ tResult cStanleyControl::Process(tTimeStamp tmTimeOfTrigger)
     LOG_INFO("Soll x : %.2f, soll y: %.2f ", vp.x, vp.y);
     LOG_INFO("Ist x : %.2f, Ist y: %.2f ", carPosition.x, carPosition.y);
     calcSteeringAngle();
-    mapSteeringAngle();
-    LOG_INFO("Steering angle in grad : %.2f ", carSteeringValue);
 
-    if(carSteeringAngle < - 45){
+    if(carSteeringAngle < -M_PI/4){
+        carSteeringAngle = -M_PI/4;
         LOG_INFO("Steering angle truncated to -45°!");
-        carSteeringAngle = -45;
-    } else if ( carSteeringAngle > 45){
+    } else if(carSteeringAngle > M_PI/4){
+        carSteeringAngle = M_PI/4;
         LOG_INFO("Steering angle truncated to 45°!");
-         carSteeringAngle = 45;
     }
+    //calculate the mapping from -100 to +100
+    mapSteeringAngle();
+    LOG_INFO("Steering Value (-100 to +100) : %.2f ", carSteeringValue);
 
+    
+    //TODO: check the input-type for the steering-controller
+    //is this a float or a integer-value
+    // in case of int, do a cast and change the output data-type
 	transmitSignalValue(m_oWriter, m_pClock->GetStreamTime(), m_SignalValueSampleFactory, m_ddlSignalValueId.timeStamp, 0, m_ddlSignalValueId.value, carSteeringValue);
 
     RETURN_NOERROR;
