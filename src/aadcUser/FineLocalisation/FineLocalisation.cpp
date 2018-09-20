@@ -16,6 +16,7 @@ THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS AS IS AND ANY EXPRESS OR I
 #include "stdafx.h"
 #include "FineLocalisation.h"
 #include "ADTF3_OpenCV_helper.h"
+#include "ADTF3_helper.h"
 #include "FineLocator.h"
 
 
@@ -87,8 +88,6 @@ cFineLocalisation::cFineLocalisation()
     RegisterPropertyVariable("search space size", propSearchSpaceSize);
     RegisterPropertyVariable("distance from back axle to Picture bottom [m]", axleToPicture);
     RegisterPropertyVariable("offset for Heading [°]", headingOffset);
-
-
 }
 
 tResult cFineLocalisation::Configure()
@@ -137,7 +136,7 @@ tResult cFineLocalisation::Process(tTimeStamp tmTimeOfTrigger)
 
             float px_x = px_loc[0], px_y = px_loc[1];
             //x = x, y = y, z = confidence
-            Point3f location = locator.localize(bvImage, heading, Point2i(px_x, px_y), searchSpaceSize);
+            Point3f location = locator.localize(bvImage, heading, Point2f(px_x, px_y), searchSpaceSize);
             object_ptr<ISample> pWriteSample;
             float* m_loc = pmt.toMeter(location.x, location.y);
 

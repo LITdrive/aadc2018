@@ -75,7 +75,7 @@ private:
     /*! The clock */
     object_ptr<adtf::services::IReferenceClock> m_pClock;
 
-    tFloat64 x, y, speed, heading;
+    tFloat32 x, y, speed, heading;
 
     FineLocator locator;
 
