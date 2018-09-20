@@ -76,8 +76,8 @@ private:
     LITD_VirtualPoint carPosition;
 
     //controller params
-    double stanleyGain = 1.5;
-    double maxAngle = 45;
+    tFloat32 stanleyGain = 1.5;
+    tFloat32 maxAngle = 45;
 
     property_variable<cFilename> m_properties_file = cFilename("../../../../configuration_files/properties/stanleycontrol_pid.ini");
 	FilePropertiesObserver* m_properties;

@@ -31,7 +31,7 @@ ADTF_TRIGGER_FUNCTION_FILTER_PLUGIN(CID_LITD_STANLEY_CONTROL_FILTER,
     adtf::filter::pin_trigger({"inPositionIs", "inPositionSet"}));
 
 void cStanleyControl::mapSteeringAngle(){
-    double  rad2degree  = 180.0 / M_PI;
+    doutFloat32ble  rad2degree  = 180.0 / M_PI;
     if(carSteeringAngle == 0){
 	carSteeringValue = 0;
     }else{
@@ -48,16 +48,16 @@ void cStanleyControl::calcSteeringAngle(){
 
     //calc sign to steer in direction of road
     int sign = 1;
-    double diff_heading_abs = wrapTo2Pi(atan2(diff(1), diff(0)));
+    tFloat32 diff_heading_abs = wrapTo2Pi(atan2(diff(1), diff(0)));
     if(wrapTo2Pi(diff_heading_abs - wrapTo2Pi(vp.h))> 4.712 ){
         sign = -1;
     }
 
     //calc normal distance of tangent to car (e)
-    double e = (vp.getVector2d() - carPosition.getVector2d()).norm() * sign;
+    tFloat32 e = (vp.getVector2d() - carPosition.getVector2d()).norm() * sign;
 
     //calc angle between car heading and point tangent
-    double theta_c =  wrapTo2Pi(vp.h) - wrapTo2Pi(carPosition.h);
+    tFloat32 theta_c =  wrapTo2Pi(vp.h) - wrapTo2Pi(carPosition.h);
 
     //calc steering-angle with stanley-approach
     carSteeringAngle = theta_c + atan2(stanleyGain*e, carSpeed);
@@ -169,22 +169,23 @@ tResult cStanleyControl::Process(tTimeStamp tmTimeOfTrigger)
         vp.y = sollY;
     }
 
-    // Do the Processing
-    LOG_INFO("Soll x : %.2f, soll y: %.2f ", vp.x, vp.y);
-    LOG_INFO("Ist x : %.2f, Ist y: %.2f ", carPosition.x, carPosition.y);
-    calcSteeringAngle();
+    if(carSpeed != 0){
+        // Do the Processing
+        LOG_INFO("Soll x : %.2f, soll y: %.2f ", vp.x, vp.y);
+        LOG_INFO("Ist x : %.2f, Ist y: %.2f ", carPosition.x, carPosition.y);
+        calcSteeringAngle();
 
-    if(carSteeringAngle < -M_PI/4){
-        carSteeringAngle = -M_PI/4;
-        LOG_INFO("Steering angle truncated to -45°!");
-    } else if(carSteeringAngle > M_PI/4){
-        carSteeringAngle = M_PI/4;
-        LOG_INFO("Steering angle truncated to 45°!");
+        if(carSteeringAngle < -M_PI/4){
+            carSteeringAngle = -M_PI/4;
+            LOG_INFO("Steering angle truncated to -45°!");
+        } else if(carSteeringAngle > M_PI/4){
+            carSteeringAngle = M_PI/4;
+            LOG_INFO("Steering angle truncated to 45°!");
+        }
+        //calculate the mapping from -100 to +100
+        mapSteeringAngle();
+        LOG_INFO("Steering Value (-100 to +100) : %.2f ", carSteeringValue);
     }
-    //calculate the mapping from -100 to +100
-    mapSteeringAngle();
-    LOG_INFO("Steering Value (-100 to +100) : %.2f ", carSteeringValue);
-
     
     //TODO: check the input-type for the steering-controller
     //is this a float or a integer-value
