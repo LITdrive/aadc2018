@@ -21,6 +21,7 @@
 #include "LITD_MapElementDoubleStraight.h"
 #include "LITD_MapElementCurve.h"
 #include "LITD_MapElementDoubleCurve.h"
+#include "LITD_MapElementCrossing.h"
 
 using namespace std;
 
@@ -50,6 +51,7 @@ public:
     LITD_map_error_t addDoubleStraightElement(double fence_x_min, double fence_x_max, double fence_y_min, double fence_y_max, double straight_cord_1, double straight_cord_2, bool straight_is_y);
     LITD_map_error_t addCurveElement(double fence_x_min, double fence_x_max, double fence_y_min, double fence_y_max, LITD_mapElementCurve_corner_t curve_corner, double curve_radius);
     LITD_map_error_t addDoubleCurveElement(double fence_x_min, double fence_x_max, double fence_y_min, double fence_y_max, LITD_mapElementCurve_corner_t curve_corner, double curve_radius_1, double curve_radius_2);
+    LITD_map_error_t addCrossingElement(double fence_x_min, double fence_x_max, double fence_y_min, double fence_y_max, bool road_beyond, bool road_left, bool road_right, bool road_above);
 
 
 protected:
