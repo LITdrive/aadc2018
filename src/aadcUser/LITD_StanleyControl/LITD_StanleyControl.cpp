@@ -31,7 +31,7 @@ ADTF_TRIGGER_FUNCTION_FILTER_PLUGIN(CID_LITD_STANLEY_CONTROL_FILTER,
     adtf::filter::pin_trigger({"inPositionIs", "inPositionSet"}));
 
 void cStanleyControl::mapSteeringAngle(){
-    doutFloat32ble  rad2degree  = 180.0 / M_PI;
+    tFloat32  rad2degree  = 180.0 / M_PI;
     if(carSteeringAngle == 0){
 	carSteeringValue = 0;
     }else{
