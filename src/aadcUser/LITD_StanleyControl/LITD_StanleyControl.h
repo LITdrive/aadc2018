@@ -92,6 +92,8 @@ private:
 
     void calculateFrontPos();
 
+	/*! mutex for process method synchronization */
+	std::mutex m_oMutex;
 
 public:
 

@@ -144,6 +144,8 @@ tResult cStanleyControl::Configure()
 
 tResult cStanleyControl::Process(tTimeStamp tmTimeOfTrigger)
 {
+	// avoid that the method triggers itself due to the feedback loop
+	std::lock_guard<std::mutex> oGuard(m_oMutex);
 
     object_ptr<const ISample> pReadSampleIst;
     object_ptr<const ISample> pReadSampleSoll;
