@@ -97,6 +97,15 @@ LITD_map_error_t LITD_Map::addDoubleCurveElement(double fence_x_min, double fenc
     return MAP_EINVAL;
 }
 
+LITD_map_error_t LITD_Map::addCrossingElement(double fence_x_min, double fence_x_max, double fence_y_min, double fence_y_max, bool road_beyond, bool road_left, bool road_right, bool road_above) {
+    LITD_MapElementCrossing *elem = new LITD_MapElementCrossing(fence_x_min, fence_x_max, fence_y_min, fence_y_max, road_beyond, road_left, road_right, road_above);
+    if(elem->isValid()) {
+        map_elements.push_back(elem);
+        return MAP_ENOERR;
+    }
+    return MAP_ENOERR;
+}
+
 void LITD_Map::findElementIndex(LITD_VirtualPoint &point) {
     std::size_t last=map_elements.size();
     map_index_current=-1;
