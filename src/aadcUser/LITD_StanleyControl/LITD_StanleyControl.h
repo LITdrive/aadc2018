@@ -21,6 +21,7 @@ THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS AS IS AND ANY EXPRESS OR I
 //*************************************************************************************************
 #define CID_LITD_STANLEY_CONTROL_FILTER "LITD_StanleyControl.filter.user.aadc.cid"
 
+#define CAR_AXIS_DIST 0.365
 
 
 using namespace adtf_util;
@@ -68,12 +69,14 @@ private:
     cPinReader m_oVPReaderSoll;
     /*! Writer to an OutPin. */
     cPinWriter m_oWriter;
+    cPinWriter m_oFrontAxisWriter;
 
     tFloat32 carX, carY, carHeading, carSpeed, sollX, sollY, sollHeading, sollSpeed;
     tFloat32 carSteeringAngle, carSteeringValue;
 
     LITD_VirtualPoint vp;
-    LITD_VirtualPoint carPosition;
+    LITD_VirtualPoint carBackPosition;
+    LITD_VirtualPoint carFrontPosition;
 
     //controller params
     tFloat32 stanleyGain = 1.5;
@@ -87,6 +90,7 @@ private:
 	/*! clock service */
 	object_ptr<adtf::services::IReferenceClock> m_pClock;
 
+    void calculateFrontPos();
 
 
 public:

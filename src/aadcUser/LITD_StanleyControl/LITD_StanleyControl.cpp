@@ -30,6 +30,16 @@ ADTF_TRIGGER_FUNCTION_FILTER_PLUGIN(CID_LITD_STANLEY_CONTROL_FILTER,
     cStanleyControl,
     adtf::filter::pin_trigger({"inPositionIs", "inPositionSet"}));
 
+void cStanleyControl::calculateFrontPos(){
+    double dx = cos(carBackPosition.h)*CAR_AXIS_DIST;
+    double dy = sin(carBackPosition.h)*CAR_AXIS_DIST;
+
+    carFrontPosition.x = carBackPosition.x + dx;
+    carFrontPosition.y = carBackPosition.y + dy;
+    carFrontPosition.h = carBackPosition.h;
+
+}
+
 void cStanleyControl::mapSteeringAngle(){
     tFloat32  rad2degree  = 180.0 / M_PI;
     carSteeringValue = (carSteeringAngle * rad2degree) / maxAngle * (-100);   
@@ -41,7 +51,7 @@ void cStanleyControl::mapSteeringAngle(){
 void cStanleyControl::calcSteeringAngle(){
     
     //vector between car and virtualpoint
-    Vector2d diff = vp.getVector2d() - carPosition.getVector2d();
+    Vector2d diff = vp.getVector2d() - carFrontPosition.getVector2d();
 
     //calc sign to steer in direction of road
     int sign = 1;
@@ -51,10 +61,10 @@ void cStanleyControl::calcSteeringAngle(){
     }
 
     //calc normal distance of tangent to car (e)
-    tFloat32 e = (vp.getVector2d() - carPosition.getVector2d()).norm() * sign;
+    tFloat32 e = (vp.getVector2d() - carFrontPosition.getVector2d()).norm() * sign;
 
     //calc angle between car heading and point tangent
-    tFloat32 theta_c =  wrapTo2Pi(vp.h) - wrapTo2Pi(carPosition.h);
+    tFloat32 theta_c =  wrapTo2Pi(vp.h) - wrapTo2Pi(carFrontPosition.h);
 
     //calc steering-angle with stanley-approach
     carSteeringAngle = theta_c + atan2(stanleyGain*e, carSpeed);
@@ -70,7 +80,7 @@ void cStanleyControl::calcSteeringAngle(){
     std::cout << "Steering Angle: " << carSteeringAngle << "(" << rad2degree * carSteeringAngle << "°)" << std::endl;
     std::cout << "-----------------------" << std::endl;*/
 	LOG_INFO("point heading in rad : %.2f ", vp.h);
-    LOG_INFO("car heading in rad : %.2f ", carPosition.h);
+    LOG_INFO("car heading in rad : %.2f ", carFrontPosition.h);
 	LOG_INFO("e  : %.2f ", e);
 	LOG_INFO("theta : %.2f ", theta_c);
     LOG_INFO("car speed : %.2f ", carSpeed);
@@ -120,6 +130,8 @@ cStanleyControl::cStanleyControl()
     Register(m_oVPReaderIst, "inPositionIs", pTypePositionData);
     Register(m_oVPReaderSoll, "inPositionSet", pTypePositionData);
     Register(m_oWriter, "output", pTypeSignalValue);
+    Register(m_oFrontAxisWriter, "frontAxis", pTypePositionData);
+
 }
 
 
@@ -142,7 +154,7 @@ tResult cStanleyControl::Process(tTimeStamp tmTimeOfTrigger)
 	
     
     
-    if(IS_OK(m_oVPReaderIst.GetLastSample(pReadSampleIst))) {
+    if(IS_OK(m_oVPReaderIst.GetNextSample(pReadSampleIst))) {
         auto oDecoder1 = m_VirtualPointSampleFactory.MakeDecoderFor(*pReadSampleIst);
 
         RETURN_IF_FAILED(oDecoder1.IsValid());
@@ -152,8 +164,31 @@ tResult cStanleyControl::Process(tTimeStamp tmTimeOfTrigger)
         RETURN_IF_FAILED(oDecoder1.GetElementValue(m_ddlPositionIndex.heading, &carHeading));
         RETURN_IF_FAILED(oDecoder1.GetElementValue(m_ddlPositionIndex.speed, &carSpeed));
 
-        carPosition.x = carX;
-        carPosition.y = carY;
+        carBackPosition.x = carX;
+        carBackPosition.y = carY;
+        carBackPosition.h = carHeading;
+        //TODO send front pos
+        calculateFrontPos();
+
+        //send front-position
+        object_ptr<ISample> pSample;
+        RETURN_IF_FAILED(alloc_sample(pSample, tmTimeOfTrigger));
+
+        auto oCodec = m_VirtualPointSampleFactory.MakeCodecFor(pSample);
+
+        RETURN_IF_FAILED(oCodec.SetElementValue(m_ddlPositionIndex.x, carFrontPosition.x));
+        RETURN_IF_FAILED(oCodec.SetElementValue(m_ddlPositionIndex.y, carFrontPosition.y));
+        RETURN_IF_FAILED(oCodec.SetElementValue(m_ddlPositionIndex.radius, 0));
+        RETURN_IF_FAILED(oCodec.SetElementValue(m_ddlPositionIndex.speed, carSpeed));
+        RETURN_IF_FAILED(oCodec.SetElementValue(m_ddlPositionIndex.heading, carFrontPosition.h));
+
+        //LOG_INFO(cString::Format("sendPositionStruct: %.3f %.3f %.3f %.3f %.3f", f32X, f32Y,
+            //f32Radius, f32Heading, f32Speed).GetPtr());
+
+        // the sample buffer lock is released in the destructor of oCodec
+        m_oFrontAxisWriter << pSample << flush << trigger;
+
+        RETURN_NOERROR; 
     }
     if(IS_OK(m_oVPReaderSoll.GetLastSample(pReadSampleSoll))) {
         auto oDecoder2 = m_VirtualPointSampleFactory.MakeDecoderFor(*pReadSampleSoll);
@@ -172,7 +207,7 @@ tResult cStanleyControl::Process(tTimeStamp tmTimeOfTrigger)
     if(carSpeed > 0.0){
         // Do the Processing
         LOG_INFO("Soll x : %.2f, soll y: %.2f ", vp.x, vp.y);
-        LOG_INFO("Ist x : %.2f, Ist y: %.2f ", carPosition.x, carPosition.y);
+        LOG_INFO("Ist x : %.2f, Ist y: %.2f ", carFrontPosition.x, carFrontPosition.y);
         calcSteeringAngle();
 
         if(carSteeringAngle < -M_PI/4){
