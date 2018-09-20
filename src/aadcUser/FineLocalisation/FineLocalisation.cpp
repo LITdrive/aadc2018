@@ -57,6 +57,20 @@ cFineLocalisation::cFineLocalisation()
     //Register output pin
     Register(m_oPosWriter, "outPosition", pTypePositionData);
 
+    object_ptr<IStreamType> pTypeSignalValue;
+    if IS_OK(adtf::mediadescription::ant::create_adtf_default_stream_type_from_service("tSignalValue", pTypeSignalValue, m_SignalValueSampleFactory))
+    {
+        (adtf_ddl::access_element::find_index(m_SignalValueSampleFactory, cString("ui32ArduinoTimestamp"), m_ddlSignalValueId.timeStamp));
+        (adtf_ddl::access_element::find_index(m_SignalValueSampleFactory, cString("f32Value"), m_ddlSignalValueId.value));
+    }
+    else
+    {
+        LOG_INFO("No mediadescription for tSignalValue found!");
+    }
+
+    Register(m_oConfWriter, "outConfidence", pTypeSignalValue);
+
+
     //register callback for type changes
     m_oReader.SetAcceptTypeCallback([this](const adtf::ucom::ant::iobject_ptr<const adtf::streaming::ant::IStreamType>& pType) -> tResult
     {
@@ -122,6 +136,7 @@ tResult cFineLocalisation::Process(tTimeStamp tmTimeOfTrigger)
             float* px_loc = pmt.toPixel(x + axleToPicture*cos(heading), y + axleToPicture*sin(heading));
 
             float px_x = px_loc[0], px_y = px_loc[1];
+            //x = x, y = y, z = confidence
             Point3f location = locator.localize(bvImage, heading, Point2i(px_x, px_y), searchSpaceSize);
             object_ptr<ISample> pWriteSample;
             float* m_loc = pmt.toMeter(location.x, location.y);
@@ -137,6 +152,9 @@ tResult cFineLocalisation::Process(tTimeStamp tmTimeOfTrigger)
             }
 
             m_oPosWriter << pWriteSample << flush << trigger;
+
+            transmitSignalValue(m_oConfWriter, m_pClock->GetStreamTime(), m_SignalValueSampleFactory, m_ddlSignalValueId.timeStamp, 0, m_ddlSignalValueId.value, location.z);
+
         }
     }
     

@@ -22,7 +22,10 @@ public:
     /*! Destructor*/
     ~FineLocator();
 
-    /*! call localisation*/
+    /*! \brief  returns x,y and confidence
+     *          returns a Point3f with x=x, y=y, z=confidence level
+     * */
+
     Point3f localize(Mat img_bv, float theta, Point2f pos, int size=20);
 
     void setMap(char* pathToScaledMap);

@@ -44,7 +44,9 @@ private:
     cPinReader m_oPosReader;
     /*! Writer to an OutPin. */
     cPinWriter m_oPosWriter;
+    cPinWriter m_oConfWriter;
 
+    /*! A position identifier*/
     struct tPositionIndex
     {
         tSize x;
@@ -54,8 +56,17 @@ private:
         tSize heading;
     } m_ddlPositionIndex;
 
-    /*! The signal value sample factory */
+    /*! A signal value identifier. */
+    struct tSignalValueId
+    {
+        tSize timeStamp;
+        tSize value;
+    } m_ddlSignalValueId;
+
+    /*! The position signal value sample factory */
     cSampleCodecFactory m_PositionSampleFactory;
+    /*! The signal value sample factory */
+    cSampleCodecFactory m_SignalValueSampleFactory;
     //Stream Formats
     /*! The input format */
 
