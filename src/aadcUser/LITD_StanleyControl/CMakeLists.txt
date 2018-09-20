@@ -4,7 +4,6 @@ project(LITD_StanleyControl)
 
 include_directories(${OpenCV_INCLUDE_DIRS})
 include_directories(${Boost_INCLUDE_DIR})
-include_directories(/home/aadc/share/adtf/include/*)
 
 set (SOURCEFILES    	stdafx.h 
 			            LITD_StanleyControl.h
@@ -18,6 +17,8 @@ set (SOURCEFILES    	stdafx.h
 adtf_add_filter(${PROJECT_NAME}
 				${SOURCEFILES}
 )
+
+target_include_directories(${PROJECT_NAME} PUBLIC .)
 
 # Specify where it should be installed to
 adtf_install_target(${PROJECT_NAME} bin)
