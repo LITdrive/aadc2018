@@ -48,6 +48,7 @@ add_subdirectory(services)
 
 # utilities
 add_subdirectory(utils/properties)
+add_subdirectory(utils/zeromq)
 
 # filters
 add_subdirectory(OpenCVTemplate)
