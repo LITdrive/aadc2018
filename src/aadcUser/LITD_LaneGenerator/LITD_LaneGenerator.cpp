@@ -44,7 +44,7 @@ LITD_LaneGenerator::LITD_LaneGenerator()
     LOG_ERROR("Error adding straight element 0/0->2/0");
   }
   */
-  if(map.addDoubleStraightElement(1.0, 4.07, 0.0, 1.0, 0.3, 0.775, false)!=MAP_ENOERR) {
+  if(map.addDoubleStraightElement(1.0, 4.07, -10.0, 1.0, 0.3, 0.775, false)!=MAP_ENOERR) {
     LOG_ERROR("Error adding straight element 1/0->4/1");
   }
   /*
@@ -52,7 +52,7 @@ LITD_LaneGenerator::LITD_LaneGenerator()
     LOG_ERROR("Error adding curve element 2/0->3/1");
   }
   */
-  if(map.addDoubleCurveElement(4.07, 5.0, 0.0, 1.0, CURVE_CORNER_UL, 0.225, 0.7)!=MAP_ENOERR) {
+  if(map.addDoubleCurveElement(4.07, 10.0, -10.0, 1.0, CURVE_CORNER_UL, 0.225, 0.7)!=MAP_ENOERR) {
     LOG_ERROR("Error adding curve element 4/0->5/1");
   }
   /*
@@ -61,7 +61,7 @@ LITD_LaneGenerator::LITD_LaneGenerator()
   }
   */
 
-  if(map.addDoubleStraightElement(4.07, 5.0, 1.0, 2.0, 4.3, 4.75, true)!=MAP_ENOERR) {
+  if(map.addDoubleStraightElement(4.07, 10.0, 1.0, 2.0, 4.3, 4.75, true)!=MAP_ENOERR) {
     LOG_ERROR("Error adding straight element 4/1->5/2");
   }
   /*
@@ -69,7 +69,7 @@ LITD_LaneGenerator::LITD_LaneGenerator()
     LOG_ERROR("Error adding curve element 3/3->2/4");
   }
   */
-  if(map.addDoubleCurveElement(3.0, 5.0, 2.0, 4.0, CURVE_CORNER_LL, 1.3, 1.75)!=MAP_ENOERR) {
+  if(map.addDoubleCurveElement(3.0, 10.0, 2.0, 10.0, CURVE_CORNER_LL, 1.3, 1.75)!=MAP_ENOERR) {
     LOG_ERROR("Error adding curve element 3/3->2/4");
   }
   /*
@@ -77,7 +77,7 @@ LITD_LaneGenerator::LITD_LaneGenerator()
     LOG_ERROR("Error adding straight element 2/4->0/4");
   }
   */
-  if(map.addDoubleStraightElement(2.1, 3.0, 3.0, 4.0, 3.25, 3.7, false)!=MAP_ENOERR) {
+  if(map.addDoubleStraightElement(2.1, 3.0, 3.0, 10.0, 3.25, 3.7, false)!=MAP_ENOERR) {
     LOG_ERROR("Error adding straight element 2/3->3/4");
   }
   /*
@@ -85,7 +85,7 @@ LITD_LaneGenerator::LITD_LaneGenerator()
     LOG_ERROR("Error adding curve element 0/4->-1/3");
   }
   */
-  if(map.addDoubleCurveElement(0.0, 2.11, 2.0, 4.0, CURVE_CORNER_LR, 1.25, 1.75)!=MAP_ENOERR) {
+  if(map.addDoubleCurveElement(-10.0, 2.11, 2.0, 10.0, CURVE_CORNER_LR, 1.25, 1.75)!=MAP_ENOERR) {
     LOG_ERROR("Error adding curve element Lower-left corner");
   }
   /*
@@ -93,7 +93,7 @@ LITD_LaneGenerator::LITD_LaneGenerator()
     LOG_ERROR("Error adding straight element -1/3->-1/1");
   }  
   */
-  if(map.addDoubleStraightElement(0.0, 1.0, 1.0, 2.0, 0.33, 0.8, true)!=MAP_ENOERR) {
+  if(map.addDoubleStraightElement(-10.0, 1.0, 1.0, 2.0, 0.33, 0.8, true)!=MAP_ENOERR) {
     LOG_ERROR("Error adding straight element -1/3->-1/1");
   }
   /*
@@ -101,7 +101,7 @@ LITD_LaneGenerator::LITD_LaneGenerator()
     LOG_ERROR("Error adding curve element -1/1->0/0");
   }
   */
-  if(map.addDoubleCurveElement(0.0, 1.0, 0.0, 1.0, CURVE_CORNER_UR, 0.225, 0.67)!=MAP_ENOERR) {
+  if(map.addDoubleCurveElement(-10.0, 1.0, -10.0, 1.0, CURVE_CORNER_UR, 0.225, 0.67)!=MAP_ENOERR) {
     LOG_ERROR("Error adding curve element upper right corner");
   }   
 
