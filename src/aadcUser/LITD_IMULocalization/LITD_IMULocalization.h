@@ -134,7 +134,7 @@ private:
     tTimeStamp m_ticks;
 
     /*! EKF variables */
-    Mat m_state; /*! filter state {X} */
+    Mat m_state; /*! filter state {X}  x, y, heading, radius, speed, accel*/
     Mat m_errorCov; /*! error covariance matrix {P} */
     Mat m_processCov; /*! process covariance matrix {Q} */
     Mat m_transitionMatrix; /*! state transition matrix {F} */

@@ -62,7 +62,7 @@ THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS AS IS AND ANY EXPRESS OR I
 ADTF_TRIGGER_FUNCTION_FILTER_PLUGIN(CID_CMARKERPOS_DATA_TRIGGERED_FILTER,
     "LITD_IMULocalization",
     cLITD_IMULocalization,
-    adtf::filter::pin_trigger({ "imu" }));
+    adtf::filter::pin_trigger({"imu", "pos_reset"}));
 
 
 
@@ -188,7 +188,21 @@ tResult cLITD_IMULocalization::Process(tTimeStamp tmTimeOfTrigger)
 
     while(IS_OK(m_oReaderPositionReset.GetNextSample(pReadSample))) {
         auto oDecoder = m_PositionSampleFactory.MakeDecoderFor(*pReadSample);
-        
+        tFloat32 x, y, heading, speed;
+        RETURN_IF_FAILED(oDecoder.IsValid());
+
+        RETURN_IF_FAILED(oDecoder.GetElementValue(m_ddlPositionIndex.x, &x));
+        RETURN_IF_FAILED(oDecoder.GetElementValue(m_ddlPositionIndex.y, &y));
+        RETURN_IF_FAILED(oDecoder.GetElementValue(m_ddlPositionIndex.heading, &heading));
+        RETURN_IF_FAILED(oDecoder.GetElementValue(m_ddlPositionIndex.speed, &speed));
+
+        ResetFilter();
+        m_state.at<double>(0) = x;
+        m_state.at<double>(1) = y;
+        m_state.at<double>(2) = heading;
+        m_state.at<double>(3) = 0;
+        m_state.at<double>(4) = speed;
+        m_state.at<double>(5) = 0;
     }
 
     while (IS_OK(m_oReaderSpeed.GetNextSample(pReadSample)))
@@ -292,8 +306,7 @@ tFloat32 cLITD_IMULocalization::mod(tFloat32 x, tFloat32 y)
 
 
 /*! sends position data out */
-tResult cLITD_IMULocalization::sendPositionStruct(const tTimeStamp &timeOfFix, const tFloat32 &f32X, const tFloat32 &f32Y, const tFloat32 &f32Radius,
-    const tFloat32 &f32Heading, const tFloat32 &f32Speed)
+tResult cLITD_IMULocalization::sendPositionStruct(const tTimeStamp &timeOfFix, const tFloat32 &f32X, const tFloat32 &f32Y, const tFloat32 &f32Radius, const tFloat32 &f32Heading, const tFloat32 &f32Speed)
 {
     object_ptr<ISample> pSample;
     RETURN_IF_FAILED(alloc_sample(pSample, timeOfFix));
