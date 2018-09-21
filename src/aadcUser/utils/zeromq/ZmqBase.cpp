@@ -220,7 +220,7 @@ void cZmqBase::InitializeZeroMQThread()
 		{
 #ifdef _DEBUG
 			// latency measurement in debug mode
-			tTimeStamp start = cHighResTimer::GetTime();
+			tTimeStamp start = 0;
 #endif
 
 			/* --- receive and forward data --- */
@@ -231,6 +231,9 @@ void cZmqBase::InitializeZeroMQThread()
 				// receive from parent thread
 				zmq::message_t message;
 				pair_socket.recv(&message);
+#ifdef _DEBUG
+				if (start == 0) start = cHighResTimer::GetTime();
+#endif
 				pair_flags = message.more() ? ZMQ_SNDMORE : 0;
 
 				// send to server
@@ -263,6 +266,11 @@ void cZmqBase::InitializeZeroMQThread()
 				}
 				while (server_flags == ZMQ_SNDMORE);
 
+#ifdef _DEBUG
+				const tTimeStamp end = cHighResTimer::GetTime();
+				LOG_DUMP("Sample latency: %.2f ms", (end - start) / 1000.0);
+#endif
+
 				// sanity checks
 				if (outputIndex < num_outputs)
 					LOG_ERROR("Expected %d output pin structs, but we only received %d messages. Missing pins will not flush any samples.", num_outputs, outputIndex);
@@ -274,11 +282,6 @@ void cZmqBase::InitializeZeroMQThread()
 					LOG_INFO("Successfully reconnected after timeout.");
 					lastConnectionState = true;
 				}
-
-#ifdef _DEBUG
-				const tTimeStamp end = cHighResTimer::GetTime();
-				LOG_DUMP("Sample latency: %.2f ms", (end - start) / 1000.0);
-#endif
 			}
 			else
 			{
