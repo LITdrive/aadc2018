@@ -79,6 +79,9 @@ private:
 	/*! server socket (tcp://ip:port OR ipc:///tmp/endpoint/0 OR inproc://endpoint) */
 	property_variable<cString> m_server_socket_address = cString("tcp://127.0.0.1:5555");
 
+	/* how many messages shall be queued in memory at a maximum (actual limit might be 60 - 70% lower) */
+	property_variable<tInt> m_queue_length = 10;
+
 	/*! clock service */
 	object_ptr<adtf::services::IReferenceClock> m_pClock;
 
@@ -111,6 +114,12 @@ private:
 
 	/* some nullbytes, which will be sent for empty pins */
 	uint8_t m_nullbytes[1024]{};
+
+	/* number of dropped samples */
+	int m_num_samples_dropped = 0;
+
+	/* is the queue full and we are only dropping samples from now on? */
+	bool m_drop_state = false;
 
 private:
 

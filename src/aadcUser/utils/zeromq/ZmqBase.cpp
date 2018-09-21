@@ -28,6 +28,7 @@ void zmq_free_message(void *data, void *hint);
 cZmqBase::cZmqBase()
 {
 	RegisterPropertyVariable("ZeroMQ Socket Address", m_server_socket_address);
+	RegisterPropertyVariable("ZeroMQ Queue Length", m_queue_length);
 
 	// we need some null bytes for empty messages, fill them!
 	memset(m_nullbytes, 0, sizeof m_nullbytes / sizeof *m_nullbytes);
@@ -75,11 +76,16 @@ tResult cZmqBase::Configure()
 	
 	// create a pair socket that will distribute messages to the runners socket
 	m_sck_pair = new zmq::socket_t(*m_pZeroMQService->GetContext(), ZMQ_PAIR);
-	m_sck_pair->bind(GetPairSocketAddress());
 
 	// do not wait at close time
 	int linger = 0;
 	m_sck_pair->setsockopt(ZMQ_LINGER, &linger, sizeof linger);
+
+	// limit queue length (shared for inproc sockets)
+	int hwm = m_queue_length / 2;
+	m_sck_pair->setsockopt(ZMQ_SNDHWM, &hwm, sizeof hwm);
+
+	m_sck_pair->bind(GetPairSocketAddress());
 
 	// wake up the zeromq thread
 	std::unique_lock<std::mutex> lk(m_runner_mutex);
@@ -189,11 +195,16 @@ void cZmqBase::InitializeZeroMQThread()
 
 		// connect a PAIR socket to the parent thread
 		auto pair_socket = zmq::socket_t(*m_pZeroMQService->GetContext(), ZMQ_PAIR);
-		pair_socket.connect(GetPairSocketAddress());
 
 		// do not wait at close time
 		int linger = 0;
 		pair_socket.setsockopt(ZMQ_LINGER, &linger, sizeof linger);
+
+		// limit queue length
+		int hwm = m_queue_length / 2;
+		pair_socket.setsockopt(ZMQ_RCVHWM, &hwm, sizeof hwm);
+
+		pair_socket.connect(GetPairSocketAddress());
 
 		// connect a REQ socket to the server
 		zmq::socket_t* client_socket = InitializeClientSocket();
@@ -270,7 +281,7 @@ void cZmqBase::InitializeZeroMQThread()
 			}
 			else
 			{
-				LOG_WARNING("Dropped sample due to timeout (%d ms).", ZMQ_REQUEST_TIMEOUT);
+				LOG_WARNING("Server socket timed out after waiting %d ms for a reply.", ZMQ_REQUEST_TIMEOUT);
 				// reopen the socket because we can't send another message on this REQ socket
 				delete client_socket;
 				client_socket = InitializeClientSocket();
@@ -312,12 +323,14 @@ tResult cZmqBase::ProcessInputs(tTimeStamp tmTimeOfTrigger)
 
 		// send a multipart message by setting the ZMQ_SNDMORE flag on every message except the last
 		const bool isLastElement = i == m_inputs.size();
-		const int flags = isLastElement ? 0 : ZMQ_SNDMORE;
+		const int flags = (isLastElement ? 0 : ZMQ_SNDMORE) | ZMQ_DONTWAIT;
 
 		std::string pinName = std::get<0>(input);
 		eZmqStruct pinType = std::get<1>(input);
 		cPinReader* pinReader = m_pinReaders[pinName];
 		cSampleCodecFactory* pinSampleFactory = GetSampleFactory(pinType);
+
+		bool returncode = false;
 
 		// if the pin is not attached or there never have been any samples, the samples might be invalid
 		object_ptr<const ISample> pSample;
@@ -325,7 +338,7 @@ tResult cZmqBase::ProcessInputs(tTimeStamp tmTimeOfTrigger)
 		{
 			// send an empty struct (just null bytes) if the samples is invalid
 			zmq::message_t message(m_nullbytes, GetStructSize(pinType), nullptr, nullptr);
-			m_sck_pair->send(message, flags);
+			returncode = m_sck_pair->send(message, flags);
 		}
 		else
 		{
@@ -350,7 +363,7 @@ tResult cZmqBase::ProcessInputs(tTimeStamp tmTimeOfTrigger)
 					RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlSignalValueId.value, &signalValue->f32Value));
 
 					zmq::message_t message(signalValue, sizeof(tSignalValue), zmq_free_message, nullptr);
-					m_sck_pair->send(message, flags);
+					returncode = m_sck_pair->send(message, flags);
 				}
 				break;
 
@@ -361,7 +374,7 @@ tResult cZmqBase::ProcessInputs(tTimeStamp tmTimeOfTrigger)
 					RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlBoolSignalValueId.bValue, &boolSignalValue->bValue));
 
 					zmq::message_t message(boolSignalValue, sizeof(tBoolSignalValue), zmq_free_message, nullptr);
-					m_sck_pair->send(message, flags);
+					returncode = m_sck_pair->send(message, flags);
 				}
 				break;
 
@@ -373,7 +386,7 @@ tResult cZmqBase::ProcessInputs(tTimeStamp tmTimeOfTrigger)
 					RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlWheelDataIndex.WheelDir, &wheelData->i8WheelDir));
 
 					zmq::message_t message(wheelData, sizeof(tWheelData), zmq_free_message, nullptr);
-					m_sck_pair->send(message, flags);
+					returncode = m_sck_pair->send(message, flags);
 				}
 				break;
 
@@ -392,7 +405,7 @@ tResult cZmqBase::ProcessInputs(tTimeStamp tmTimeOfTrigger)
 					RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlInerMeasUnitDataIndex.M_z, &IMU_data->f32M_z));
 
 					zmq::message_t message(IMU_data, sizeof(tInerMeasUnitData), zmq_free_message, nullptr);
-					m_sck_pair->send(message, flags);
+					returncode = m_sck_pair->send(message, flags);
 				}
 				break;
 
@@ -432,7 +445,7 @@ tResult cZmqBase::ProcessInputs(tTimeStamp tmTimeOfTrigger)
 					RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlUltrasonicStructIndex.RearRight.timeStamp, &US_data->tRearRight.ui32ArduinoTimestamp));
 
 					zmq::message_t message(US_data, sizeof(tUltrasonicStruct), zmq_free_message, nullptr);
-					m_sck_pair->send(message, flags);
+					returncode = m_sck_pair->send(message, flags);
 				}
 				break;
 
@@ -451,7 +464,7 @@ tResult cZmqBase::ProcessInputs(tTimeStamp tmTimeOfTrigger)
 					RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlVoltageStructIndex.SensorCell6.value, &voltData->tSensorCell6.f32Value));
 
 					zmq::message_t message(voltData, sizeof(tVoltageStruct), zmq_free_message, nullptr);
-					m_sck_pair->send(message, flags);
+					returncode = m_sck_pair->send(message, flags);
 				}
 				break;
 
@@ -476,13 +489,31 @@ tResult cZmqBase::ProcessInputs(tTimeStamp tmTimeOfTrigger)
 						scan.push_back(scanPoint);
 					}
 
-					m_sck_pair->send(&scan[0], numOfScanPoints * sizeof(tPolarCoordiante));
+					returncode = m_sck_pair->send(&scan[0], numOfScanPoints * sizeof(tPolarCoordiante));
 				}
 				break;
 
 			default:
 				LOG_ERROR("Unrecognized eZmqStruct %d while processing inputs.", pinType);
 			}
+		}
+
+		// if the send fails with the ZMQ_DONTWAIT flag set, the queue length limit has been reached
+		if (!returncode)
+		{
+			// did we just switch to this state?
+			if (!m_drop_state)
+				LOG_WARNING("Senders queue overflow. We will drop samples from now on!");
+			m_num_samples_dropped++;
+			m_drop_state = true;
+			break;
+		}
+		else if (m_drop_state)
+		{
+			// we recovered, report number of dropped samples
+			LOG_WARNING("Dropped %d samples because too many samples are in the senders queue.", m_num_samples_dropped);
+			m_num_samples_dropped = 0;
+			m_drop_state = false;
 		}
 	}
 
