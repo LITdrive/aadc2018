@@ -200,6 +200,7 @@ void cZmqBase::InitializeZeroMQThread()
 
 		LOG_DUMP("ZMQ I/O thread and client sockets initialized.");
 
+		const size_t num_outputs = m_outputs.size();
 		bool lastConnectionState = true;
 
 		// TODO: explicitly stop this loop in the destructor or use zmq heartbeating
@@ -251,10 +252,10 @@ void cZmqBase::InitializeZeroMQThread()
 				while (server_flags == ZMQ_SNDMORE);
 
 				// sanity checks
-				if (outputIndex < m_inputs.size())
-					LOG_ERROR("Expected %d output pin structs, but we only received %d messages. Missing pins will not flush any samples.",	m_inputs.size(), outputIndex);
-				else if (outputIndex > m_inputs.size())
-					LOG_ERROR("Expected %d output pin structs, but we received %d messages. Additional messages will be discarded.", m_inputs.size(), outputIndex);
+				if (outputIndex < num_outputs)
+					LOG_ERROR("Expected %d output pin structs, but we only received %d messages. Missing pins will not flush any samples.", num_outputs, outputIndex);
+				else if (outputIndex > num_outputs)
+					LOG_ERROR("Expected %d output pin structs, but we received %d messages. Additional messages will be discarded.", num_outputs, outputIndex);
 
 				if (!lastConnectionState)
 				{
