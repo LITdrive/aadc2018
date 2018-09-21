@@ -76,6 +76,7 @@ tResult cLITD_ObjectDetection::Process(tTimeStamp tmTimeOfTrigger)
             //Do the image processing and copy to destination image buffer
             output = yolo_handler.forward_path(inputImage);
             LOG_INFO("forward path done: %d", output.dim_size(1));
+            // TODO: write output tensor on output pin
         }
     }
     
