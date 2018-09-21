@@ -144,8 +144,9 @@ tResult cStanleyControl::Configure()
 
 tResult cStanleyControl::Process(tTimeStamp tmTimeOfTrigger)
 {
-	// avoid that the method triggers itself due to the feedback loop
-	std::lock_guard<std::mutex> oGuard(m_oMutex);
+    LOG_INFO("Process");
+    // only one thread at a time shall execute this method
+    std::lock_guard<std::mutex> oGuard(m_oMutex);
 
     object_ptr<const ISample> pReadSampleIst;
     object_ptr<const ISample> pReadSampleSoll;
@@ -188,7 +189,7 @@ tResult cStanleyControl::Process(tTimeStamp tmTimeOfTrigger)
             //f32Radius, f32Heading, f32Speed).GetPtr());
 
         // the sample buffer lock is released in the destructor of oCodec
-        m_oFrontAxisWriter << pSample << flush << trigger;
+        m_oFrontAxisWriter << pSample << flush;
 
         RETURN_NOERROR; 
     }

@@ -87,13 +87,14 @@ private:
     property_variable<tBool>       m_bShowDebug = tFalse;
 
 
-	/*! clock service */
-	object_ptr<adtf::services::IReferenceClock> m_pClock;
+    /*! clock service */
+    object_ptr<adtf::services::IReferenceClock> m_pClock;
 
     void calculateFrontPos();
 
-	/*! mutex for process method synchronization */
-	std::mutex m_oMutex;
+    /*! mutex for process method synchronization */
+    std::mutex m_oMutex;
+
 
 public:
 
