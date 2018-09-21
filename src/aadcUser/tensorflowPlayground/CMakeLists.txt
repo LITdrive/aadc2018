@@ -14,7 +14,7 @@ set(CMAKE_CXX_STANDARD 11)
 # Print some message showing some of them
 
 # Add tensorflow headers location to your include paths
-include_directories(${Protobuf_INCLUDE_DIRS} ${EIGEN3_INCLUDE_DIRS} ${TENSORFLOW_INCLUDE_DIRS})
+include_directories(${Protobuf_INCLUDE_DIRS} ${EIGEN3_INCLUDE_DIRS} ${TENSORFLOW_INCLUDE_DIRS} ${OpenCV_INCLUDE_DIRS})
 
 
 
@@ -27,4 +27,5 @@ install(TARGETS ${PROJECT_NAME} DESTINATION bin/application CONFIGURATIONS RelWi
 install(TARGETS ${PROJECT_NAME} DESTINATION bin/debug/application CONFIGURATIONS Debug)
 
 # Link your application with tensorflow libraries
+target_link_libraries(${PROJECT_NAME} LINK_PUBLIC ${OpenCV_LIBS})
 target_link_libraries(${PROJECT_NAME} LINK_PUBLIC ${Protobuf_LIBRARIES} ${TENSORFLOW_LIBS} )
