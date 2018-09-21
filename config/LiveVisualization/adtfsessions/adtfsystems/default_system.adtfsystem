@@ -235,7 +235,7 @@
       <url>$(BIN_DIR)/tensorflowtemplate_filter.adtfplugin</url>
     </plugin>
     <plugin>
-      <url>$(BIN_DIR)/newtensorflowtemplate_filter.adtfplugin</url>
+      <url>$(BIN_DIR)/litd_objectdetection_filter.adtfplugin</url>
     </plugin>
   </plugins>
   <debug_plugins>
@@ -336,7 +336,7 @@
       <url>$(BIN_DIR)/tensorflowtemplate_filter.adtfplugin</url>
     </plugin>
     <plugin>
-      <url>$(BIN_DIR)/debug/newtensorflowtemplate_filter.adtfplugin</url>
+      <url>$(BIN_DIR)/debug/litd_objectdetection_filter.adtfplugin</url>
     </plugin>
   </debug_plugins>
   <services>
