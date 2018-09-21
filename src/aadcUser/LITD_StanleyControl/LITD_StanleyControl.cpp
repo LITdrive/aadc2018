@@ -13,6 +13,8 @@ THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS AS IS AND ANY EXPRESS OR I
 
 **********************************************************************/
 
+#define SPEED_DEADBAND 0.01
+
 #include "stdafx.h"
 #include "LITD_StanleyControl.h"
 #include "math_utilities.h"
@@ -21,7 +23,6 @@ THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS AS IS AND ANY EXPRESS OR I
 /* notes to check
 [] actual speed has to be in car-struct
 [] is the given point normal to car position?
-
 */
 
 
@@ -47,6 +48,16 @@ void cStanleyControl::mapSteeringAngle(){
 
 }
 
+double wrapToPiSymetric(double angle){
+    if(angle > M_PI){
+        return 2*M_PI - angle;
+    }
+    if(angle < -M_PI){
+        return 2*M_PI + angle;
+    }
+    return angle;
+}
+
 
 void cStanleyControl::calcSteeringAngle(){
     
@@ -67,7 +78,7 @@ void cStanleyControl::calcSteeringAngle(){
     tFloat32 theta_c =  wrapTo2Pi(vp.h) - wrapTo2Pi(carFrontPosition.h);
 
     //calc steering-angle with stanley-approach
-    carSteeringAngle = theta_c + atan2(stanleyGain*e, carSpeed);
+    carSteeringAngle = wrapToPiSymetric(theta_c + atan2(stanleyGain*e, carSpeed));
     LOG_INFO("Steering angle in rad : %.2f ", carSteeringAngle);
 
     //Debug Messages
@@ -83,7 +94,7 @@ void cStanleyControl::calcSteeringAngle(){
     LOG_INFO("car heading in rad : %.2f ", carFrontPosition.h);
 	LOG_INFO("e  : %.2f ", e);
 	LOG_INFO("theta : %.2f ", theta_c);
-    LOG_INFO("car speed : %.2f ", carSpeed);
+    LOG_INFO("car speed : %e ", carSpeed);
     LOG_INFO("calc : %.2f ", theta_c + atan2(stanleyGain*e, carSpeed));
     LOG_INFO("gainz : %.2f ", stanleyGain);
 
@@ -267,7 +278,7 @@ tResult cStanleyControl::Process(tTimeStamp tmTimeOfTrigger)
         }
     
 
-        if(carSpeed > 0.0){
+        if(carSpeed > SPEED_DEADBAND){
             // Do the Processing
             LOG_INFO("Soll x : %.2f, soll y: %.2f ", vp.x, vp.y);
             LOG_INFO("Ist x : %.2f, Ist y: %.2f ", carFrontPosition.x, carFrontPosition.y);
@@ -284,13 +295,9 @@ tResult cStanleyControl::Process(tTimeStamp tmTimeOfTrigger)
             mapSteeringAngle();
             LOG_INFO("Steering Value (-100 to +100) : %.2f ", carSteeringValue);
         }
-    
-    //TODO: check the input-type for the steering-controller
-    //is this a float or a integer-value
-    // in case of int, do a cast and change the output data-type
-	transmitSignalValue(m_oWriter, m_pClock->GetStreamTime(), m_SignalValueSampleFactory, m_ddlSignalValueId.timeStamp, 0, m_ddlSignalValueId.value, carSteeringValue);
+        transmitSignalValue(m_oWriter, m_pClock->GetStreamTime(), m_SignalValueSampleFactory, m_ddlSignalValueId.timeStamp, 0, m_ddlSignalValueId.value, carSteeringValue);
     } else {
-        LOG_ERROR("Reading sample failed!!");
+        //LOG_ERROR("Reading sample failed!!");
     }
     RETURN_NOERROR;
 }
