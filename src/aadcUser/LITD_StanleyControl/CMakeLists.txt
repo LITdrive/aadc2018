@@ -12,7 +12,25 @@ set (SOURCEFILES    	stdafx.h
                         LITD_VirtualPoint.cpp
                         math_utilities.h
                         ../utils/properties/FilePropertiesObserver.h
-						../utils/properties/FilePropertiesObserver.cpp)
+						../utils/properties/FilePropertiesObserver.cpp
+		  LITD_Map.cpp
+		  LITD_MapElementCrossing.cpp
+		  LITD_MapElementCrossing.h
+		  LITD_MapElementCurve.cpp
+		  LITD_MapElementCurve.h
+		  LITD_MapElementDoubleCurve.cpp
+		  LITD_MapElementDoubleCurve.h
+		  LITD_MapElementDoubleStraight.cpp
+		  LITD_MapElementDoubleStraight.h
+		  LITD_MapElement.h
+		  LITD_MapElementStraight.cpp
+		  LITD_MapElementStraight.h
+		  LITD_Map.h
+		  LITD_VirtualPoint.cpp
+		  LITD_VirtualPoint.h
+		  math_utilities.h
+		  stdafx.h
+                  )
 
 adtf_add_filter(${PROJECT_NAME}
 				${SOURCEFILES}

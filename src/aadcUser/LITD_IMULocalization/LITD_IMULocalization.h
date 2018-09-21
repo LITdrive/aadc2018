@@ -60,6 +60,8 @@ private:
     cPinReader m_oReaderSpeed;
     /*! Reader of an InPin IMU. */
     cPinReader m_oReaderIMU;
+    /*! Reader of an InPin, Position reset */
+    cPinReader m_oReaderPositionReset;
 
     /*! Writer to an OutPin. */
     cPinWriter m_oWriter;

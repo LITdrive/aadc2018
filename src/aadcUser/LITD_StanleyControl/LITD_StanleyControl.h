@@ -16,6 +16,7 @@ THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS AS IS AND ANY EXPRESS OR I
 #pragma once
 
 #include "LITD_VirtualPoint.h"
+#include "LITD_Map.h"
 #include "../utils/properties/FilePropertiesObserver.h"
 
 //*************************************************************************************************
@@ -66,10 +67,8 @@ private:
 
     /*! Reader of an InPin. */
     cPinReader m_oVPReaderIst;
-    cPinReader m_oVPReaderSoll;
     /*! Writer to an OutPin. */
     cPinWriter m_oWriter;
-    cPinWriter m_oFrontAxisWriter;
 
     tFloat32 carX, carY, carHeading, carSpeed, sollX, sollY, sollHeading, sollSpeed;
     tFloat32 carSteeringAngle, carSteeringValue;
@@ -78,22 +77,21 @@ private:
     LITD_VirtualPoint carBackPosition;
     LITD_VirtualPoint carFrontPosition;
 
+    LITD_Map map;
+
     //controller params
     tFloat32 stanleyGain = 1.5;
-    tFloat32 maxAngle = 45.0;
+    tFloat32 maxAngle = 45;
 
-    property_variable<cFilename> m_properties_file = cFilename("/home/aadc/share/adtf/configuration_files/properties/stanleycontrol_pid.ini");
+    property_variable<cFilename> m_properties_file = cFilename("../../../../configuration_files/properties/stanleycontrol_pid.ini");
 	FilePropertiesObserver* m_properties;
     property_variable<tBool>       m_bShowDebug = tFalse;
 
 
-    /*! clock service */
-    object_ptr<adtf::services::IReferenceClock> m_pClock;
+	/*! clock service */
+	object_ptr<adtf::services::IReferenceClock> m_pClock;
 
     void calculateFrontPos();
-
-    /*! mutex for process method synchronization */
-    std::mutex m_oMutex;
 
 
 public:

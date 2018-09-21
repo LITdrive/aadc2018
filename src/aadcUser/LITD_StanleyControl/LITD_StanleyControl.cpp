@@ -28,7 +28,7 @@ THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS AS IS AND ANY EXPRESS OR I
 ADTF_TRIGGER_FUNCTION_FILTER_PLUGIN(CID_LITD_STANLEY_CONTROL_FILTER,
     "LITD_StanleyControl",
     cStanleyControl,
-    adtf::filter::pin_trigger({"inPositionIs", "inPositionSet"}));
+    adtf::filter::pin_trigger({"inPositionIs"}));
 
 void cStanleyControl::calculateFrontPos(){
     double dx = cos(carBackPosition.h)*CAR_AXIS_DIST;
@@ -128,9 +128,80 @@ cStanleyControl::cStanleyControl()
 
     //Register input pin
     Register(m_oVPReaderIst, "inPositionIs", pTypePositionData);
-    Register(m_oVPReaderSoll, "inPositionSet", pTypePositionData);
     Register(m_oWriter, "output", pTypeSignalValue);
-    Register(m_oFrontAxisWriter, "frontAxis", pTypePositionData);
+
+
+    LOG_INFO("Generating lane map...");
+
+   //Vertical straight between x 0->2
+  /*
+  if(map.addStraightElement(0.0, 2.0, -0.5, 0.5, 0.0, false)!=MAP_ENOERR) {
+    LOG_ERROR("Error adding straight element 0/0->2/0");
+  }
+  */
+  if(map.addDoubleStraightElement(1.0, 4.07, -10.0, 1.0, 0.3, 0.775, false)!=MAP_ENOERR) {
+    LOG_ERROR("Error adding straight element 1/0->4/1");
+  }
+  /*
+  if(map.addCurveElement(2.0, 3.5, -0.5, 1.0, CURVE_CORNER_UL, 1.0)!=MAP_ENOERR) {
+    LOG_ERROR("Error adding curve element 2/0->3/1");
+  }
+  */
+  if(map.addDoubleCurveElement(4.07, 10.0, -10.0, 1.0, CURVE_CORNER_UL, 0.225, 0.7)!=MAP_ENOERR) {
+    LOG_ERROR("Error adding curve element 4/0->5/1");
+  }
+  /*
+  if(map.addStraightElement(2.5, 3.5, 1.0, 3.0, 3.0, true)!=MAP_ENOERR) {
+    LOG_ERROR("Error adding straight element 3/1->3/3");
+  }
+  */
+
+  if(map.addDoubleStraightElement(4.07, 10.0, 1.0, 2.0, 4.3, 4.75, true)!=MAP_ENOERR) {
+    LOG_ERROR("Error adding straight element 4/1->5/2");
+  }
+  /*
+  if(map.addCurveElement(2.0, 3.5, 3.0, 4.5, CURVE_CORNER_LL, 1.0)!=MAP_ENOERR) {
+    LOG_ERROR("Error adding curve element 3/3->2/4");
+  }
+  */
+  if(map.addDoubleCurveElement(3.0, 10.0, 2.0, 10.0, CURVE_CORNER_LL, 1.3, 1.75)!=MAP_ENOERR) {
+    LOG_ERROR("Error adding curve element 3/3->2/4");
+  }
+  /*
+  if(map.addStraightElement(0.0, 2.0, 3.5, 4.5, 4.0, false)!=MAP_ENOERR) {
+    LOG_ERROR("Error adding straight element 2/4->0/4");
+  }
+  */
+  if(map.addDoubleStraightElement(2.1, 3.0, 3.0, 10.0, 3.25, 3.7, false)!=MAP_ENOERR) {
+    LOG_ERROR("Error adding straight element 2/3->3/4");
+  }
+  /*
+  if(map.addCurveElement(-1.5, 0.0, 3.0, 4.5, CURVE_CORNER_LR, 1.0)!=MAP_ENOERR) {
+    LOG_ERROR("Error adding curve element 0/4->-1/3");
+  }
+  */
+  if(map.addDoubleCurveElement(-10.0, 2.11, 2.0, 10.0, CURVE_CORNER_LR, 1.25, 1.75)!=MAP_ENOERR) {
+    LOG_ERROR("Error adding curve element Lower-left corner");
+  }
+  /*
+  if(map.addStraightElement(-1.5, -0.5, 1.0, 3.0, -1.0, true)!=MAP_ENOERR) {
+    LOG_ERROR("Error adding straight element -1/3->-1/1");
+  }  
+  */
+  if(map.addDoubleStraightElement(-10.0, 1.0, 1.0, 2.0, 0.33, 0.8, true)!=MAP_ENOERR) {
+    LOG_ERROR("Error adding straight element -1/3->-1/1");
+  }
+  /*
+  if(map.addCurveElement(-1.5, 0.0, -0.5, 1.0, CURVE_CORNER_UR, 1.0)!=MAP_ENOERR) {
+    LOG_ERROR("Error adding curve element -1/1->0/0");
+  }
+  */
+  if(map.addDoubleCurveElement(-10.0, 1.0, -10.0, 1.0, CURVE_CORNER_UR, 0.225, 0.67)!=MAP_ENOERR) {
+    LOG_ERROR("Error adding curve element upper right corner");
+  }   
+
+    LOG_INFO("Lane map generation complete!");
+
 
 }
 
@@ -144,16 +215,13 @@ tResult cStanleyControl::Configure()
 
 tResult cStanleyControl::Process(tTimeStamp tmTimeOfTrigger)
 {
-    LOG_INFO("Process");
-    // only one thread at a time shall execute this method
-    std::lock_guard<std::mutex> oGuard(m_oMutex);
 
     object_ptr<const ISample> pReadSampleIst;
     object_ptr<const ISample> pReadSampleSoll;
 
     m_properties->TriggerPropertiesReload(80); // reload the file every 2 seconds with a 25 msec timer
 	stanleyGain = m_properties->GetFloat("stanley_gain");
-    //maxAngle = m_properties->GetFloat("max_angle");
+    maxAngle = m_properties->GetFloat("max_angle");
 	
     
     
@@ -188,47 +256,41 @@ tResult cStanleyControl::Process(tTimeStamp tmTimeOfTrigger)
         //LOG_INFO(cString::Format("sendPositionStruct: %.3f %.3f %.3f %.3f %.3f", f32X, f32Y,
             //f32Radius, f32Heading, f32Speed).GetPtr());
 
-        // the sample buffer lock is released in the destructor of oCodec
-        m_oFrontAxisWriter << pSample << flush;
+        //RETURN_NOERROR; 
 
-        RETURN_NOERROR; 
-    }
-    if(IS_OK(m_oVPReaderSoll.GetLastSample(pReadSampleSoll))) {
-        auto oDecoder2 = m_VirtualPointSampleFactory.MakeDecoderFor(*pReadSampleSoll);
-
-        RETURN_IF_FAILED(oDecoder2.IsValid());
-
-        RETURN_IF_FAILED(oDecoder2.GetElementValue(m_ddlPositionIndex.x, &sollX));
-        RETURN_IF_FAILED(oDecoder2.GetElementValue(m_ddlPositionIndex.y, &sollY));
-        RETURN_IF_FAILED(oDecoder2.GetElementValue(m_ddlPositionIndex.heading, &sollHeading));
-        RETURN_IF_FAILED(oDecoder2.GetElementValue(m_ddlPositionIndex.speed, &sollSpeed));
-
-        vp.x = sollX;
-        vp.y = sollY;
-    }
-
-    if(carSpeed > 0.0001){
-        // Do the Processing
-        LOG_INFO("Soll x : %.2f, soll y: %.2f ", vp.x, vp.y);
-        LOG_INFO("Ist x : %.2f, Ist y: %.2f ", carFrontPosition.x, carFrontPosition.y);
-        calcSteeringAngle();
-
-        if(carSteeringAngle < -M_PI/4){
-            carSteeringAngle = -M_PI/4;
-            LOG_INFO("Steering angle truncated to %.2f(-45°)!",carSteeringAngle);
-        } else if(carSteeringAngle > M_PI/4){
-            carSteeringAngle = M_PI/4;
-            LOG_INFO("Steering angle truncated to 45°!");
+        vp=map.getNormalPoint(carFrontPosition);
+        //double spd=map.getSpeedAdvisory();
+        LITD_map_error_t err=map.getMapState();
+        if(err!=MAP_ENOERR) {
+            LOG_ERROR("LaneGenerator (x=%lf; y=%lf; heading=%lf) is in invalid state: \"%s\" Resetting speed!", static_cast<double>(carFrontPosition.x),static_cast<double>(carFrontPosition.y),static_cast<double>(carFrontPosition.h),map.strerr(err).c_str());
+            vp=carFrontPosition;
         }
-        //calculate the mapping from -100 to +100
-        mapSteeringAngle();
-        LOG_INFO("Steering Value (-100 to +100) : %.2f ", carSteeringValue);
-    }
+    
+
+        if(carSpeed > 0.0){
+            // Do the Processing
+            LOG_INFO("Soll x : %.2f, soll y: %.2f ", vp.x, vp.y);
+            LOG_INFO("Ist x : %.2f, Ist y: %.2f ", carFrontPosition.x, carFrontPosition.y);
+            calcSteeringAngle();
+
+            if(carSteeringAngle < -M_PI/4){
+                carSteeringAngle = -M_PI/4;
+                LOG_INFO("Steering angle truncated to -45°!");
+            } else if(carSteeringAngle > M_PI/4){
+                carSteeringAngle = M_PI/4;
+                LOG_INFO("Steering angle truncated to 45°!");
+            }
+            //calculate the mapping from -100 to +100
+            mapSteeringAngle();
+            LOG_INFO("Steering Value (-100 to +100) : %.2f ", carSteeringValue);
+        }
     
     //TODO: check the input-type for the steering-controller
     //is this a float or a integer-value
     // in case of int, do a cast and change the output data-type
 	transmitSignalValue(m_oWriter, m_pClock->GetStreamTime(), m_SignalValueSampleFactory, m_ddlSignalValueId.timeStamp, 0, m_ddlSignalValueId.value, carSteeringValue);
-
+    } else {
+        LOG_ERROR("Reading sample failed!!");
+    }
     RETURN_NOERROR;
 }

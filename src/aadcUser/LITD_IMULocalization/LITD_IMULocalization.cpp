@@ -145,6 +145,7 @@ cLITD_IMULocalization::cLITD_IMULocalization()
     //register input pin(s)
     Register(m_oReaderSpeed, "speed", pConstTypeSignalData);
     Register(m_oReaderIMU, "imu", pConstTypeIMUData);
+    Register(m_oReaderPositionReset, "pos_reset", pConstTypePositionData);
    
     //register output pin
     Register(m_oWriter, "position", pConstTypePositionData);
@@ -184,6 +185,11 @@ tResult cLITD_IMULocalization::Process(tTimeStamp tmTimeOfTrigger)
     object_ptr<const ISample> pReadSample;
 
     //LOG_INFO(cString::Format("process: %lu", tmTimeOfTrigger).GetPtr());
+
+    while(IS_OK(m_oReaderPositionReset.GetNextSample(pReadSample))) {
+        auto oDecoder = m_PositionSampleFactory.MakeDecoderFor(*pReadSample);
+        
+    }
 
     while (IS_OK(m_oReaderSpeed.GetNextSample(pReadSample)))
     {
