@@ -236,7 +236,7 @@ void cZmqBase::InitializeZeroMQThread()
 			if (items[0].revents & ZMQ_POLLIN)
 			{
 				int server_flags;
-				int outputIndex = 0;
+				size_t outputIndex = 0;
 				do
 				{
 					// receive from server
@@ -249,6 +249,12 @@ void cZmqBase::InitializeZeroMQThread()
 					outputIndex++;
 				}
 				while (server_flags == ZMQ_SNDMORE);
+
+				// sanity checks
+				if (outputIndex < m_inputs.size())
+					LOG_ERROR("Expected %d output pin structs, but we only received %d messages. Missing pins will not flush any samples.",	m_inputs.size(), outputIndex);
+				else if (outputIndex > m_inputs.size())
+					LOG_ERROR("Expected %d output pin structs, but we received %d messages. Additional messages will be discarded.", m_inputs.size(), outputIndex);
 
 				if (!lastConnectionState)
 				{
@@ -482,8 +488,14 @@ tResult cZmqBase::ProcessInputs(tTimeStamp tmTimeOfTrigger)
 	RETURN_NOERROR;
 }
 
-tResult cZmqBase::ProcessOutput(zmq::message_t* frame, const int index)
+tResult cZmqBase::ProcessOutput(zmq::message_t* frame, const size_t index)
 {
+	if (index >= m_outputs.size())
+	{
+		// ignore invalid outputs
+		RETURN_NOERROR;
+	}
+
 	ZmqPinDef pinDef = m_outputs.at(index);
 	std::string pinName = std::get<0>(pinDef);
 	eZmqStruct pinType = std::get<1>(pinDef);
@@ -505,17 +517,31 @@ tResult cZmqBase::ProcessOutput(zmq::message_t* frame, const int index)
 		break;
 	case SignalValue:
 		{
-			const auto signalValue = static_cast<tSignalValue*>(frame->data());
-			RETURN_IF_FAILED(sampleEncoder.SetElementValue(m_ddlSignalValueId.timeStamp, signalValue->ui32ArduinoTimestamp));
-			RETURN_IF_FAILED(sampleEncoder.SetElementValue(m_ddlSignalValueId.value, signalValue->f32Value));
+			if (frame->size() != sizeof(tSignalValue))
+			{
+				LOG_ERROR("Received %d bytes, but expected %d bytes for tSignalValue struct on pin %s", frame->size(), sizeof(tSignalValue), pinName.c_str());
+			}
+			else
+			{
+				const auto signalValue = static_cast<tSignalValue*>(frame->data());
+				RETURN_IF_FAILED(sampleEncoder.SetElementValue(m_ddlSignalValueId.timeStamp, signalValue->ui32ArduinoTimestamp));
+				RETURN_IF_FAILED(sampleEncoder.SetElementValue(m_ddlSignalValueId.value, signalValue->f32Value));
+			}
 		}
 		break;
 
 	case BoolSignalValue:
 		{
-			const auto boolSignalValue = static_cast<tBoolSignalValue*>(frame->data());
-			RETURN_IF_FAILED(sampleEncoder.SetElementValue(m_ddlBoolSignalValueId.ui32ArduinoTimestamp, boolSignalValue->ui32ArduinoTimestamp));
-			RETURN_IF_FAILED(sampleEncoder.SetElementValue(m_ddlBoolSignalValueId.bValue, boolSignalValue->bValue));
+			if (frame->size() != sizeof(tBoolSignalValue))
+			{
+				LOG_ERROR("Received %d bytes, but expected %d bytes for tBoolSignalValue struct on pin %s", frame->size(), sizeof(tBoolSignalValue), pinName.c_str());
+			}
+			else
+			{
+				const auto boolSignalValue = static_cast<tBoolSignalValue*>(frame->data());
+				RETURN_IF_FAILED(sampleEncoder.SetElementValue(m_ddlBoolSignalValueId.ui32ArduinoTimestamp, boolSignalValue->ui32ArduinoTimestamp));
+				RETURN_IF_FAILED(sampleEncoder.SetElementValue(m_ddlBoolSignalValueId.bValue, boolSignalValue->bValue));
+			}
 		}
 		break;
 

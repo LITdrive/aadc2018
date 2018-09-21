@@ -57,7 +57,7 @@ public:
 
 	tResult ProcessInputs(tTimeStamp tmTimeOfTrigger);
 
-	tResult ProcessOutput(zmq::message_t* frame, int index);
+	tResult ProcessOutput(zmq::message_t* frame, size_t index);
 
 	// necessary for proper behaviour of the create_inner_pipe call
 	using cRuntimeBehaviour::RegisterRunner;
