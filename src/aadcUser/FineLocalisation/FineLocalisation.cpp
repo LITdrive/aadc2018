@@ -113,10 +113,10 @@ tResult cFineLocalisation::Configure()
 
 tResult cFineLocalisation::Process(tTimeStamp tmTimeOfTrigger)
 {
-    object_ptr<const ISample> pReadSample, pVPReadSample;
+    object_ptr<const ISample> pReadSample, pPosReadSample;
 
-    if(IS_OK(m_oPosReader.GetLastSample(pVPReadSample))) {
-        auto oDecoder = m_PositionSampleFactory.MakeDecoderFor(*pVPReadSample);
+    if(IS_OK(m_oPosReader.GetLastSample(pPosReadSample))) {
+        auto oDecoder = m_PositionSampleFactory.MakeDecoderFor(*pPosReadSample);
 
         RETURN_IF_FAILED(oDecoder.IsValid());
 
@@ -126,6 +126,8 @@ tResult cFineLocalisation::Process(tTimeStamp tmTimeOfTrigger)
         //adjust heading for inversion of back camera
         heading = heading + headingOffset*DEG2RAD;
         RETURN_IF_FAILED(oDecoder.GetElementValue(m_ddlPositionIndex.speed, &speed));
+    } else {
+        LOG_ERROR("!!Failed to read last Position Sample!!");
     }
 
     while (IS_OK(m_oReader.GetNextSample(pReadSample)))
@@ -137,9 +139,8 @@ tResult cFineLocalisation::Process(tTimeStamp tmTimeOfTrigger)
             //create a opencv matrix from the media sample buffer
             Mat bvImage = Mat(cv::Size(m_sImageFormat.m_ui32Width, m_sImageFormat.m_ui32Height), CV_8UC3, const_cast<unsigned char*>(static_cast<const unsigned char*>(pReadBuffer->GetPtr())));
             float* px_loc = pmt.toPixel(x + axleToPicture*cos(heading), y + axleToPicture*sin(heading));
-
             float px_x = px_loc[0], px_y = px_loc[1];
-            //x = x, y = y, z = confidence
+            //[x, y, headingOffset, confidence]
             float* location = locator.localize(bvImage, heading, Point2f(px_x, px_y), searchSpaceSize);
             object_ptr<ISample> pWriteSample;
             float* m_loc = pmt.toMeter(location[0], location[1]);
