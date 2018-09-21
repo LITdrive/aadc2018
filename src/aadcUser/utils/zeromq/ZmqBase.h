@@ -91,8 +91,11 @@ private:
 	/*! ZeroMQ pair socket for asynchronous reply polling */
 	zmq::socket_t* m_sck_pair = nullptr;
 
-	/*! signals the ZeroMQ thread, that */
+	/*! signals the ZeroMQ thread, that it can start connecting to the socket */
 	bool m_runner_ready = false;
+
+	/* signals the ZeroMQ thread, that it should stop */
+	std::atomic<bool> m_runner_stop { false };
 
 	/*! synchronization of the m_runner_ready bool between the ZeroMQ thread and the parent */
 	std::condition_variable m_runner_cv;

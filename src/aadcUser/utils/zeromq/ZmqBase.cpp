@@ -48,7 +48,20 @@ tResult cZmqBase::Init(const tInitStage eStage)
 
 cZmqBase::~cZmqBase()
 {
-	if (m_sck_pair) m_sck_pair->close();
+	// signal the thread to stop
+	m_runner_stop = true;
+
+	delete m_sck_pair;
+
+	// deallocate pin readers
+	for (const auto& pair : m_pinReaders) {
+		delete pair.second;
+	}
+
+	// deallocate pin writers
+	for (const auto& pair : m_pinWriters) {
+		delete pair.second;
+	}
 }
 
 tResult cZmqBase::Configure()
@@ -63,6 +76,10 @@ tResult cZmqBase::Configure()
 	// create a pair socket that will distribute messages to the runners socket
 	m_sck_pair = new zmq::socket_t(*m_pZeroMQService->GetContext(), ZMQ_PAIR);
 	m_sck_pair->bind(GetPairSocketAddress());
+
+	// do not wait at close time
+	int linger = 0;
+	m_sck_pair->setsockopt(ZMQ_LINGER, &linger, sizeof linger);
 
 	// wake up the zeromq thread
 	std::unique_lock<std::mutex> lk(m_runner_mutex);
@@ -174,6 +191,10 @@ void cZmqBase::InitializeZeroMQThread()
 		auto pair_socket = zmq::socket_t(*m_pZeroMQService->GetContext(), ZMQ_PAIR);
 		pair_socket.connect(GetPairSocketAddress());
 
+		// do not wait at close time
+		int linger = 0;
+		pair_socket.setsockopt(ZMQ_LINGER, &linger, sizeof linger);
+
 		// connect a REQ socket to the server
 		zmq::socket_t* client_socket = InitializeClientSocket();
 
@@ -182,7 +203,7 @@ void cZmqBase::InitializeZeroMQThread()
 		bool lastConnectionState = true;
 
 		// TODO: explicitly stop this loop in the destructor or use zmq heartbeating
-		while (pair_socket.connected())
+		while (!m_runner_stop && pair_socket.connected())
 		{
 #ifdef _DEBUG
 			// latency measurement in debug mode
@@ -251,6 +272,8 @@ void cZmqBase::InitializeZeroMQThread()
 		}
 
 		pair_socket.close();
+		LOG_DUMP("Gracefully closed ZeroMQ I/O thread.");
+
 		RETURN_NOERROR;
 	});
 
