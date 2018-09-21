@@ -9,12 +9,15 @@
 /_build_demo_ide
 /_install
 
+# Ubuntu
+desktop.ini
+
 # CMake
 CMakeCache.txt
 cmake-build-*/
 CMakeFiles/
 
-# CLion
+# CLion and IntelliJ
 .idea/
 
 # QtCreator
@@ -49,5 +52,13 @@ CMakeDoxygenDefaults.cmake
 
 # Jupyter Notebook
 .ipynb_checkpoints/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.ipynb_checkpoints
+ipython_config.py
+.python-version
 
 src/aadcUser/tensorflowPlayground/data
