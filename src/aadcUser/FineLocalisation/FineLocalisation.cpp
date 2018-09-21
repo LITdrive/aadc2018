@@ -88,6 +88,9 @@ cFineLocalisation::cFineLocalisation()
     RegisterPropertyVariable("search space size", propSearchSpaceSize);
     RegisterPropertyVariable("distance from back axle to Picture bottom [m]", axleToPicture);
     RegisterPropertyVariable("offset for Heading [°]", headingOffset);
+    RegisterPropertyVariable("Angle Iteration Count", angleIterCnt);
+    RegisterPropertyVariable("Angle Range Min [°]", angleRangeMin);
+    RegisterPropertyVariable("Angle Range Max [°]", angleRangeMax);
 }
 
 tResult cFineLocalisation::Configure()
@@ -96,6 +99,7 @@ tResult cFineLocalisation::Configure()
     RETURN_IF_FAILED(_runtime->GetObject(m_pClock));
     string pathToMap = static_cast<string>(cString(mapPath));
     locator.setMap(const_cast<char*>(pathToMap.c_str()));
+    locator.setAngleSearchSpace(angleRangeMin, angleRangeMax, angleIterCnt);
     searchSpaceSize = propSearchSpaceSize;
     affineMat[0][0] = mat00;
     affineMat[0][1] = mat01;

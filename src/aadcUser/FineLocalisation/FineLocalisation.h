@@ -88,7 +88,7 @@ private:
     property_variable<tFloat32> headingOffset = 0;
     property_variable<cFilename> mapPath = cFilename("/home/aadc/share/adtf/data/scaledMap.png");
     property_variable<tInt32> propSearchSpaceSize = 20;
-    property_variable<tInt32> angleIterCnt = 10;
+    property_variable<tInt32> angleIterCnt = 9;
     property_variable<tFloat32> angleRangeMin = -2;
     property_variable<tFloat32> angleRangeMax =  2;
 
