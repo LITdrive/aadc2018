@@ -82,6 +82,9 @@ private:
 	/* how many messages shall be queued in memory at a maximum (actual limit might be 60 - 70% lower) */
 	property_variable<tInt> m_queue_length = 10;
 
+	/* only take every nth trigger */
+	property_variable<tInt> m_subsample_factor = 1;
+
 	/*! clock service */
 	object_ptr<adtf::services::IReferenceClock> m_pClock;
 
@@ -114,6 +117,9 @@ private:
 
 	/* some nullbytes, which will be sent for empty pins */
 	uint8_t m_nullbytes[1024]{};
+
+	/* count number of samples for applying the subsample factor */
+	int m_num_samples = 0;
 
 	/* number of dropped samples */
 	int m_num_samples_dropped = 0;

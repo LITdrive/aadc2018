@@ -29,6 +29,7 @@ cZmqBase::cZmqBase()
 {
 	RegisterPropertyVariable("ZeroMQ Socket Address", m_server_socket_address);
 	RegisterPropertyVariable("ZeroMQ Queue Length", m_queue_length);
+	RegisterPropertyVariable("ZeroMQ Subsample Factor", m_subsample_factor);
 
 	// we need some null bytes for empty messages, fill them!
 	memset(m_nullbytes, 0, sizeof m_nullbytes / sizeof *m_nullbytes);
@@ -315,6 +316,11 @@ tResult cZmqBase::ProcessInputs(tTimeStamp tmTimeOfTrigger)
 {
 	// only one thread at a time shall execute this method
 	std::lock_guard<std::mutex> oGuard(m_oMutex);
+
+	// subsample the triggers (only take every nth trigger)
+	m_num_samples++;
+	if (m_num_samples % m_subsample_factor != 0)
+		RETURN_NOERROR;
 
 	size_t i = 0;
 	for (auto& input : m_inputs)
