@@ -25,12 +25,13 @@ Status YOLOHandler::load_graph() {
     return Status::OK();
 }
 
-Tensor YOLOHandler::forward_path(Mat image) {
-    int height = 488;
-    int width = 488;
+Tensor YOLOHandler::forward_path(Mat camera_image) {
+    int height = 448;
+    int width = 448;
+    Mat image;
     std::vector<Tensor> outputs;
 
-    resize(image, image, Size(height, width));
+    resize(camera_image, image, Size(height, width));
 
     int depth = image.channels();
 
@@ -40,16 +41,19 @@ Tensor YOLOHandler::forward_path(Mat image) {
     const float * source_data = (float*) image.data;
 
     // copying the data into the corresponding tensor
-//    for (int y = 0; y < height; ++y) {
-//        const float* source_row = source_data + (y * width * depth);
-//        for (int x = 0; x < width; ++x) {
-//            const float* source_pixel = source_row + (x * depth);
-//            for (int c = 0; c < depth; ++c) {
-//                const float* source_value = source_pixel + c;
-//                input_tensor_mapped(0, y, x, c) = *source_value;
-//            }
-//        }
-//    }
+    for (int y = 0; y < height; ++y) {
+        const float* source_row = source_data + (y * width * depth);
+        for (int x = 0; x < width; ++x) {
+            const float* source_pixel = source_row + (x * depth);
+            const float* source_B = source_pixel + 0;
+            const float* source_G = source_pixel + 1;
+            const float* source_R = source_pixel + 2;
+
+            input_tensor_mapped(0, y, x, 0) = *source_R;
+            input_tensor_mapped(0, y, x, 1) = *source_G;
+            input_tensor_mapped(0, y, x, 2) = *source_B;
+        }
+    }
 
     Status run_status = session->Run({{"input", input_tensor}},
                                         {"output"}, {}, &outputs);

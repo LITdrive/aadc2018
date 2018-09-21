@@ -74,7 +74,8 @@ tResult cLITD_ObjectDetection::Process(tTimeStamp tmTimeOfTrigger)
                                    CV_8UC3, const_cast<unsigned char*>(static_cast<const unsigned char*>(pReadBuffer->GetPtr())));
 
             //Do the image processing and copy to destination image buffer
-//            yolo_handler.forward_path(inputImage);
+            output = yolo_handler.forward_path(inputImage);
+            LOG_INFO("forward path done: %d", output.dim_size(1));
         }
     }
     
