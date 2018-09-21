@@ -41,6 +41,13 @@ cLITD_ObjectDetection::cLITD_ObjectDetection()
     {
         return ChangeType(m_oReader, m_sImageFormat, *pType.Get(), m_oWriter);
     });
+
+    Status load_graph_status = yolo_handler.load_graph();
+    if (!load_graph_status.ok()) {
+        std::cout << load_graph_status.ToString() << "\n";
+    } else {
+        LOG_INFO("loaded YOLO network");
+    }
 }
 
 tResult cLITD_ObjectDetection::Configure()
@@ -54,7 +61,7 @@ tResult cLITD_ObjectDetection::Configure()
 tResult cLITD_ObjectDetection::Process(tTimeStamp tmTimeOfTrigger)
 {
     object_ptr<const ISample> pReadSample;
-    Mat outputImage;
+    Tensor output;
 
     while (IS_OK(m_oReader.GetNextSample(pReadSample)))
     {
@@ -67,20 +74,8 @@ tResult cLITD_ObjectDetection::Process(tTimeStamp tmTimeOfTrigger)
                                    CV_8UC3, const_cast<unsigned char*>(static_cast<const unsigned char*>(pReadBuffer->GetPtr())));
 
             //Do the image processing and copy to destination image buffer
-            Canny(inputImage, outputImage, 100, 200);// Detect Edges
+//            yolo_handler.forward_path(inputImage);
         }
-    }
-
-    //Write processed Image to Output Pin
-    if (!outputImage.empty())
-    {
-        //update output format if matrix size does not fit to
-        if (outputImage.total() * outputImage.elemSize() != m_sImageFormat.m_szMaxByteSize)
-        {
-            setTypeFromMat(m_oWriter, outputImage);
-        }
-        // write to pin
-        writeMatToPin(m_oWriter, outputImage, m_pClock->GetStreamTime());
     }
     
     RETURN_NOERROR;

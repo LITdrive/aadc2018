@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.10.0)
 
 project(litd_objectdetection_filter)
 
-include_directories(${OpenCV_INCLUDE_DIRS})
+include_directories(${Protobuf_INCLUDE_DIRS} ${EIGEN3_INCLUDE_DIRS} ${TENSORFLOW_INCLUDE_DIRS} ${OpenCV_INCLUDE_DIRS})
 
 set (SOURCEFILES    	stdafx.h 
 						LITD_ObjectDetection.h
@@ -31,6 +31,7 @@ adtf_create_plugindescription(
  ) 
 
 target_link_libraries(${PROJECT_NAME} LINK_PUBLIC ${OpenCV_LIBS})
+target_link_libraries(${PROJECT_NAME} LINK_PUBLIC ${Protobuf_LIBRARIES} ${TENSORFLOW_LIBS} )
 
 #this is to add a folder within the ADTF solution
 set_property(TARGET ${PROJECT_NAME} PROPERTY FOLDER user)

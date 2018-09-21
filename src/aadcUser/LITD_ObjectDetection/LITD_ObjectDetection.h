@@ -41,6 +41,8 @@ private:
     /*! Writer to an OutPin. */
     cPinWriter m_oWriter;
 
+    YOLOHandler yolo_handler;
+
     //Stream Formats
         /*! The input format */
     adtf::streaming::tStreamImageFormat m_sImageFormat;
