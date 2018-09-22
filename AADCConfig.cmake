@@ -11,10 +11,17 @@ set(AADC_BOOST_FOUND FALSE)
 #-------ADTF Dir----------------------------------------
 #-------------------------------------------------------
 if (WIN32)
-	set (ADTF_DIR "C:/SDK/adtf/3.3.1")
+	#either use env var or set dir here
+	if ("$ENV{ADTF3_DIR}" STREQUAL "")
+		set (ADTF_DIR "C:/SDK/adtf/3.3.3")
+	    message(STATUS "ADTF3_DIR not set use default path: ${ADTF_DIR}")
+	else ("$ENV{ADTF3_DIR}" STREQUAL "")
+		set (ADTF_DIR "$ENV{ADTF3_DIR}")
+		message(STATUS "ADTF3_DIR set use this path: ${ADTF_DIR}")
+	endif ()
 	set (ADTF_ALLOW_UNSUPPORTED_COMPILER ON)
 else(WIN32)
-	set (ADTF_DIR "/opt/ADTF/3.3.1")
+	set (ADTF_DIR "/opt/ADTF/3.3.3")
 endif(WIN32)
 
 #-------------------------------------------------------

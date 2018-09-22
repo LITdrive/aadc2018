@@ -42,6 +42,12 @@
       <property_set/>
       <name>camera_calibration</name>
     </project_file>
+    <project_file>
+      <url>./adtfsessions/devel_win.adtfsession</url>
+      <properties_url/>
+      <property_set/>
+      <name>devel_win</name>
+    </project_file>
   </session_files>
   <graph_files>
     <project_file>

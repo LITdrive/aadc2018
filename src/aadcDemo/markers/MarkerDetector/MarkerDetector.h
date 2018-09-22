@@ -69,6 +69,7 @@ private:
         tSize tVec;
         tSize rVec;
         tSize id;
+        tSize imageSize;
     } m_ddlRoadSignExtIds;
 
     /*! The vector pin writer */

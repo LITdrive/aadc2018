@@ -472,7 +472,7 @@
           <properties>
             <property>
               <name>trigger/calibration file</name>
-              <value>$(ADTF_SESSION_DIR)/../files/basler_fisheye_intrinsic_calib.yml</value>
+              <value>../../files/basler_fisheye_intrinsic_calib.yml</value>
               <type>cFilename</type>
             </property>
           </properties>
@@ -502,12 +502,12 @@
           <properties>
             <property>
               <name>trigger/Calibration File</name>
-              <value>$(ADTF_SESSION_DIR)/../files/basler_afterFisheye_intrinsic_calibration.yml</value>
+              <value>../../files/basler_afterFisheye_intrinsic_calibration.yml</value>
               <type>cFilename</type>
             </property>
             <property>
               <name>trigger/Detector Parameter File</name>
-              <value>$(ADTF_SESSION_DIR)/../files/detector_params.yml</value>
+              <value>../../files/detector_params.yml</value>
               <type>cFilename</type>
             </property>
             <property>
@@ -618,20 +618,6 @@
           <properties/>
         </property_set>
         <property_set>
-          <name>graphs/visualization_graph/filters/Map Visualization</name>
-          <properties>
-            <property>
-              <name>OpenDrive Map File</name>
-              <value>$(ADTF_SESSION_DIR)/../files/aadc2018_kickoff.xodr</value>
-              <type>cFilename</type>
-            </property>
-          </properties>
-        </property_set>
-        <property_set>
-          <name>graphs/visualization_graph/filters/Map Visualization/input_pins/position</name>
-          <properties/>
-        </property_set>
-        <property_set>
           <name>graphs/visualization_graph/sample_streams/position_stream</name>
           <properties/>
         </property_set>
@@ -640,15 +626,11 @@
           <properties/>
         </property_set>
         <property_set>
-          <name>graphs/visualization_graph/connections/position_stream._Map Visualization.position</name>
-          <properties/>
-        </property_set>
-        <property_set>
           <name>graphs/default_filter_graph/filters/Marker Positioning</name>
           <properties>
             <property>
-              <name>MarkerPos/Roadsign File</name>
-              <value>$(ADTF_SESSION_DIR)/../files/signs_aadc2018_kickoff.xml</value>
+              <name>MarkerPos/Optional Roadsign File</name>
+              <value>../../files/signs_aadc2018_kickoff.xml</value>
               <type>cFilename</type>
             </property>
           </properties>
@@ -774,7 +756,187 @@
           <properties/>
         </property_set>
         <property_set>
+          <name>streaming_graphs/default_streaming_graph/streaming_sources/Jury Communication TCP Receiver</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>streaming_graphs/default_streaming_graph/streaming_sinks/Jury Communication TCP Sender</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>streaming_graphs/default_streaming_graph/streaming_dock_in_ports/jury_struct</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>streaming_graphs/default_streaming_graph/connections/Jury Communication TCP Receiver.jury_struct_Filter Graph Dock.jury_struct</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>streaming_graphs/default_streaming_graph/streaming_dock_in_ports/maneuver_list</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>streaming_graphs/default_streaming_graph/connections/Jury Communication TCP Receiver.maneuver_list_Filter Graph Dock.maneuver_list</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/streaming_in_ports/maneuver_list</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>streaming_graphs/default_streaming_graph/streaming_sources/Jury Communication TCP Receiver/binding_servers/socket</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>streaming_graphs/default_streaming_graph/streaming_sinks/Jury Communication TCP Sender/binding_clients/socket</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>streaming_graphs/default_streaming_graph/streaming_sources/Jury Communication TCP Receiver/output_pins/jury_struct</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>streaming_graphs/default_streaming_graph/streaming_sources/Jury Communication TCP Receiver/output_pins/maneuver_list</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/streaming_in_ports/jury_struct</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/connections/jury_struct._Driver Module.jury_struct</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/filters/Driver Module/input_pins/jury_struct</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/connections/maneuver_list._Driver Module.maneuver_list</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/filters/Driver Module/input_pins/maneuver_list</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/streaming_out_ports/driver_struct</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/connections/Driver Module.driver_struct_driver_struct.</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/filters/Driver Module/output_pins/driver_struct</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>streaming_graphs/default_streaming_graph/streaming_dock_out_ports/driver_struct</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>streaming_graphs/default_streaming_graph/connections/Filter Graph Dock.driver_struct_Jury Communication TCP Sender.driver_struct</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>streaming_graphs/default_streaming_graph/streaming_sinks/Jury Communication TCP Sender/input_pins/driver_struct</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>streaming_graphs/default_streaming_graph/streaming_dock_in_ports/open_drive_map</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>streaming_graphs/default_streaming_graph/connections/Jury Communication TCP Receiver.open_drive_map_Filter Graph Dock.open_drive_map</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>streaming_graphs/default_streaming_graph/streaming_sources/Jury Communication TCP Receiver/output_pins/open_drive_map</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/streaming_in_ports/open_drive_map</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>streaming_graphs/default_streaming_graph/streaming_dock_in_ports/road_sign_map</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/streaming_in_ports/road_sign_map</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>streaming_graphs/default_streaming_graph/binding_proxys/Binding Proxy</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>streaming_graphs/default_streaming_graph/connections/Jury Communication TCP Receiver.socket_Binding Proxy.</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>streaming_graphs/default_streaming_graph/connections/Binding Proxy._Jury Communication TCP Sender.socket</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/visualization_graph/input_data_ports/open_drive</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/visualization_graph/sample_streams/Sample Stream</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/visualization_graph/connections/open_drive._Sample Stream.</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/connections/open_drive_map._visualization.open_drive</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/connections/road_sign_map._Marker Positioning.road_sign_map</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/filters/Marker Positioning/input_pins/road_sign_map</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/visualization_graph/filters/Map Visualization</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/visualization_graph/connections/position_stream._Map Visualization.position</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/visualization_graph/filters/Map Visualization/input_pins/position</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/visualization_graph/connections/Sample Stream._Map Visualization.open_drive</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/visualization_graph/filters/Map Visualization/input_pins/open_drive</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>streaming_graphs/default_streaming_graph/connections/Jury Communication TCP Receiver.road_sign_map_Filter Graph Dock.road_sign_map</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>streaming_graphs/default_streaming_graph/streaming_sources/Jury Communication TCP Receiver/output_pins/road_sign_map</name>
+          <properties/>
+        </property_set>
+        <property_set>
           <name>services/kernel.service.adtf</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>services/qt_xsystem.ui_service.adtf</name>
           <properties/>
         </property_set>
         <property_set>
@@ -790,7 +952,11 @@
           <properties/>
         </property_set>
         <property_set>
-          <name>services/qt_xsystem.ui_service.adtf</name>
+          <name>services/log_view.ui_service.adtf</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>services/adtf_file_support.service.adtf</name>
           <properties/>
         </property_set>
       </property_sets>

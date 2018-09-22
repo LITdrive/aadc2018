@@ -29,13 +29,40 @@ ADTF_PLUGIN(LABEL_CAR_CONTROLLER, DriverModule)
 
 using namespace aadc::jury;
 
-DriverModule::DriverModule() : m_pWidget(nullptr),
-m_clientConnectionEstablished(tFalse)
+DriverModule::DriverModule() : m_pWidget(nullptr)
 {
     //Register Properties
-    RegisterPropertyVariable("Port number", m_propTCPPort);
     RegisterPropertyVariable("Enable console log", m_propEnableConsoleOutput);
 
+    //Get Media Descriptions
+    object_ptr<IStreamType> pTypeJuryStruct;
+    cString structName = "tJuryStruct";
+    if IS_OK(adtf::mediadescription::ant::create_adtf_default_stream_type_from_service(structName.GetPtr(), pTypeJuryStruct, m_juryStructSampleFactory))
+    {
+        (adtf_ddl::access_element::find_index(m_juryStructSampleFactory, cString("i16ActionID"), m_ddlJuryStructId.actionId));
+        (adtf_ddl::access_element::find_index(m_juryStructSampleFactory, cString("i16ManeuverEntry"), m_ddlJuryStructId.maneuverEntry));
+    }
+    else
+    {
+        LOG_WARNING(cString::Format("No mediadescription for %s found!", structName.GetPtr()));
+    }
+    create_pin(*this, m_oInputJuryStruct, "jury_struct", pTypeJuryStruct);
+    
+    object_ptr<IStreamType> pTypeDriverStruct;
+    structName = "tDriverStruct";
+    if IS_OK(adtf::mediadescription::ant::create_adtf_default_stream_type_from_service(structName.GetPtr(), pTypeDriverStruct, m_driverStructSampleFactory))
+    {
+        (adtf_ddl::access_element::find_index(m_driverStructSampleFactory, cString("i16StateID"), m_ddlDriverStructId.stateId));
+        (adtf_ddl::access_element::find_index(m_driverStructSampleFactory, cString("i16ManeuverEntry"), m_ddlDriverStructId.maneuverEntry));
+    }
+    else
+    {
+        LOG_WARNING(cString::Format("No mediadescription for %s found!", structName.GetPtr()));
+    }
+    create_pin(*this, m_oOutputDriverStruct, "driver_struct", pTypeDriverStruct);
+
+    object_ptr<IStreamType> pTypeDefault = adtf::ucom::make_object_ptr<cStreamType>(stream_meta_type_anonymous());
+    create_pin(*this, m_oInputManeuverList, "maneuver_list", pTypeDefault);
 }
 
 DriverModule::~DriverModule()
@@ -83,103 +110,30 @@ tResult DriverModule::OnIdle()
 tResult DriverModule::Init(tInitStage eStage)
 {
     RETURN_IF_FAILED(adtf::ui::cQtUIFilter::Init(eStage));
-
     RETURN_IF_FAILED(_runtime->GetObject(m_pClock));
-    if (eStage == StageFirst)
-    {
-        RETURN_IF_FAILED_DESC(m_serverSocket.Open(m_propTCPPort, cServerSocket::SS_Exclusive),
-            cString::Format("Could not open server socket with port %d", static_cast<tInt>(m_propTCPPort)));
-        LOG_INFO(cString::Format("Server Socket was opened with port %d", static_cast<tInt>(m_propTCPPort)));
-        RETURN_IF_FAILED_DESC(m_serverSocket.Listen(),
-            cString::Format("Could not listen to port %d",static_cast<tInt>(m_propTCPPort)));
-        LOG_INFO(cString::Format("Server Socket now listens on port %d", static_cast<tInt>(m_propTCPPort)));
-        if (m_serverSocket.IsConnected(static_cast<tTimeStamp>(5e5)))
-        {
-            RETURN_IF_FAILED_DESC(m_serverSocket.Accept(m_streamSocket),"Could not access Server socket");
-            m_clientConnectionEstablished = tTrue;
-            LOG_INFO("TCP Connection was established");
-        }
-        else
-        {
-            LOG_ERROR(cString::Format("No client is connected on Port %d", static_cast<tInt>(m_propTCPPort)));
-            m_clientConnectionEstablished = tFalse;
-        }
-    }
     RETURN_NOERROR;
 }
 
 tResult DriverModule::Shutdown(cFilterLevelmachine::tInitStage eStage)
 {
-    if (eStage == StageFirst)
-    {
-        //closes the connections and the server
-        m_streamSocket.Close();
-        m_serverSocket.Close();
-        m_clientConnectionEstablished = tFalse;
-    }
     return cQtUIFilter::Shutdown(eStage);
-}
-
-
-tResult DriverModule::ReceiveTCPData(std::vector<tChar>& data)
-{
-    // no stream connected yet
-    if (!m_clientConnectionEstablished)
-    {
-        // try to connect to client
-        if (m_serverSocket.IsConnected(static_cast<tTimeStamp>(2e2)))
-        {
-            RETURN_IF_FAILED(m_serverSocket.Accept(m_streamSocket));
-            LOG_INFO("TCP Connection was established");
-            m_clientConnectionEstablished = tTrue;
-        }
-    }
-    else
-    {
-        if (m_streamSocket.DataAvailable())
-        {
-            cString strBuffer;
-            const tSize bufferSize = 65536;
-            tInt bytesRead = 0;
-            //make some space for data
-            strBuffer.SetBuffer(bufferSize);
-            // if read ok
-            tResult res = m_streamSocket.Read((void*) strBuffer.GetPtr(), bufferSize, &bytesRead);
-            if (IS_OK(res))
-            {
-                CONSOLE_LOG_INFO(cString::Format("Received from client: %s", strBuffer.GetPtr()));
-                data.clear();
-                data.resize(bytesRead);
-                memcpy(data.data(), strBuffer.GetPtr(), bytesRead);
-            }
-            else
-            {
-                LOG_INFO("TCP Connection was disconnected");
-                m_clientConnectionEstablished = tFalse;
-            }
-        }
-        else
-        {
-            RETURN_ERROR(ERR_NOT_READY);
-        }
-    }
-    RETURN_NOERROR;
 }
 
 tResult DriverModule::OnTimer()
 {
     std::lock_guard<std::mutex> oGuard(m_oMutex);
-
-    std::vector<tChar> data;
-    RETURN_IF_FAILED(ReceiveTCPData(data));
-    const tSize sizeOfJuryStruct = sizeof(tJuryStruct);
-    if (data.size() == sizeOfJuryStruct)
-    { //jurysruct
-
-        tJuryStruct* juryStruct = (tJuryStruct*) data.data();
-        tInt8 i8ActionID = juryStruct->i16ActionID;
-        tInt16 i16entry = juryStruct->i16ManeuverEntry;
-
+       
+    object_ptr<const ISample> pSample;
+    while (IS_OK(m_oInputJuryStruct.GetNextSample(pSample)))
+    {
+        auto oDecoder = m_juryStructSampleFactory.MakeDecoderFor(*pSample);
+        RETURN_IF_FAILED(oDecoder.IsValid());      
+        tJuryStruct juryInput;
+        RETURN_IF_FAILED(oDecoder.GetElementValue(m_ddlJuryStructId.maneuverEntry, &juryInput.i16ManeuverEntry));
+        RETURN_IF_FAILED(oDecoder.GetElementValue(m_ddlJuryStructId.actionId, &juryInput.i16ActionID));
+        
+        tInt8 i8ActionID = juryInput.i16ActionID;
+        tInt16 i16entry = juryInput.i16ManeuverEntry;
 
         switch (aadc::jury::juryAction(i8ActionID))
         {
@@ -197,12 +151,22 @@ tResult DriverModule::OnTimer()
                 break;
         }
     }
-    else if (data.size() > 0)
-    {//maneuverlist
-        m_strManeuverFileString.Set(data.data(),data.size());
-        TriggerLoadManeuverList();
-    }
 
+    object_ptr<const ISample> pSampleAnonymous;
+    while (IS_OK(m_oInputManeuverList.GetNextSample(pSampleAnonymous)))
+    {
+
+        std::vector<tChar> data;
+        object_ptr_shared_locked<const ISampleBuffer> pSampleBuffer;
+        RETURN_IF_FAILED(pSampleAnonymous->Lock(pSampleBuffer));
+        data.resize(pSampleBuffer->GetSize());
+        memcpy(data.data(), pSampleBuffer->GetPtr(), pSampleBuffer->GetSize());
+        if (data.size() > 0)
+        {//maneuverlist
+            m_strManeuverFileString.Set(data.data(), data.size());
+            TriggerLoadManeuverList();
+        }
+    }
     RETURN_NOERROR;
 }
 
@@ -234,12 +198,27 @@ tResult DriverModule::OnSendState(stateCar stateID, tInt16 i16ManeuverEntry)
                 break;
         }
     }
-    if (m_clientConnectionEstablished)
-    {
-        RETURN_IF_FAILED(m_streamSocket.Write(&driverStruct, sizeof(tDriverStruct)));
-    }
+    RETURN_IF_FAILED(TransmitDriverStruct(driverStruct));
+
     RETURN_NOERROR;
 }
+
+tResult DriverModule::TransmitDriverStruct(tDriverStruct& driverStruct)
+{
+    object_ptr<ISample> pWriteSample;
+
+    RETURN_IF_FAILED(alloc_sample(pWriteSample, m_pClock->GetStreamTime()));
+    {
+        auto oCodec = m_driverStructSampleFactory.MakeCodecFor(pWriteSample);
+
+        RETURN_IF_FAILED(oCodec.SetElementValue(m_ddlDriverStructId.stateId, driverStruct.i16StateID));
+        RETURN_IF_FAILED(oCodec.SetElementValue(m_ddlDriverStructId.maneuverEntry, driverStruct.i16ManeuverEntry));
+    }
+
+    m_oOutputDriverStruct << pWriteSample << flush << trigger;
+    RETURN_NOERROR;
+}
+
 
 tResult DriverModule::LoadManeuverList()
 {

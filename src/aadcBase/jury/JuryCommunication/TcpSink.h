@@ -12,71 +12,48 @@ Redistribution and use in source and binary forms, with or without modification,
 THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS AS IS AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL AUDI AG OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 **********************************************************************/
+#pragma once
 
+#include "TcpSource.h"
+#include <adtf_systemsdk.h>
 
-/*********************************************************************
-* This code was provided by HERE
-*
-* *******************************************************************/
+#define CID_JURY_COM_TCP_STREAMING_SINK "jury_communication_tcp.streaming_sink.base.aadc.cid"
+#define LBL_JURY_COM_TCP_STREAMING_SINK "Jury Communication TCP Sender"
 
-
-#ifndef _DISPLAY_WIDGET_
-#define _DISPLAY_WIDGET_
-
-#define GRAPHICSSCENE_WIDTH 500
-#define GRAPHICSSCENE_HEIGHT 500
-
-enum RoadType{
-  CENTER_LANE =0,
-  DRIVING_LANE = 1,
-  BORDER_LANE = 2
-};
-class DisplayWidget : public QWidget
+class cTcpSink: public adtf::streaming::cSampleStreamingSink
 {
     public:
-        DisplayWidget(QWidget* pParent);
-        virtual ~DisplayWidget();
-        void ResetScene();
-        void DrawLine(float x1, float y1, float x2, float y2,float zScale,RoadType rType=DRIVING_LANE);
-        void PlotPosition(float x, float y,float h,bool showTrace = false);
+        ADTF_CLASS_ID_NAME(cTcpSink,
+                           CID_JURY_COM_TCP_STREAMING_SINK,
+                           LBL_JURY_COM_TCP_STREAMING_SINK);
+    private:
+    struct tDriverStructId
+    {
+        tSize stateId;
+        tSize maneuverEntry;
+    } m_ddlDriverStructId;
 
-      private:
+    /*! The driver structure sample factory */
+    adtf::mediadescription::cSampleCodecFactory m_driverStructSampleFactory;
 
-          /*! the main widget */
-          QWidget* m_pWidget;
+    /*! The property enable console output */
+    adtf::base::property_variable<tBool> m_propEnableConsoleOutput = tFalse;
 
-          /*! the main font for the widget */
-          QFont* m_mainFont;
+    public:
+        cTcpSink();
 
-          /*! the smaller main font for the tableviews etc */
-          QFont* m_mainFontSmall;
+        tResult Construct() override;
+        tResult Init() override;
+        tResult StartStreaming() override;
+        tResult StopStreaming() override;
 
-          /*! the x coordinate of the car in the graphicsscene */
-          const qreal m_qPCarCenter_x;
+    private:
+        tResult ProcessSamples(tTimeStamp tmTrigger);
+        tResult ForwardDriverStruct(const tDriverStruct& driverStruct);
 
-          /*! the y coordinate of the car in the graphicsscene */
-          const qreal m_qPCarCenter_y;
+        /*! The input driver structure */
+        adtf::streaming::cDynamicSampleReader m_oInputDriverStruct;
 
-          QGraphicsScene* scene;
-          /*! the main layout for the widget*/
-          QVBoxLayout *m_mainLayout;
-
-          //Graphics View for widget
-          QGraphicsView* view;
-
-          //Circles for Position
-          QGraphicsEllipseItem *pos,*pos1;
-
-          //Circles for Marker
-          QGraphicsEllipseItem *marker1,*marker2;
-
-          //Heading Line
-          QGraphicsLineItem *head;
-
-          //Text for Marker
-          QGraphicsTextItem *text;
-
-          QGraphicsSceneWheelEvent *wheel;
+        /*! The socket */
+        adtf::ucom::object_ptr<ISocket> m_pSocket;
 };
-
-#endif //_ADTF_QT_VIDEO_WIDGET_CLASS_HEADER_

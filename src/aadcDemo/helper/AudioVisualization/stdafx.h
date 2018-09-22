@@ -13,70 +13,25 @@ THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS AS IS AND ANY EXPRESS OR I
 
 **********************************************************************/
 
+#pragma once
 
-/*********************************************************************
-* This code was provided by HERE
-*
-* *******************************************************************/
+#include <iomanip>      // std::setw
 
+#include <QMainWindow>
+#include <QtWidgets>
+#include <QtCharts>
 
-#ifndef _DISPLAY_WIDGET_
-#define _DISPLAY_WIDGET_
+#include <adtf_filtersdk.h>
 
-#define GRAPHICSSCENE_WIDTH 500
-#define GRAPHICSSCENE_HEIGHT 500
+//always include filtersdk, systemsdk or streaming3 sdk BEFORE adtfui!!
+#include <adtf_ui.h>
 
-enum RoadType{
-  CENTER_LANE =0,
-  DRIVING_LANE = 1,
-  BORDER_LANE = 2
-};
-class DisplayWidget : public QWidget
-{
-    public:
-        DisplayWidget(QWidget* pParent);
-        virtual ~DisplayWidget();
-        void ResetScene();
-        void DrawLine(float x1, float y1, float x2, float y2,float zScale,RoadType rType=DRIVING_LANE);
-        void PlotPosition(float x, float y,float h,bool showTrace = false);
-
-      private:
-
-          /*! the main widget */
-          QWidget* m_pWidget;
-
-          /*! the main font for the widget */
-          QFont* m_mainFont;
-
-          /*! the smaller main font for the tableviews etc */
-          QFont* m_mainFontSmall;
-
-          /*! the x coordinate of the car in the graphicsscene */
-          const qreal m_qPCarCenter_x;
-
-          /*! the y coordinate of the car in the graphicsscene */
-          const qreal m_qPCarCenter_y;
-
-          QGraphicsScene* scene;
-          /*! the main layout for the widget*/
-          QVBoxLayout *m_mainLayout;
-
-          //Graphics View for widget
-          QGraphicsView* view;
-
-          //Circles for Position
-          QGraphicsEllipseItem *pos,*pos1;
-
-          //Circles for Marker
-          QGraphicsEllipseItem *marker1,*marker2;
-
-          //Heading Line
-          QGraphicsLineItem *head;
-
-          //Text for Marker
-          QGraphicsTextItem *text;
-
-          QGraphicsSceneWheelEvent *wheel;
-};
-
-#endif //_ADTF_QT_VIDEO_WIDGET_CLASS_HEADER_
+using namespace adtf_util;
+using namespace ddl;
+using namespace adtf::ucom;
+using namespace adtf::base;
+using namespace adtf::streaming;
+using namespace adtf::mediadescription;
+using namespace adtf::filter;
+using namespace adtf::ui;
+using namespace adtf::filter::ant;

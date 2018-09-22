@@ -1,4 +1,4 @@
-/*********************************************************************
+﻿/*********************************************************************
 Copyright (c) 2018
 Audi Autonomous Driving Cup. All rights reserved.
 
@@ -13,35 +13,52 @@ THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS AS IS AND ANY EXPRESS OR I
 
 **********************************************************************/
 
+#pragma once
 
-/*********************************************************************
-* This code was provided by HERE
-*
-* *******************************************************************/
+#include "stdafx.h"
 
-#ifndef __STD_INCLUDES_HEADER
-#define __STD_INCLUDES_HEADER
+#define CID_MICROPHONE_VISUALIZATION  "audio_visualization.filter.demo.aadc.cid"
 
-#include <vector>
-#define _USE_MATH_DEFINES
-#include <math.h>
-#include <string>
+/*! the main class for the car controller filter. */
+class cAudioVisualization : virtual public cQtUIFilter
+{
 
-#include <QtWidgets>
-#include <QtCore/QCoreApplication>
+public:
+    ADTF_CLASS_ID_NAME(cAudioVisualization, CID_MICROPHONE_VISUALIZATION, "Audio Visualization");
+    ADTF_CLASS_DEPENDENCIES(REQUIRE_INTERFACE(adtf::ui::ant::IQtXSystem),
+        REQUIRE_INTERFACE(adtf::services::IReferenceClock));
 
-#include <QtGui/QOpenGLContext>
-#include <QtGui/QOpenGLPaintDevice>
-#include <QtGui/QPainter>
+private:
 
-#include <adtf_filtersdk.h>
-//always include filtersdk, systemsdk or streaming3 sdk BEFORE adtfui!!
-#include <adtf_ui.h>
+    /*! The output speed controller */
+    cPinReader m_inAudio;
 
-#include "displaywidget.h"
-#include "cMapVisualization.h"
+    /*! The chart view */
+    QChartView* m_chartView;
 
+    /*! The series used in qchart */
+    QLineSeries* m_series;
 
+    /*! The buffer for audio samples */
+    QVector<QPointF> m_buffer;
 
+    /*! The nr samples to display */
+    const int m_nrSamplesToDisplay = 2000;
 
-#endif // __STD_INCLUDES_HEADER
+    /*! The codec package size in bytes */
+    const int m_codecPackageSizeInBytes = 4;
+
+public:
+
+    /*! Default constructor. */
+    cAudioVisualization();
+
+    /*! Destructor. */
+    virtual ~cAudioVisualization();
+
+protected: // Implement cBaseQtFilter
+    QWidget * CreateView() override;
+    tVoid    ReleaseView() override;
+    tResult  OnTimer() override;
+    tResult  Init(tInitStage eStage) override;
+};

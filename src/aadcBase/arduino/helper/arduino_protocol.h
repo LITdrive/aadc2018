@@ -401,6 +401,7 @@ enum ARDUINO_ID /*: uint8_t*/
 	ARDUINO_CENTER_ACTUATORS        = 4,
 	ARDUINO_REAR_US                 = 5,
 	ARDUINO_REAR_IMU_WHEELENC       = 6,
+	ARDUINO_TOP_RIGHT_OF_WAY		= 7,
 };
 
  /*! A macro that defines pin ard code. */

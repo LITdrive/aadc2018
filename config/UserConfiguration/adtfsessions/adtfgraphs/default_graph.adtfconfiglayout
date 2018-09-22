@@ -28,8 +28,8 @@
         <layout_set>
           <name>streaming_graphs/default_streaming_graph/streaminggraphdock/Filter Graph Dock</name>
           <boundary>
-            <x>672</x>
-            <y>58</y>
+            <x>694</x>
+            <y>202</y>
             <width>0</width>
             <height>0</height>
           </boundary>
@@ -113,8 +113,8 @@
         <layout_set>
           <name>streaming_graphs/default_streaming_graph/streaming_sinks/Arduino Actuator</name>
           <boundary>
-            <x>1315</x>
-            <y>133</y>
+            <x>1411</x>
+            <y>187</y>
             <width>0</width>
             <height>0</height>
           </boundary>
@@ -147,7 +147,7 @@
         <layout_set>
           <name>streaming_graphs/default_streaming_graph/streaming_sources/Universal Camera</name>
           <boundary>
-            <x>187</x>
+            <x>188</x>
             <y>740</y>
             <width>0</width>
             <height>0</height>
@@ -980,8 +980,8 @@
         <layout_set>
           <name>graphs/default_filter_graph/streaming_in_ports/ultrasonic_struct</name>
           <boundary>
-            <x>36</x>
-            <y>103</y>
+            <x>34</x>
+            <y>191</y>
             <width>0</width>
             <height>0</height>
           </boundary>
@@ -1031,8 +1031,8 @@
         <layout_set>
           <name>graphs/default_filter_graph/sample_streams/ultrasonic_struct_stream</name>
           <boundary>
-            <x>322</x>
-            <y>117</y>
+            <x>342</x>
+            <y>211</y>
             <width>0</width>
             <height>0</height>
           </boundary>
@@ -1303,8 +1303,8 @@
         <layout_set>
           <name>graphs/default_filter_graph/streaming_out_ports/steering</name>
           <boundary>
-            <x>1565</x>
-            <y>51</y>
+            <x>1578</x>
+            <y>148</y>
             <width>0</width>
             <height>0</height>
           </boundary>
@@ -1465,7 +1465,7 @@
           <connection_layout>
             <name/>
             <centerLineIsManual>true</centerLineIsManual>
-            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsX>1280</centerLineAbsX>
             <centerLineAbsY>0</centerLineAbsY>
             <centerLineStraight>false</centerLineStraight>
           </connection_layout>
@@ -1499,7 +1499,7 @@
           <connection_layout>
             <name/>
             <centerLineIsManual>true</centerLineIsManual>
-            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsX>1265</centerLineAbsX>
             <centerLineAbsY>0</centerLineAbsY>
             <centerLineStraight>false</centerLineStraight>
           </connection_layout>
@@ -1533,7 +1533,7 @@
           <connection_layout>
             <name/>
             <centerLineIsManual>true</centerLineIsManual>
-            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsX>1249</centerLineAbsX>
             <centerLineAbsY>0</centerLineAbsY>
             <centerLineStraight>false</centerLineStraight>
           </connection_layout>
@@ -1567,7 +1567,7 @@
           <connection_layout>
             <name/>
             <centerLineIsManual>true</centerLineIsManual>
-            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsX>1227</centerLineAbsX>
             <centerLineAbsY>0</centerLineAbsY>
             <centerLineStraight>false</centerLineStraight>
           </connection_layout>
@@ -1601,7 +1601,7 @@
           <connection_layout>
             <name/>
             <centerLineIsManual>true</centerLineIsManual>
-            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsX>1238</centerLineAbsX>
             <centerLineAbsY>0</centerLineAbsY>
             <centerLineStraight>false</centerLineStraight>
           </connection_layout>
@@ -1635,7 +1635,7 @@
           <connection_layout>
             <name/>
             <centerLineIsManual>true</centerLineIsManual>
-            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsX>1208</centerLineAbsX>
             <centerLineAbsY>0</centerLineAbsY>
             <centerLineStraight>false</centerLineStraight>
           </connection_layout>
@@ -1669,7 +1669,7 @@
           <connection_layout>
             <name/>
             <centerLineIsManual>true</centerLineIsManual>
-            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsX>1210</centerLineAbsX>
             <centerLineAbsY>0</centerLineAbsY>
             <centerLineStraight>false</centerLineStraight>
           </connection_layout>
@@ -1703,7 +1703,7 @@
           <connection_layout>
             <name/>
             <centerLineIsManual>true</centerLineIsManual>
-            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsX>1222</centerLineAbsX>
             <centerLineAbsY>0</centerLineAbsY>
             <centerLineStraight>false</centerLineStraight>
           </connection_layout>
@@ -1728,8 +1728,8 @@
         <layout_set>
           <name>graphs/default_filter_graph/streaming_out_ports/speed</name>
           <boundary>
-            <x>1566</x>
-            <y>98</y>
+            <x>1579</x>
+            <y>195</y>
             <width>0</width>
             <height>0</height>
           </boundary>
@@ -1745,8 +1745,8 @@
         <layout_set>
           <name>graphs/default_filter_graph/streaming_out_ports/hazard_light</name>
           <boundary>
-            <x>1570</x>
-            <y>266</y>
+            <x>1583</x>
+            <y>363</y>
             <width>0</width>
             <height>0</height>
           </boundary>
@@ -1762,8 +1762,8 @@
         <layout_set>
           <name>graphs/default_filter_graph/streaming_out_ports/brake_light</name>
           <boundary>
-            <x>1567</x>
-            <y>172</y>
+            <x>1580</x>
+            <y>269</y>
             <width>0</width>
             <height>0</height>
           </boundary>
@@ -1779,8 +1779,8 @@
         <layout_set>
           <name>graphs/default_filter_graph/streaming_out_ports/turn_signal_left</name>
           <boundary>
-            <x>1573</x>
-            <y>405</y>
+            <x>1586</x>
+            <y>502</y>
             <width>0</width>
             <height>0</height>
           </boundary>
@@ -1796,8 +1796,8 @@
         <layout_set>
           <name>graphs/default_filter_graph/streaming_out_ports/turn_signal_right</name>
           <boundary>
-            <x>1568</x>
-            <y>355</y>
+            <x>1581</x>
+            <y>452</y>
             <width>0</width>
             <height>0</height>
           </boundary>
@@ -1813,8 +1813,8 @@
         <layout_set>
           <name>graphs/default_filter_graph/streaming_out_ports/reverse_light</name>
           <boundary>
-            <x>1568</x>
-            <y>219</y>
+            <x>1581</x>
+            <y>316</y>
             <width>0</width>
             <height>0</height>
           </boundary>
@@ -2476,8 +2476,8 @@
         <layout_set>
           <name>streaming_graphs/default_streaming_graph/streaming_sinks/TCP Sender</name>
           <boundary>
-            <x>1326</x>
-            <y>419</y>
+            <x>1354</x>
+            <y>481</y>
             <width>0</width>
             <height>0</height>
           </boundary>
@@ -2527,8 +2527,8 @@
         <layout_set>
           <name>graphs/default_filter_graph/filters/Driver Module</name>
           <boundary>
-            <x>449</x>
-            <y>1133</y>
+            <x>422</x>
+            <y>1028</y>
             <width>0</width>
             <height>0</height>
           </boundary>
@@ -2646,8 +2646,8 @@
         <layout_set>
           <name>graphs/visualization_graph/filters/Map Visualization</name>
           <boundary>
-            <x>735</x>
-            <y>131</y>
+            <x>799</x>
+            <y>149</y>
             <width>0</width>
             <height>0</height>
           </boundary>
@@ -2748,12 +2748,12 @@
         <layout_set>
           <name>graphs/default_filter_graph/subgraphs/visualization</name>
           <boundary>
-            <x>1405</x>
-            <y>518</y>
+            <x>1429</x>
+            <y>520</y>
             <width>0</width>
             <height>0</height>
           </boundary>
-          <selected>false</selected>
+          <selected>true</selected>
           <connection_layout>
             <name/>
             <centerLineIsManual>true</centerLineIsManual>
@@ -2901,12 +2901,12 @@
         <layout_set>
           <name>graphs/visualization_graph/input_data_ports/front_cam</name>
           <boundary>
-            <x>201</x>
-            <y>315</y>
+            <x>281</x>
+            <y>318</y>
             <width>0</width>
             <height>0</height>
           </boundary>
-          <selected>false</selected>
+          <selected>true</selected>
           <connection_layout>
             <name/>
             <centerLineIsManual>true</centerLineIsManual>
@@ -3076,7 +3076,7 @@
             <width>0</width>
             <height>0</height>
           </boundary>
-          <selected>true</selected>
+          <selected>false</selected>
           <connection_layout>
             <name/>
             <centerLineIsManual>true</centerLineIsManual>
@@ -3114,7 +3114,7 @@
           <connection_layout>
             <name/>
             <centerLineIsManual>true</centerLineIsManual>
-            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsX>599</centerLineAbsX>
             <centerLineAbsY>0</centerLineAbsY>
             <centerLineStraight>false</centerLineStraight>
           </connection_layout>
@@ -3139,8 +3139,8 @@
         <layout_set>
           <name>graphs/default_filter_graph/streaming_in_ports/laserscanner</name>
           <boundary>
-            <x>55</x>
-            <y>28</y>
+            <x>50</x>
+            <y>141</y>
             <width>0</width>
             <height>0</height>
           </boundary>
@@ -3156,8 +3156,8 @@
         <layout_set>
           <name>graphs/default_filter_graph/sample_streams/laserscanner_stream</name>
           <boundary>
-            <x>324</x>
-            <y>43</y>
+            <x>333</x>
+            <y>140</y>
             <width>0</width>
             <height>0</height>
           </boundary>
@@ -3179,6 +3179,839 @@
             <height>0</height>
           </boundary>
           <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>streaming_graphs/default_streaming_graph/streaming_sources/Jury Communication TCP Receiver</name>
+          <boundary>
+            <x>160</x>
+            <y>1071</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>streaming_graphs/default_streaming_graph/streaming_sinks/Jury Communication TCP Sender</name>
+          <boundary>
+            <x>1293</x>
+            <y>694</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>streaming_graphs/default_streaming_graph/connections/Jury Communication TCP Receiver.socket_Jury Communication TCP Sender.socket</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>903</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>streaming_graphs/default_streaming_graph/streaming_dock_in_ports/jury_struct</name>
+          <boundary>
+            <x>6</x>
+            <y>288</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>streaming_graphs/default_streaming_graph/connections/Jury Communication TCP Receiver.jury_struct_Filter Graph Dock.jury_struct</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>624</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>streaming_graphs/default_streaming_graph/streaming_dock_in_ports/maneuver_list</name>
+          <boundary>
+            <x>15</x>
+            <y>316</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>streaming_graphs/default_streaming_graph/connections/Jury Communication TCP Receiver.maneuver_list_Filter Graph Dock.maneuver_list</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>645</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/default_filter_graph/streaming_in_ports/maneuver_list</name>
+          <boundary>
+            <x>48</x>
+            <y>1103</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>streaming_graphs/default_streaming_graph/streaming_sources/Jury Communication TCP Receiver/binding_servers/socket</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>streaming_graphs/default_streaming_graph/streaming_sinks/Jury Communication TCP Sender/binding_clients/socket</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>streaming_graphs/default_streaming_graph/streaming_sources/Jury Communication TCP Receiver/output_pins/jury_struct</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>streaming_graphs/default_streaming_graph/streaming_sources/Jury Communication TCP Receiver/output_pins/maneuver_list</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/default_filter_graph/streaming_in_ports/jury_struct</name>
+          <boundary>
+            <x>66</x>
+            <y>1044</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/default_filter_graph/connections/jury_struct._Driver Module.jury_struct</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/default_filter_graph/filters/Driver Module/input_pins/jury_struct</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/default_filter_graph/connections/maneuver_list._Driver Module.maneuver_list</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/default_filter_graph/filters/Driver Module/input_pins/maneuver_list</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/default_filter_graph/streaming_out_ports/driver_struct</name>
+          <boundary>
+            <x>825</x>
+            <y>1069</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/default_filter_graph/connections/Driver Module.driver_struct_driver_struct.</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/default_filter_graph/filters/Driver Module/output_pins/driver_struct</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>streaming_graphs/default_streaming_graph/streaming_dock_out_ports/driver_struct</name>
+          <boundary>
+            <x>332</x>
+            <y>206</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>streaming_graphs/default_streaming_graph/connections/Filter Graph Dock.driver_struct_Jury Communication TCP Sender.driver_struct</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>streaming_graphs/default_streaming_graph/streaming_sinks/Jury Communication TCP Sender/input_pins/driver_struct</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>streaming_graphs/default_streaming_graph/streaming_dock_in_ports/open_drive_map</name>
+          <boundary>
+            <x>11</x>
+            <y>359</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>streaming_graphs/default_streaming_graph/connections/Jury Communication TCP Receiver.open_drive_map_Filter Graph Dock.open_drive_map</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>666</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>streaming_graphs/default_streaming_graph/streaming_sources/Jury Communication TCP Receiver/output_pins/open_drive_map</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/default_filter_graph/streaming_in_ports/open_drive_map</name>
+          <boundary>
+            <x>846</x>
+            <y>329</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>streaming_graphs/default_streaming_graph/streaming_dock_in_ports/road_sign_map</name>
+          <boundary>
+            <x>12</x>
+            <y>392</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>streaming_graphs/default_streaming_graph/connections/Jury Communication TCP Receiver.traffic_sign_map_Filter Graph Dock.traffic_sign_map</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>686</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>streaming_graphs/default_streaming_graph/streaming_sources/Jury Communication TCP Receiver/output_pins/traffic_sign_map</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/default_filter_graph/streaming_in_ports/road_sign_map</name>
+          <boundary>
+            <x>979</x>
+            <y>1000</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>streaming_graphs/default_streaming_graph/binding_proxys/Binding Proxy</name>
+          <boundary>
+            <x>925</x>
+            <y>948</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>streaming_graphs/default_streaming_graph/connections/Jury Communication TCP Receiver.socket_Binding Proxy.</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>streaming_graphs/default_streaming_graph/connections/Binding Proxy._Jury Communication TCP Sender.socket</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/default_filter_graph/filters/Marker Positioning_1</name>
+          <boundary>
+            <x>941</x>
+            <y>216</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>true</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/visualization_graph/filters/Map Visualization_1</name>
+          <boundary>
+            <x>315</x>
+            <y>48</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>true</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/visualization_graph/input_data_ports/open_drive</name>
+          <boundary>
+            <x>443</x>
+            <y>240</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/visualization_graph/connections/open_drive._Map Visualization.open_drive</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/visualization_graph/filters/Map Visualization/input_pins/open_drive</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/visualization_graph/sample_streams/Sample Stream</name>
+          <boundary>
+            <x>590</x>
+            <y>223</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/visualization_graph/connections/open_drive._Sample Stream.</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/visualization_graph/connections/Sample Stream._Map Visualization.open_drive</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/default_filter_graph/connections/open_drive_map._visualization.open_drive</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/default_filter_graph/connections/road_sign_map._Marker Positioning.road_sign_map</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/default_filter_graph/filters/Marker Positioning/input_pins/road_sign_map</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>streaming_graphs/default_streaming_graph/connections/Jury Communication TCP Receiver.road_sign_map_Filter Graph Dock.road_sign_map</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>streaming_graphs/default_streaming_graph/streaming_sources/Jury Communication TCP Receiver/output_pins/road_sign_map</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/empty/filters/Marker Positioning</name>
+          <boundary>
+            <x>453</x>
+            <y>240</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>true</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/empty/filters/Map Visualization</name>
+          <boundary>
+            <x>700</x>
+            <y>253</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>true</selected>
           <connection_layout>
             <name/>
             <centerLineIsManual>true</centerLineIsManual>
