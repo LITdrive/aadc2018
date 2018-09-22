@@ -2043,21 +2043,6 @@
           <sync>true</sync>
         </connection>
         <connection>
-          <name>ADTFDAT File Player.rear_video_Filter Graph Dock.rear_cam</name>
-          <source_connector_path>
-            <connector>rear_video</connector>
-            <component>ADTFDAT File Player</component>
-            <portbindingobject/>
-          </source_connector_path>
-          <destination_connector_path>
-            <connector>rear_cam</connector>
-            <component>Filter Graph Dock</component>
-            <portbindingobject/>
-          </destination_connector_path>
-          <priority>0</priority>
-          <sync>true</sync>
-        </connection>
-        <connection>
           <name>ADTFDAT File Player.laser_scanner_Filter Graph Dock.laser_scanner</name>
           <source_connector_path>
             <connector>laser_scanner</connector>
