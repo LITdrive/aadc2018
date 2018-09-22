@@ -31,6 +31,9 @@ cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Debug ../src/aadcUser
 echo "Build debug ..."
 cmake --build . --target install -- -j4
 
+## copy plugin description
+find . -type f -name "*.plugindescription" -print0 | xargs -0 cp -t ../_install/linux64/bin/debug/
+
 cd ..
 
 
@@ -52,5 +55,8 @@ cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release ../src/aadcUser
 
 echo "Build release ..."
 cmake --build . --target install -- -j4
+
+## copy plugin description
+find . -type f -name "*.plugindescription" -print0 | xargs -0 cp -t ../_install/linux64/bin/
 
 cd ..
