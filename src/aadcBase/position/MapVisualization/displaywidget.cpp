@@ -40,19 +40,12 @@ DisplayWidget::DisplayWidget(QWidget* pParent) :
   scene->setBackgroundBrush(QColor(43,43,43));
   //Create New view
   view= new QGraphicsView(scene,this);
-  //Create Small Circle for Position
-  pos=scene->addEllipse(0,0,0,0,QPen(QColor(0,0,0)),QBrush(QColor(0,0,0)));
-  //Create Big Circle for Position
-  pos1=scene->addEllipse(400,400,0,0,QPen(QColor(0,0,0)),QBrush(QColor(0,0,0)));
-  //Create heading line
-  head=scene->addLine(0,0,0,0);
   //Create Marker Small Cirle
   marker1=scene->addEllipse(0,0,0,0,QPen(QColor(0,0,0)),QBrush(QColor(0,0,0)));
   //Create Marker Bight circle
   marker2=scene->addEllipse(0,0,0,0,QPen(QColor(0,0,0)),QBrush(QColor(0,0,0)));
   text=new QGraphicsTextItem("");
   scene->addItem(text);
-
   //Add view layout
   view->setMaximumSize(600,800);
   //Map scene to view
@@ -62,28 +55,56 @@ DisplayWidget::DisplayWidget(QWidget* pParent) :
   //Add view to the layout
   m_mainLayout->addWidget(view);
   setLayout(m_mainLayout);
-
+  ResetScene();
 }
 
+/**
+ * Destructor.
+ * Mind: A destructor within adtf should always be virtual.
+ */
 DisplayWidget::~DisplayWidget()
 {
 }
 
-void DisplayWidget::DrawLine(float x1, float y1, float x2, float y2)
+void DisplayWidget::ResetScene()
 {
+  scene->clear();
+  //Create Small Circle for Position
+  pos=scene->addEllipse(0,0,0,0,QPen(QColor(0,0,0)),QBrush(QColor(0,0,0)));
+  //Create Big Circle for Position
+  pos1=scene->addEllipse(400,400,0,0,QPen(QColor(0,0,0)),QBrush(QColor(0,0,0)));
+  //Create heading line
+  head=scene->addLine(0,0,0,0);
+  return;
+}
 
+
+//Plot Map points
+void DisplayWidget::DrawLine(float x1, float y1, float x2, float y2,float zScale,RoadType rType)
+{
   //Create Right Lane
   QGraphicsLineItem *line1=scene->addLine(x1,y1,x2,y2);
   QPen pen1;
   pen1.setWidth(1);
-  pen1.setColor(QColor(18,232,175));
+  if(rType == BORDER_LANE)
+  {
+    pen1.setColor(QColor(zScale,255-zScale,100));
+  }
+  else if (rType == CENTER_LANE)
+  {
+    pen1.setStyle(Qt::DashDotLine);
+    pen1.setColor(QColor(255,255,255));
+  }
+  else{
+    pen1.setColor(QColor(zScale,255-zScale,190));
+  }
   line1->setPen(pen1);
   //Update Scene
   scene->update();
-
 }
 
-void DisplayWidget::PlotPosition(float x1, float y1, float h1)
+//Position Date Received Create Position
+void DisplayWidget::PlotPosition(float x1, float y1, float h1,bool showTrace)
 {
   //x1=m_scalex*x1;
   //y1=m_ymax-m_scaley*y1;
@@ -94,6 +115,10 @@ void DisplayWidget::PlotPosition(float x1, float y1, float h1)
   //Add Position Circles
   pos1=scene->addEllipse(x1-12.5,y1-12.5,25,25,QPen(QColor(0,0,0)),QBrush(QColor(255,0,0,50)));
   pos=scene->addEllipse(x1-5,y1-5,10,10,QPen(QColor(0,0,0)),QBrush(QColor(247,0,0)));
+  if(showTrace)
+  {
+    scene->addEllipse(x1-2.5,y1-2.5,5,5,QPen(QColor(0,0,0)),QBrush(QColor(76,247,202)));
+  }
 
   //Add Heading Line
   head=scene->addLine(x1,y1,x1+cos(h1)*10,y1-sin(h1)*10);

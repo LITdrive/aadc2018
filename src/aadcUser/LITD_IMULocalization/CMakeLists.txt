@@ -1,12 +1,12 @@
 cmake_minimum_required(VERSION 3.10.0)
 
-project(marker_positioning)
+project(LITD_IMULocalization)
 
 include_directories(${OpenCV_INCLUDE_DIRS})
 
 set (SOURCEFILES    	
-            MarkerPositioning.h
-			MarkerPositioning.cpp)
+            LITD_IMULocalization.h
+			LITD_IMULocalization.cpp)
 
 adtf_add_filter(${PROJECT_NAME}
 				${SOURCEFILES})

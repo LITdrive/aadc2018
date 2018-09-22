@@ -15,7 +15,10 @@ THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS AS IS AND ANY EXPRESS OR I
 
 #pragma once
 
-#define CID_CMARKERPOS_DATA_TRIGGERED_FILTER "marker_positioning.filter.demo.aadc.cid"
+#define _USE_MATH_DEFINES
+#include <math.h>
+
+#define CID_CMARKERPOS_DATA_TRIGGERED_FILTER "imulocalization.filter.user.aadc.cid"
 using namespace adtf_util;
 using namespace ddl;
 using namespace adtf::ucom;
@@ -26,49 +29,17 @@ using namespace adtf::filter;
 using namespace std;
 using namespace cv;
 
-#ifndef M_PI
-#define M_PI 3.14159265358979323846
-#endif
 
 #define RAD2DEG 180/M_PI
 #define DEG2RAD M_PI/180
 
-/*! Storage structure for the road sign data */
-typedef struct _roadSign
-{
-    /*! road sign */
-    tInt16 u16Id;
-
-    /*! init sign */
-    tBool bInit;
-
-    /*! location  x*/
-    tFloat32 f32X;
-    /*! location  y*/
-    tFloat32 f32Y;
-
-    /*! sign search radius */
-    tFloat32 f32Radius;
-
-    /*! direction (heading) of the road sign */
-    tFloat32 f32Direction;
-
-    /*! Number of 16s */
-    tInt u16Cnt;
-
-    /*! measurement ticks*/
-    tTimeStamp u32ticks;
-
-} roadSign;
-
 
 /*! the main class of the marker positioning. */
-class cMarkerPos : public cTriggerFunction
+class cLITD_IMULocalization : public cTriggerFunction
 {
 private:
 
-    /*! configuration file for markers  */
-    adtf::base::property_variable<cFilename> m_roadSignFile = cFilename("roadSigns.xml");
+
 
     /*! speed scale */
     adtf::base::property_variable<tFloat32> m_f32SpeedScale = 1.0f;
@@ -78,9 +49,13 @@ private:
     /*! distance to the rear axle */
     adtf::base::property_variable<tFloat32> m_f32CameraOffsetLon = 0.295f;
 
+    //Positioning offsets
+    adtf::base::property_variable<tFloat32> m_f32XOffset = 0.0f;
+    adtf::base::property_variable<tFloat32> m_f32YOffset = 0.0f;
+    adtf::base::property_variable<tFloat32> m_f32HeadingOffset = 0.0f;
 
-    /*! Reader of an InPin roadSign. */
-    cPinReader m_oReaderRoadSign;
+
+
     /*! Reader of an InPin speed. */
     cPinReader m_oReaderSpeed;
     /*! Reader of an InPin IMU. */
@@ -123,17 +98,9 @@ private:
     /*! The signal data sample factory */
     adtf::mediadescription::cSampleCodecFactory m_SignalDataSampleFactory;
 
-    /*! The ddl indices for a tRoadSignExt */
-    struct
-    {
-        tSize id;
-        tSize size;
-        tSize tvec;
-        tSize rvec;
-    } m_ddlRoadSignIndex;
 
-    /*! The road sign sample factory */
-    adtf::mediadescription::cSampleCodecFactory m_RoadSignSampleFactory;
+
+
 
     /*! The ddl indices for a tPosition */
     struct
@@ -161,11 +128,6 @@ private:
     /*! Size of the 32 marker */
     tFloat32 m_f32MarkerSize;
 
-    /*! translation vector */
-    Mat m_Tvec;
-    /*! rotation vector */
-    Mat m_Rvec;
-
     /*! The ticks */
     tTimeStamp m_ticks;
 
@@ -177,8 +139,7 @@ private:
 
     tBool m_isInitialized; /*! initialization state of the filter */
 
-    /*! storage for the roadsign data */
-    vector<roadSign> m_roadSigns;
+
 
     /*! Number of 32s */
     tInt m_ui32Cnt;
@@ -231,16 +192,6 @@ private:
     tResult ProcessInerMeasUnitSample(tTimeStamp tmTimeOfTrigger, const adtf::streaming::ISample &oSample);
 
     /*!
-     * Process the road sign structure extent.
-     *
-     * \param   tmTimeOfTrigger The time time of trigger.
-     * \param   oSample         The sample.
-     *
-     * \return  Standard Result Code.
-     */
-    tResult ProcessRoadSignStructExt(tTimeStamp tmTimeOfTrigger, const adtf::streaming::ISample &oSample);
-
-    /*!
      * Sends a position structure.
      *
      * \param   timeOfFix   The time of fix.
@@ -258,16 +209,29 @@ private:
 public:
 
     /*! Default constructor. */
-    cMarkerPos();
+    cLITD_IMULocalization();
+
+    /*!
+     * Parse the road sign file.
+     *
+     * \param   oDOM    The dom.
+     */
+    tResult ParseRoadSignFile(cDOM& oDOM);
 
     /*! Destructor. */
-    virtual ~cMarkerPos() = default;
+    virtual ~cLITD_IMULocalization() = default;
 
     /**
     * Overwrites the Configure
     * This is to Read Properties prepare your Trigger Function
     */
     tResult Configure() override;
+    /**
+    Reset Filter covariances
+    **/
+    tVoid ResetFilter();
+  
+
     /**
     * Overwrites the Process
     * You need to implement the Reading and Writing of Samples within this function

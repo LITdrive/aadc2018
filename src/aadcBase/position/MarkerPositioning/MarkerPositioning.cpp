@@ -62,19 +62,20 @@ THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS AS IS AND ANY EXPRESS OR I
 ADTF_TRIGGER_FUNCTION_FILTER_PLUGIN(CID_CMARKERPOS_DATA_TRIGGERED_FILTER,
     "Marker Positioning",
     cMarkerPositioning,
-    adtf::filter::pin_trigger({ "imu" }));
+    adtf::filter::pin_trigger({ "imu" , "road_sign_map"}));
+
+
 
 /*! initialize the trigger function */
 cMarkerPositioning::cMarkerPositioning()
 {
     SetName("MarkerPos");
-
     //register properties
-    RegisterPropertyVariable("Roadsign File", m_roadSignFile);
-
     RegisterPropertyVariable("Speed Scale", m_f32SpeedScale);
     RegisterPropertyVariable("Camera Offset::Lateral", m_f32CameraOffsetLat);
     RegisterPropertyVariable("Camera Offset::Longitudinal", m_f32CameraOffsetLon);
+    RegisterPropertyVariable("Optional Roadsign File", m_roadSignFile);
+
 
     //the imu struct
     object_ptr<IStreamType> pTypeIMUData;
@@ -151,42 +152,17 @@ cMarkerPositioning::cMarkerPositioning()
     object_ptr<const IStreamType> pConstTypeSignalData = pTypeSignalData;
     object_ptr<const IStreamType> pConstTypeIMUData = pTypeIMUData;
     object_ptr<const IStreamType> pConstTypePositionData = pTypePositionData;
+    object_ptr<IStreamType> pTypeAnonymous = make_object_ptr<cStreamType>(stream_meta_type_anonymous());
 
     //register input pin(s)
     Register(m_oReaderRoadSign, "road_sign_ext", pConstTypeRoadSignData);
     Register(m_oReaderSpeed, "speed", pConstTypeSignalData);
     Register(m_oReaderIMU, "imu", pConstTypeIMUData);
-
+    Register(m_roadSignMapData, "road_sign_map", pTypeAnonymous);
     //register output pin
     Register(m_oWriter, "position", pConstTypePositionData);
-
-    // initialize EKF variables
-    m_state = Mat(6, 1, CV_64F, Scalar::all(0));
-    m_errorCov = Mat(6, 6, CV_64F, Scalar::all(0));
-
-    tFloat64 T = 0.1;
-    m_errorCov.at<double>(0, 0) = MP_PROCESS_INIT_X;
-    m_errorCov.at<double>(1, 1) = MP_PROCESS_INIT_Y;
-    m_errorCov.at<double>(2, 2) = MP_PROCESS_INIT_HEADING;
-    m_errorCov.at<double>(2, 3) = MP_PROCESS_INIT_HEADING / T;
-    m_errorCov.at<double>(3, 3) = MP_PROCESS_INIT_HEADING_DRIFT;
-    m_errorCov.at<double>(4, 4) = MP_PROCESS_INIT_SPEED;
-    m_errorCov.at<double>(4, 5) = MP_PROCESS_INIT_SPEED / T;
-    m_errorCov.at<double>(5, 5) = MP_PROCESS_INIT_SPEED_SCALE;
-
-    m_transitionMatrix = Mat(6, 6, CV_64F, Scalar::all(0));
-    setIdentity(m_transitionMatrix);
-
-    m_processCov = Mat(6, 6, CV_64F, Scalar::all(0));
-    m_processCov.at<double>(0, 0) = MP_PROCESS_X;
-    m_processCov.at<double>(1, 1) = MP_PROCESS_Y;
-    m_processCov.at<double>(2, 2) = MP_PROCESS_HEADING;
-    m_processCov.at<double>(3, 3) = MP_PROCESS_HEADING_DRIFT;
-    m_processCov.at<double>(4, 4) = MP_PROCESS_SPEED;
-    m_processCov.at<double>(5, 5) = MP_PROCESS_SPEED_SCALE;
-
-    m_isInitialized = tFalse;
-
+    //Reset Filter Covariances
+    ResetFilter();
     // initialize translation and rotation vectors
     m_Tvec = Mat(3, 1, CV_32F, Scalar::all(0));
     m_Rvec = Mat(3, 1, CV_32F, Scalar::all(0));
@@ -202,69 +178,91 @@ cMarkerPositioning::cMarkerPositioning()
 }
 
 
+tResult cMarkerPositioning::ParseRoadSignFile(cDOM& oDOM)
+{
+    m_roadSigns.clear();
+
+    cDOMElementRefList oElems;
+
+    if (IS_OK(oDOM.FindNodes("configuration/roadSign", oElems)))
+    {
+        for (cDOMElementRefList::iterator itElem = oElems.begin(); itElem != oElems.end(); ++itElem)
+        {
+            roadSign item;
+            item.u16Id = tUInt16((*itElem)->GetAttribute("id", "0").AsInt32());
+            item.f32X = tFloat32((*itElem)->GetAttribute("x", "0").AsFloat64());
+            item.f32Y = tFloat32((*itElem)->GetAttribute("y", "0").AsFloat64());
+            item.f32Radius = tFloat32((*itElem)->GetAttribute("radius", "0").AsFloat64());
+            item.f32Direction = tFloat32((*itElem)->GetAttribute("direction", "0").AsFloat64());
+
+            //item.bInit = ((*itElem)->GetAttribute("init","0").AsInt32());
+            if ((*itElem)->GetAttribute("init", "0").AsInt32() == 0)
+            {
+                item.bInit = false;
+            }
+            else
+            {
+                item.bInit = true;
+            }
+
+
+            item.u16Cnt = 0;
+            item.u32ticks = GetTime();
+
+            item.f32Direction *= static_cast<tFloat32>(DEG2RAD); // convert to radians
+
+            //LOG_INFO(cString::Format("LoadConfiguration::Id %d XY %f %f Radius %f Direction %f",
+            //    item.u16Id, item.f32X, item.f32Y, item.f32Radius, item.f32Direction).GetPtr());
+
+            m_roadSigns.push_back(item);
+
+        }
+        RETURN_NOERROR;
+    }
+    else
+    {
+        RETURN_ERROR(ERR_INVALID_FILE);
+    }
+
+    RETURN_NOERROR;
+}
 
 /*! implements the configure function to read ALL Properties */
 tResult cMarkerPositioning::Configure()
 {
-    // open roadsign configuration file 
+    // open roadsign configuration file
     cFilename fileRoadSign = m_roadSignFile;
     adtf::services::ant::adtf_resolve_macros(fileRoadSign);
 
-    //check if roadsign file exits
-    if (fileRoadSign.IsEmpty())
+
+    if (cFileSystem::Exists(fileRoadSign))
     {
-        RETURN_ERROR_DESC(ERR_INVALID_FILE, "RoadSign file not found");
-    }
-    if (!(cFileSystem::Exists(fileRoadSign)))
-    {
-        RETURN_ERROR_DESC(ERR_INVALID_FILE, "RoadSign file not found");
-    }
-    else
-    {
-        tInt i = 0;
-
-        cDOM oDOM;
-        oDOM.Load(fileRoadSign);
-        cDOMElementRefList oElems;
-
-        if (IS_OK(oDOM.FindNodes("configuration/roadSign", oElems)))
-        {
-            for (cDOMElementRefList::iterator itElem = oElems.begin(); itElem != oElems.end(); ++itElem)
-            {
-                roadSign item;
-                item.u16Id = tUInt16((*itElem)->GetAttribute("id", "0").AsInt32());
-                item.f32X = tFloat32((*itElem)->GetAttribute("x", "0").AsFloat64());
-                item.f32Y = tFloat32((*itElem)->GetAttribute("y", "0").AsFloat64());
-                item.f32Radius = tFloat32((*itElem)->GetAttribute("radius", "0").AsFloat64());
-                item.f32Direction = tFloat32((*itElem)->GetAttribute("direction", "0").AsFloat64());
-
-                //item.bInit = ((*itElem)->GetAttribute("init","0").AsInt32());
-                if ((*itElem)->GetAttribute("init", "0").AsInt32() == 0)
-                {
-                    item.bInit = false;
-                }
-                else
-                {
-                    item.bInit = true;
-                }
-
-
-                item.u16Cnt = 0;
-                item.u32ticks = GetTime();
-
-                item.f32Direction *= static_cast<tFloat32>(DEG2RAD); // convert to radians
-
-                LOG_INFO(cString::Format("LoadConfiguration::Id %d XY %f %f Radius %f Direction %f",
-                    item.u16Id, item.f32X, item.f32Y, item.f32Radius, item.f32Direction).GetPtr());
-
-                m_roadSigns.push_back(item);
-
-                i++;
-            }
-        }
-
+        cDOM oDOMFromFile;
+        oDOMFromFile.Load(fileRoadSign);
+        RETURN_IF_FAILED(ParseRoadSignFile(oDOMFromFile));
+        LOG_INFO(cString::Format("Loaded road sign file %s with %d signs", fileRoadSign.GetPtr(), m_roadSigns.size()));
     }
 
+    RETURN_NOERROR;
+}
+
+tResult cMarkerPositioning::ProcessRoadSignFile(tInt64 tmTimeOfTrigger, const ISample& sample)
+{
+    adtf::ucom::ant::object_ptr_shared_locked<const adtf::streaming::ant::ISampleBuffer> pSampleBuffer;
+    RETURN_IF_FAILED(sample.Lock(pSampleBuffer));
+
+    adtf_util::cString roadSignFileString;
+    roadSignFileString.SetBuffer(pSampleBuffer->GetSize());
+
+    memcpy(roadSignFileString.GetBuffer(), pSampleBuffer->GetPtr(), pSampleBuffer->GetSize());
+
+
+    cDOM oDOM;
+    RETURN_IF_FAILED(oDOM.FromString(roadSignFileString));
+    RETURN_IF_FAILED(ParseRoadSignFile(oDOM));
+
+    LOG_INFO(cString::Format("Recieved road sign file from pin with %d signs", m_roadSigns.size()));
+    ResetFilter();
     RETURN_NOERROR;
 }
 
@@ -294,7 +292,45 @@ tResult cMarkerPositioning::Process(tTimeStamp tmTimeOfTrigger)
         ProcessRoadSignStructExt(tmTimeOfTrigger, *pReadSample);
     }
 
+    while (IS_OK(m_roadSignMapData.GetNextSample(pReadSample)))
+    {
+        // update
+        ProcessRoadSignFile(tmTimeOfTrigger, *pReadSample);
+    }
+
+
     RETURN_NOERROR;
+}
+tVoid cMarkerPositioning::ResetFilter()
+{
+  LOG_INFO("Reset Filter Covariances");
+  // initialize EKF variables
+  m_state = Mat(6,1,CV_64F,Scalar::all(0));
+  m_errorCov = Mat(6,6,CV_64F,Scalar::all(0));
+
+  tFloat64 T = 0.1;
+  m_errorCov.at<double>(0,0) = MP_PROCESS_INIT_X;
+  m_errorCov.at<double>(1,1) = MP_PROCESS_INIT_Y;
+  m_errorCov.at<double>(2,2) = MP_PROCESS_INIT_HEADING;
+  m_errorCov.at<double>(2,3) = MP_PROCESS_INIT_HEADING/T;
+  m_errorCov.at<double>(3,3) = MP_PROCESS_INIT_HEADING_DRIFT;
+  m_errorCov.at<double>(4,4) = MP_PROCESS_INIT_SPEED;
+  m_errorCov.at<double>(4,5) = MP_PROCESS_INIT_SPEED/T;
+  m_errorCov.at<double>(5,5) = MP_PROCESS_INIT_SPEED_SCALE;
+
+  m_transitionMatrix = Mat(6,6,CV_64F,Scalar::all(0));
+  setIdentity(m_transitionMatrix);
+
+  m_processCov = Mat(6,6,CV_64F,Scalar::all(0));
+  m_processCov.at<double>(0,0) = MP_PROCESS_X;
+  m_processCov.at<double>(1,1) = MP_PROCESS_Y;
+  m_processCov.at<double>(2,2) = MP_PROCESS_HEADING;
+  m_processCov.at<double>(3,3) = MP_PROCESS_HEADING_DRIFT;
+  m_processCov.at<double>(4,4) = MP_PROCESS_SPEED;
+  m_processCov.at<double>(5,5) = MP_PROCESS_SPEED_SCALE;
+
+  m_isInitialized = tFalse;
+  return;
 }
 
 /*! calculates normalized angle difference */
@@ -349,7 +385,7 @@ tFloat32 cMarkerPositioning::mod(tFloat32 x, tFloat32 y)
  * and updates the positioning filter accordingly */
 tResult cMarkerPositioning::ProcessRoadSignStructExt(tTimeStamp tmTimeOfTrigger, const adtf::streaming::ISample &oSample)
 {
-    // parse the data 
+    // parse the data
     auto oDecoder = m_RoadSignSampleFactory.MakeDecoderFor(oSample);
 
     // fetch marker id
@@ -630,10 +666,10 @@ tResult cMarkerPositioning::ProcessInerMeasUnitSample(tTimeStamp tmTimeOfTrigger
     tFloat64 dt = 0;
     tUInt32 ui32ArduinoTimestamp = 0;
 
-    // parse the data 
+    // parse the data
     auto oDecoder = m_IMUDataSampleFactory.MakeDecoderFor(oSample);
 
-    // yaw-rate gyro measurment 
+    // yaw-rate gyro measurment
     m_f32YawRate = access_element::get_value(oDecoder, m_ddlInerMeasUnitDataIndex.G_z);
 
     // fetch timestamp and calculate dt
@@ -690,4 +726,3 @@ tResult cMarkerPositioning::ProcessInerMeasUnitSample(tTimeStamp tmTimeOfTrigger
 
     RETURN_NOERROR;
 }
-

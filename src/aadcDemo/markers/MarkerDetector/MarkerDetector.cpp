@@ -61,6 +61,7 @@ cMarkerDetector::cMarkerDetector()
         adtf_ddl::access_element::find_array_index(m_outputPoseSampleFactory, "af32TVec", m_ddlRoadSignExtIds.tVec);
         adtf_ddl::access_element::find_array_index(m_outputPoseSampleFactory, "af32RVec", m_ddlRoadSignExtIds.rVec);
         adtf_ddl::access_element::find_index(m_outputPoseSampleFactory, "i16Identifier", m_ddlRoadSignExtIds.id);
+        adtf_ddl::access_element::find_index(m_outputPoseSampleFactory, "f32Imagesize", m_ddlRoadSignExtIds.imageSize);
     }
 
     //register output pose pin
@@ -118,7 +119,11 @@ tResult cMarkerDetector::Configure()
 tResult cMarkerDetector::Process(tTimeStamp tmTimeOfTrigger)
 {
     object_ptr<const ISample> pReadSample;
+    
+    // the results from aruco detection	
+    vector< vector< Point2f > > corners, rejected;
     Mat outputImage;
+
     vector< Vec3d > rvecs, tvecs;
     vector< int > ids;
     if (IS_OK(m_oReader.GetNextSample(pReadSample)))
@@ -130,8 +135,7 @@ tResult cMarkerDetector::Process(tTimeStamp tmTimeOfTrigger)
             //create a opencv matrix from the media sample buffer
             Mat m_inputImage(cv::Size(m_sInputFormat.m_ui32Width, m_sInputFormat.m_ui32Height),
                 CV_8UC3, (uchar*)pReadBuffer->GetPtr());
-            // the results from aruco detection	
-            vector< vector< Point2f > > corners, rejected;
+            
 
 
             //Check for ROI settings and create ROI appropriately
@@ -199,12 +203,15 @@ tResult cMarkerDetector::Process(tTimeStamp tmTimeOfTrigger)
                     tFloat32 *rVecSample = static_cast<tFloat32*>(oCodec.GetElementAddress(m_ddlRoadSignExtIds.rVec));
                     memcpy(rVecSample, rVecFl32, sizeof(rVecFl32));
 
+                    tFloat32 imageSize =  getMarkerArea(corners[n]);
+
                     // get pointer to translation vector in sample
                     tFloat32 tVecFl32[3] = { static_cast<tFloat32>(tvecs[n][0]) , static_cast<tFloat32>(tvecs[n][1]) ,static_cast<tFloat32>(tvecs[n][2]) };
                     tFloat32 *tVecSample = static_cast<tFloat32*>(oCodec.GetElementAddress(m_ddlRoadSignExtIds.tVec));
                     memcpy(tVecSample, tVecFl32, sizeof(tVecFl32));
 
-                    if (IS_OK(oCodec.SetElementValue(m_ddlRoadSignExtIds.id, id)))
+                    if (IS_OK(oCodec.SetElementValue(m_ddlRoadSignExtIds.id, id)) && 
+                        IS_OK(oCodec.SetElementValue(m_ddlRoadSignExtIds.imageSize, imageSize)))
                     {
                         // the sample buffer lock is released in the destructor of oCodec
                         m_oPosePinWriter << pWriteSample << flush << trigger;
