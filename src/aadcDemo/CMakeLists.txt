@@ -33,7 +33,7 @@ else(AADC_FOUND)
    message(FATAL_ERROR "-- AADC not found")
 endif (AADC_FOUND)
 
-find_package(ADTF REQUIRED)
+find_package(ADTF 3.3.0 REQUIRED)
 message(STATUS "Found ADTF: ${ADTF_VERSION}")
 
 #--------------add private macros-----------------

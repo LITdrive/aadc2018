@@ -1,8 +1,8 @@
 <xml>
  <property name="signal_scope_view.ui_service.adtf_disptb" value="scopeview" />
- <property name="signal_scope_view.ui_service.adtf_disptb.Xinterval" value="7500000,000000" />
- <property name="signal_scope_view.ui_service.adtf_disptb.Ymax" value="200,233372" />
- <property name="signal_scope_view.ui_service.adtf_disptb.Ymin" value="-49,754959" />
+ <property name="signal_scope_view.ui_service.adtf_disptb.Xinterval" value="7500000.000000" />
+ <property name="signal_scope_view.ui_service.adtf_disptb.Ymax" value="200.233372" />
+ <property name="signal_scope_view.ui_service.adtf_disptb.Ymin" value="-49.754959" />
  <property name="signal_scope_view.ui_service.adtf_disptb.active_signal" value="-1" />
  <property name="signal_scope_view.ui_service.adtf_disptb.autozoom_timer" value="false" />
  <property name="signal_scope_view.ui_service.adtf_disptb.autozoomproperties_allsignals" value="true" />
@@ -32,22 +32,22 @@
  <property name="signal_scope_view.ui_service.adtf_disptb.sig0.cgreen" value="0" />
  <property name="signal_scope_view.ui_service.adtf_disptb.sig0.cred" value="255" />
  <property name="signal_scope_view.ui_service.adtf_disptb.sig0.displayname" value="f32Value" />
- <property name="signal_scope_view.ui_service.adtf_disptb.sig0.factor" value="1,000000" />
+ <property name="signal_scope_view.ui_service.adtf_disptb.sig0.factor" value="1.000000" />
  <property name="signal_scope_view.ui_service.adtf_disptb.sig0.linestyle" value="1" />
- <property name="signal_scope_view.ui_service.adtf_disptb.sig0.max" value="1000,000000" />
- <property name="signal_scope_view.ui_service.adtf_disptb.sig0.min" value="-1000,000000" />
- <property name="signal_scope_view.ui_service.adtf_disptb.sig0.offset" value="0,000000" />
+ <property name="signal_scope_view.ui_service.adtf_disptb.sig0.max" value="1000.000000" />
+ <property name="signal_scope_view.ui_service.adtf_disptb.sig0.min" value="-1000.000000" />
+ <property name="signal_scope_view.ui_service.adtf_disptb.sig0.offset" value="0.000000" />
  <property name="signal_scope_view.ui_service.adtf_disptb.sig0.plotpoints" value="false" />
- <property name="signal_scope_view.ui_service.adtf_disptb.sig0.scale_max" value="200,233372" />
- <property name="signal_scope_view.ui_service.adtf_disptb.sig0.scale_min" value="-49,754959" />
+ <property name="signal_scope_view.ui_service.adtf_disptb.sig0.scale_max" value="200.233372" />
+ <property name="signal_scope_view.ui_service.adtf_disptb.sig0.scale_min" value="-49.754959" />
  <property name="signal_scope_view.ui_service.adtf_disptb.sig0.show" value="false" />
- <property name="signal_scope_view.ui_service.adtf_disptb.sig0.show_scale" value="1,000000" />
+ <property name="signal_scope_view.ui_service.adtf_disptb.sig0.show_scale" value="1.000000" />
  <property name="signal_scope_view.ui_service.adtf_disptb.sig0.unit" value="" />
  <property name="signal_scope_view.ui_service.adtf_disptb.signal_count" value="1" />
  <property name="signal_scope_view.ui_service.adtf_disptb.signal_label_x_offset" value="0" />
  <property name="signal_scope_view.ui_service.adtf_disptb.signal_label_y_offset" value="0" />
- <property name="signal_scope_view.ui_service.adtf_disptb.splitterpos1" value="48" />
- <property name="signal_scope_view.ui_service.adtf_disptb.splitterpos2" value="48" />
+ <property name="signal_scope_view.ui_service.adtf_disptb.splitterpos1" value="47" />
+ <property name="signal_scope_view.ui_service.adtf_disptb.splitterpos2" value="47" />
  <property name="signal_scope_view.ui_service.adtf_disptb.statusbar" value="true" />
  <property name="signal_scope_view.ui_service.adtf_disptb.toolbar" value="true" />
  <property name="signal_scope_view.ui_service.adtf_disptb.width" value="640" />

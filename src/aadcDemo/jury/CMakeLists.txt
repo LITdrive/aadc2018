@@ -1,2 +1,1 @@
-add_subdirectory(JuryApplication)
 add_subdirectory(DriverModule)

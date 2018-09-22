@@ -25,6 +25,7 @@ THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS AS IS AND ANY EXPRESS OR I
 
 #include <aadc_jury.h>
 #include <thread>
+#include <QGraphicsView>
 
 //#include <aadc_structs.h>
 // use own defintion, otherwise we have to include ADTF
@@ -66,6 +67,7 @@ public:
     /*! Destructor. */
     ~JuryApp();
 
+    void closeEvent(QCloseEvent *event) override;
 private slots:
 
     /*! Handles action exit triggered signals. */
@@ -75,16 +77,38 @@ private slots:
     void on_actionClear_all_triggered();
 
     /*! Handles set maneuver file triggered signals. */
-    void on_setManeuverFile_triggered();
+    void onSetManeuverFileTriggered();
+    /*! Handles set open drive map triggered signals. */
+    void onSetOpenDriveMapTriggered();
+    /*! Handles set traffic sign map triggered signals. */
+    void onSetRoadSignMapTriggered();
 
     /*! Handles load maneuver triggered signals. */
-    void on_loadManeuver_triggered();
+    void onLoadManeuverTriggered();
+
+    /*!
+     * Transmit file.
+     *
+     * \param [in,out]  pFile       If non-null, the file.
+     * \param           fileType    Type of the file.
+     *
+     * \return  True if it succeeds, false if it fails.
+     */
+    bool TransmitFile(QFile* pFile, aadc::jury::juryContainerId fileType);
 
     /*! Handles send maneuver triggered signals. */
-    void on_sendManeuver_triggered();
+    void onSendManeuverTriggered();
+    
+    /*! Handles send open drive map triggered signals. */
+    void onSendOpenDriveMapTriggered();
+    /*! Handles send traffic sign map triggered signals. */
+    void onSendRoadSignMapTriggered();
 
     /*! Handles connect signals. */
     void on_connect();
+    
+    /*! Handles disconnect signals. */
+    void on_disconnect();
 
     /*! Handles connection established signals. */
     void on_socketConnectionEstablished();
@@ -101,7 +125,7 @@ private slots:
      *
      * \param   socketError The socket error.
      */
-    void on_socketError(QAbstractSocket::SocketError socketError);
+    void onSocketError(QAbstractSocket::SocketError socketError);
 
     /*!
      * Handles section index changed signals.
@@ -146,14 +170,16 @@ private:
     //if we have a valid maneuver file
     bool m_hasValidManeuverFile;
 
-    //if something has been received from car
-    bool m_hasReceivedCarState;
-
     // the loaded manveuver file
     QFile* m_maneuverFile;
 
+   
     /*! Sets initial values. */
     void setInitValues(bool deleteUserEntries = true);
+
+    void WriteLog(const QString log) const;
+    void BrushGraphicsView(QGraphicsView* view, QColor color, QString text = "");
+
 
     /*!
      * Verify maneuver file.
@@ -178,6 +204,8 @@ private:
 
     //thread for reading data from socket
     QTimer *m_readTimer;
+
+    QSettings m_settings;
 };
 
 #endif // MAINWINDOW_H
