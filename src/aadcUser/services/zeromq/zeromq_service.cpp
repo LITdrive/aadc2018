@@ -17,7 +17,6 @@ tResult cZeroMQService::ServiceInit()
 
 tResult cZeroMQService::ServiceShutdown()
 {
-	m_zeromq_ctx->close();
 	delete m_zeromq_ctx;
 
 	RETURN_NOERROR;
