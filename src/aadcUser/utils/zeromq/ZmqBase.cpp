@@ -352,6 +352,14 @@ inline zmq::socket_t* cZmqBase::InitializeClientSocket() const
 	return client_socket;
 }
 
+#define PROCESS_INPUT_SAMPLE_HELPER(_TYPE_, _CONTENT_) { \
+	auto* data = new _TYPE_(); \
+	_CONTENT_ \
+	zmq::message_t message(data, sizeof(data), zmq_free_message, nullptr); \
+	returncode = m_sck_pair->send(message, flags); \
+	break; \
+}
+
 tResult cZmqBase::ProcessInputs(tTimeStamp tmTimeOfTrigger)
 {
 	// only one thread at a time shall execute this method
@@ -403,57 +411,37 @@ tResult cZmqBase::ProcessInputs(tTimeStamp tmTimeOfTrigger)
 				break;
 
 			case SignalValue:
-				{
-					auto* signalValue = new tSignalValue();
-					RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlSignalValueId.timeStamp, &signalValue->ui32ArduinoTimestamp));
-					RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlSignalValueId.value, &signalValue->f32Value));
-
-					zmq::message_t message(signalValue, sizeof(tSignalValue), zmq_free_message, nullptr);
-					returncode = m_sck_pair->send(message, flags);
-				}
-				break;
+				PROCESS_INPUT_SAMPLE_HELPER(tSignalValue, {
+					RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlSignalValueId.timeStamp, &data->ui32ArduinoTimestamp));
+					RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlSignalValueId.value, &data->f32Value));
+				});
 
 			case BoolSignalValue:
-				{
-					auto* boolSignalValue = new tBoolSignalValue();
-					RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlBoolSignalValueId.ui32ArduinoTimestamp, &boolSignalValue->ui32ArduinoTimestamp));
-					RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlBoolSignalValueId.bValue, &boolSignalValue->bValue));
-
-					zmq::message_t message(boolSignalValue, sizeof(tBoolSignalValue), zmq_free_message, nullptr);
-					returncode = m_sck_pair->send(message, flags);
-				}
-				break;
+				PROCESS_INPUT_SAMPLE_HELPER(tBoolSignalValue, {
+					RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlBoolSignalValueId.ui32ArduinoTimestamp, &data->ui32ArduinoTimestamp));
+					RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlBoolSignalValueId.bValue, &data->bValue));
+				});
 
 			case WheelData:
-				{
-					auto* wheelData = new tWheelData();
-					RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlWheelDataIndex.ArduinoTimestamp, &wheelData->ui32ArduinoTimestamp));
-					RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlWheelDataIndex.WheelTach, &wheelData->ui32WheelTach));
-					RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlWheelDataIndex.WheelDir, &wheelData->i8WheelDir));
-
-					zmq::message_t message(wheelData, sizeof(tWheelData), zmq_free_message, nullptr);
-					returncode = m_sck_pair->send(message, flags);
-				}
-				break;
+				PROCESS_INPUT_SAMPLE_HELPER(tWheelData, {
+					RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlWheelDataIndex.ArduinoTimestamp, &data->ui32ArduinoTimestamp));
+					RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlWheelDataIndex.WheelTach, &data->ui32WheelTach));
+					RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlWheelDataIndex.WheelDir, &data->i8WheelDir));
+				});
 
 			case InerMeasUnitData:
-				{
-					auto* IMU_data = new tInerMeasUnitData();
-					RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlInerMeasUnitDataIndex.timeStamp, &IMU_data->ui32ArduinoTimestamp));
-					RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlInerMeasUnitDataIndex.A_x, &IMU_data->f32A_x));
-					RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlInerMeasUnitDataIndex.A_y, &IMU_data->f32A_y));
-					RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlInerMeasUnitDataIndex.A_z, &IMU_data->f32A_z));
-					RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlInerMeasUnitDataIndex.G_x, &IMU_data->f32G_x));
-					RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlInerMeasUnitDataIndex.G_y, &IMU_data->f32G_y));
-					RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlInerMeasUnitDataIndex.G_z, &IMU_data->f32G_z));
-					RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlInerMeasUnitDataIndex.M_x, &IMU_data->f32M_x));
-					RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlInerMeasUnitDataIndex.M_y, &IMU_data->f32M_y));
-					RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlInerMeasUnitDataIndex.M_z, &IMU_data->f32M_z));
-
-					zmq::message_t message(IMU_data, sizeof(tInerMeasUnitData), zmq_free_message, nullptr);
-					returncode = m_sck_pair->send(message, flags);
-				}
-				break;
+				PROCESS_INPUT_SAMPLE_HELPER(tInerMeasUnitData, {
+					RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlInerMeasUnitDataIndex.timeStamp, &data->ui32ArduinoTimestamp));
+					RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlInerMeasUnitDataIndex.A_x, &data->f32A_x));
+					RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlInerMeasUnitDataIndex.A_y, &data->f32A_y));
+					RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlInerMeasUnitDataIndex.A_z, &data->f32A_z));
+					RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlInerMeasUnitDataIndex.G_x, &data->f32G_x));
+					RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlInerMeasUnitDataIndex.G_y, &data->f32G_y));
+					RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlInerMeasUnitDataIndex.G_z, &data->f32G_z));
+					RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlInerMeasUnitDataIndex.M_x, &data->f32M_x));
+					RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlInerMeasUnitDataIndex.M_y, &data->f32M_y));
+					RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlInerMeasUnitDataIndex.M_z, &data->f32M_z));
+				});
 
 			case RoadSignExt:
 				LOG_ERROR("eZmqStruct 'RoadSignExt' not implemented.");
@@ -476,43 +464,33 @@ tResult cZmqBase::ProcessInputs(tTimeStamp tmTimeOfTrigger)
 				break;
 
 			case Ultrasonic:
-				{
-					// TODO: remove timestamps
-					auto* US_data = new tUltrasonicStruct();
-					RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlUltrasonicStructIndex.SideLeft.value, &US_data->tSideLeft.f32Value));
-					RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlUltrasonicStructIndex.SideLeft.timeStamp, &US_data->tSideLeft.ui32ArduinoTimestamp));
-					RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlUltrasonicStructIndex.SideRight.value, &US_data->tSideRight.f32Value));
-					RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlUltrasonicStructIndex.SideRight.timeStamp, &US_data->tSideRight.ui32ArduinoTimestamp));
-					RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlUltrasonicStructIndex.RearLeft.value, &US_data->tRearLeft.f32Value));
-					RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlUltrasonicStructIndex.RearLeft.timeStamp, &US_data->tRearLeft.ui32ArduinoTimestamp));
-					RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlUltrasonicStructIndex.RearCenter.value, &US_data->tRearCenter.f32Value));
-					RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlUltrasonicStructIndex.RearCenter.timeStamp, &US_data->tRearCenter.ui32ArduinoTimestamp));
-					RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlUltrasonicStructIndex.RearRight.value, &US_data->tRearRight.f32Value));
-					RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlUltrasonicStructIndex.RearRight.timeStamp, &US_data->tRearRight.ui32ArduinoTimestamp));
-
-					zmq::message_t message(US_data, sizeof(tUltrasonicStruct), zmq_free_message, nullptr);
-					returncode = m_sck_pair->send(message, flags);
-				}
-				break;
+				// TODO: remove timestamps
+				PROCESS_INPUT_SAMPLE_HELPER(tUltrasonicStruct, {
+					RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlUltrasonicStructIndex.SideLeft.value, &data->tSideLeft.f32Value));
+					RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlUltrasonicStructIndex.SideLeft.timeStamp, &data->tSideLeft.ui32ArduinoTimestamp));
+					RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlUltrasonicStructIndex.SideRight.value, &data->tSideRight.f32Value));
+					RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlUltrasonicStructIndex.SideRight.timeStamp, &data->tSideRight.ui32ArduinoTimestamp));
+					RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlUltrasonicStructIndex.RearLeft.value, &data->tRearLeft.f32Value));
+					RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlUltrasonicStructIndex.RearLeft.timeStamp, &data->tRearLeft.ui32ArduinoTimestamp));
+					RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlUltrasonicStructIndex.RearCenter.value, &data->tRearCenter.f32Value));
+					RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlUltrasonicStructIndex.RearCenter.timeStamp, &data->tRearCenter.ui32ArduinoTimestamp));
+					RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlUltrasonicStructIndex.RearRight.value, &data->tRearRight.f32Value));
+					RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlUltrasonicStructIndex.RearRight.timeStamp, &data->tRearRight.ui32ArduinoTimestamp));
+				});
 
 			case Voltage:
-				{
-					auto* voltData = new tVoltageStruct();
-					RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlVoltageStructIndex.ActuatorVoltage.value, &voltData->tActuatorVoltage.f32Value));
-					RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlVoltageStructIndex.ActuatorCell1.value, &voltData->tActuatorCell1.f32Value));
-					RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlVoltageStructIndex.ActuatorCell2.value, &voltData->tActuatorCell2.f32Value));
-					RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlVoltageStructIndex.SensorVoltage.value, &voltData->tSensorVoltage.f32Value));
-					RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlVoltageStructIndex.SensorCell1.value, &voltData->tSensorCell1.f32Value));
-					RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlVoltageStructIndex.SensorCell2.value, &voltData->tSensorCell2.f32Value));
-					RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlVoltageStructIndex.SensorCell3.value, &voltData->tSensorCell3.f32Value));
-					RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlVoltageStructIndex.SensorCell4.value, &voltData->tSensorCell4.f32Value));
-					RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlVoltageStructIndex.SensorCell5.value, &voltData->tSensorCell5.f32Value));
-					RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlVoltageStructIndex.SensorCell6.value, &voltData->tSensorCell6.f32Value));
-
-					zmq::message_t message(voltData, sizeof(tVoltageStruct), zmq_free_message, nullptr);
-					returncode = m_sck_pair->send(message, flags);
-				}
-				break;
+				PROCESS_INPUT_SAMPLE_HELPER(tVoltageStruct, {
+					RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlVoltageStructIndex.ActuatorVoltage.value, &data->tActuatorVoltage.f32Value));
+					RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlVoltageStructIndex.ActuatorCell1.value, &data->tActuatorCell1.f32Value));
+					RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlVoltageStructIndex.ActuatorCell2.value, &data->tActuatorCell2.f32Value));
+					RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlVoltageStructIndex.SensorVoltage.value, &data->tSensorVoltage.f32Value));
+					RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlVoltageStructIndex.SensorCell1.value, &data->tSensorCell1.f32Value));
+					RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlVoltageStructIndex.SensorCell2.value, &data->tSensorCell2.f32Value));
+					RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlVoltageStructIndex.SensorCell3.value, &data->tSensorCell3.f32Value));
+					RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlVoltageStructIndex.SensorCell4.value, &data->tSensorCell4.f32Value));
+					RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlVoltageStructIndex.SensorCell5.value, &data->tSensorCell5.f32Value));
+					RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlVoltageStructIndex.SensorCell6.value, &data->tSensorCell6.f32Value));
+				});
 
 			case PolarCoordinate:
 				LOG_ERROR("eZmqStruct 'PolarCoordinate' not implemented.");
@@ -566,13 +544,24 @@ tResult cZmqBase::ProcessInputs(tTimeStamp tmTimeOfTrigger)
 	RETURN_NOERROR;
 }
 
+#define PROCESS_OUTPUT_SAMPLE_HELPER(_TYPE_, _CONTENT_) { \
+	if (frame->size() != sizeof(_TYPE_)) \
+	{ \
+		LOG_ERROR("Received %d bytes, but expected %d bytes on pin %s", frame->size(), sizeof(_TYPE_), pinName.c_str()); \
+		break; \
+	} \
+	const auto data = static_cast<_TYPE_*>(frame->data()); \
+	{ \
+		_CONTENT_ \
+	} \
+	break; \
+}
+
 tResult cZmqBase::ProcessOutput(zmq::message_t* frame, const size_t index)
 {
+	// ignore invalid outputs
 	if (index >= m_outputs.size())
-	{
-		// ignore invalid outputs
 		RETURN_NOERROR;
-	}
 
 	ZmqPinDef pinDef = m_outputs.at(index);
 	std::string pinName = std::get<0>(pinDef);
@@ -593,42 +582,25 @@ tResult cZmqBase::ProcessOutput(zmq::message_t* frame, const size_t index)
 	case Driver:
 		LOG_ERROR("eZmqStruct 'Driver' not implemented.");
 		break;
+
 	case SignalValue:
-		{
-			if (frame->size() != sizeof(tSignalValue))
-			{
-				LOG_ERROR("Received %d bytes, but expected %d bytes for tSignalValue struct on pin %s", frame->size(), sizeof(tSignalValue), pinName.c_str());
-			}
-			else
-			{
-				const auto signalValue = static_cast<tSignalValue*>(frame->data());
-				RETURN_IF_FAILED(sampleEncoder.SetElementValue(m_ddlSignalValueId.timeStamp, signalValue->ui32ArduinoTimestamp));
-				RETURN_IF_FAILED(sampleEncoder.SetElementValue(m_ddlSignalValueId.value, signalValue->f32Value));
-			}
-		}
-		break;
+		PROCESS_OUTPUT_SAMPLE_HELPER(tSignalValue, {
+			RETURN_IF_FAILED(sampleEncoder.SetElementValue(m_ddlSignalValueId.timeStamp, data->ui32ArduinoTimestamp));
+			RETURN_IF_FAILED(sampleEncoder.SetElementValue(m_ddlSignalValueId.value, data->f32Value));
+		});
 
 	case BoolSignalValue:
-		{
-			if (frame->size() != sizeof(tBoolSignalValue))
-			{
-				LOG_ERROR("Received %d bytes, but expected %d bytes for tBoolSignalValue struct on pin %s", frame->size(), sizeof(tBoolSignalValue), pinName.c_str());
-			}
-			else
-			{
-				const auto boolSignalValue = static_cast<tBoolSignalValue*>(frame->data());
-				RETURN_IF_FAILED(sampleEncoder.SetElementValue(m_ddlBoolSignalValueId.ui32ArduinoTimestamp, boolSignalValue->ui32ArduinoTimestamp));
-				RETURN_IF_FAILED(sampleEncoder.SetElementValue(m_ddlBoolSignalValueId.bValue, boolSignalValue->bValue));
-			}
-		}
-		break;
+		PROCESS_OUTPUT_SAMPLE_HELPER(tBoolSignalValue, {
+			RETURN_IF_FAILED(sampleEncoder.SetElementValue(m_ddlBoolSignalValueId.ui32ArduinoTimestamp, data->ui32ArduinoTimestamp));
+			RETURN_IF_FAILED(sampleEncoder.SetElementValue(m_ddlBoolSignalValueId.bValue, data->bValue));
+		});
 
 	case WheelData:
+		LOG_ERROR("eZmqStruct 'WheelData' not implemented.");
 		break;
-
 	case InerMeasUnitData:
+		LOG_ERROR("eZmqStruct 'InerMeasUnitData' not implemented.");
 		break;
-
 	case RoadSignExt:
 		LOG_ERROR("eZmqStruct 'RoadSignExt' not implemented.");
 		break;
@@ -666,100 +638,15 @@ tResult cZmqBase::ProcessOutput(zmq::message_t* frame, const size_t index)
 	RETURN_NOERROR;
 }
 
-size_t cZmqBase::GetStructSize(const eZmqStruct sampleType) const
-{
-	switch (sampleType)
-	{
-	case Jury:
-		return sizeof(tJuryStruct);
-	case Driver:
-		return sizeof(tDriverStruct);
-	case SignalValue:
-		return sizeof(tSignalValue);
-	case BoolSignalValue:
-		return sizeof(tBoolSignalValue);
-	case WheelData:
-		return sizeof(tWheelData);
-	case InerMeasUnitData:
-		return sizeof(tInerMeasUnitData);
-	case RoadSignExt:
-		return sizeof(tRoadSignExt);
-	case Position:
-		// use global namespace because tPosition is also defined by fucking ADTF somewhere
-		return sizeof(::tPosition);
-	case Obstacle:
-		return sizeof(tObstacle);
-	case TrafficSign:
-		return sizeof(tTrafficSign);
-	case ParkingSpace:
-		return sizeof(tParkingSpace);
-	case Ultrasonic:
-		return sizeof(tUltrasonicStruct);
-	case Voltage:
-		return sizeof(tVoltageStruct);
-	case PolarCoordinate:
-		return sizeof(tPolarCoordiante);
-	case LaserScanner:
-		return sizeof(tLaserScannerData);
-	default:
-		LOG_ERROR("Could not request size for unrecognized eZmqStruct %d", sampleType);
-	}
-
-	return 0;
-}
-
-/**
- * \brief Get the cSampleCodecFactory for a struct type.
- * \param sampleType The pin type
- * \return The cSampleCodecFactory
- */
-cSampleCodecFactory* cZmqBase::GetSampleFactory(const eZmqStruct sampleType)
-{
-	switch (sampleType)
-	{
-	case Jury:
-		LOG_ERROR("eZmqStruct 'Jury' not implemented.");
-		break;
-	case Driver:
-		LOG_ERROR("eZmqStruct 'Driver' not implemented.");
-		break;
-	case SignalValue:
-		return &m_SignalValueSampleFactory;
-	case BoolSignalValue:
-		return &m_BoolSignalValueSampleFactory;
-	case WheelData:
-		return &m_WheelDataSampleFactory;
-	case InerMeasUnitData:
-		return &m_IMUDataSampleFactory;
-	case RoadSignExt:
-		LOG_ERROR("eZmqStruct 'RoadSignExt' not implemented.");
-		break;
-	case Position:
-		LOG_ERROR("eZmqStruct 'Position' not implemented.");
-		break;
-	case Obstacle:
-		LOG_ERROR("eZmqStruct 'Obstacle' not implemented.");
-		break;
-	case TrafficSign:
-		LOG_ERROR("eZmqStruct 'TrafficSign' not implemented.");
-		break;
-	case ParkingSpace:
-		LOG_ERROR("eZmqStruct 'ParkingSpace' not implemented.");
-		break;
-	case Ultrasonic:
-		return &m_USDataSampleFactory;
-	case Voltage:
-		return &m_VoltageStructSampleFactory;
-	case PolarCoordinate:
-		LOG_ERROR("eZmqStruct 'PolarCoordinate' not implemented.");
-		break;
-	case LaserScanner:
-		return &m_LSStructSampleFactory;
-	default:
-		LOG_ERROR("Could not get sample factory for unrecognized eZmqStruct %d", sampleType);
-	}
-
-	return nullptr;
+#define STREAM_TYPE_DEFINITION_HELPER(_STRUCT_NAME_, _STREAM_TYPE_, _SAMPLE_FACTORY_, _CONTENT_) {\
+	if (!_STREAM_TYPE_) \
+		if IS_OK(adtf::mediadescription::ant::create_adtf_default_stream_type_from_service(_STRUCT_NAME_, _STREAM_TYPE_, _SAMPLE_FACTORY_)) \
+		{ \
+			_CONTENT_ \
+		} \
+		else LOG_ERROR("No mediadescription for %s found!", _STRUCT_NAME_); \
+	else LOG_DUMP("Skipped initialization for %s, because it is already initialized.", _STRUCT_NAME_); \
+	return &_STREAM_TYPE_; \
 }
 
 /**
@@ -780,93 +667,37 @@ object_ptr<IStreamType>* cZmqBase::GetStreamType(const eZmqStruct sampleType)
 		break;
 
 	case SignalValue:
-		if (!m_SignalValueStreamType)
-		{
-			if IS_OK(adtf::mediadescription::ant::create_adtf_default_stream_type_from_service("tSignalValue", m_SignalValueStreamType, m_SignalValueSampleFactory))
-			{
-				access_element::find_index(m_SignalValueSampleFactory, cString("ui32ArduinoTimestamp"), m_ddlSignalValueId.timeStamp);
-				access_element::find_index(m_SignalValueSampleFactory, cString("f32Value"), m_ddlSignalValueId.value);
-			}
-			else
-			{
-				LOG_ERROR("No mediadescription for tSignalValue found!");
-			}
-		}
-		else
-		{
-			LOG_DUMP("Skipped initialization for tSignalValue, because it is already initialized.");
-		}
-
-		return &m_SignalValueStreamType;
+		STREAM_TYPE_DEFINITION_HELPER("tSignalValue", m_SignalValueStreamType, m_SignalValueSampleFactory, {
+			access_element::find_index(m_SignalValueSampleFactory, cString("ui32ArduinoTimestamp"), m_ddlSignalValueId.timeStamp);
+			access_element::find_index(m_SignalValueSampleFactory, cString("f32Value"), m_ddlSignalValueId.value);
+		});
 
 	case BoolSignalValue:
-		if (!m_BoolSignalValueStreamType)
-		{
-			if IS_OK(adtf::mediadescription::ant::create_adtf_default_stream_type_from_service("tBoolSignalValue", m_BoolSignalValueStreamType, m_BoolSignalValueSampleFactory))
-			{
-				access_element::find_index(m_BoolSignalValueSampleFactory, cString("ui32ArduinoTimestamp"), m_ddlBoolSignalValueId.ui32ArduinoTimestamp);
-				access_element::find_index(m_BoolSignalValueSampleFactory, cString("bValue"), m_ddlBoolSignalValueId.bValue);
-			}
-			else
-			{
-				LOG_ERROR("No mediadescription for tBoolSignalValue found!");
-			}
-		}
-		else
-		{
-			LOG_DUMP("Skipped initialization for tBoolSignalValue, because it is already initialized.");
-		}
-
-		return &m_BoolSignalValueStreamType;
+		STREAM_TYPE_DEFINITION_HELPER("tBoolSignalValue", m_BoolSignalValueStreamType, m_BoolSignalValueSampleFactory, {
+			access_element::find_index(m_BoolSignalValueSampleFactory, cString("ui32ArduinoTimestamp"), m_ddlBoolSignalValueId.ui32ArduinoTimestamp);
+			access_element::find_index(m_BoolSignalValueSampleFactory, cString("bValue"), m_ddlBoolSignalValueId.bValue);
+		});
 
 	case WheelData:
-		if (!m_WheelDataStreamType)
-		{
-			if IS_OK(create_adtf_default_stream_type_from_service("tWheelData", m_WheelDataStreamType, m_WheelDataSampleFactory))
-			{
-				access_element::find_index(m_WheelDataSampleFactory, "ui32ArduinoTimestamp", m_ddlWheelDataIndex.ArduinoTimestamp);
-				access_element::find_index(m_WheelDataSampleFactory, "ui32WheelTach", m_ddlWheelDataIndex.WheelTach);
-				access_element::find_index(m_WheelDataSampleFactory, "i8WheelDir", m_ddlWheelDataIndex.WheelDir);
-			}
-			else
-			{
-				LOG_ERROR("No mediadescription for tWheelData found!");
-			}
-		}
-		else
-		{
-			LOG_DUMP("Skipped initialization for tWheelData, because it is already initialized.");
-		}
-
-		return &m_WheelDataStreamType;
+		STREAM_TYPE_DEFINITION_HELPER("tWheelData", m_WheelDataStreamType, m_WheelDataSampleFactory, {
+			access_element::find_index(m_WheelDataSampleFactory, "ui32ArduinoTimestamp", m_ddlWheelDataIndex.ArduinoTimestamp);
+			access_element::find_index(m_WheelDataSampleFactory, "ui32WheelTach", m_ddlWheelDataIndex.WheelTach);
+			access_element::find_index(m_WheelDataSampleFactory, "i8WheelDir", m_ddlWheelDataIndex.WheelDir);
+		});
 
 	case InerMeasUnitData:
-		if (!m_IMUDataStreamType)
-		{
-			if IS_OK(create_adtf_default_stream_type_from_service("tInerMeasUnitData", m_IMUDataStreamType, m_IMUDataSampleFactory))
-			{
-				access_element::find_index(m_IMUDataSampleFactory, "ui32ArduinoTimestamp", m_ddlInerMeasUnitDataIndex.timeStamp);
-				access_element::find_index(m_IMUDataSampleFactory, "f32A_x", m_ddlInerMeasUnitDataIndex.A_x);
-				access_element::find_index(m_IMUDataSampleFactory, "f32A_y", m_ddlInerMeasUnitDataIndex.A_y);
-				access_element::find_index(m_IMUDataSampleFactory, "f32A_z", m_ddlInerMeasUnitDataIndex.A_z);
-				access_element::find_index(m_IMUDataSampleFactory, "f32G_x", m_ddlInerMeasUnitDataIndex.G_x);
-				access_element::find_index(m_IMUDataSampleFactory, "f32G_y", m_ddlInerMeasUnitDataIndex.G_y);
-				access_element::find_index(m_IMUDataSampleFactory, "f32G_z", m_ddlInerMeasUnitDataIndex.G_z);
-				access_element::find_index(m_IMUDataSampleFactory, "f32M_x", m_ddlInerMeasUnitDataIndex.M_x);
-				access_element::find_index(m_IMUDataSampleFactory, "f32M_y", m_ddlInerMeasUnitDataIndex.M_y);
-				access_element::find_index(m_IMUDataSampleFactory, "f32M_z", m_ddlInerMeasUnitDataIndex.M_z);
-			}
-			else
-			{
-				LOG_ERROR("No mediadescription for tInerMeasUnitData found!");
-			}
-		}
-		else
-		{
-			LOG_DUMP("Skipped initialization for tInerMeasUnitData, because it is already initialized.");
-		}
-
-		return &m_IMUDataStreamType;
+		STREAM_TYPE_DEFINITION_HELPER("tInerMeasUnitData", m_IMUDataStreamType, m_IMUDataSampleFactory, {
+			access_element::find_index(m_IMUDataSampleFactory, "ui32ArduinoTimestamp", m_ddlInerMeasUnitDataIndex.timeStamp);
+			access_element::find_index(m_IMUDataSampleFactory, "f32A_x", m_ddlInerMeasUnitDataIndex.A_x);
+			access_element::find_index(m_IMUDataSampleFactory, "f32A_y", m_ddlInerMeasUnitDataIndex.A_y);
+			access_element::find_index(m_IMUDataSampleFactory, "f32A_z", m_ddlInerMeasUnitDataIndex.A_z);
+			access_element::find_index(m_IMUDataSampleFactory, "f32G_x", m_ddlInerMeasUnitDataIndex.G_x);
+			access_element::find_index(m_IMUDataSampleFactory, "f32G_y", m_ddlInerMeasUnitDataIndex.G_y);
+			access_element::find_index(m_IMUDataSampleFactory, "f32G_z", m_ddlInerMeasUnitDataIndex.G_z);
+			access_element::find_index(m_IMUDataSampleFactory, "f32M_x", m_ddlInerMeasUnitDataIndex.M_x);
+			access_element::find_index(m_IMUDataSampleFactory, "f32M_y", m_ddlInerMeasUnitDataIndex.M_y);
+			access_element::find_index(m_IMUDataSampleFactory, "f32M_z", m_ddlInerMeasUnitDataIndex.M_z);
+		});
 
 	case RoadSignExt:
 		LOG_ERROR("eZmqStruct 'RoadSignExt' not implemented.");
@@ -889,98 +720,106 @@ object_ptr<IStreamType>* cZmqBase::GetStreamType(const eZmqStruct sampleType)
 		break;
 
 	case Ultrasonic:
-		if (!m_USDataStreamType)
-		{
-			if IS_OK(create_adtf_default_stream_type_from_service("tUltrasonicStruct", m_USDataStreamType, m_USDataSampleFactory))
-			{
-				access_element::find_index(m_USDataSampleFactory, cString("tSideLeft") + cString(".ui32ArduinoTimestamp"), m_ddlUltrasonicStructIndex.SideLeft.timeStamp);
-				access_element::find_index(m_USDataSampleFactory, cString("tSideLeft") + cString(".f32Value"), m_ddlUltrasonicStructIndex.SideLeft.value);
-				access_element::find_index(m_USDataSampleFactory, cString("tSideRight") + cString(".ui32ArduinoTimestamp"), m_ddlUltrasonicStructIndex.SideRight.timeStamp);
-				access_element::find_index(m_USDataSampleFactory, cString("tSideRight") + cString(".f32Value"), m_ddlUltrasonicStructIndex.SideRight.value);
-				access_element::find_index(m_USDataSampleFactory, cString("tRearLeft") + cString(".ui32ArduinoTimestamp"), m_ddlUltrasonicStructIndex.RearLeft.timeStamp);
-				access_element::find_index(m_USDataSampleFactory, cString("tRearLeft") + cString(".f32Value"), m_ddlUltrasonicStructIndex.RearLeft.value);
-				access_element::find_index(m_USDataSampleFactory, cString("tRearCenter") + cString(".ui32ArduinoTimestamp"), m_ddlUltrasonicStructIndex.RearCenter.timeStamp);
-				access_element::find_index(m_USDataSampleFactory, cString("tRearCenter") + cString(".f32Value"), m_ddlUltrasonicStructIndex.RearCenter.value);
-				access_element::find_index(m_USDataSampleFactory, cString("tRearRight") + cString(".ui32ArduinoTimestamp"), m_ddlUltrasonicStructIndex.RearRight.timeStamp);
-				access_element::find_index(m_USDataSampleFactory, cString("tRearRight") + cString(".f32Value"), m_ddlUltrasonicStructIndex.RearRight.value);
-			}
-			else
-			{
-				LOG_ERROR("No mediadescription for tUltrasonicStruct found!");
-			}
-		}
-		else
-		{
-			LOG_DUMP("Skipped initialization for tUltrasonicStruct, because it is already initialized.");
-		}
-
-		return &m_USDataStreamType;
+		STREAM_TYPE_DEFINITION_HELPER("tUltrasonicStruct", m_USDataStreamType, m_USDataSampleFactory, {
+			access_element::find_index(m_USDataSampleFactory, cString("tSideLeft") + cString(".ui32ArduinoTimestamp"), m_ddlUltrasonicStructIndex.SideLeft.timeStamp);
+			access_element::find_index(m_USDataSampleFactory, cString("tSideLeft") + cString(".f32Value"), m_ddlUltrasonicStructIndex.SideLeft.value);
+			access_element::find_index(m_USDataSampleFactory, cString("tSideRight") + cString(".ui32ArduinoTimestamp"), m_ddlUltrasonicStructIndex.SideRight.timeStamp);
+			access_element::find_index(m_USDataSampleFactory, cString("tSideRight") + cString(".f32Value"), m_ddlUltrasonicStructIndex.SideRight.value);
+			access_element::find_index(m_USDataSampleFactory, cString("tRearLeft") + cString(".ui32ArduinoTimestamp"), m_ddlUltrasonicStructIndex.RearLeft.timeStamp);
+			access_element::find_index(m_USDataSampleFactory, cString("tRearLeft") + cString(".f32Value"), m_ddlUltrasonicStructIndex.RearLeft.value);
+			access_element::find_index(m_USDataSampleFactory, cString("tRearCenter") + cString(".ui32ArduinoTimestamp"), m_ddlUltrasonicStructIndex.RearCenter.timeStamp);
+			access_element::find_index(m_USDataSampleFactory, cString("tRearCenter") + cString(".f32Value"), m_ddlUltrasonicStructIndex.RearCenter.value);
+			access_element::find_index(m_USDataSampleFactory, cString("tRearRight") + cString(".ui32ArduinoTimestamp"), m_ddlUltrasonicStructIndex.RearRight.timeStamp);
+			access_element::find_index(m_USDataSampleFactory, cString("tRearRight") + cString(".f32Value"), m_ddlUltrasonicStructIndex.RearRight.value);
+		});
 
 	case Voltage:
-		if (!m_VoltageStructStreamType)
-		{
-			if IS_OK(create_adtf_default_stream_type_from_service("tVoltageStruct", m_VoltageStructStreamType, m_VoltageStructSampleFactory))
-			{
-				access_element::find_index(m_VoltageStructSampleFactory, cString("tActuatorVoltage") + cString(".ui32ArduinoTimestamp"), m_ddlVoltageStructIndex.ActuatorVoltage.timeStamp);
-				access_element::find_index(m_VoltageStructSampleFactory, cString("tActuatorCell1") + cString(".ui32ArduinoTimestamp"), m_ddlVoltageStructIndex.ActuatorCell1.timeStamp);
-				access_element::find_index(m_VoltageStructSampleFactory, cString("tActuatorCell2") + cString(".ui32ArduinoTimestamp"), m_ddlVoltageStructIndex.ActuatorCell2.timeStamp);
-				access_element::find_index(m_VoltageStructSampleFactory, cString("tSensorVoltage") + cString(".ui32ArduinoTimestamp"), m_ddlVoltageStructIndex.SensorVoltage.timeStamp);
-				access_element::find_index(m_VoltageStructSampleFactory, cString("tSensorCell1") + cString(".ui32ArduinoTimestamp"), m_ddlVoltageStructIndex.SensorCell1.timeStamp);
-				access_element::find_index(m_VoltageStructSampleFactory, cString("tSensorCell2") + cString(".ui32ArduinoTimestamp"), m_ddlVoltageStructIndex.SensorCell2.timeStamp);
-				access_element::find_index(m_VoltageStructSampleFactory, cString("tSensorCell3") + cString(".ui32ArduinoTimestamp"), m_ddlVoltageStructIndex.SensorCell3.timeStamp);
-				access_element::find_index(m_VoltageStructSampleFactory, cString("tSensorCell4") + cString(".ui32ArduinoTimestamp"), m_ddlVoltageStructIndex.SensorCell4.timeStamp);
-				access_element::find_index(m_VoltageStructSampleFactory, cString("tSensorCell5") + cString(".ui32ArduinoTimestamp"), m_ddlVoltageStructIndex.SensorCell5.timeStamp);
-				access_element::find_index(m_VoltageStructSampleFactory, cString("tSensorCell6") + cString(".ui32ArduinoTimestamp"), m_ddlVoltageStructIndex.SensorCell6.timeStamp);
+		STREAM_TYPE_DEFINITION_HELPER("tVoltageStruct", m_VoltageStructStreamType, m_VoltageStructSampleFactory, {
+			access_element::find_index(m_VoltageStructSampleFactory, cString("tActuatorVoltage") + cString(".ui32ArduinoTimestamp"), m_ddlVoltageStructIndex.ActuatorVoltage.timeStamp);
+			access_element::find_index(m_VoltageStructSampleFactory, cString("tActuatorCell1") + cString(".ui32ArduinoTimestamp"), m_ddlVoltageStructIndex.ActuatorCell1.timeStamp);
+			access_element::find_index(m_VoltageStructSampleFactory, cString("tActuatorCell2") + cString(".ui32ArduinoTimestamp"), m_ddlVoltageStructIndex.ActuatorCell2.timeStamp);
+			access_element::find_index(m_VoltageStructSampleFactory, cString("tSensorVoltage") + cString(".ui32ArduinoTimestamp"), m_ddlVoltageStructIndex.SensorVoltage.timeStamp);
+			access_element::find_index(m_VoltageStructSampleFactory, cString("tSensorCell1") + cString(".ui32ArduinoTimestamp"), m_ddlVoltageStructIndex.SensorCell1.timeStamp);
+			access_element::find_index(m_VoltageStructSampleFactory, cString("tSensorCell2") + cString(".ui32ArduinoTimestamp"), m_ddlVoltageStructIndex.SensorCell2.timeStamp);
+			access_element::find_index(m_VoltageStructSampleFactory, cString("tSensorCell3") + cString(".ui32ArduinoTimestamp"), m_ddlVoltageStructIndex.SensorCell3.timeStamp);
+			access_element::find_index(m_VoltageStructSampleFactory, cString("tSensorCell4") + cString(".ui32ArduinoTimestamp"), m_ddlVoltageStructIndex.SensorCell4.timeStamp);
+			access_element::find_index(m_VoltageStructSampleFactory, cString("tSensorCell5") + cString(".ui32ArduinoTimestamp"), m_ddlVoltageStructIndex.SensorCell5.timeStamp);
+			access_element::find_index(m_VoltageStructSampleFactory, cString("tSensorCell6") + cString(".ui32ArduinoTimestamp"), m_ddlVoltageStructIndex.SensorCell6.timeStamp);
 
-				access_element::find_index(m_VoltageStructSampleFactory, cString("tActuatorVoltage") + cString(".f32Value"), m_ddlVoltageStructIndex.ActuatorVoltage.value);
-				access_element::find_index(m_VoltageStructSampleFactory, cString("tActuatorCell1") + cString(".f32Value"), m_ddlVoltageStructIndex.ActuatorCell1.value);
-				access_element::find_index(m_VoltageStructSampleFactory, cString("tActuatorCell2") + cString(".f32Value"), m_ddlVoltageStructIndex.ActuatorCell2.value);
-				access_element::find_index(m_VoltageStructSampleFactory, cString("tSensorVoltage") + cString(".f32Value"), m_ddlVoltageStructIndex.SensorVoltage.value);
-				access_element::find_index(m_VoltageStructSampleFactory, cString("tSensorCell1") + cString(".f32Value"), m_ddlVoltageStructIndex.SensorCell1.value);
-				access_element::find_index(m_VoltageStructSampleFactory, cString("tSensorCell2") + cString(".f32Value"), m_ddlVoltageStructIndex.SensorCell2.value);
-				access_element::find_index(m_VoltageStructSampleFactory, cString("tSensorCell3") + cString(".f32Value"), m_ddlVoltageStructIndex.SensorCell3.value);
-				access_element::find_index(m_VoltageStructSampleFactory, cString("tSensorCell4") + cString(".f32Value"), m_ddlVoltageStructIndex.SensorCell4.value);
-				access_element::find_index(m_VoltageStructSampleFactory, cString("tSensorCell5") + cString(".f32Value"), m_ddlVoltageStructIndex.SensorCell5.value);
-				access_element::find_index(m_VoltageStructSampleFactory, cString("tSensorCell6") + cString(".f32Value"), m_ddlVoltageStructIndex.SensorCell6.value);
-			}
-			else
-			{
-				LOG_ERROR("No mediadescription for tVoltageStruct found!");
-			}
-		}
-		else
-		{
-			LOG_DUMP("Skipped initialization for tVoltageStruct, because it is already initialized.");
-		}
-
-		return &m_VoltageStructStreamType;
+			access_element::find_index(m_VoltageStructSampleFactory, cString("tActuatorVoltage") + cString(".f32Value"), m_ddlVoltageStructIndex.ActuatorVoltage.value);
+			access_element::find_index(m_VoltageStructSampleFactory, cString("tActuatorCell1") + cString(".f32Value"), m_ddlVoltageStructIndex.ActuatorCell1.value);
+			access_element::find_index(m_VoltageStructSampleFactory, cString("tActuatorCell2") + cString(".f32Value"), m_ddlVoltageStructIndex.ActuatorCell2.value);
+			access_element::find_index(m_VoltageStructSampleFactory, cString("tSensorVoltage") + cString(".f32Value"), m_ddlVoltageStructIndex.SensorVoltage.value);
+			access_element::find_index(m_VoltageStructSampleFactory, cString("tSensorCell1") + cString(".f32Value"), m_ddlVoltageStructIndex.SensorCell1.value);
+			access_element::find_index(m_VoltageStructSampleFactory, cString("tSensorCell2") + cString(".f32Value"), m_ddlVoltageStructIndex.SensorCell2.value);
+			access_element::find_index(m_VoltageStructSampleFactory, cString("tSensorCell3") + cString(".f32Value"), m_ddlVoltageStructIndex.SensorCell3.value);
+			access_element::find_index(m_VoltageStructSampleFactory, cString("tSensorCell4") + cString(".f32Value"), m_ddlVoltageStructIndex.SensorCell4.value);
+			access_element::find_index(m_VoltageStructSampleFactory, cString("tSensorCell5") + cString(".f32Value"), m_ddlVoltageStructIndex.SensorCell5.value);
+			access_element::find_index(m_VoltageStructSampleFactory, cString("tSensorCell6") + cString(".f32Value"), m_ddlVoltageStructIndex.SensorCell6.value);
+		});
 
 	case PolarCoordinate:
 		LOG_ERROR("eZmqStruct 'PolarCoordinate' not implemented.");
 		break;
 
 	case LaserScanner:
-		if (!m_LSStructStreamType)
-		{
-			if (ERR_NOERROR == create_adtf_default_stream_type_from_service("tLaserScannerData", m_LSStructStreamType, m_LSStructSampleFactory))
-			{
-				access_element::find_index(m_LSStructSampleFactory, "ui32Size", m_ddlLSDataId.size);
-				access_element::find_array_index(m_LSStructSampleFactory, "tScanArray", m_ddlLSDataId.scanArray);
-			}
-			else
-			{
-				LOG_ERROR("No mediadescription for tLaserScannerData found!");
-			}
-		}
-		else
-		{
-			LOG_DUMP("Skipped initialization for tLaserScannerData, because it is already initialized.");
-		}
-
-		return &m_LSStructStreamType;
+		STREAM_TYPE_DEFINITION_HELPER("tLaserScannerData", m_LSStructStreamType, m_LSStructSampleFactory, {
+			access_element::find_index(m_LSStructSampleFactory, "ui32Size", m_ddlLSDataId.size);
+			access_element::find_array_index(m_LSStructSampleFactory, "tScanArray", m_ddlLSDataId.scanArray);
+		});
 
 	default:
 		LOG_ERROR("Could not get or create stream type for unrecognized eZmqStruct %d", sampleType);
+	}
+
+	return nullptr;
+}
+
+size_t cZmqBase::GetStructSize(const eZmqStruct sampleType) const
+{
+	switch (sampleType)
+	{
+	case Jury:					return sizeof(tJuryStruct);
+	case Driver:				return sizeof(tDriverStruct);
+	case SignalValue:			return sizeof(tSignalValue);
+	case BoolSignalValue:		return sizeof(tBoolSignalValue);
+	case WheelData:				return sizeof(tWheelData);
+	case InerMeasUnitData:		return sizeof(tInerMeasUnitData);
+	case RoadSignExt:			return sizeof(tRoadSignExt);
+	case Position:				return sizeof(::tPosition);
+	case Obstacle:				return sizeof(tObstacle);
+	case TrafficSign:			return sizeof(tTrafficSign);
+	case ParkingSpace:			return sizeof(tParkingSpace);
+	case Ultrasonic:			return sizeof(tUltrasonicStruct);
+	case Voltage:				return sizeof(tVoltageStruct);
+	case PolarCoordinate:		return sizeof(tPolarCoordiante);
+	case LaserScanner:			return sizeof(tLaserScannerData);
+	default:					LOG_ERROR("Could not request size for unrecognized eZmqStruct %d", sampleType);
+	}
+
+	return 0;
+}
+
+cSampleCodecFactory* cZmqBase::GetSampleFactory(const eZmqStruct sampleType)
+{
+	switch (sampleType)
+	{
+	case Jury:					LOG_ERROR("eZmqStruct 'Jury' not implemented."); break;
+	case Driver:				LOG_ERROR("eZmqStruct 'Driver' not implemented."); break;
+	case SignalValue:			return &m_SignalValueSampleFactory;
+	case BoolSignalValue:		return &m_BoolSignalValueSampleFactory;
+	case WheelData:				return &m_WheelDataSampleFactory;
+	case InerMeasUnitData:		return &m_IMUDataSampleFactory;
+	case RoadSignExt:			LOG_ERROR("eZmqStruct 'RoadSignExt' not implemented."); break;
+	case Position:				LOG_ERROR("eZmqStruct 'Position' not implemented."); break;
+	case Obstacle:				LOG_ERROR("eZmqStruct 'Obstacle' not implemented."); break;
+	case TrafficSign:			LOG_ERROR("eZmqStruct 'TrafficSign' not implemented."); break;
+	case ParkingSpace:			LOG_ERROR("eZmqStruct 'ParkingSpace' not implemented."); break;
+	case Ultrasonic:			return &m_USDataSampleFactory;
+	case Voltage:				return &m_VoltageStructSampleFactory;
+	case PolarCoordinate:		LOG_ERROR("eZmqStruct 'PolarCoordinate' not implemented."); break;
+	case LaserScanner:			return &m_LSStructSampleFactory;
+	default:					LOG_ERROR("Could not get sample factory for unrecognized eZmqStruct %d", sampleType);
 	}
 
 	return nullptr;
