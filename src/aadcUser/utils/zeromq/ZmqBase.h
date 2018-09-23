@@ -53,7 +53,15 @@ public:
 
 	tResult Init(tInitStage eStage) override;
 
+	tResult Shutdown(tInitStage eStage) override;
+
+	tResult Start() override;
+
+	tResult Stop() override;
+	
 	tResult Configure();
+
+	tResult Deconfigure();
 
 	tResult ProcessInputs(tTimeStamp tmTimeOfTrigger);
 
@@ -88,22 +96,22 @@ private:
 	/*! clock service */
 	object_ptr<adtf::services::IReferenceClock> m_pClock;
 
-	/*! mutex for process method synchronization */
-	std::mutex m_oMutex;
-
 	/*! ZeroMQ context service */
 	object_ptr<IZeroMQService> m_pZeroMQService;
+
+	/*! mutex for process method synchronization */
+	std::mutex m_oMutex;
 
 	/*! ZeroMQ pair socket for asynchronous reply polling */
 	zmq::socket_t* m_sck_pair = nullptr;
 
 	/*! signals the ZeroMQ thread, that it can start connecting to the socket */
-	bool m_runner_ready = false;
+	bool m_parent_ready = false;
 
 	/* signals the ZeroMQ thread, that it should stop */
-	std::atomic<bool> m_runner_stop { false };
+	std::atomic<bool> m_runner_reset_signal { false };
 
-	/*! synchronization of the m_runner_ready bool between the ZeroMQ thread and the parent */
+	/*! synchronization of the m_parent_ready bool between the ZeroMQ thread and the parent */
 	std::condition_variable m_runner_cv;
 
 	/*! mutex for the condition variable */
@@ -126,6 +134,9 @@ private:
 
 	/* is the queue full and we are only dropping samples from now on? */
 	bool m_drop_state = false;
+
+	/* the deconfiguration routine can only be done once */
+	bool m_deconfigured = false;
 
 private:
 

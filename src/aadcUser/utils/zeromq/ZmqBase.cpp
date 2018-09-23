@@ -37,32 +37,33 @@ cZmqBase::cZmqBase()
 	InitializeZeroMQThread();
 }
 
+cZmqBase::~cZmqBase()
+{
+	// tell the zeromq thread to stop
+	m_runner_reset_signal = true;
+	Deconfigure();
+}
+
 tResult cZmqBase::Init(const tInitStage eStage)
 {
 	RETURN_IF_FAILED(cFilter::Init(eStage));
 	if (eStage == StageFirst)
 	{
+		// press "Init"
 		RETURN_IF_FAILED(Configure());
 	}
 	RETURN_NOERROR;
 }
 
-cZmqBase::~cZmqBase()
+tResult cZmqBase::Shutdown(const tInitStage eStage)
 {
-	// signal the thread to stop
-	m_runner_stop = true;
-
-	delete m_sck_pair;
-
-	// deallocate pin readers
-	for (const auto& pair : m_pinReaders) {
-		delete pair.second;
+	RETURN_IF_FAILED(cFilter::Shutdown(eStage));
+	if (eStage == StageFirst)
+	{
+		// press "Deinit"
+		RETURN_IF_FAILED(Deconfigure());
 	}
-
-	// deallocate pin writers
-	for (const auto& pair : m_pinWriters) {
-		delete pair.second;
-	}
+	RETURN_NOERROR;
 }
 
 tResult cZmqBase::Configure()
@@ -80,17 +81,57 @@ tResult cZmqBase::Configure()
 	// do not wait at close time
 	int linger = 0;
 	m_sck_pair->setsockopt(ZMQ_LINGER, &linger, sizeof linger);
-
 	// limit queue length (shared for inproc sockets)
 	int hwm = m_queue_length / 2;
 	m_sck_pair->setsockopt(ZMQ_SNDHWM, &hwm, sizeof hwm);
 
 	m_sck_pair->bind(GetPairSocketAddress());
 
+	RETURN_NOERROR;
+}
+
+tResult cZmqBase::Deconfigure()
+{
+	// avoid double-free through the destructor
+	if (m_deconfigured) RETURN_NOERROR;
+
+	// close and delete socket to our I/O thread
+	delete m_sck_pair;
+	
+	// deallocate pin readers
+	for (const auto& pair : m_pinReaders) {
+		delete pair.second;
+	}
+
+	// deallocate pin writers
+	for (const auto& pair : m_pinWriters) {
+		delete pair.second;
+	}
+
+	m_deconfigured = true;
+	RETURN_NOERROR;
+}
+
+tResult cZmqBase::Start()
+{
+	m_runner_reset_signal = false;
+
 	// wake up the zeromq thread
 	std::unique_lock<std::mutex> lk(m_runner_mutex);
-	m_runner_ready = true;
+	m_parent_ready = true;
 	m_runner_cv.notify_one();
+
+	RETURN_NOERROR;
+}
+
+tResult cZmqBase::Stop()
+{
+	// tell the zeromq thread to stop
+	m_runner_reset_signal = true;
+
+	// break any blocking recv calls with an empty message
+	auto msg = zmq::message_t(0);
+	m_sck_pair->send(msg);
 
 	RETURN_NOERROR;
 }
@@ -176,81 +217,78 @@ void cZmqBase::InitializeZeroMQThread()
 	// thread for zeromq, where requests are sent and replies are polled
 	const object_ptr<IRunner> zmq_thread = ::adtf::ucom::make_object_ptr<cRunner>("zmq_thread", [&](tTimeStamp /* tmTime */) -> tResult
 	{
-		/* --- wait for parent --- */
+		/* --- (1) wait for parent --- */
 
-		LOG_DUMP("ZMQ I/O thread waits for mutex ...");
+		LOG_DUMP("ZMQ I/O thread started. Waiting for signal ...");
 
 		// the runner needs to wait until the parent is done with binding the socket
 		std::unique_lock<std::mutex> lk(m_runner_mutex);
-		while (!m_runner_ready)
+		while (!m_parent_ready)
 		{
 			m_runner_cv.wait(lk);
-			if (!m_runner_ready)
-			{
-				LOG_WARNING("Spurious wake-up in the ZMQ I/O thread detected.");
-			}
+			if (!m_parent_ready)
+				LOG_ERROR("Spurious wake-up in the ZMQ I/O thread detected.");
 		}
 
-		/* --- connect sockets --- */
+		/* --- (2) connect PAIR socket to parent thread --- */
 
-		// connect a PAIR socket to the parent thread
 		auto pair_socket = zmq::socket_t(*m_pZeroMQService->GetContext(), ZMQ_PAIR);
 
 		// do not wait at close time
 		int linger = 0;
 		pair_socket.setsockopt(ZMQ_LINGER, &linger, sizeof linger);
-
 		// limit queue length
 		int hwm = m_queue_length / 2;
 		pair_socket.setsockopt(ZMQ_RCVHWM, &hwm, sizeof hwm);
 
 		pair_socket.connect(GetPairSocketAddress());
 
-		// connect a REQ socket to the server
+		/* --- (3) connect REQ socket to server --- */
+
 		zmq::socket_t* client_socket = InitializeClientSocket();
 
-		LOG_DUMP("ZMQ I/O thread and client sockets initialized.");
+		LOG_DUMP("ZMQ I/O thread and sockets initialized.");
 
 		const size_t num_outputs = m_outputs.size();
 		bool lastConnectionState = true;
 
-		while (!m_runner_stop && pair_socket.connected())
+		while (!m_runner_reset_signal && pair_socket.connected())
 		{
-#ifdef _DEBUG
-			// latency measurement in debug mode
-			tTimeStamp start = 0;
-#endif
-
-			/* --- receive and forward data --- */
+			/* --- (4) receive and forward data --- */
 
 			int pair_flags;
+			tTimeStamp start = 0;
 			do
 			{
-				// receive from parent thread
 				zmq::message_t message;
 				pair_socket.recv(&message);
-#ifdef _DEBUG
+
 				if (start == 0) start = cHighResTimer::GetTime();
-#endif
-				pair_flags = message.more() ? ZMQ_SNDMORE : 0;
+
+				// an empty message from the parent thread signals a break condition
+				if (message.size() == 0)
+					break;
 
 				// send to server
+				pair_flags = message.more() ? ZMQ_SNDMORE : 0;
 				client_socket->send(message, pair_flags);
-			}
-			while (pair_flags == ZMQ_SNDMORE);
+			} while (pair_flags == ZMQ_SNDMORE);
 
-			/* --- wait for server reply (with timeout) --- */
+			// check for stop signal from parent
+			if (m_runner_reset_signal) break;
+
+			/* --- (5) wait for server reply (with timeout) --- */
 
 			zmq::pollitem_t items[] = { { *client_socket, 0, ZMQ_POLLIN, 0 } };
 			zmq::poll(&items[0], 1, ZMQ_REQUEST_TIMEOUT);
 
+			// polling successful
 			if (items[0].revents & ZMQ_POLLIN)
 			{
 				int server_flags;
 				size_t outputIndex = 0;
 				do
 				{
-					// receive from server
 					zmq::message_t message;
 					client_socket->recv(&message);
 					server_flags = message.more() ? ZMQ_SNDMORE : 0;
@@ -258,13 +296,12 @@ void cZmqBase::InitializeZeroMQThread()
 					// process message
 					ProcessOutput(&message, outputIndex);
 					outputIndex++;
-				}
-				while (server_flags == ZMQ_SNDMORE);
+				} while (server_flags == ZMQ_SNDMORE);
 
-#ifdef _DEBUG
-				const tTimeStamp end = cHighResTimer::GetTime();
-				LOG_DUMP("Sample latency: %.2f ms", (end - start) / 1000.0);
-#endif
+				#ifdef _DEBUG
+					const tTimeStamp end = cHighResTimer::GetTime();
+					LOG_DUMP("Sample latency: %.2f ms", (end - start) / 1000.0);
+				#endif
 
 				// sanity checks
 				if (outputIndex < num_outputs)
@@ -281,6 +318,7 @@ void cZmqBase::InitializeZeroMQThread()
 			else
 			{
 				LOG_WARNING("Server socket timed out after waiting %d ms for a reply.", ZMQ_REQUEST_TIMEOUT);
+
 				// reopen the socket because we can't send another message on this REQ socket
 				delete client_socket;
 				client_socket = InitializeClientSocket();
@@ -289,8 +327,10 @@ void cZmqBase::InitializeZeroMQThread()
 		}
 
 		pair_socket.close();
-		LOG_DUMP("Gracefully closed ZeroMQ I/O thread.");
+		delete client_socket;
 
+		// TODO: allow reconnecting ability
+		LOG_WARNING("ZeroMQ I/O thread runner stopped. Starting the session again will fail.");
 		RETURN_NOERROR;
 	});
 
