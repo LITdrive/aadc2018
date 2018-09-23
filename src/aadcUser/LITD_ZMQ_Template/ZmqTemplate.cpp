@@ -20,15 +20,18 @@ ADTF_PLUGIN(LABEL_LITD_ZMQ_TEMPLATE, cZmqTemplateFilter)
 cZmqTemplateFilter::cZmqTemplateFilter()
 {
 	// input pin names and types
+	m_inputs.emplace_back("signal_in", SignalValue);
+	m_inputs.emplace_back("bool_in", BoolSignalValue);
+	m_inputs.emplace_back("wheel", WheelData);
 	m_inputs.emplace_back("imu", InerMeasUnitData);
 	m_inputs.emplace_back("ultrasonic", Ultrasonic);
-	m_inputs.emplace_back("wheelLeft", WheelData);
-	m_inputs.emplace_back("wheelRight", WheelData);
+	m_inputs.emplace_back("voltage", Voltage);
 
 	// output pin names and types
-	m_outputs.emplace_back("signal", SignalValue);
-	m_outputs.emplace_back("bool", BoolSignalValue);
+	m_outputs.emplace_back("signal_out", SignalValue);
+	m_outputs.emplace_back("bool_out", BoolSignalValue);
 
 	// pipe out the data whenever there are new samples on these pins
 	m_triggers.emplace_back("imu");
+
 }
