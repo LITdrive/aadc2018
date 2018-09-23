@@ -16,7 +16,9 @@ THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS AS IS AND ANY EXPRESS OR I
 #pragma once
 
 //*************************************************************************************************
-#define CID_OPENCVFILTER_DATA_TRIGGERED_FILTER "opencv_filter.filter.user.aadc.cid"
+#include "stdafx.h"
+
+#define CID_FOLLOW_ME_DATA_TRIGGERED_FILTER "litd_follow_me.filter.user.aadc.cid"
 
 using namespace adtf_util;
 using namespace ddl;
@@ -28,7 +30,7 @@ using namespace adtf::filter;
 using namespace std;
 using namespace cv;
 
-class cOpenCVFilter : public cTriggerFunction
+class cFollowMeFilter : public cTriggerFunction
 {
 private:
     /*! ddl identifier for signal value */
@@ -61,10 +63,10 @@ private:
 public:
 
     /*! Default constructor. */
-    cOpenCVFilter();
+	cFollowMeFilter();
 
     /*! Destructor. */
-    virtual ~cOpenCVFilter() = default;
+    virtual ~cFollowMeFilter() = default;
 
     /**
     * Overwrites the Configure

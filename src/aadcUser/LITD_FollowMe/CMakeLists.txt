@@ -1,15 +1,15 @@
 cmake_minimum_required(VERSION 3.10.0)
 
-project(opencv_filter)
+project(litd_follow_me)
 
 include_directories(${OpenCV_INCLUDE_DIRS})
 
 set (SOURCEFILES    	stdafx.h 
-						OpenCVFilter.h
-						OpenCVFilter.cpp)
+						LITD_FollowMe.h
+						LITD_FollowMe.cpp)
 
 adtf_add_filter(${PROJECT_NAME}
-                                ${SOURCEFILES}
+                ${SOURCEFILES}
 )
 
 # Specify where it should be installed to

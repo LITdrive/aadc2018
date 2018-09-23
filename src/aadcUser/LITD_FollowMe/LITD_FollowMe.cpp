@@ -13,18 +13,18 @@ THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS AS IS AND ANY EXPRESS OR I
 
 **********************************************************************/
 
-#include <bitset>
-#include "stdafx.h"
-#include "OpenCVFilter.h"
+#include "LITD_FollowMe.h"
 #include "ADTF3_OpenCV_helper.h"
 #include "ADTF3_helper.h"
 
-ADTF_TRIGGER_FUNCTION_FILTER_PLUGIN(CID_OPENCVFILTER_DATA_TRIGGERED_FILTER,
-                                    "OpenCV Filter",
-                                    cOpenCVFilter,
+#include <bitset>
+
+ADTF_TRIGGER_FUNCTION_FILTER_PLUGIN(CID_FOLLOW_ME_DATA_TRIGGERED_FILTER,
+                                    "LITD Follow Me",
+									cFollowMeFilter,
                                     adtf::filter::pin_trigger({ "input" }));
 
-cOpenCVFilter::cOpenCVFilter()
+cFollowMeFilter::cFollowMeFilter()
 {
 
     //create and set inital input format type
@@ -59,7 +59,7 @@ cOpenCVFilter::cOpenCVFilter()
     });
 }
 
-tResult cOpenCVFilter::Configure()
+tResult cFollowMeFilter::Configure()
 {
     //get clock object
     RETURN_IF_FAILED(_runtime->GetObject(m_pClock));
@@ -67,7 +67,7 @@ tResult cOpenCVFilter::Configure()
     RETURN_NOERROR;
 }
 
-tResult cOpenCVFilter::Process(tTimeStamp tmTimeOfTrigger)
+tResult cFollowMeFilter::Process(tTimeStamp tmTimeOfTrigger)
 {
     object_ptr<const ISample> pReadSample;
     tFloat speed = 0.0, steering=0.0;
