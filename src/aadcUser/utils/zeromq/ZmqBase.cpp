@@ -291,10 +291,12 @@ void cZmqBase::InitializeZeroMQThread()
 				{
 					zmq::message_t message;
 					client_socket->recv(&message);
-					server_flags = message.more() ? ZMQ_SNDMORE : 0;
 
-					// process message
-					ProcessOutput(&message, outputIndex);
+					// send output samples
+					if (message.size() > 0)
+						ProcessOutput(&message, outputIndex);
+
+					server_flags = message.more() ? ZMQ_SNDMORE : 0;
 					outputIndex++;
 				} while (server_flags == ZMQ_SNDMORE);
 
