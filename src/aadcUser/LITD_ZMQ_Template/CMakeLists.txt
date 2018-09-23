@@ -7,7 +7,6 @@ if (NOT TARGET adtf::ui)
 endif()
 
 include_directories(${ZMQ_INCLUDE_DIRS})
-include_directories(${Boost_INCLUDE_DIR})
 
 set (HEADERS	stdafx.h
 				ZmqTemplate.h
@@ -36,20 +35,7 @@ adtf_create_plugindescription(
         "bin"
 )
 
-target_link_libraries(${PROJECT_NAME} LINK_PUBLIC ${ZMQ_LIBS} LINK_PUBLIC ${Boost_LIBRARIES})
-
-if(WIN32)
-    #install Release/RelWithDebInfo
-    install(FILES "${Boost_LIBRARY_DIRS}/boost_system-vc140-mt-x64-1_66.dll" DESTINATION ${CMAKE_INSTALL_BINARY} CONFIGURATIONS Release RelWithDebInfo)
-    install(FILES "${Boost_LIBRARY_DIRS}/boost_chrono-vc140-mt-x64-1_66.dll" DESTINATION ${CMAKE_INSTALL_BINARY} CONFIGURATIONS Release RelWithDebInfo)
-    install(FILES "${Boost_LIBRARY_DIRS}/boost_thread-vc140-mt-x64-1_66.dll" DESTINATION ${CMAKE_INSTALL_BINARY} CONFIGURATIONS Release RelWithDebInfo)
-    install(FILES "${Boost_LIBRARY_DIRS}/boost_date_time-vc140-mt-x64-1_66.dll" DESTINATION ${CMAKE_INSTALL_BINARY} CONFIGURATIONS Release RelWithDebInfo)
-    #install Debug
-    install(FILES "${Boost_LIBRARY_DIRS}/boost_system-vc140-mt-gd-x64-1_66.dll" DESTINATION ${CMAKE_INSTALL_BINARY}/debug CONFIGURATIONS Debug)
-    install(FILES "${Boost_LIBRARY_DIRS}/boost_chrono-vc140-mt-gd-x64-1_66.dll" DESTINATION ${CMAKE_INSTALL_BINARY}/debug CONFIGURATIONS Debug)
-    install(FILES "${Boost_LIBRARY_DIRS}/boost_thread-vc140-mt-gd-x64-1_66.dll" DESTINATION ${CMAKE_INSTALL_BINARY}/debug CONFIGURATIONS Debug)
-    install(FILES "${Boost_LIBRARY_DIRS}/boost_date_time-vc140-mt-gd-x64-1_66.dll" DESTINATION ${CMAKE_INSTALL_BINARY}/debug CONFIGURATIONS Debug)
-endif(WIN32)
+target_link_libraries(${PROJECT_NAME} LINK_PUBLIC ${ZMQ_LIBS})
 
 #this is to add a folder within the ADTF solution
 set_property(TARGET ${PROJECT_NAME} PROPERTY FOLDER zeromq)

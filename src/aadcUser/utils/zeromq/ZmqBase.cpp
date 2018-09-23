@@ -20,7 +20,6 @@ THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS AS IS AND ANY EXPRESS OR I
 
 #include <sstream>
 #include <algorithm>
-#include <boost/thread/thread.hpp>
 
 // forward declaration
 void zmq_free_message(void *data, void *hint);
@@ -215,7 +214,6 @@ void cZmqBase::InitializeZeroMQThread()
 		const size_t num_outputs = m_outputs.size();
 		bool lastConnectionState = true;
 
-		// TODO: explicitly stop this loop in the destructor or use zmq heartbeating
 		while (!m_runner_stop && pair_socket.connected())
 		{
 #ifdef _DEBUG
@@ -241,9 +239,6 @@ void cZmqBase::InitializeZeroMQThread()
 			}
 			while (pair_flags == ZMQ_SNDMORE);
 
-			// simulate load
-			//boost::this_thread::sleep(boost::posix_time::seconds(2));
-			
 			/* --- wait for server reply (with timeout) --- */
 
 			zmq::pollitem_t items[] = { { *client_socket, 0, ZMQ_POLLIN, 0 } };
