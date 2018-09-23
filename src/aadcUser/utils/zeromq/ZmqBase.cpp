@@ -355,7 +355,7 @@ inline zmq::socket_t* cZmqBase::InitializeClientSocket() const
 #define PROCESS_INPUT_SAMPLE_HELPER(_TYPE_, _CONTENT_) { \
 	auto* data = new _TYPE_(); \
 	_CONTENT_ \
-	zmq::message_t message(data, sizeof(data), zmq_free_message, nullptr); \
+	zmq::message_t message(data, sizeof(_TYPE_), zmq_free_message, nullptr); \
 	returncode = m_sck_pair->send(message, flags); \
 	break; \
 }
