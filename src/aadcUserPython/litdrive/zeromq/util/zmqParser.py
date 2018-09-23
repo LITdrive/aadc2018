@@ -96,7 +96,7 @@ def parseToZMQ(data, data_type):
         Parses one data_type to a 
         Returns
     """
-    parsed_data = struct.pack(getFormat(data_type), data)
+    parsed_data = struct.pack(fDict[data_type], *data)
     return parsed_data
 
 def parseToZMQMultiple(data, data_types):
@@ -104,8 +104,8 @@ def parseToZMQMultiple(data, data_types):
         Parses multiple ... too lazy to write doc
     """
     parsed_data=[]
-    for i in range(data_types):
-        parsed_data.append( parseToZMQ(data[i], data_types[i]))
+    for i, data_type in enumerate(data_types):
+        parsed_data.append( parseToZMQ(data[i], data_type))
     return parsed_data
     
 def getColumnNames(data_type):
