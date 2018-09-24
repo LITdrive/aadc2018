@@ -287,16 +287,23 @@ void cZmqBase::InitializeZeroMQThread()
 			{
 				int server_flags;
 				size_t outputIndex = 0;
+				bool empty_reply = false;
 				do
 				{
 					zmq::message_t message;
 					client_socket->recv(&message);
+					server_flags = message.more() ? ZMQ_SNDMORE : 0;
+					bool empty = message.size() == 0;
+
+					// is the first message empty and has no ZMQ_SNDMORE flag?
+					if (empty && outputIndex == 0 && server_flags == 0)
+						empty_reply = true;
 
 					// send output samples
-					if (message.size() > 0)
+					if (!empty)
 						ProcessOutput(&message, outputIndex);
 
-					server_flags = message.more() ? ZMQ_SNDMORE : 0;
+					// next pin
 					outputIndex++;
 				} while (server_flags == ZMQ_SNDMORE);
 
@@ -306,10 +313,14 @@ void cZmqBase::InitializeZeroMQThread()
 				#endif
 
 				// sanity checks
-				if (outputIndex < num_outputs)
-					LOG_ERROR("Expected %d output pin structs, but we only received %d messages. Missing pins will not flush any samples.", num_outputs, outputIndex);
-				else if (outputIndex > num_outputs)
-					LOG_ERROR("Expected %d output pin structs, but we received %d messages. Additional messages will be discarded.", num_outputs, outputIndex);
+				if (!empty_reply)
+				{
+					if (outputIndex < num_outputs)
+						LOG_ERROR("Expected %d output pin structs, but we only received %d messages. Missing pins will not flush any samples.", num_outputs, outputIndex);
+					else if (outputIndex > num_outputs)
+						LOG_ERROR("Expected %d output pin structs, but we received %d messages. Additional messages will be discarded.", num_outputs, outputIndex);					
+				}
+				else LOG_DUMP("Received empty reply. No samples will be sent.");
 
 				if (!lastConnectionState)
 				{
