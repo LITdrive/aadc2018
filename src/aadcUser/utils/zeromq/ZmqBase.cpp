@@ -527,7 +527,7 @@ tResult cZmqBase::ProcessInputs(tTimeStamp tmTimeOfTrigger)
 		{
 			// did we just switch to this state?
 			if (!m_drop_state)
-				LOG_WARNING("Senders queue overflow. We will drop samples from now on!");
+				LOG_WARNING("Queue overflow. Samples will be dropped.");
 			m_num_samples_dropped++;
 			m_drop_state = true;
 			break;
@@ -535,7 +535,7 @@ tResult cZmqBase::ProcessInputs(tTimeStamp tmTimeOfTrigger)
 		else if (m_drop_state)
 		{
 			// we recovered, report number of dropped samples
-			LOG_WARNING("Dropped %d samples because too many samples are in the senders queue.", m_num_samples_dropped);
+			LOG_WARNING("Dropped %d samples.", m_num_samples_dropped);
 			m_num_samples_dropped = 0;
 			m_drop_state = false;
 		}
