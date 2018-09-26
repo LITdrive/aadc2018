@@ -43,16 +43,22 @@ include(${AADC_DIR}/AADCConfigVersion.cmake)
 include_directories(${AADC_DIR}/include)
 include_directories(${CMAKE_INSTALL_INCLUDE})
 
+# system services
+add_subdirectory(services)
 
+# utilities
 add_subdirectory(utils/properties)
+add_subdirectory(utils/zeromq)
 
+# filters
 add_subdirectory(OpenCVTemplate)
 add_subdirectory(TemplateFilter)
 add_subdirectory(playground)
-#add_subdirectory(MQSensorStreamer)
+add_subdirectory(MQSensorStreamer)
 add_subdirectory(BirdsEyeView)
 add_subdirectory(LITD_FollowMe)
 add_subdirectory(FineLocalisation)
 add_subdirectory(LITD_KeyboardControl)
 add_subdirectory(LITD_SpeedLimit)
 add_subdirectory(LITD_WheelSpeedController)
+add_subdirectory(LITD_ZMQ_Template)

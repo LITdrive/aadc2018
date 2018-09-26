@@ -40,24 +40,22 @@ cMQSensorStreamer::cMQSensorStreamer() {
             [this](const adtf::ucom::ant::iobject_ptr<const adtf::streaming::ant::IStreamType> &pType) -> tResult {
                 return ChangeType(m_oReader, m_sImageFormat, *pType.Get(), m_oWriter);
             });
-
-    // initialize ZeroMQ
-    m_context = new zmq::context_t(1);
-    m_publisher = new zmq::socket_t(*m_context, ZMQ_PUB);
-
-    const int v_true = 1;
-    m_publisher->setsockopt(ZMQ_CONFLATE, &v_true, sizeof(v_true));
 }
 
 //implement the Configure function to read ALL Properties
 tResult cMQSensorStreamer::Configure() {
+	RETURN_IF_FAILED(_runtime->GetObject(m_zeromq_service));
+
+	// create and configure the socket
+	m_publisher = new zmq::socket_t(*m_zeromq_service->GetContext(), ZMQ_PUB);
+	const int v_true = 1;
+	m_publisher->setsockopt(ZMQ_CONFLATE, &v_true, sizeof(v_true));
     m_publisher->bind("tcp://*:5556");
     //m_publisher->bind("ipc://aadc_camera.ipc");
 
     RETURN_NOERROR;
 
     //m_publisher->close();
-    //m_context->close();
 }
 
 tResult cMQSensorStreamer::Process(tTimeStamp tmTimeOfTrigger) {

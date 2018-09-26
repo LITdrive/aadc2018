@@ -33,7 +33,7 @@ THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS �AS IS� AND ANY EXPRES
 #include <adtf_systemsdk.h>
 
 #include <opencv2/opencv.hpp>
-#include "zmq.hpp"
+#include <zmq.hpp>
 #include <stdlib.h>
 
 using namespace std;

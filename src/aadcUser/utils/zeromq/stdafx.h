@@ -1,4 +1,4 @@
-﻿/*********************************************************************
+/*********************************************************************
 Copyright (c) 2018
 Audi Autonomous Driving Cup. All rights reserved.
 
@@ -15,65 +15,23 @@ THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS AS IS AND ANY EXPRESS OR I
 
 #pragma once
 
-//*************************************************************************************************
-#define CID_MQSENSORSTREAMER_DATA_TRIGGERED_FILTER "mq_sensor_streamer.filter.user.aadc.cid"
-#include "../services/zeromq/zeromq_service_intf.h"
+#ifdef WIN32
+#include <windows.h>
+#endif
+
+#include <adtf_filtersdk.h>
+#include <zmq.hpp>
+
+#include "../../services/zeromq/zeromq_service_intf.h"
 
 using namespace adtf_util;
 using namespace ddl;
 using namespace adtf::ucom;
 using namespace adtf::base;
 using namespace adtf::streaming;
+using namespace adtf::streaming::ant;
 using namespace adtf::mediadescription;
 using namespace adtf::filter;
+using namespace adtf::filter::ant;
+
 using namespace std;
-using namespace cv;
-
-class cMQSensorStreamer : public cTriggerFunction {
-
-private:
-    /*! Reader of an InPin. */
-    cPinReader m_oReader;
-    /*! Writer to an OutPin. */
-    cPinWriter m_oWriter;
-
-    //Stream Formats
-    /*! The input format */
-    adtf::streaming::tStreamImageFormat m_sImageFormat;
-
-	/*! ZeroMQ context service */
-	object_ptr<IZeroMQService> m_zeromq_service;
-
-	/*! ZeroMQ publisher */
-    zmq::socket_t* m_publisher;
-
-public:
-	ADTF_CLASS_ID_NAME(cMQSensorStreamer, CID_MQSENSORSTREAMER_DATA_TRIGGERED_FILTER, "LITD MQ Sensor Streamer");
-	ADTF_CLASS_DEPENDENCIES(REQUIRE_INTERFACE(IZeroMQService));
-
-public:
-
-    /*! Default constructor. */
-    cMQSensorStreamer();
-
-    /*! Destructor. */
-    virtual ~cMQSensorStreamer() = default;
-
-    /**
-    * Overwrites the Configure
-    * This is to Read Properties prepare your Trigger Function
-    */
-    tResult Configure() override;
-
-    /**
-    * Overwrites the Process
-    * You need to implement the Reading and Writing of Samples within this function
-    * MIND: Do Reading until the Readers queues are empty or use the IPinReader::GetLastSample()
-    * This FUnction will be called if the Run() of the TriggerFunction was called.
-    */
-    tResult Process(tTimeStamp tmTimeOfTrigger) override;
-
-};
-
-
-//*************************************************************************************************
