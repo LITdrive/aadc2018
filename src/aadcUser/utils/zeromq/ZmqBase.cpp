@@ -151,6 +151,25 @@ tResult cZmqBase::InitializePins(std::vector<ZmqPinDef> &pin_definitions, const 
 			const auto pinReader = new cPinReader();
 			m_pinReaders[pinName] = pinReader;
 			RETURN_IF_FAILED(create_pin(*this, *pinReader, pinName.c_str(), *streamType));
+
+			if (pinType == Image)
+			{
+				pinReader->SetAcceptTypeCallback([this, pinName](const adtf::ucom::ant::iobject_ptr<const IStreamType> &pType) -> tResult {
+					// expanded: ChangeType(*m_pinReaders[pinName], m_sImageFormat, *pType.Get());
+					if (*pType.Get() == stream_meta_type_image())
+					{
+						object_ptr<const IStreamType> pTypeInput;
+						*m_pinReaders[pinName] >> pTypeInput;
+						get_stream_type_image_format(m_sImageFormat, *pTypeInput);
+					}
+					else
+					{
+						RETURN_ERROR(ERR_INVALID_TYPE);
+					}
+
+					RETURN_NOERROR;
+				});
+			}
 		}
 		else
 		{
@@ -412,129 +431,140 @@ tResult cZmqBase::ProcessInputs(tTimeStamp tmTimeOfTrigger)
 		}
 		else
 		{
-			// properly decode the sample
-			cSampleDecoder sampleDecoder = pinSampleFactory->MakeDecoderFor(*pSample);
-			RETURN_IF_FAILED(sampleDecoder.IsValid());
-
-			switch (pinType)
+			if (pinType == Image)
 			{
-			case Jury:
-				LOG_ERROR("eZmqStruct 'Jury' not implemented.");
-				break;
-
-			case Driver:
-				LOG_ERROR("eZmqStruct 'Driver' not implemented.");
-				break;
-
-			case SignalValue:
-				PROCESS_INPUT_SAMPLE_HELPER(tSignalValue, {
-					RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlSignalValueId.timeStamp, &data->ui32ArduinoTimestamp));
-					RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlSignalValueId.value, &data->f32Value));
-				});
-
-			case BoolSignalValue:
-				PROCESS_INPUT_SAMPLE_HELPER(tBoolSignalValue, {
-					RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlBoolSignalValueId.ui32ArduinoTimestamp, &data->ui32ArduinoTimestamp));
-					RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlBoolSignalValueId.bValue, &data->bValue));
-				});
-
-			case WheelData:
-				PROCESS_INPUT_SAMPLE_HELPER(tWheelData, {
-					RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlWheelDataIndex.ArduinoTimestamp, &data->ui32ArduinoTimestamp));
-					RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlWheelDataIndex.WheelTach, &data->ui32WheelTach));
-					RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlWheelDataIndex.WheelDir, &data->i8WheelDir));
-				});
-
-			case InerMeasUnitData:
-				PROCESS_INPUT_SAMPLE_HELPER(tInerMeasUnitData, {
-					RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlInerMeasUnitDataIndex.timeStamp, &data->ui32ArduinoTimestamp));
-					RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlInerMeasUnitDataIndex.A_x, &data->f32A_x));
-					RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlInerMeasUnitDataIndex.A_y, &data->f32A_y));
-					RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlInerMeasUnitDataIndex.A_z, &data->f32A_z));
-					RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlInerMeasUnitDataIndex.G_x, &data->f32G_x));
-					RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlInerMeasUnitDataIndex.G_y, &data->f32G_y));
-					RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlInerMeasUnitDataIndex.G_z, &data->f32G_z));
-					RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlInerMeasUnitDataIndex.M_x, &data->f32M_x));
-					RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlInerMeasUnitDataIndex.M_y, &data->f32M_y));
-					RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlInerMeasUnitDataIndex.M_z, &data->f32M_z));
-				});
-
-			case RoadSignExt:
-				LOG_ERROR("eZmqStruct 'RoadSignExt' not implemented.");
-				break;
-
-			case Position:
-				LOG_ERROR("eZmqStruct 'Position' not implemented.");
-				break;
-
-			case Obstacle:
-				LOG_ERROR("eZmqStruct 'Obstacle' not implemented.");
-				break;
-
-			case TrafficSign:
-				LOG_ERROR("eZmqStruct 'TrafficSign' not implemented.");
-				break;
-
-			case ParkingSpace:
-				LOG_ERROR("eZmqStruct 'ParkingSpace' not implemented.");
-				break;
-
-			case Ultrasonic:
-				// TODO: remove timestamps
-				PROCESS_INPUT_SAMPLE_HELPER(tUltrasonicStruct, {
-					RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlUltrasonicStructIndex.SideLeft.value, &data->tSideLeft.f32Value));
-					RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlUltrasonicStructIndex.SideLeft.timeStamp, &data->tSideLeft.ui32ArduinoTimestamp));
-					RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlUltrasonicStructIndex.SideRight.value, &data->tSideRight.f32Value));
-					RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlUltrasonicStructIndex.SideRight.timeStamp, &data->tSideRight.ui32ArduinoTimestamp));
-					RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlUltrasonicStructIndex.RearLeft.value, &data->tRearLeft.f32Value));
-					RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlUltrasonicStructIndex.RearLeft.timeStamp, &data->tRearLeft.ui32ArduinoTimestamp));
-					RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlUltrasonicStructIndex.RearCenter.value, &data->tRearCenter.f32Value));
-					RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlUltrasonicStructIndex.RearCenter.timeStamp, &data->tRearCenter.ui32ArduinoTimestamp));
-					RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlUltrasonicStructIndex.RearRight.value, &data->tRearRight.f32Value));
-					RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlUltrasonicStructIndex.RearRight.timeStamp, &data->tRearRight.ui32ArduinoTimestamp));
-				});
-
-			case Voltage:
-				PROCESS_INPUT_SAMPLE_HELPER(tVoltageStruct, {
-					RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlVoltageStructIndex.ActuatorVoltage.value, &data->tActuatorVoltage.f32Value));
-					RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlVoltageStructIndex.ActuatorCell1.value, &data->tActuatorCell1.f32Value));
-					RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlVoltageStructIndex.ActuatorCell2.value, &data->tActuatorCell2.f32Value));
-					RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlVoltageStructIndex.SensorVoltage.value, &data->tSensorVoltage.f32Value));
-					RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlVoltageStructIndex.SensorCell1.value, &data->tSensorCell1.f32Value));
-					RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlVoltageStructIndex.SensorCell2.value, &data->tSensorCell2.f32Value));
-					RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlVoltageStructIndex.SensorCell3.value, &data->tSensorCell3.f32Value));
-					RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlVoltageStructIndex.SensorCell4.value, &data->tSensorCell4.f32Value));
-					RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlVoltageStructIndex.SensorCell5.value, &data->tSensorCell5.f32Value));
-					RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlVoltageStructIndex.SensorCell6.value, &data->tSensorCell6.f32Value));
-				});
-
-			case PolarCoordinate:
-				LOG_ERROR("eZmqStruct 'PolarCoordinate' not implemented.");
-				break;
-
-			case LaserScanner:
-				{
-					// TODO: use zeromq zero-copy here!
-
-					tSize numOfScanPoints = 0;
-					tResult res = sampleDecoder.GetElementValue(m_ddlLSDataId.size, &numOfScanPoints);
-					const tPolarCoordiante* pCoordinates = reinterpret_cast<const tPolarCoordiante*>(sampleDecoder.GetElementAddress(m_ddlLSDataId.scanArray));
-					std::vector<tPolarCoordiante> scan(numOfScanPoints);
-					tPolarCoordiante scanPoint;
-
-					for (tSize i = 0; i < numOfScanPoints; ++i)
-					{
-						scanPoint.f32Radius = pCoordinates[i].f32Radius;
-						scanPoint.f32Angle = pCoordinates[i].f32Angle;
-						scan.push_back(scanPoint);
-					}
-
-					returncode = m_sck_pair->send(&scan[0], numOfScanPoints * sizeof(tPolarCoordiante));
+				object_ptr_shared_locked<const ISampleBuffer> pReadBuffer;
+				if (IS_OK(pSample->Lock(pReadBuffer))) {
+					const size_t imageSize = 3 * m_sImageFormat.m_ui32Width * m_sImageFormat.m_ui32Height;
+					// copy the image to avoid keeping the buffer lock for too long
+					returncode = m_sck_pair->send(pReadBuffer->GetPtr(), imageSize);
 				}
-				break;
+			}
+			else
+			{
+				cSampleDecoder sampleDecoder = pinSampleFactory->MakeDecoderFor(*pSample);
+				RETURN_IF_FAILED(sampleDecoder.IsValid());
 
-			default:
-				LOG_ERROR("Unrecognized eZmqStruct %d while processing inputs.", pinType);
+				switch (pinType)
+				{
+				case Jury:
+					LOG_ERROR("eZmqStruct 'Jury' not implemented.");
+					break;
+
+				case Driver:
+					LOG_ERROR("eZmqStruct 'Driver' not implemented.");
+					break;
+
+				case SignalValue:
+					PROCESS_INPUT_SAMPLE_HELPER(tSignalValue, {
+						RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlSignalValueId.timeStamp, &data->ui32ArduinoTimestamp));
+						RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlSignalValueId.value, &data->f32Value));
+					});
+
+				case BoolSignalValue:
+					PROCESS_INPUT_SAMPLE_HELPER(tBoolSignalValue, {
+						RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlBoolSignalValueId.ui32ArduinoTimestamp, &data->ui32ArduinoTimestamp));
+						RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlBoolSignalValueId.bValue, &data->bValue));
+					});
+
+				case WheelData:
+					PROCESS_INPUT_SAMPLE_HELPER(tWheelData, {
+						RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlWheelDataIndex.ArduinoTimestamp, &data->ui32ArduinoTimestamp));
+						RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlWheelDataIndex.WheelTach, &data->ui32WheelTach));
+						RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlWheelDataIndex.WheelDir, &data->i8WheelDir));
+					});
+
+				case InerMeasUnitData:
+					PROCESS_INPUT_SAMPLE_HELPER(tInerMeasUnitData, {
+						RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlInerMeasUnitDataIndex.timeStamp, &data->ui32ArduinoTimestamp));
+						RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlInerMeasUnitDataIndex.A_x, &data->f32A_x));
+						RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlInerMeasUnitDataIndex.A_y, &data->f32A_y));
+						RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlInerMeasUnitDataIndex.A_z, &data->f32A_z));
+						RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlInerMeasUnitDataIndex.G_x, &data->f32G_x));
+						RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlInerMeasUnitDataIndex.G_y, &data->f32G_y));
+						RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlInerMeasUnitDataIndex.G_z, &data->f32G_z));
+						RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlInerMeasUnitDataIndex.M_x, &data->f32M_x));
+						RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlInerMeasUnitDataIndex.M_y, &data->f32M_y));
+						RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlInerMeasUnitDataIndex.M_z, &data->f32M_z));
+					});
+
+				case RoadSignExt:
+					LOG_ERROR("eZmqStruct 'RoadSignExt' not implemented.");
+					break;
+
+				case Position:
+					LOG_ERROR("eZmqStruct 'Position' not implemented.");
+					break;
+
+				case Obstacle:
+					LOG_ERROR("eZmqStruct 'Obstacle' not implemented.");
+					break;
+
+				case TrafficSign:
+					LOG_ERROR("eZmqStruct 'TrafficSign' not implemented.");
+					break;
+
+				case ParkingSpace:
+					LOG_ERROR("eZmqStruct 'ParkingSpace' not implemented.");
+					break;
+
+				case Ultrasonic:
+					// TODO: remove timestamps
+					PROCESS_INPUT_SAMPLE_HELPER(tUltrasonicStruct, {
+						RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlUltrasonicStructIndex.SideLeft.value, &data->tSideLeft.f32Value));
+						RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlUltrasonicStructIndex.SideLeft.timeStamp, &data->tSideLeft.ui32ArduinoTimestamp));
+						RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlUltrasonicStructIndex.SideRight.value, &data->tSideRight.f32Value));
+						RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlUltrasonicStructIndex.SideRight.timeStamp, &data->tSideRight.ui32ArduinoTimestamp));
+						RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlUltrasonicStructIndex.RearLeft.value, &data->tRearLeft.f32Value));
+						RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlUltrasonicStructIndex.RearLeft.timeStamp, &data->tRearLeft.ui32ArduinoTimestamp));
+						RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlUltrasonicStructIndex.RearCenter.value, &data->tRearCenter.f32Value));
+						RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlUltrasonicStructIndex.RearCenter.timeStamp, &data->tRearCenter.ui32ArduinoTimestamp));
+						RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlUltrasonicStructIndex.RearRight.value, &data->tRearRight.f32Value));
+						RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlUltrasonicStructIndex.RearRight.timeStamp, &data->tRearRight.ui32ArduinoTimestamp));
+					});
+
+				case Voltage:
+					PROCESS_INPUT_SAMPLE_HELPER(tVoltageStruct, {
+						RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlVoltageStructIndex.ActuatorVoltage.value, &data->tActuatorVoltage.f32Value));
+						RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlVoltageStructIndex.ActuatorCell1.value, &data->tActuatorCell1.f32Value));
+						RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlVoltageStructIndex.ActuatorCell2.value, &data->tActuatorCell2.f32Value));
+						RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlVoltageStructIndex.SensorVoltage.value, &data->tSensorVoltage.f32Value));
+						RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlVoltageStructIndex.SensorCell1.value, &data->tSensorCell1.f32Value));
+						RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlVoltageStructIndex.SensorCell2.value, &data->tSensorCell2.f32Value));
+						RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlVoltageStructIndex.SensorCell3.value, &data->tSensorCell3.f32Value));
+						RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlVoltageStructIndex.SensorCell4.value, &data->tSensorCell4.f32Value));
+						RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlVoltageStructIndex.SensorCell5.value, &data->tSensorCell5.f32Value));
+						RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlVoltageStructIndex.SensorCell6.value, &data->tSensorCell6.f32Value));
+					});
+
+				case PolarCoordinate:
+					LOG_ERROR("eZmqStruct 'PolarCoordinate' not implemented.");
+					break;
+
+				case LaserScanner:
+					{
+						// TODO: use zeromq zero-copy here!
+
+						tSize numOfScanPoints = 0;
+						tResult res = sampleDecoder.GetElementValue(m_ddlLSDataId.size, &numOfScanPoints);
+						const tPolarCoordiante* pCoordinates = reinterpret_cast<const tPolarCoordiante*>(sampleDecoder.GetElementAddress(m_ddlLSDataId.scanArray));
+						std::vector<tPolarCoordiante> scan(numOfScanPoints);
+						tPolarCoordiante scanPoint;
+
+						for (tSize i = 0; i < numOfScanPoints; ++i)
+						{
+							scanPoint.f32Radius = pCoordinates[i].f32Radius;
+							scanPoint.f32Angle = pCoordinates[i].f32Angle;
+							scan.push_back(scanPoint);
+						}
+
+						returncode = m_sck_pair->send(&scan[0], numOfScanPoints * sizeof(tPolarCoordiante));
+					}
+					break;
+
+				default:
+					LOG_ERROR("Unrecognized eZmqStruct %d while processing inputs.", pinType);
+				}
 			}
 		}
 
@@ -592,6 +622,9 @@ tResult cZmqBase::ProcessOutput(zmq::message_t* frame, const size_t index)
 
 	switch (pinType)
 	{
+	case Image:
+		LOG_ERROR("eZmqStruct 'Image' is not supported for output pins.");
+		break;
 	case Jury:
 		LOG_ERROR("eZmqStruct 'Jury' not implemented.");
 		break;
@@ -674,6 +707,21 @@ object_ptr<IStreamType>* cZmqBase::GetStreamType(const eZmqStruct sampleType)
 {
 	switch (sampleType)
 	{
+	case Image:
+		{
+			if (!m_ImageFormatStreamType)
+			{
+				m_sImageFormat.m_strFormatName = ADTF_IMAGE_FORMAT(RGB_24);
+				m_ImageFormatStreamType = make_object_ptr<cStreamType>(stream_meta_type_image());
+				if (!m_ImageFormatStreamType)
+					LOG_ERROR("Call make_object_ptr() for the image format yielded a nullptr.");
+				else if (IS_FAILED(set_stream_type_image_format(*m_ImageFormatStreamType, m_sImageFormat)))
+					LOG_ERROR("Call set_stream_type_image_format() failed during retrieving the image format stream type.");
+			}
+			else LOG_ERROR("Do not use more than one image input pin !!!");
+			return &m_ImageFormatStreamType;
+		}
+
 	case Jury:
 		LOG_ERROR("eZmqStruct 'Jury' not implemented.");
 		break;
@@ -795,6 +843,7 @@ size_t cZmqBase::GetStructSize(const eZmqStruct sampleType) const
 {
 	switch (sampleType)
 	{
+	case Image:					return 3 * m_sImageFormat.m_ui32Width * m_sImageFormat.m_ui32Height;
 	case Jury:					return sizeof(tJuryStruct);
 	case Driver:				return sizeof(tDriverStruct);
 	case SignalValue:			return sizeof(tSignalValue);
@@ -820,6 +869,7 @@ cSampleCodecFactory* cZmqBase::GetSampleFactory(const eZmqStruct sampleType)
 {
 	switch (sampleType)
 	{
+	case Image:					return nullptr;
 	case Jury:					LOG_ERROR("eZmqStruct 'Jury' not implemented."); break;
 	case Driver:				LOG_ERROR("eZmqStruct 'Driver' not implemented."); break;
 	case SignalValue:			return &m_SignalValueSampleFactory;

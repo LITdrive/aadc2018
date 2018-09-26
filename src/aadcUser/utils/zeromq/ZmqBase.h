@@ -23,6 +23,7 @@ THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS AS IS AND ANY EXPRESS OR I
 /*! input and output pin types (as specified in "aadc_structs.h") */
 enum eZmqStruct
 {
+	Image,
 	Jury,
 	Driver,
 	SignalValue,
@@ -162,6 +163,10 @@ private:
 	static std::string ReceiveString(zmq::socket_t& socket);
 
 private:
+
+	// image
+	tStreamImageFormat m_sImageFormat;
+	object_ptr<IStreamType> m_ImageFormatStreamType = nullptr;
 
 	// signal value
 	cSampleCodecFactory m_SignalValueSampleFactory;

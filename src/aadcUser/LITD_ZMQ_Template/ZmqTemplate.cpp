@@ -26,12 +26,12 @@ cZmqTemplateFilter::cZmqTemplateFilter()
 	m_inputs.emplace_back("imu", InerMeasUnitData);
 	m_inputs.emplace_back("ultrasonic", Ultrasonic);
 	m_inputs.emplace_back("voltage", Voltage);
+	m_inputs.emplace_back("image", Image);
 
 	// output pin names and types
 	m_outputs.emplace_back("signal_out", SignalValue);
 	m_outputs.emplace_back("bool_out", BoolSignalValue);
 
 	// pipe out the data whenever there are new samples on these pins
-	m_triggers.emplace_back("imu");
-
+	m_triggers.emplace_back("image");
 }
