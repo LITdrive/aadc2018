@@ -123,9 +123,6 @@ private:
 	/* output pin writers with the pin name as its key */
 	std::map<std::string, cPinWriter*> m_pinWriters;
 
-	/* some nullbytes, which will be sent for empty pins */
-	uint8_t m_nullbytes[1024]{};
-
 	/* count number of samples for applying the subsample factor */
 	int m_num_samples = 0;
 

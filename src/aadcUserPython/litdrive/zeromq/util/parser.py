@@ -81,6 +81,8 @@ def unpack(data, dtype=None, fmt_str=None):
 
 def unpack_dict(data, dtype=None, fmt_str=None):
     tuples = unpack(data, dtype, fmt_str)
+    if not tuples:
+        return None
 
     def __unpack_dict(elements, i, result):
         for element in elements:
@@ -89,7 +91,7 @@ def unpack_dict(data, dtype=None, fmt_str=None):
                     result[key] = {}
                     i = __unpack_dict(element[key], i, result[key])
             else:
-                result[element[0]] = tuples[i]
+                result[element[0]] = tuples[i] if tuples else None
                 i += 1
         return i
 

@@ -30,9 +30,6 @@ cZmqBase::cZmqBase()
 	RegisterPropertyVariable("ZeroMQ Queue Length", m_queue_length);
 	RegisterPropertyVariable("ZeroMQ Subsample Factor", m_subsample_factor);
 
-	// we need some null bytes for empty messages, fill them!
-	memset(m_nullbytes, 0, sizeof m_nullbytes / sizeof *m_nullbytes);
-
 	// register the runner which processes zeromq messages in the background
 	InitializeZeroMQThread();
 }
@@ -267,7 +264,7 @@ void cZmqBase::InitializeZeroMQThread()
 				if (start == 0) start = cHighResTimer::GetTime();
 
 				// an empty message from the parent thread signals a break condition
-				if (message.size() == 0)
+				if (message.size() == 0 && m_runner_reset_signal)
 					break;
 
 				// send to server
@@ -402,8 +399,8 @@ tResult cZmqBase::ProcessInputs(tTimeStamp tmTimeOfTrigger)
 		object_ptr<const ISample> pSample;
 		if (IS_FAILED(pinReader->GetLastSample(pSample)))
 		{
-			// send an empty struct (just null bytes) if the samples is invalid
-			zmq::message_t message(m_nullbytes, GetStructSize(pinType), nullptr, nullptr);
+			// send an empty message
+			zmq::message_t message(0);
 			returncode = m_sck_pair->send(message, flags);
 		}
 		else
