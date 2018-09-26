@@ -241,13 +241,14 @@ void cZmqBase::InitializeZeroMQThread()
 		int hwm = m_queue_length / 2;
 		pair_socket.setsockopt(ZMQ_RCVHWM, &hwm, sizeof hwm);
 
-		pair_socket.connect(GetPairSocketAddress());
+		const std::string address = GetPairSocketAddress();
+		pair_socket.connect(address);
 
 		/* --- (3) connect REQ socket to server --- */
 
 		zmq::socket_t* client_socket = InitializeClientSocket();
 
-		LOG_DUMP("ZMQ I/O thread and sockets initialized.");
+		LOG_DUMP("ZMQ I/O thread initialized. Connected to %s", cString(m_server_socket_address).GetPtr());
 
 		const size_t num_outputs = m_outputs.size();
 		bool lastConnectionState = true;
