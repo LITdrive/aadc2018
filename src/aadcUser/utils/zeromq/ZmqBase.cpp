@@ -31,7 +31,8 @@ cZmqBase::cZmqBase()
 	RegisterPropertyVariable("ZeroMQ Subsample Factor", m_subsample_factor);
 
 	// register the runner which processes zeromq messages in the background
-	InitializeZeroMQThread();
+	if (IS_FAILED(InitializeZeroMQThread()))
+		LOG_ERROR("Failed initializing the ZeroMQ Thread in the constructor");
 }
 
 cZmqBase::~cZmqBase()
@@ -65,8 +66,8 @@ tResult cZmqBase::Shutdown(const tInitStage eStage)
 
 tResult cZmqBase::Configure()
 {
-	InitializeInputPins();
-	InitializeOutputPins();
+	RETURN_IF_FAILED(InitializeInputPins());
+	RETURN_IF_FAILED(InitializeOutputPins());
 
 	// hey, dependency injector, gimme' my objects!
 	RETURN_IF_FAILED(_runtime->GetObject(m_pClock));
@@ -133,47 +134,50 @@ tResult cZmqBase::Stop()
 	RETURN_NOERROR;
 }
 
-void cZmqBase::InitializePins(std::vector<ZmqPinDef> &pin_definitions, const bool isReader)
+tResult cZmqBase::InitializePins(std::vector<ZmqPinDef> &pin_definitions, const bool isReader)
 {
 	for (auto& pin_def : pin_definitions)
 	{
-		std::string pinName = std::get<0>(pin_def);
-		eZmqStruct pinType = std::get<1>(pin_def);
+		const std::string pinName = std::get<0>(pin_def);
+		const eZmqStruct pinType = std::get<1>(pin_def);
 
 		// resolve or create the stream type
 		object_ptr<IStreamType>* streamType = GetStreamType(pinType);
+		if (!streamType) RETURN_ERROR_DESC(-1, cString::Format("GetStreamType(pinType) for pin %s yielded a nullptr.", pinName.c_str()));
 
 		if (isReader)
 		{
 			// input pin
 			const auto pinReader = new cPinReader();
 			m_pinReaders[pinName] = pinReader;
-			create_pin(*this, *pinReader, pinName.c_str(), *streamType);
+			RETURN_IF_FAILED(create_pin(*this, *pinReader, pinName.c_str(), *streamType));
 		}
 		else
 		{
 			// output pin
 			const auto pinWriter = new cPinWriter();
 			m_pinWriters[pinName] = pinWriter;
-			filter_create_pin(*this, *pinWriter, pinName.c_str(), *streamType);
+			RETURN_IF_FAILED(filter_create_pin(*this, *pinWriter, pinName.c_str(), *streamType));
 		}
 	}
+
+	RETURN_NOERROR;
 }
 
 /**
  * \brief Register cPinWriters with their respective names
  */
-void cZmqBase::InitializeOutputPins()
+tResult cZmqBase::InitializeOutputPins()
 {
-	InitializePins(m_outputs, false);
+	return InitializePins(m_outputs, false);
 }
 
 /**
  * \brief Register cPinReaders with their respective names. trigger lambdas on the trigger pins
  */
-void cZmqBase::InitializeInputPins()
+tResult cZmqBase::InitializeInputPins()
 {
-	InitializePins(m_inputs, true);
+	RETURN_IF_FAILED(InitializePins(m_inputs, true));
 
 	// do we also need to create an inner trigger pipe?
 	for (auto& trigger_pin : m_triggers)
@@ -185,7 +189,7 @@ void cZmqBase::InitializeInputPins()
 		if (it != m_pinReaders.end())
 		{
 			// execute this lambda if the pin is triggered
-			create_inner_pipe(*this, cString::Format("%s_trigger", trigger_pin_cstr), trigger_pin_cstr, [&](tTimeStamp tmTime) -> tResult
+			RETURN_IF_FAILED(create_inner_pipe(*this, cString::Format("%s_trigger", trigger_pin_cstr), trigger_pin_cstr, [&](tTimeStamp tmTime) -> tResult
 			{
 				if (m_sck_pair && m_sck_pair->connected())
 				{
@@ -197,19 +201,21 @@ void cZmqBase::InitializeInputPins()
 				}
 
 				RETURN_NOERROR;
-			});
+			}));
 		}
 		else
 		{
 			LOG_ERROR("Could not create trigger pin on nonexistent pin %s", trigger_pin_cstr);
 		}
 	}
+
+	RETURN_NOERROR;
 }
 
 /**
  * \brief Define and register the ZeroMQ I/O thread, which will actually send the samples and poll for replies
  */
-void cZmqBase::InitializeZeroMQThread()
+tResult cZmqBase::InitializeZeroMQThread()
 {
 	// thread for zeromq, where requests are sent and replies are polled
 	const object_ptr<IRunner> zmq_thread = ::adtf::ucom::make_object_ptr<cRunner>("zmq_thread", [&](tTimeStamp /* tmTime */) -> tResult
@@ -345,7 +351,8 @@ void cZmqBase::InitializeZeroMQThread()
 		RETURN_NOERROR;
 	});
 
-	cRuntimeBehaviour::RegisterRunner(zmq_thread);
+	RETURN_IF_FAILED(cRuntimeBehaviour::RegisterRunner(zmq_thread));
+	RETURN_NOERROR;
 }
 
 inline zmq::socket_t* cZmqBase::InitializeClientSocket() const

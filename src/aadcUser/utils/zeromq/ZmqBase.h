@@ -139,13 +139,13 @@ private:
 
 	zmq::socket_t* InitializeClientSocket() const;
 
-	void InitializeZeroMQThread();
+	tResult InitializeZeroMQThread();
 
-	void InitializeInputPins();
+	tResult InitializeInputPins();
 
-	void InitializeOutputPins();
+	tResult InitializeOutputPins();
 
-	void InitializePins(std::vector<ZmqPinDef>& pin_definitions, bool isReader);
+	tResult InitializePins(std::vector<ZmqPinDef>& pin_definitions, bool isReader);
 
 	object_ptr<IStreamType>* GetStreamType(eZmqStruct sampleType);
 
