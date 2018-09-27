@@ -14,11 +14,12 @@ using namespace cv;
 class PixelMetricTransformer {
 public:
 
-    PixelMetricTransformer(float matrix[2][3]);
+    PixelMetricTransformer(double matrix[2][3]);
+    PixelMetricTransformer();
 
-    float *toMeter(float x, float y);
+    Point2d toMeter(double x, double y);
 
-    float *toPixel(float x, float y);
+    Point2d toPixel(double x, double y);
 
 private:
     Matx23f matrix;
