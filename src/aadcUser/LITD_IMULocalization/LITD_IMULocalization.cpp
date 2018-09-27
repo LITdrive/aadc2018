@@ -58,18 +58,14 @@ THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS AS IS AND ANY EXPRESS OR I
 #define MP_MEASUREMENT_Y                0.5
 #define MP_MEASUREMENT_HEADING          1.0 // [radians]
 
-/*! defines a data triggered filter and exposes it via a plugin class factory */
-ADTF_TRIGGER_FUNCTION_FILTER_PLUGIN(CID_CMARKERPOS_DATA_TRIGGERED_FILTER,
-    "LITD_IMULocalization",
-    cLITD_IMULocalization,
-    adtf::filter::pin_trigger({"imu", "pos_reset"}));
+ADTF_PLUGIN(LABEL_IMULOCALIZATION_FILTER, cLITD_IMULocalization)
 
 
 
 /*! initialize the trigger function */
 cLITD_IMULocalization::cLITD_IMULocalization()
 {
-    SetName("MarkerPos");
+    //SetName("MarkerPos");
     //register properties
     RegisterPropertyVariable("Speed Scale", m_f32SpeedScale);
     RegisterPropertyVariable("Camera Offset::Lateral", m_f32CameraOffsetLat);
@@ -143,12 +139,12 @@ cLITD_IMULocalization::cLITD_IMULocalization()
     object_ptr<const IStreamType> pConstTypePositionData = pTypePositionData;
 
     //register input pin(s)
-    Register(m_oReaderSpeed, "speed", pConstTypeSignalData);
-    Register(m_oReaderIMU, "imu", pConstTypeIMUData);
-    Register(m_oReaderPositionReset, "pos_reset", pConstTypePositionData);
-   
+	create_pin(*this, m_oReaderSpeed, "speed", pConstTypeSignalData);
+	create_pin(*this, m_oReaderIMU, "imu", pConstTypeIMUData);
+	create_pin(*this, m_oReaderPositionReset, "pos_reset", pConstTypePositionData);
+
     //register output pin
-    Register(m_oWriter, "position", pConstTypePositionData);
+	filter_create_pin(*this, m_oWriter, "position", pConstTypePositionData);
     //Reset Filter Covariances
     ResetFilter();
     // initialize other variables
@@ -159,10 +155,33 @@ cLITD_IMULocalization::cLITD_IMULocalization()
 
     m_ui32Cnt = 0;
 
+	create_inner_pipe(*this, cString::Format("%s_trigger", "speed"), "speed", [&](tTimeStamp tmTime) -> tResult
+	{
+		return ProcessSpeed(tmTime);
+	});
+
+	create_inner_pipe(*this, cString::Format("%s_trigger", "imu"), "imu", [&](tTimeStamp tmTime) -> tResult
+	{
+		return ProcessImu(tmTime);
+	});
+
+	create_inner_pipe(*this, cString::Format("%s_trigger", "pos_reset"), "pos_reset", [&](tTimeStamp tmTime) -> tResult
+	{
+		return ProcessReset(tmTime);
+	});
+
 }
 
-
-
+tResult cLITD_IMULocalization::Init(const tInitStage eStage)
+{
+	RETURN_IF_FAILED(cFilter::Init(eStage));
+	if (eStage == StageFirst)
+	{
+		// press "Init"
+		RETURN_IF_FAILED(Configure());
+	}
+	RETURN_NOERROR;
+}
 
 /*! implements the configure function to read ALL Properties */
 tResult cLITD_IMULocalization::Configure()
@@ -176,49 +195,54 @@ tResult cLITD_IMULocalization::Configure()
     RETURN_NOERROR;
 }
 
-
-
-/*! funtion will be executed each time a trigger occured */
-tResult cLITD_IMULocalization::Process(tTimeStamp tmTimeOfTrigger)
+tResult cLITD_IMULocalization::ProcessSpeed(tTimeStamp tmTimeOfTrigger)
 {
-   // LOG_INFO("Process");
-    object_ptr<const ISample> pReadSample;
+	object_ptr<const ISample> pReadSample;
+	while (IS_OK(m_oReaderSpeed.GetNextSample(pReadSample)))
+	{
+		// store speed
+		auto oDecoder = m_SignalDataSampleFactory.MakeDecoderFor(*pReadSample);
+		m_f32Speed = adtf_ddl::access_element::get_value(oDecoder, m_ddlSignalDataIndex.value);
+	}
 
-    //LOG_INFO(cString::Format("process: %lu", tmTimeOfTrigger).GetPtr());
+	RETURN_NOERROR;
+}
 
-    while(IS_OK(m_oReaderPositionReset.GetNextSample(pReadSample))) {
-        auto oDecoder = m_PositionSampleFactory.MakeDecoderFor(*pReadSample);
-        tFloat32 x, y, heading, speed;
-        RETURN_IF_FAILED(oDecoder.IsValid());
+tResult cLITD_IMULocalization::ProcessImu(tTimeStamp tmTimeOfTrigger)
+{
+	object_ptr<const ISample> pReadSample;
+	while (IS_OK(m_oReaderIMU.GetNextSample(pReadSample)))
+	{
+		// predict
+		ProcessInerMeasUnitSample(tmTimeOfTrigger, *pReadSample);
+	}
 
-        RETURN_IF_FAILED(oDecoder.GetElementValue(m_ddlPositionIndex.x, &x));
-        RETURN_IF_FAILED(oDecoder.GetElementValue(m_ddlPositionIndex.y, &y));
-        RETURN_IF_FAILED(oDecoder.GetElementValue(m_ddlPositionIndex.heading, &heading));
-        RETURN_IF_FAILED(oDecoder.GetElementValue(m_ddlPositionIndex.speed, &speed));
+	RETURN_NOERROR;
+}
 
-        ResetFilter();
-        m_state.at<double>(0) = x;
-        m_state.at<double>(1) = y;
-        m_state.at<double>(2) = heading;
-        m_state.at<double>(3) = 0;
-        m_state.at<double>(4) = speed;
-        m_state.at<double>(5) = 0;
-    }
+tResult cLITD_IMULocalization::ProcessReset(tTimeStamp tmTimeOfTrigger)
+{
+	object_ptr<const ISample> pReadSample;
+	while (IS_OK(m_oReaderPositionReset.GetNextSample(pReadSample))) {
+		auto oDecoder = m_PositionSampleFactory.MakeDecoderFor(*pReadSample);
+		tFloat32 x, y, heading, speed;
+		RETURN_IF_FAILED(oDecoder.IsValid());
 
-    while (IS_OK(m_oReaderSpeed.GetNextSample(pReadSample)))
-    {
-        // store speed
-        auto oDecoder = m_SignalDataSampleFactory.MakeDecoderFor(*pReadSample);
-        m_f32Speed = adtf_ddl::access_element::get_value(oDecoder, m_ddlSignalDataIndex.value);
-    }
+		RETURN_IF_FAILED(oDecoder.GetElementValue(m_ddlPositionIndex.x, &x));
+		RETURN_IF_FAILED(oDecoder.GetElementValue(m_ddlPositionIndex.y, &y));
+		RETURN_IF_FAILED(oDecoder.GetElementValue(m_ddlPositionIndex.heading, &heading));
+		RETURN_IF_FAILED(oDecoder.GetElementValue(m_ddlPositionIndex.speed, &speed));
 
-    while (IS_OK(m_oReaderIMU.GetNextSample(pReadSample)))
-    {
-        // predict
-        ProcessInerMeasUnitSample(tmTimeOfTrigger, *pReadSample);
-    }
+		ResetFilter();
+		m_state.at<double>(0) = x;
+		m_state.at<double>(1) = y;
+		m_state.at<double>(2) = heading;
+		m_state.at<double>(3) = 0;
+		m_state.at<double>(4) = speed;
+		m_state.at<double>(5) = 0;
+	}
 
-    RETURN_NOERROR;
+	RETURN_NOERROR;
 }
 
 tVoid cLITD_IMULocalization::ResetFilter()

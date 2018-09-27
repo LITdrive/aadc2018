@@ -18,7 +18,9 @@ THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS AS IS AND ANY EXPRESS OR I
 #define _USE_MATH_DEFINES
 #include <math.h>
 
-#define CID_CMARKERPOS_DATA_TRIGGERED_FILTER "imulocalization.filter.user.aadc.cid"
+#define CID_IMULOCALIZATION_FILTER "imulocalization.filter.user.aadc.cid"
+#define LABEL_IMULOCALIZATION_FILTER "LITD IMULocalization"
+
 using namespace adtf_util;
 using namespace ddl;
 using namespace adtf::ucom;
@@ -35,8 +37,15 @@ using namespace cv;
 
 
 /*! the main class of the marker positioning. */
-class cLITD_IMULocalization : public cTriggerFunction
+class cLITD_IMULocalization : public cFilter
 {
+public:
+	ADTF_CLASS_ID_NAME(cLITD_IMULocalization, CID_IMULOCALIZATION_FILTER, LABEL_IMULOCALIZATION_FILTER);
+
+	// necessary for proper behaviour of the create_inner_pipe call
+	using cRuntimeBehaviour::RegisterRunner;
+	using cRuntimeBehaviour::RegisterInnerPipe;
+
 private:
 
 
@@ -210,36 +219,18 @@ private:
 
 public:
 
-    /*! Default constructor. */
     cLITD_IMULocalization();
 
-    /*!
-     * Parse the road sign file.
-     *
-     * \param   oDOM    The dom.
-     */
-    tResult ParseRoadSignFile(cDOM& oDOM);
-
-    /*! Destructor. */
     virtual ~cLITD_IMULocalization() = default;
 
-    /**
-    * Overwrites the Configure
-    * This is to Read Properties prepare your Trigger Function
-    */
-    tResult Configure() override;
-    /**
-    Reset Filter covariances
-    **/
-    tVoid ResetFilter();
-  
+	tResult Init(tInitStage eStage) override;
 
-    /**
-    * Overwrites the Process
-    * You need to implement the Reading and Writing of Samples within this function
-    * MIND: Do Reading until the Readers queues are empty or use the IPinReader::GetLastSample()
-    * This FUnction will be called if the Run() of the TriggerFunction was called.
-    */
-    tResult Process(tTimeStamp tmTimeOfTrigger) override;
+    tResult Configure();
+  
+    tResult ProcessSpeed(tTimeStamp tmTimeOfTrigger);
+	tResult ProcessImu(tTimeStamp tmTimeOfTrigger);
+	tResult ProcessReset(tTimeStamp tmTimeOfTrigger);
+
+	tVoid ResetFilter();
 
 };
