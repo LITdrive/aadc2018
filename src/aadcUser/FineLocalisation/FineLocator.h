@@ -5,6 +5,8 @@
 #ifndef AADC_USER_FINELOCATOR_H
 #include <opencv2/opencv.hpp>
 #include <math.h>
+#include "PixelMetricTransformer.h"
+
 #define AADC_USER_FINELOCATOR_H
 
 using namespace cv;
@@ -18,6 +20,8 @@ private:
 
     float ret[4] = {0, 0, 0, 0};
 
+    PixelMetricTransformer pmt;
+
 public:
     /*! Constructor*/
     FineLocator();
@@ -30,9 +34,10 @@ public:
      *          returns a Point3f with x=x, y=y, z=confidence level
      * */
 
-    float* localize(Mat img_bv, float theta, Point2f pos, int size=20);
+    float* localize(Mat img_bv, float theta, Point2f pos, float offset, int size=20);
 
     void setMap(char* pathToScaledMap);
+    void setPixelMetricTransformer(PixelMetricTransformer pixelMetricTransformer);
 
     void setAngleSearchSpace(float min, float max, int cnt);
 };

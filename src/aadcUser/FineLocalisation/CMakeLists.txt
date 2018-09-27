@@ -4,13 +4,14 @@ project(finelocalisation_filter)
 
 include_directories(${OpenCV_INCLUDE_DIRS})
 
-set (SOURCEFILES    	stdafx.h 
-						FineLocalisation.h
-						FineLocalisation.cpp
+set (SOURCEFILES    	stdafx.h
                         PixelMetricTransformer.h
                         PixelMetricTransformer.cpp
                         FineLocator.h
-                        FineLocator.cpp)
+                        FineLocator.cpp
+                        FineLocalisation.h
+						FineLocalisation.cpp
+                        )
 
 adtf_add_filter(${PROJECT_NAME}
 				${SOURCEFILES}

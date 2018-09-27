@@ -23,7 +23,7 @@ THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS AS IS AND ANY EXPRESS OR I
 #define DEG2RAD M_PI/180
 
 ADTF_TRIGGER_FUNCTION_FILTER_PLUGIN(CID_CBIRDS_EYE_VIEW_DATA_TRIGGERED_FILTER,
-                                    "FineLocalisation_cf",
+                                    "LITD_FineLocalisation",
                                     cFineLocalisation,
                                     adtf::filter::pin_trigger({ "inBirdsEye" }));
 
@@ -107,7 +107,7 @@ tResult cFineLocalisation::Configure()
     affineMat[1][0] = mat10;
     affineMat[1][1] = mat11;
     affineMat[1][2] = mat12;
-    pmt = PixelMetricTransformer(affineMat);
+    locator.setPixelMetricTransformer(PixelMetricTransformer(affineMat));
     RETURN_NOERROR;
 }
 
@@ -138,19 +138,20 @@ tResult cFineLocalisation::Process(tTimeStamp tmTimeOfTrigger)
         {
             //create a opencv matrix from the media sample buffer
             Mat bvImage = Mat(cv::Size(m_sImageFormat.m_ui32Width, m_sImageFormat.m_ui32Height), CV_8UC3, const_cast<unsigned char*>(static_cast<const unsigned char*>(pReadBuffer->GetPtr())));
-            float* px_loc = pmt.toPixel(x + axleToPicture*cos(heading), y + axleToPicture*sin(heading));
-            float px_x = px_loc[0], px_y = px_loc[1];
             //[x, y, headingOffset, confidence]
-            float* location = locator.localize(bvImage, heading, Point2f(px_x, px_y), searchSpaceSize);
-            object_ptr<ISample> pWriteSample;
-            float* m_loc = pmt.toMeter(location[0], location[1]);
+            auto start = std::chrono::system_clock::now();
+            float* location = locator.localize(bvImage, heading + headingOffset*DEG2RAD, Point2f(x, y), axleToPicture, searchSpaceSize);
+            auto end = std::chrono::system_clock::now();
+            std::chrono::duration<double> diff = end-start;
+            LOG_INFO("Localization took %e s", diff.count());
 
+            object_ptr<ISample> pWriteSample;
             RETURN_IF_FAILED(alloc_sample(pWriteSample, m_pClock->GetStreamTime()));
             {
                 auto oCodec = m_PositionSampleFactory.MakeCodecFor(pWriteSample);
 
-                RETURN_IF_FAILED(oCodec.SetElementValue(m_ddlPositionIndex.x, m_loc[0] - axleToPicture*cos(heading)));
-                RETURN_IF_FAILED(oCodec.SetElementValue(m_ddlPositionIndex.y, m_loc[1] - axleToPicture*sin(heading)));
+                RETURN_IF_FAILED(oCodec.SetElementValue(m_ddlPositionIndex.x, location[0]));
+                RETURN_IF_FAILED(oCodec.SetElementValue(m_ddlPositionIndex.y, location[1]));
                 RETURN_IF_FAILED(oCodec.SetElementValue(m_ddlPositionIndex.heading, heading + location[2]));
                 RETURN_IF_FAILED(oCodec.SetElementValue(m_ddlPositionIndex.speed, speed));
             }
