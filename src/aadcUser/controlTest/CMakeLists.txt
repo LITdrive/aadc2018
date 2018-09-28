@@ -41,6 +41,10 @@ add_executable(${PROJECT_NAME} #map_generator_test.cpp
                                LITD_Map.cpp
                                Pose2d.cpp
                                LITD_VirtualCar.cpp
+							   LITD_PolyVirtualPoint.cpp
+							   LITD_StanleyController.cpp
+							   LITD_PolyVirtualPoint.h
+							   LITD_StanleyController.h
                                )
 
 install(TARGETS ${PROJECT_NAME} DESTINATION bin/application CONFIGURATIONS RelWithDebInfo Release)

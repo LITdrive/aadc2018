@@ -1,7 +1,7 @@
 #ifndef LITD_POLYVIRTUALPOINT_H
 #define LITD_POLYVIRTUALPOINT_H
 
-#include LITD_VirtualPoint.h
+#include "LITD_VirtualPoint.h"
 
 #define ITERATION_PER_POLY 10
 
@@ -15,7 +15,9 @@ class LITD_PolyVirtualPoint{
     public:
     LITD_PolyVirtualPoint();
 
-    void getNextVirtualPointOnPoly(poly_t polys[], uint16_t polyLen, polyPoint_t idealPolyPoint, LITD_VirtualPoint idealPoint);
+	void calcVirtualPointfromPoly(poly_t poly, double p, LITD_VirtualPoint * vp);
+
+	void getNextVirtualPointOnPoly(poly_t polys[], uint8_t polyLen, polyPoint_t * idealPolyPoint, LITD_VirtualPoint * idealPoint, LITD_VirtualPoint carPosition);
 
     private:
 
