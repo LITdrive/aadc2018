@@ -92,9 +92,12 @@ private:
     property_variable<tInt32> angleIterCnt = 9;
     property_variable<tFloat32> angleRangeMin = -2;
     property_variable<tFloat32> angleRangeMax =  2;
+    property_variable<tInt32> subSampleRate =  30;
+    tInt32 sampleCnt = 0;
 
     double affineMat [2][3] = {{mat00, mat01, mat02}, {mat10, mat11, mat12}};
     int searchSpaceSize = 0;
+    bool recievedPosition = false;
 
 
 public:

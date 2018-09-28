@@ -91,6 +91,7 @@ cFineLocalisation::cFineLocalisation()
     RegisterPropertyVariable("Angle Iteration Count", angleIterCnt);
     RegisterPropertyVariable("Angle Range Min [°]", angleRangeMin);
     RegisterPropertyVariable("Angle Range Max [°]", angleRangeMax);
+    RegisterPropertyVariable("Image subsample rate", subSampleRate);
 }
 
 tResult cFineLocalisation::Configure()
@@ -108,6 +109,7 @@ tResult cFineLocalisation::Configure()
     affineMat[1][1] = mat11;
     affineMat[1][2] = mat12;
     locator.setPixelMetricTransformer(PixelMetricTransformer(affineMat));
+    sampleCnt = 0;
     RETURN_NOERROR;
 }
 
@@ -126,41 +128,48 @@ tResult cFineLocalisation::Process(tTimeStamp tmTimeOfTrigger)
         //adjust heading for inversion of back camera
         heading = heading + headingOffset*DEG2RAD;
         RETURN_IF_FAILED(oDecoder.GetElementValue(m_ddlPositionIndex.speed, &speed));
+        //LOG_INFO("recievedinfo %.2f %.2f", x, y);
+        recievedPosition = true;
     } else {
         LOG_ERROR("!!Failed to read last Position Sample!!");
     }
 
-    while (IS_OK(m_oReader.GetNextSample(pReadSample)))
+    while (IS_OK(m_oReader.GetNextSample(pReadSample)) && recievedPosition)
     {
-        object_ptr_shared_locked<const ISampleBuffer> pReadBuffer;
-        //lock read buffer
-        if (IS_OK(pReadSample->Lock(pReadBuffer)))
-        {
-            //create a opencv matrix from the media sample buffer
-            Mat bvImage = Mat(cv::Size(m_sImageFormat.m_ui32Width, m_sImageFormat.m_ui32Height), CV_8UC3, const_cast<unsigned char*>(static_cast<const unsigned char*>(pReadBuffer->GetPtr())));
-            //[x, y, headingOffset, confidence]
-            auto start = std::chrono::system_clock::now();
-            float* location = locator.localize(bvImage, heading + headingOffset*DEG2RAD, Point2f(x, y), axleToPicture, searchSpaceSize);
-            auto end = std::chrono::system_clock::now();
-            std::chrono::duration<double> diff = end-start;
-            LOG_INFO("Localization took %e s", diff.count());
+        if(sampleCnt % subSampleRate == 0) {
+            object_ptr_shared_locked<const ISampleBuffer> pReadBuffer;
+            //lock read buffer
+            if (IS_OK(pReadSample->Lock(pReadBuffer))) {
+                //create a opencv matrix from the media sample buffer
+                Mat bvImage = Mat(cv::Size(m_sImageFormat.m_ui32Width, m_sImageFormat.m_ui32Height), CV_8UC3,
+                                  const_cast<unsigned char *>(static_cast<const unsigned char *>(pReadBuffer->GetPtr())));
+                //[x, y, headingOffset, confidence]
+                auto start = std::chrono::system_clock::now();
+                float *location = locator.localize(bvImage, heading + headingOffset * DEG2RAD, Point2f(x, y),
+                                                   axleToPicture, searchSpaceSize);
+                auto end = std::chrono::system_clock::now();
+                std::chrono::duration<double> diff = end - start;
+                LOG_INFO("Localization took %e s", diff.count());
 
-            object_ptr<ISample> pWriteSample;
-            RETURN_IF_FAILED(alloc_sample(pWriteSample, m_pClock->GetStreamTime()));
-            {
-                auto oCodec = m_PositionSampleFactory.MakeCodecFor(pWriteSample);
+                object_ptr<ISample> pWriteSample;
+                RETURN_IF_FAILED(alloc_sample(pWriteSample, m_pClock->GetStreamTime()));
+                {
+                    auto oCodec = m_PositionSampleFactory.MakeCodecFor(pWriteSample);
 
-                RETURN_IF_FAILED(oCodec.SetElementValue(m_ddlPositionIndex.x, location[0]));
-                RETURN_IF_FAILED(oCodec.SetElementValue(m_ddlPositionIndex.y, location[1]));
-                RETURN_IF_FAILED(oCodec.SetElementValue(m_ddlPositionIndex.heading, heading + location[2]));
-                RETURN_IF_FAILED(oCodec.SetElementValue(m_ddlPositionIndex.speed, speed));
+                    RETURN_IF_FAILED(oCodec.SetElementValue(m_ddlPositionIndex.x, location[0]));
+                    RETURN_IF_FAILED(oCodec.SetElementValue(m_ddlPositionIndex.y, location[1]));
+                    RETURN_IF_FAILED(oCodec.SetElementValue(m_ddlPositionIndex.heading, heading + location[2]));
+                    RETURN_IF_FAILED(oCodec.SetElementValue(m_ddlPositionIndex.speed, speed));
+                }
+                LOG_INFO("Wrote info %.2f %.2f %.4f",location[0], location[1], location[2]);
+                m_oPosWriter << pWriteSample << flush << trigger;
+
+                transmitSignalValue(m_oConfWriter, m_pClock->GetStreamTime(), m_SignalValueSampleFactory, m_ddlSignalValueId.timeStamp, 0, m_ddlSignalValueId.value, location[3]);
+
             }
-
-            m_oPosWriter << pWriteSample << flush << trigger;
-
-            transmitSignalValue(m_oConfWriter, m_pClock->GetStreamTime(), m_SignalValueSampleFactory, m_ddlSignalValueId.timeStamp, 0, m_ddlSignalValueId.value, location[3]);
-
+            sampleCnt = 0;
         }
+        sampleCnt++;
     }
     
     RETURN_NOERROR;

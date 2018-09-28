@@ -10,6 +10,7 @@
 #define WEIGHT_SEARCH_SIZE 1        //1 for 3x3 2 for 5x5 etc.
 #define DEGTORAD M_PI/180
 #define RADTODEG 180/M_PI
+#define DEBUG_LOC false
 
 FineLocator::FineLocator(){
 }
@@ -35,7 +36,7 @@ void FineLocator::setPixelMetricTransformer(PixelMetricTransformer pixel2metric)
 }
 
 float* FineLocator::localize(Mat img_bv, float theta, Point2f pos, float pictureOffset, int size) {
-    double angleSum = 0, weightedAngleOff = 0, weightedXSum = 0, weightedYSum = 0;
+    double angleSum = 0, weightedAngleOff = 0, weightedXSum = 0, weightedYSum = 0, anglemax=0 ;
     for(double angleOff= angleMin; angleOff <= angleMax; angleOff += angleInc) {
         // origin world coordinates -> car location
         double x_pic = pos.x + pictureOffset*cos(theta + angleOff*DEGTORAD), y_pic = pos.y + pictureOffset*sin(theta + angleOff*DEGTORAD);
@@ -64,6 +65,17 @@ float* FineLocator::localize(Mat img_bv, float theta, Point2f pos, float picture
         double mi, ma;
         Point mil, mal;
         minMaxLoc(search_result, &mi, &ma, &mil, &mal);
+        //--------------------Write-Result----
+        if(angleOff*angleOff <= 1e-2 && DEBUG_LOC) {
+            double range = ma - mi;
+            Mat res_pic = search_result.clone();
+            res_pic = (res_pic - mi) * 255 / range;
+            res_pic.convertTo(res_pic, CV_8UC1);
+            cvtColor(res_pic, res_pic, cv::COLOR_GRAY2BGR);
+            imwrite("/home/aadc/share/adtf/data/res.png", res_pic);
+            imwrite("/home/aadc/share/adtf/data/sspace.png", search_space);
+        }
+        //------------------------------------
         float max_loc_weighted_x = 0, max_loc_weighted_y = 0, sum = 0;
         for (int x_off = -WEIGHT_SEARCH_SIZE; x_off <= WEIGHT_SEARCH_SIZE; x_off++) {
             for (int y_off = -WEIGHT_SEARCH_SIZE; y_off <= WEIGHT_SEARCH_SIZE; y_off++) {
@@ -76,14 +88,22 @@ float* FineLocator::localize(Mat img_bv, float theta, Point2f pos, float picture
                 max_loc_weighted_y += (mal.y + y_off) * curr_res;
             }
         }
+        if(sum == 0) sum = 1e-6; //prevent div by 0 error
         Mat reverse;
         invertAffineTransform(combined, reverse);
-        Mat location_global = reverse * Mat(Vec3d(size - max_loc_weighted_x/sum + img_bv.size[1]/2.f, size - max_loc_weighted_y / sum + img_bv.size[0], 1));
-        weightedAngleOff += angleOff * ma;
+        Mat location_global = reverse * Mat(Vec3d(max_loc_weighted_x/sum + img_bv.size[1]/2.0, max_loc_weighted_y / sum + img_bv.size[0], 1));
+        /*weightedAngleOff += angleOff * ma;
         angleSum += ma;
-        Point2d pos_m = pmt.toMeter(location_global.at<double>(0), location_global.at<double>(1));
+        */Point2d pos_m = pmt.toMeter(location_global.at<double>(0), location_global.at<double>(1));/*
         weightedXSum += ma*(pos_m.x - pictureOffset*cos(theta + angleOff*DEGTORAD));
-        weightedYSum += ma*(pos_m.y - pictureOffset*sin(theta + angleOff*DEGTORAD));
+        weightedYSum += ma*(pos_m.y - pictureOffset*sin(theta + angleOff*DEGTORAD));*/
+        if(ma > anglemax){
+            anglemax = ma;
+            weightedXSum = pos_m.x - pictureOffset*cos(theta + angleOff*DEGTORAD);
+            weightedYSum = pos_m.y - pictureOffset*sin(theta + angleOff*DEGTORAD);
+            angleSum = 1;
+            weightedAngleOff = angleOff;
+        }
     }
 
     ret[0] = weightedXSum/angleSum;
