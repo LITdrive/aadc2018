@@ -14,7 +14,6 @@ THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS AS IS AND ANY EXPRESS OR I
 **********************************************************************/
 
 #include "ZmqBase.h"
-#include "../../services/zeromq/zeromq_service_intf.h"
 
 #include <aadc_structs.h>
 

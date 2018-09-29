@@ -1,4 +1,4 @@
-﻿/*********************************************************************
+/*********************************************************************
 Copyright (c) 2018
 Audi Autonomous Driving Cup. All rights reserved.
 
@@ -13,25 +13,20 @@ THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS AS IS AND ANY EXPRESS OR I
 
 **********************************************************************/
 
-#include "ZmqTemplate.h"
+#pragma once
 
-ADTF_PLUGIN(LABEL_LITD_ZMQ_TEMPLATE, cZmqTemplateFilter)
+#include "../utils/zeromq/ZmqBase.h"
 
-cZmqTemplateFilter::cZmqTemplateFilter()
+#define CID_LITD_ZMQ_IMAGE_TEMPLATE  "litd_zmq_image_template.filter.user.aadc.cid"
+#define LABEL_LITD_ZMQ_IMAGE_TEMPLATE  "LITD ZMQ Image Template"
+
+class cZmqImageTemplate : public cZmqBase
 {
-	// input pin names and types
-	m_inputs.emplace_back("signal_in", SignalValue);
-	m_inputs.emplace_back("bool_in", BoolSignalValue);
-	m_inputs.emplace_back("wheel", WheelData);
-	m_inputs.emplace_back("imu", InerMeasUnitData);
-	m_inputs.emplace_back("ultrasonic", Ultrasonic);
-	m_inputs.emplace_back("voltage", Voltage);
-	m_inputs.emplace_back("image", Image);
+public:
+	ADTF_CLASS_ID_NAME(cZmqImageTemplate, CID_LITD_ZMQ_IMAGE_TEMPLATE, LABEL_LITD_ZMQ_IMAGE_TEMPLATE);
 
-	// output pin names and types
-	m_outputs.emplace_back("signal_out", SignalValue);
-	m_outputs.emplace_back("bool_out", BoolSignalValue);
+	ADTF_CLASS_DEPENDENCIES(REQUIRE_INTERFACE(IZeroMQService),
+		REQUIRE_INTERFACE(adtf::services::IReferenceClock));
 
-	// pipe out the data whenever there are new samples on these pins
-	m_triggers.emplace_back("image");
-}
+	cZmqImageTemplate();
+};

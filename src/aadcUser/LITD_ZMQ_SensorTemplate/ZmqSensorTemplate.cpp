@@ -1,4 +1,4 @@
-/*********************************************************************
+﻿/*********************************************************************
 Copyright (c) 2018
 Audi Autonomous Driving Cup. All rights reserved.
 
@@ -13,28 +13,24 @@ THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS AS IS AND ANY EXPRESS OR I
 
 **********************************************************************/
 
-#pragma once
+#include "ZmqSensorTemplate.h"
 
-#ifdef WIN32
-#include <windows.h>
-#endif
+ADTF_PLUGIN(LABEL_LITD_ZMQ_SENSOR_TEMPLATE, cZmqSensorTemplate)
 
-#include <sstream>
+cZmqSensorTemplate::cZmqSensorTemplate()
+{
+	// input pin names and types
+	m_inputs.emplace_back("signal_in", SignalValue);
+	m_inputs.emplace_back("bool_in", BoolSignalValue);
+	m_inputs.emplace_back("wheel", WheelData);
+	m_inputs.emplace_back("imu", InerMeasUnitData);
+	m_inputs.emplace_back("ultrasonic", Ultrasonic);
+	m_inputs.emplace_back("voltage", Voltage);
 
-#include <adtf_filtersdk.h>
-#include <zmq.hpp>
+	// output pin names and types
+	m_outputs.emplace_back("signal_out", SignalValue);
+	m_outputs.emplace_back("bool_out", BoolSignalValue);
 
-#include "../services/zeromq/zeromq_service_intf.h"
-#include "../utils/zeromq/ZmqBase.h"
-
-using namespace adtf_util;
-using namespace ddl;
-using namespace adtf::ucom;
-using namespace adtf::base;
-using namespace adtf::streaming;
-using namespace adtf::streaming::ant;
-using namespace adtf::mediadescription;
-using namespace adtf::filter;
-using namespace adtf::filter::ant;
-
-using namespace std;
+	// pipe out the data whenever there are new samples on these pins
+	m_triggers.emplace_back("imu");
+}
