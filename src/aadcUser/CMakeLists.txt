@@ -50,10 +50,10 @@ add_subdirectory(services)
 add_subdirectory(utils/properties)
 add_subdirectory(utils/zeromq)
 
+# templates
+add_subdirectory(templates)
+
 # filters
-add_subdirectory(OpenCVTemplate)
-add_subdirectory(TemplateFilter)
-add_subdirectory(playground)
 add_subdirectory(BirdsEyeView)
 add_subdirectory(LITD_FollowMe)
 add_subdirectory(FineLocalisation)

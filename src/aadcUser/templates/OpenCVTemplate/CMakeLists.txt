@@ -31,5 +31,5 @@ adtf_create_plugindescription(
 target_link_libraries(${PROJECT_NAME} LINK_PUBLIC ${OpenCV_LIBS})
 
 #this is to add a folder within the ADTF solution
-set_property(TARGET ${PROJECT_NAME} PROPERTY FOLDER user)
-set_property(TARGET ${PROJECT_NAME}_pdgen PROPERTY FOLDER user)
+set_property(TARGET ${PROJECT_NAME} PROPERTY FOLDER templates)
+set_property(TARGET ${PROJECT_NAME}_pdgen PROPERTY FOLDER templates)

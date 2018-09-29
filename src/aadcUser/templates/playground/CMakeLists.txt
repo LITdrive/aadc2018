@@ -29,3 +29,6 @@ install(TARGETS ${PROJECT_NAME} DESTINATION bin/debug/application CONFIGURATIONS
 
 # Link your application with OpenCV libraries
 target_link_libraries(${PROJECT_NAME} ${OpenCV_LIBS})
+
+#this is to add a folder within the ADTF solution
+set_property(TARGET ${PROJECT_NAME} PROPERTY FOLDER templates)
