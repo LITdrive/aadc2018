@@ -47,8 +47,7 @@ include_directories(${CMAKE_INSTALL_INCLUDE})
 add_subdirectory(services)
 
 # utilities
-add_subdirectory(utils/properties)
-add_subdirectory(utils/zeromq)
+add_subdirectory(utils)
 
 # templates
 add_subdirectory(templates)
