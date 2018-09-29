@@ -1,4 +1,4 @@
-from LITD_RoadList import *
+from .LITD_RoadList import *
 
 class RoadManager:
     def __init__(self):

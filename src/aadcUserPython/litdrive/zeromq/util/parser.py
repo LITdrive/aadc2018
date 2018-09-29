@@ -6,18 +6,18 @@ from xml.etree import ElementTree
 AADC_DESCRIPTION = abspath(join(dirname(__file__), r'../../../../../description/aadc.description'))
 
 baseTypes = {
-    'tBool': '?',  # bool (1 byte)
-    'tChar': 'c',  # char (1 byte)
-    'tUInt8': 'B',  # unsigned char (1 byte)
-    'tInt8': 'b',  # signed char (1 byte)
-    'tUInt16': 'H',  # unsigned short (2 bytes)
-    'tInt16': 'h',  # signed short (2 bytes)
-    'tUInt32': 'I',  # unsigned int (4 bytes)
-    'tInt32': 'i',  # signed int (4 bytes)
-    'tUInt64': 'Q',  # unsigned long (8 bytes)
-    'tInt64': 'q',  # signed long (8 bytes)
-    'tFloat32': 'f',  # float (4 bytes)
-    'tFloat64': 'd'  # double (8 bytes)
+    'tBool': '?',
+    'tChar': 'c',
+    'tUInt8': 'B',
+    'tInt8': 'b',
+    'tUInt16': 'H',
+    'tInt16': 'h',
+    'tUInt32': 'I',
+    'tInt32': 'i',
+    'tUInt64': 'Q',
+    'tInt64': 'q',
+    'tFloat32': 'f',
+    'tFloat64': 'd'
 }
 
 

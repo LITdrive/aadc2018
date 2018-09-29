@@ -1,7 +1,7 @@
 import sys
 import argparse
 from lxml import etree
-from LITD_RoadManager import RoadManager
+from .LITD_RoadManager import RoadManager
 
 if __name__ == "__main__":
     print("starting lane_planner testing program...")

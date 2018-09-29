@@ -2,16 +2,11 @@
 # PLEASE COPY THE ENCLOSING PYTHON PACKAGE 'template' AND CREATE YOUR OWN PYTHON FILTER #
 #########################################################################################
 
-import sys
-
-# workaround that will find the packages in script mode
-sys.path.append(r'../../')
-
 import json
-import time
+import numpy as np
 import matplotlib.pyplot as plt
 
-from zeromq.util.server import *
+from ..util.server import ZmqServer
 
 IMAGE_HEIGHT = 960
 IMAGE_WIDTH = 1280

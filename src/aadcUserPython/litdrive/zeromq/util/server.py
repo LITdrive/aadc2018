@@ -3,7 +3,7 @@ import numpy as np
 
 from typing import Iterable
 
-from zeromq.util.parser import pack, unpack, unpack_dict, FORMATS
+from .parser import pack, unpack, unpack_dict, FORMATS
 
 
 class ZmqServer:
@@ -51,7 +51,7 @@ class ZmqServer:
             return None
 
         if len(blob) != (3 * height * width):
-            raise IOError("Image dimension mismatch. Expected image {}x{} (%d bytes) but we received %d bytes."
+            raise IOError("Image dimension mismatch. Expected image {}x{} ({} bytes) but we received {} bytes."
                           .format(height, width, (3 * height * width), len(blob)))
 
         return np.frombuffer(blob, dtype=np.uint8).reshape((height, width, 3))
