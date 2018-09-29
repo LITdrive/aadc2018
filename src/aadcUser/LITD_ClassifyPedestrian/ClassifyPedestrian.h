@@ -16,7 +16,9 @@ THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS AS IS AND ANY EXPRESS OR I
 #pragma once
 
 //*************************************************************************************************
-#define CID_TEMPLATEFILTER_DATA_TRIGGERED_FILTER "classifypedestrian_filter.filter.user.aadc.cid"
+#define CID_TEMPLATEFILTER_DATA_TRIGGERED_FILTER "litd_classify_pedestrian.filter.user.aadc.cid"
+
+#include "stdafx.h"
 
 using namespace adtf_util;
 using namespace ddl;

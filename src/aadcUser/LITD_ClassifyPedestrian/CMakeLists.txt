@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.10.0)
 
-project(classifypedestrian_filter)
+project(litd_classify_pedestrian)
 
 include_directories(${OpenCV_INCLUDE_DIRS})
 

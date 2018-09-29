@@ -18,7 +18,7 @@ THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS AS IS AND ANY EXPRESS OR I
 #include <aadc_structs.h>
 
 ADTF_TRIGGER_FUNCTION_FILTER_PLUGIN(CID_TEMPLATEFILTER_DATA_TRIGGERED_FILTER,
-    "ClassifyPedestrian_cf",
+    "LITD ClassifyPedestrian",
     cClassifyPedestrian,
     adtf::filter::pin_trigger({"input"}));
 
