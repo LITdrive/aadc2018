@@ -1,3 +1,4 @@
+#!/bin/sh
 rm -r _install
 rm -r _build_user
 rm -r _build_user_debug
