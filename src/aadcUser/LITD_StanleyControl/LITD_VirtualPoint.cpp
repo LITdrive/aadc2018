@@ -1,6 +1,6 @@
 ﻿#include <math.h>
 #include "LITD_VirtualPoint.h"
-#include "Eigen/Dense"
+#include <Eigen/Dense>
 
 LITD_VirtualPoint::LITD_VirtualPoint()
 : LITD_VirtualPoint(0.0, 0.0, 0.0, 0.0)

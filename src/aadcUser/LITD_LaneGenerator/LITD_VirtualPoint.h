@@ -1,7 +1,7 @@
 #pragma once
 
 #include <vector>
-#include "Eigen/Dense"
+#include <Eigen/Dense>
 #include "math_utilities.h"
 
 class LITD_VirtualPoint

@@ -1,7 +1,7 @@
 #include "LITD_VirtualCar.h"
 #include "LITD_VirtualPoint.h"
 #include "math_utilities.h"
-#include "Eigen/Dense"
+#include <Eigen/Dense>
 
 #include <stdio.h>
 #include <unistd.h>
