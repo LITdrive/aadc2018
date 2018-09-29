@@ -165,6 +165,31 @@ typedef struct
 } tLaserScannerData;
 #pragma pack(pop)
 
+#pragma pack(push,1)
+typedef struct
+{
+    tUInt32 id;
+    tFloat32 ax;
+    tFloat32 bx;
+    tFloat32 cx;
+    tFloat32 dx;
+    tFloat32 ay;
+    tFloat32 by;
+    tFloat32 cy;
+    tFloat32 dy;
+    tFloat32 start;
+    tFloat32 end;
+    tBool backwards;
+} tTrajectory;
+#pragma pack(pop)
+
+#pragma pack(push,1)
+typedef struct
+{
+    tTrajectory trajectories[5];
+} tTrajectoryArray;
+#pragma pack(pop)
+
 // The following types are assumed to be known:
 // tInt8
 // tInt16

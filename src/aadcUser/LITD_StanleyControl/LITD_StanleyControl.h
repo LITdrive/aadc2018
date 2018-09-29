@@ -15,15 +15,16 @@ THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS AS IS AND ANY EXPRESS OR I
 
 #pragma once
 
+#include "stdafx.h"
 #include "LITD_VirtualPoint.h"
-#include "LITD_Map.h"
-#include "../utils/properties/FilePropertiesObserver.h"
 
 //*************************************************************************************************
-#define CID_LITD_STANLEY_CONTROL_FILTER "LITD_StanleyControl.filter.user.aadc.cid"
-
-#define CAR_AXIS_DIST 0.365
-
+#define CID_STANLEY_CONTROL_FILTER "litd_stanley_control.filter.user.aadc.cid"
+#define LABEL_STANLEY_CONTROL_FILTER "LITD StanleyControl"
+#define STANLEY_GAIN 1.5
+#define VEHICLE_AXIS_DISTANCE 0.36 // in m
+#define TRAJECTORY_ARRAY_LEN 2
+#define POINTS_PER_POLY 10
 
 using namespace adtf_util;
 using namespace ddl;
@@ -34,65 +35,73 @@ using namespace adtf::mediadescription;
 using namespace adtf::filter;
 using namespace std;
 
-class cStanleyControl : public cTriggerFunction
+class cStanleyControl : public cFilter
 {
+public:
+	ADTF_CLASS_ID_NAME(cStanleyControl, CID_STANLEY_CONTROL_FILTER, LABEL_STANLEY_CONTROL_FILTER);
+
+	// necessary for proper behaviour of the create_inner_pipe call
+	using cRuntimeBehaviour::RegisterRunner;
+	using cRuntimeBehaviour::RegisterInnerPipe;
+
 private:
 
-    
     void calcSteeringAngle();
-    void mapSteeringAngle();
 
-    /*! Media Descriptions. */
-   struct tPositionIndex
-    {
-        tSize x;
-        tSize y;
-        tSize radius;
-        tSize speed;
-        tSize heading;
-    }m_ddlPositionIndex;
+	/* tPosition */
+	struct
+	{
+		tSize f32x;
+		tSize f32y;
+		tSize f32radius;
+		tSize f32speed;
+		tSize f32heading;
+	}  m_ddlPositionIndex;
+	cSampleCodecFactory m_PositionSampleFactory;
+	cPinReader m_ActualPointReader;
 
-   /*! The template data sample factory */
-   cSampleCodecFactory m_VirtualPointSampleFactory;
+	/* tTrajectory */
+	struct
+	{
+		tSize id;
+		tSize ax;
+		tSize bx;
+		tSize cx;
+		tSize dx;
+		tSize ay;
+		tSize by;
+		tSize cy;
+		tSize dy;
+		tSize start;
+		tSize end;
+		tSize backwards;
+	}  m_ddlTrajectoryIndex;
+	cSampleCodecFactory m_TrajectorySampleFactory;
+	cPinReader m_TrajectoryReader;
 
-   struct tSignalValueId
-   {
-	   tSize timeStamp;
-	   tSize value;
-   } m_ddlSignalValueId{};
-
-	// signal value
+	/* tSignalValue */
+	struct tSignalValueId
+	{
+		tSize timeStamp;
+		tSize value;
+	} m_ddlSignalValueId;
 	cSampleCodecFactory m_SignalValueSampleFactory;
+	cPinWriter m_SteeringWriter;
 
-
-    /*! Reader of an InPin. */
-    cPinReader m_oVPReaderIst;
-    /*! Writer to an OutPin. */
-    cPinWriter m_oWriter;
-
-    tFloat32 carX, carY, carHeading, carSpeed, sollX, sollY, sollHeading, sollSpeed;
-    tFloat32 carSteeringAngle, carSteeringValue;
-
-    LITD_VirtualPoint vp;
-    LITD_VirtualPoint carBackPosition;
-    LITD_VirtualPoint carFrontPosition;
-
-    LITD_Map map;
+	/*// Parameters of Polynomial
+	tFloat64 poly_x_a, poly_x_b, poly_x_c, poly_x_d, poly_y_a, poly_y_b, poly_y_c, poly_y_d;
+	// Actual vehicle position
+    tFloat64 vehicleActualPosition_x, vehicleActualPosition_y, vehicleActualHeading, vehicleActualSpeed;
+	// Target vehicle position
+	tFloat64 vehicleActualPosition_x, vehicleActualPosition_y, vehicleActualHeading, vehicleActualSpeed;*/
+    tFloat64 vehicleSteeringAngle;
+	tFloat64 vehicleSpeed;
+	//::tPosition vehicleActualPosition;
+	::tTrajectory trajectoryArray[TRAJECTORY_ARRAY_LEN];
+    LITD_VirtualPoint vehicleActualRearAxlePosition, vehicleActualFrontAxlePosition, vehicleTargetFrontAxlePosition;
 
     //controller params
-    tFloat32 stanleyGain = 1.5;
-    tFloat32 maxAngle = 45;
-
-    property_variable<cFilename> m_properties_file = cFilename("/home/aadc/share/adtf/configuration_files/properties/stanleycontrol_pid.ini");
-	FilePropertiesObserver* m_properties;
-    property_variable<tBool>       m_bShowDebug = tFalse;
-
-
-	/*! clock service */
-	object_ptr<adtf::services::IReferenceClock> m_pClock;
-
-    void calculateFrontPos();
-
+    //const double stanleyGain = 1.5;
 
 public:
 
@@ -102,18 +111,17 @@ public:
     /*! Destructor. */
     virtual ~cStanleyControl() = default;
 
-    /**
-    * Overwrites the Configure
-    * This is to Read Properties prepare your Trigger Function
-    */
-    tResult Configure() override;
-    /**
-    * Overwrites the Process
-    * You need to implement the Reading and Writing of Samples within this function
-    * MIND: Do Reading until the Readers queues are empty or use the IPinReader::GetLastSample()
-    * This FUnction will be called if the Run() of the TriggerFunction was called.
-    */
-    tResult Process(tTimeStamp tmTimeOfTrigger) override;
+	tResult Init(tInitStage eStage) override;
+
+    tResult Configure();
+
+    tResult ProcessTrajectories(tTimeStamp tmTimeOfTrigger);
+
+	tResult ProcessPosition(tTimeStamp tmTimeOfTrigger);
+
+	void updatePolyList(tTrajectory trajectory);
+
+	void calcVirtualPointfromPoly(tTrajectory poly, double p, LITD_VirtualPoint * vp);
 
 };
 
