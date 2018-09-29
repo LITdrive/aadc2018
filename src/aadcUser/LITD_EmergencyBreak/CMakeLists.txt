@@ -1,12 +1,12 @@
 cmake_minimum_required(VERSION 3.10.0)
 
-project(lsbreak_filter)
+project(litd_emergency_break)
 
 include_directories(${OpenCV_INCLUDE_DIRS})
 
 set (SOURCEFILES    	stdafx.h 
-						LSBreak.h
-						LSBreak.cpp)
+						LITD_EmergencyBreak.h
+						LITD_EmergencyBreak.cpp)
 
 adtf_add_filter(${PROJECT_NAME}
 				${SOURCEFILES}

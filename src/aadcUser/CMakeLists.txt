@@ -54,8 +54,9 @@ add_subdirectory(templates)
 
 # filters
 add_subdirectory(BirdsEyeView)
-add_subdirectory(LITD_FollowMe)
 add_subdirectory(FineLocalisation)
+add_subdirectory(LITD_FollowMe)
+add_subdirectory(LITD_EmergencyBreak)
 add_subdirectory(LITD_KeyboardControl)
 add_subdirectory(LITD_SpeedLimit)
 add_subdirectory(LITD_WheelSpeedController)

@@ -14,11 +14,11 @@ THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS AS IS AND ANY EXPRESS OR I
 **********************************************************************/
 
 #include "stdafx.h"
-#include "LSBreak.h"
+#include "LITD_EmergencyBreak.h"
 #include <aadc_structs.h>
 
 ADTF_TRIGGER_FUNCTION_FILTER_PLUGIN(CID_TEMPLATEFILTER_DATA_TRIGGERED_FILTER,
-    "LSBreak_cf",
+    "LITD Emergency Break",
     cLSBreak,
     adtf::filter::pin_trigger({"input"}));
 
