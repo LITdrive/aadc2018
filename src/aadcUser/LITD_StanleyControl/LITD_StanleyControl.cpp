@@ -14,11 +14,10 @@ THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS AS IS AND ANY EXPRESS OR I
 **********************************************************************/
 
 #define _USE_MATH_DEFINES
-#include "stdafx.h"
 #include "LITD_StanleyControl.h"
 #include <cmath>
+#include <cfloat>
 #include "math_utilities.h"
-#include <aadc_structs.h>
 
 /* notes to check
 [] actual speed has to be in car-struct
@@ -260,7 +259,7 @@ void cStanleyControl::updatePolyList(tTrajectory trajectory) {
 	steeringAngle = calcSteeringAngle(frontAxlePosition, idealPoint, carSpeed);
 } */
 
-void cStanleyControl::getNextVirtualPointOnPoly(tTrajectoryArrayId polys[], uint8_t polyLen, tTrajectoryId* idealPolyPoint, LITD_VirtualPoint* idealPoint, LITD_VirtualPoint carPosition) {
+void cStanleyControl::getNextVirtualPointOnPoly(tTrajectory trajectories[], uint8_t polyLen, tTrajectory* idealPolyPoint, LITD_VirtualPoint* idealPoint, LITD_VirtualPoint carPosition) {
 
 	LITD_VirtualPoint actPoint;
 	double min_dist = DBL_MAX;
@@ -276,7 +275,7 @@ void cStanleyControl::getNextVirtualPointOnPoly(tTrajectoryArrayId polys[], uint
 		{
 			// p = [0, 1]
 			double p = j / POINTS_PER_POLY;
-			calcVirtualPointfromPoly(trajectoryArray[i], p, &actPoint);
+			calcVirtualPointfromPoly(&trajectories[i], p, &actPoint);
 
 			//calc norm to carPosition
 			double dist = sqrt(pow(actPoint.x - carPosition.x, 2) + pow(actPoint.y - carPosition.y, 2));
@@ -294,8 +293,9 @@ void cStanleyControl::getNextVirtualPointOnPoly(tTrajectoryArrayId polys[], uint
 	}
 
 	// Function value and ID of Poly with smallest distance to given car point
-	idealPolyPoint->id = polys[min_poly_index].id;
-	idealPolyPoint->p = min_poly_p;
+	idealPolyPoint->id = trajectories[min_poly_index].id;
+	// TODO: not compiling, there is no parameter p
+	// idealPolyPoint->p = min_poly_p;
 
 	// Point on Poly with smallest distance to given car point
 	idealPoint->x = min_dist_x;
@@ -303,13 +303,13 @@ void cStanleyControl::getNextVirtualPointOnPoly(tTrajectoryArrayId polys[], uint
 	idealPoint->h = min_dist_h;
 }
 
-void cStanleyControl::calcVirtualPointfromPoly(tTrajectory poly, double p, LITD_VirtualPoint* vp) {
-	double x = poly.ax * pow(p, 3) + poly.bx * pow(p, 2) + poly.cx * p + poly.dx;
-	double y = poly.ay * pow(p, 3) + poly.by * pow(p, 2) + poly.cy * p + poly.dy;
+void cStanleyControl::calcVirtualPointfromPoly(tTrajectory* poly, double p, LITD_VirtualPoint* vp) {
+	double x = poly->ax * pow(p, 3) + poly->bx * pow(p, 2) + poly->cx * p + poly->dx;
+	double y = poly->ay * pow(p, 3) + poly->by * pow(p, 2) + poly->cy * p + poly->dy;
 
 	//tangente durch erste ableitung berechnen
-	double x_der = poly.ax * pow(p, 2) + poly.bx * p + poly.cx;
-	double y_der = poly.ay * pow(p, 2) + poly.by * p + poly.cy;
+	double x_der = poly->ax * pow(p, 2) + poly->bx * p + poly->cx;
+	double y_der = poly->ay * pow(p, 2) + poly->by * p + poly->cy;
 
 	double heading = wrapTo2Pi(atan2(y_der, x_der));
 

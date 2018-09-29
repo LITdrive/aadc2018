@@ -17,6 +17,7 @@ THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS AS IS AND ANY EXPRESS OR I
 
 #include "stdafx.h"
 #include "LITD_VirtualPoint.h"
+#include <aadc_structs.h>
 
 //*************************************************************************************************
 #define CID_STANLEY_CONTROL_FILTER "litd_stanley_control.filter.user.aadc.cid"
@@ -117,11 +118,15 @@ public:
 
     tResult ProcessTrajectories(tTimeStamp tmTimeOfTrigger);
 
+	void calculateFrontAxlePosition(LITD_VirtualPoint rearAxlePosition, LITD_VirtualPoint* frontAxlePosition);
+
 	tResult ProcessPosition(tTimeStamp tmTimeOfTrigger);
 
 	void updatePolyList(tTrajectory trajectory);
 
-	void calcVirtualPointfromPoly(tTrajectory poly, double p, LITD_VirtualPoint * vp);
+	void getNextVirtualPointOnPoly(tTrajectory trajectories[], uint8_t polyLen, tTrajectory* idealPolyPoint, LITD_VirtualPoint* idealPoint, LITD_VirtualPoint carPosition);
+
+	void calcVirtualPointfromPoly(tTrajectory* poly, double p, LITD_VirtualPoint * vp);
 
 };
 
