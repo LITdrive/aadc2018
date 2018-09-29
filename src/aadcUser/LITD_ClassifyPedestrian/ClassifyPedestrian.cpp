@@ -108,24 +108,24 @@ tResult cClassifyPedestrian::Process(tTimeStamp tmTimeOfTrigger)
 
 
         const tVoid* ptr1 = oDecoder2.GetElementAddress(m_ddlTrackletLocationId.StartPoint);
-        const tSize* ptrSP = reinterpret_cast<const tSize*>(ptr1);
+        const tFloat32* ptrSP = reinterpret_cast<const tFloat32*>(ptr1);
 
         const tVoid* ptr2 = oDecoder2.GetElementAddress(m_ddlTrackletLocationId.TrackletDimension);
-        const tSize* ptrTD = reinterpret_cast<const tSize*>(ptr2);
+        const tFloat32* ptrTD = reinterpret_cast<const tFloat32*>(ptr2);
         //to be fixed
-        tSize referenceDist = 100;
-        tSize referenceTall = 10;
-        tSize referenceShort = 3;
+        tFloat32 referenceDist = 100;
+        tFloat32 referenceTall = 10;
+        tFloat32 referenceShort = 3;
 
-        tSize PedestrianDepth = 0;
-        tSize PedestrianNoPoints = 0;
-        tSize InitCol = ptrSP[0];
-        tSize PedestrianHeight = ptrTD[1];
-        tSize FinCol = ptrSP[0] + ptrTD[0];
-        tSize midCol = 480;
+        tFloat32 PedestrianDepth = 0;
+        tFloat32 PedestrianNoPoints = 0;
+        tFloat32 InitCol = ptrSP[0];
+        tFloat32 PedestrianHeight = ptrTD[1];
+        tFloat32 FinCol = ptrSP[0] + ptrTD[0];
+        tFloat32 midCol = 480;
         //init theta is negative if it is left of center
-        tSize Inittheta  = 90 - acos((InitCol - midCol)/midCol);
-        tSize Fintheta   = 90 - acos((FinCol -  midCol)/midCol);
+        tFloat32 Inittheta  = 90 - acos((InitCol - midCol)/midCol);
+        tFloat32 Fintheta   = 90 - acos((FinCol -  midCol)/midCol);
 
         if (IS_OK(m_oInputLaserScanner.GetLastSample(pLSSample)))
         {
@@ -176,8 +176,8 @@ tResult cClassifyPedestrian::Process(tTimeStamp tmTimeOfTrigger)
                 PedestrianDepth /= PedestrianNoPoints;
             }
 
-            tSize expectedHeightTall  = (referenceTall*PedestrianDepth)/referenceDist;
-            tSize expectedHeightShort = (referenceShort*PedestrianDepth)/referenceDist;
+            tFloat32 expectedHeightTall  = (referenceTall*PedestrianDepth)/referenceDist;
+            tFloat32 expectedHeightShort = (referenceShort*PedestrianDepth)/referenceDist;
             if (abs(expectedHeightTall - PedestrianHeight) < abs(expectedHeightShort - PedestrianHeight))
             {//tall pedestrian
                 OutputResult = 1;
