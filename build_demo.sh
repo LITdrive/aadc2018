@@ -1,5 +1,7 @@
 #!/bin/sh
 
+# return on errors
+set -e
 
 if which cmake > /dev/null; then
     echo "cmake found"

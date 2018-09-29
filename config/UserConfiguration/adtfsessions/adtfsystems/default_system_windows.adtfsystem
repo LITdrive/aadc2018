@@ -9,7 +9,7 @@
   <environment>
     <variable>
       <name>BIN_DIR</name>
-      <value>Z:/aadc2018-filter-porting/_install/bin</value>
+      <value>Z:/AADC2018_gitlab/filter-porting/_install/bin</value>
     </variable>
   </environment>
   <dependencies>
@@ -103,7 +103,52 @@
   </dependencies>
   <plugins>
     <plugin>
+      <url>$(BIN_DIR)/debug/fisheye_undistortion.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(BIN_DIR)/debug/marker_detector.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(BIN_DIR)/debug/converter_wheels.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(BIN_DIR)/debug/driver_module.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(BIN_DIR)/debug/marker_positioning.adtfplugin</url>
+    </plugin>
+    <plugin>
       <url>$(ADTF_DIR)/bin/default_core_objects.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(BIN_DIR)/debug/map_visualization.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(ADTF_DIR)/src/examples/bin/demo_qt_video_display.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(BIN_DIR)/debug/arduino_battery_sensor.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(BIN_DIR)/debug/arduino_egomotion_sensor.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(BIN_DIR)/debug/arduino_us_sensors.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(BIN_DIR)/debug/basler_camera.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(BIN_DIR)/debug/universal_camera.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(BIN_DIR)/debug/laser_scanner.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(BIN_DIR)/debug/jury_communication_tcp.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(BIN_DIR)/debug/arduino_actuator.adtfplugin</url>
     </plugin>
     <plugin>
       <url>$(ADTF_DIR)/bin/adtf_ipc_tcp.adtfplugin</url>
@@ -124,8 +169,10 @@
       <url>$(ADTF_DIR)/bin/adtf_media_description.adtfplugin</url>
     </plugin>
     <plugin>
-      <url>$(ADTF_DIR)/src/examples/bin/demo_qt_video_display.adtfplugin</url>
+      <url>$(ADTF_DIR)/bin/adtf_log_view.adtfplugin</url>
     </plugin>
+  </plugins>
+  <debug_plugins>
     <plugin>
       <url>$(BIN_DIR)/debug/fisheye_undistortion.adtfplugin</url>
     </plugin>
@@ -142,7 +189,13 @@
       <url>$(BIN_DIR)/debug/marker_positioning.adtfplugin</url>
     </plugin>
     <plugin>
+      <url>$(ADTF_DIR)/bin/debug/default_core_objects.adtfplugin</url>
+    </plugin>
+    <plugin>
       <url>$(BIN_DIR)/debug/map_visualization.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(ADTF_DIR)/src/examples/bin/debug/demo_qt_video_display.adtfplugin</url>
     </plugin>
     <plugin>
       <url>$(BIN_DIR)/debug/arduino_battery_sensor.adtfplugin</url>
@@ -163,12 +216,10 @@
       <url>$(BIN_DIR)/debug/laser_scanner.adtfplugin</url>
     </plugin>
     <plugin>
-      <url>$(BIN_DIR)/debug/arduino_actuator.adtfplugin</url>
+      <url>$(BIN_DIR)/debug/jury_communication_tcp.adtfplugin</url>
     </plugin>
-  </plugins>
-  <debug_plugins>
     <plugin>
-      <url>$(ADTF_DIR)/bin/debug/default_core_objects.adtfplugin</url>
+      <url>$(BIN_DIR)/debug/arduino_actuator.adtfplugin</url>
     </plugin>
     <plugin>
       <url>$(ADTF_DIR)/bin/debug/adtf_ipc_tcp.adtfplugin</url>
@@ -189,46 +240,7 @@
       <url>$(ADTF_DIR)/bin/debug/adtf_media_description.adtfplugin</url>
     </plugin>
     <plugin>
-      <url>$(ADTF_DIR)/src/examples/bin/debug/demo_qt_video_display.adtfplugin</url>
-    </plugin>
-    <plugin>
-      <url>$(BIN_DIR)/debug/fisheye_undistortion.adtfplugin</url>
-    </plugin>
-    <plugin>
-      <url>$(BIN_DIR)/debug/marker_detector.adtfplugin</url>
-    </plugin>
-    <plugin>
-      <url>$(BIN_DIR)/debug/converter_wheels.adtfplugin</url>
-    </plugin>
-    <plugin>
-      <url>$(BIN_DIR)/debug/driver_module.adtfplugin</url>
-    </plugin>
-    <plugin>
-      <url>$(BIN_DIR)/debug/marker_positioning.adtfplugin</url>
-    </plugin>
-    <plugin>
-      <url>$(BIN_DIR)/debug/map_visualization.adtfplugin</url>
-    </plugin>
-    <plugin>
-      <url>$(BIN_DIR)/debug/arduino_battery_sensor.adtfplugin</url>
-    </plugin>
-    <plugin>
-      <url>$(BIN_DIR)/debug/arduino_egomotion_sensor.adtfplugin</url>
-    </plugin>
-    <plugin>
-      <url>$(BIN_DIR)/debug/arduino_us_sensors.adtfplugin</url>
-    </plugin>
-    <plugin>
-      <url>$(BIN_DIR)/debug/basler_camera.adtfplugin</url>
-    </plugin>
-    <plugin>
-      <url>$(BIN_DIR)/debug/universal_camera.adtfplugin</url>
-    </plugin>
-    <plugin>
-      <url>$(BIN_DIR)/debug/laser_scanner.adtfplugin</url>
-    </plugin>
-    <plugin>
-      <url>$(BIN_DIR)/debug/arduino_actuator.adtfplugin</url>
+      <url>$(ADTF_DIR)/bin/debug/adtf_log_view.adtfplugin</url>
     </plugin>
   </debug_plugins>
   <services>
@@ -255,6 +267,11 @@
     <service>
       <classid>media_description.service.adtf.cid</classid>
       <objectid>media_description.service.adtf</objectid>
+      <runlevel>system</runlevel>
+    </service>
+    <service>
+      <classid>log_view.ui_service.adtf.cid</classid>
+      <objectid>log_view.ui_service.adtf</objectid>
       <runlevel>system</runlevel>
     </service>
   </services>

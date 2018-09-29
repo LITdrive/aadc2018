@@ -1,0 +1,3 @@
+add_subdirectory(OpenCVTemplate)
+add_subdirectory(TemplateFilter)
+add_subdirectory(playground)

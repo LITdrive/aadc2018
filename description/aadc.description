@@ -25,7 +25,7 @@
  <enums />
  <structs>
   <struct alignment="1" name="tJuryStruct" version="1">
-   <element alignment="1" arraysize="1" byteorder="LE" bytepos="0" name="i16ActionID" type="tInt8" />
+   <element alignment="1" arraysize="1" byteorder="LE" bytepos="0" name="i16ActionID" type="tInt16" />
    <element alignment="1" arraysize="1" byteorder="LE" bytepos="2" name="i16ManeuverEntry" type="tInt16" />
   </struct>
   <struct alignment="1" name="tDriverStruct" version="1">
