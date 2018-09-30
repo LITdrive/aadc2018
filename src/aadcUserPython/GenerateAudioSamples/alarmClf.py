@@ -56,6 +56,7 @@ def mySpec(sig,fs,nfft):
     return a, freqs, t
     #plt.imshow((np.log(a)))
 
+recordings=[] #TODO DELETE
 while True:
     #record
     sig = sd.rec(int(duration * fs), samplerate=fs, channels=1)
@@ -84,5 +85,6 @@ while True:
     prob2 = computeEngineeringSol(spectrum)
     
     fin = (prob+prob2)
+    recordings.append([prob,prob2]) #TODO DELETE
     
     print('lr: {:4.0f}% engineeringSol: {:4.0f} finDecision: {}'.format(prob[0]*100, prob2*100,fin>0.5), end='\n')

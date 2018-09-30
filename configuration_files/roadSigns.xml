@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="iso-8859-1" standalone="no"?>
-<configuration>		
-	<roadSign id="10" x="0.000" y="0.000" radius="1.0" direction="90"/>
+<configuration>
+	<roadSign id="11" x="1.0" y="2.0" radius="1.0" direction="0" init="1"/>
+	<roadSign id="6" x="1.0" y="3.0" radius="1.0" direction="0"/>
+	<roadSign id="12" x="4.5" y="4.5" radius="1.0" direction="0"/>
+	<roadSign id="9" x="3.0" y="2.0" radius="1.0" direction="0"/>
+	<roadSign id="5" x="2.0" y="1.0" radius="1.0" direction="0"/>
 </configuration>

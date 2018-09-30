@@ -15,8 +15,19 @@ THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS AS IS AND ANY EXPRESS OR I
 
 ###: ADTF Source Package:
 
-Version:        1.0.2
-Date:           2018.06.29
+Version:        1.1.0
+Date:           2018.09.17
+*   change BaslerCamera Property Naming unit for frame delay from [ms] to [micro s] to highlight that the frame delay is set in micro seconds
+*   added microphone streaming source
+*   added microphone visualization filter to visualize data from the microphone streaming source
+*   reworked jury communication added jury communication streaming sink and source, adapted drivermodule - see SW description for more details
+*   reimplemented jury procedure. Now there is a streaming sink to receive all the data from the Jury Application, an example Driver Module for showing how to process this data, and a streaming sink to sent data back to the Jury Application. See SW description for more details.
+*   moved jury application to base project
+*   extended jury application with some UI features
+*   fixed bug with wrong image size in marker detector filter
+*   fixed inconsistency for merge_left and merge_right in "aadc_jury.h"
+*   Marker positioning filter now receives road sign map also over input pin and some algorithm improvements
+*   Map Visualization now receives map over input pin 
 
 
 ###: changes:
