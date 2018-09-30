@@ -1,13 +1,14 @@
 import zmq
 import numpy as np
 
-from typing import Iterable
+from typing import Iterable, Union, Tuple
 
 from .parser import pack, unpack, unpack_dict, FORMATS
 
 
 class ZmqServer:
-    def __init__(self, address: str, inputs: Iterable[str] = None, outputs: Iterable[str] = None):
+    def __init__(self, address: str,
+                 inputs: Iterable[Union[str, Tuple[str, int, int]]] = None, outputs: Iterable[str] = None):
         self._address = address
         self._inputs = inputs if inputs else []
         self._outputs = outputs if outputs else []
@@ -25,7 +26,6 @@ class ZmqServer:
 
         self._context = zmq.Context()
         self._socket = None
-        self._process = None
 
     def connect(self):
         if not self._socket:
@@ -42,9 +42,6 @@ class ZmqServer:
         if self._socket:
             self._socket.disconnect()
 
-    def set_process(self, process):
-        self._process = process
-
     @staticmethod
     def _unpack_image(blob, height, width):
         if len(blob) == 0:
@@ -56,36 +53,44 @@ class ZmqServer:
 
         return np.frombuffer(blob, dtype=np.uint8).reshape((height, width, 3))
 
-    def run(self, process, return_dict):
+    def run(self, process, return_dict: bool = False):
         if not process:
-            print("No process() method set.")
+            return
+
+        # cache member variables locally for fast lookup
+        socket = self._socket
+        inputs = self._inputs
+        input_fmts = self._input_fmts
+        output_fmts = self._output_fmts
+        images_available = self._images_available
+        images = []
 
         while True:
-            request_blob = self._socket.recv_multipart()
+            request_blob = socket.recv_multipart()
 
             # unpack all the images first
-            images = []
-            if self._images_available:
+            if images_available:
+                images.clear()
                 for pin_index, (_, height, width) in self._inputs_img:
                     image = ZmqServer._unpack_image(request_blob[pin_index], height, width)
                     images.append(image)
                     del request_blob[pin_index]
 
             # fast-path unpacking
-            request = [unpack_dict(req, dtype=dtype) for req, dtype in zip(request_blob, self._inputs)] if return_dict \
-                else [unpack(req, fmt_str=fmt) for req, fmt in zip(request_blob, self._input_fmts)]
+            request = [unpack_dict(req, dtype=dtype) for req, dtype in zip(request_blob, inputs)] if return_dict \
+                else [unpack(req, fmt_str=fmt) for req, fmt in zip(request_blob, input_fmts)]
 
             # insert images into result
-            if self._images_available:
+            if images_available:
                 for image_index, (pin_index, _) in enumerate(self._inputs_img):
                     request.insert(pin_index, images.pop(image_index))
 
             reply = process(*request)
             reply_blob = [pack(rep, fmt_str=fmt)
-                          for rep, fmt in zip(reply, self._output_fmts)] if reply else None
+                          for rep, fmt in zip(reply, output_fmts)] if reply else None
 
             # handle empty replies
             if reply:
-                self._socket.send_multipart(reply_blob)
+                socket.send_multipart(reply_blob)
             else:
-                self._socket.send(b'')
+                socket.send(b'')
