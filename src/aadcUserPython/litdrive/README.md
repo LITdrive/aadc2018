@@ -10,7 +10,7 @@ Be sure to activate the environment if you are using Anaconda:
 
 You need to execute every module from the project root (here), and call the package like so:
 
-    python -m zeromq.template
+    python -m litdrive.demo.sensors
 
 ## Requirements
 

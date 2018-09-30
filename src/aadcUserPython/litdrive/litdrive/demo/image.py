@@ -5,7 +5,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-from zeromq.server import ZmqServer
+from ..zeromq.server import ZmqServer
 
 IMAGE_HEIGHT = 960
 IMAGE_WIDTH = 1280

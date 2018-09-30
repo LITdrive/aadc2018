@@ -4,7 +4,7 @@
 
 import json
 
-from zeromq.server import ZmqServer
+from ..zeromq.server import ZmqServer
 
 # open a server for the filter
 zmq = ZmqServer("tcp://*:5555",
