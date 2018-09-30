@@ -936,10 +936,6 @@
           <properties/>
         </property_set>
         <property_set>
-          <name>services/qt_xsystem.ui_service.adtf</name>
-          <properties/>
-        </property_set>
-        <property_set>
           <name>services/reference_clock.service.adtf</name>
           <properties/>
         </property_set>
@@ -952,11 +948,15 @@
           <properties/>
         </property_set>
         <property_set>
-          <name>services/log_view.ui_service.adtf</name>
+          <name>services/qt_xsystem.ui_service.adtf</name>
           <properties/>
         </property_set>
         <property_set>
           <name>services/adtf_file_support.service.adtf</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>services/log_view.ui_service.adtf</name>
           <properties/>
         </property_set>
       </property_sets>
