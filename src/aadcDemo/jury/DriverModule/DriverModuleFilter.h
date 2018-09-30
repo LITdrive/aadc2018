@@ -18,6 +18,7 @@ THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS AS IS AND ANY EXPRESS OR I
 #include "stdafx.h"
 #include "DriverModuleWidget.h"
 #include <a_utils/core/a_utils_core.h>
+#include <aadc_structs.h>
 
 #define CID_CAR_CONTROLLER  "driver_module.filter.demo.aadc.cid"
 #define LABEL_CAR_CONTROLLER  "Driver Module"
@@ -32,6 +33,7 @@ class DriverModule : public QObject, virtual public cQtUIFilter
     * \param i16ManeuverEntry current entry to be sent
     */
     tResult OnSendState(aadc::jury::stateCar stateID, tInt16 i16ManeuverEntry);
+    tResult TransmitDriverStruct(tDriverStruct& driverStruct);
 
     /*! this functions loads the maneuver list given in the properties
     * \result Returns a standard result code.
@@ -65,9 +67,6 @@ public:
 private:
     /*! The property enable console output */
     property_variable<tBool> m_propEnableConsoleOutput = tFalse;
-
-    /*! The property TCP port */
-    property_variable<tInt>    m_propTCPPort = 1234;
 
 
     /*! sample writer of The output driver structure */
@@ -111,13 +110,6 @@ private:
     /*! The mutex */
     std::mutex m_oMutex;
 
-    /*! The server socket */
-    cServerSocket m_serverSocket;
-    /*! The stream socket */
-    cStreamSocket m_streamSocket;
-
-    /*! The client connection established */
-    tBool m_clientConnectionEstablished;
 public:
     /*! Default constructor. */
     DriverModule();
@@ -132,10 +124,4 @@ protected: // Implement cBaseQtFilter
     tResult  Init(tInitStage eStage) override;
     tResult  Shutdown(cFilterLevelmachine::tInitStage eStage) override;
 
-    /*!
-     * Constructor.
-     *
-     * \param [in,out]  data    The data.
-     */
-    ::adtf_util::cResult ReceiveTCPData(std::vector<tChar>& data);
 };

@@ -16,9 +16,9 @@ THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS “AS IS” AND ANY EXPRESS OR
 * $Author:: spiesra $  $Date:: 2017-05-11 16:43:59#$ $Rev:: 63082   $
 **********************************************************************/
 
-//#pragma once
+#pragma once
 
-#include <string>
+#include <string.h>
 #include <vector>
 
 namespace aadc
@@ -107,10 +107,10 @@ namespace aadc
                     return std::string("pull_out_right");
                     break;
                 case maneuver_merge_left:
-                    return std::string("pull_merge_left");
+                    return std::string("merge_left");
                     break;
                 case maneuver_merge_right:
-                    return std::string("pull_merge_right");
+                    return std::string("merge_right");
                     break;
 				default:
                     return std::string("");
@@ -148,11 +148,11 @@ namespace aadc
             {
                 return maneuver_pull_out_right;
             }
-            else if (man.compare("pull_merge_left") == 0)
+            else if (man.compare("merge_left") == 0)
             {
                 return maneuver_merge_left;
             }
-            else if (man.compare("pull_merge_right") == 0)
+            else if (man.compare("merge_right") == 0)
             {
                 return maneuver_merge_right;
             }
@@ -185,7 +185,58 @@ namespace aadc
 		/*! the maneuver list which contains multiple sectors */
 		typedef std::vector<tSector> maneuverList;
 		
-			
+		enum juryContainerId: int 
+		{
+			container_id_unkown = 0,
+			container_id_juryStruct,
+			container_id_maneuverlist,
+			container_id_opendrive_map,
+			container_id_traffic_sign_map
+		};
+		
+		struct tJuryContainer
+		{
+			juryContainerId id;
+			int dataSize;
+			char* data;
+
+        };
+
+        static bool serializeContainer(const tJuryContainer& container, std::vector<char>& serialized)
+        {
+            serialized.clear();
+            if (container.dataSize <= 0)
+            {
+                return false;
+            }
+            serialized.resize(sizeof(container.id) + sizeof(container.dataSize) + container.dataSize);
+            size_t dataOffset = serialized.size() - container.dataSize;
+            //copy container header
+            memcpy(serialized.data(), &container, dataOffset);
+            //copy payload
+            memcpy(serialized.data() + dataOffset, container.data, container.dataSize);
+            return true;
+        }
+
+        static bool deserializeContainer(const std::vector<char>& serialized, tJuryContainer& container)
+        {
+            if (serialized.size() < sizeof tJuryContainer::id + sizeof tJuryContainer::dataSize + 1)
+            {   //make sure the we have at least one byte of data
+                return false;
+            }
+            //first int is the id
+            container.id = *reinterpret_cast<const aadc::jury::juryContainerId*>(&serialized[0]);
+            //second is the size
+            container.dataSize = *reinterpret_cast<const int*>(&serialized[4]);
+            if (static_cast<size_t>(container.dataSize) != serialized.size() - (sizeof(container.id) + sizeof(container.dataSize)))
+            {   //inconsitency in payload and container size
+                return false;
+            }
+            //then dynamic sized data
+            container.data = reinterpret_cast<char*>(malloc(container.dataSize));
+            memcpy(container.data, &serialized[8], container.dataSize);
+            return true;
+        }
 	
 	}
 }

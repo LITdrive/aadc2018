@@ -21,7 +21,18 @@ ADTF_PLUGIN("LITD Keyboard Control Plugin", cKeyboardControlFilter);
 
 cKeyboardControlFilter::cKeyboardControlFilter()
 {
-	RegisterPropertyVariable("update interval [msec]", m_f64updateInterval);
+	RegisterPropertyVariable("speed: default value", m_speed_default_value);
+	RegisterPropertyVariable("speed: maximum", m_speed_max_value);
+	RegisterPropertyVariable("speed: minimum", m_speed_min_value);
+	RegisterPropertyVariable("speed: increment step", m_speed_increment_value);
+
+	RegisterPropertyVariable("steering: default value", m_steering_offset_default_value);
+	RegisterPropertyVariable("steering: maximum", m_steering_offset_max_value);
+	RegisterPropertyVariable("steering: minimum", m_steering_offset_min_value);
+	RegisterPropertyVariable("steering: increment step", m_steering_offset_increment_value);
+
+	RegisterPropertyVariable("key debounce timeout [msec]", m_min_debounce_timeout);
+	RegisterPropertyVariable("update interval [msec]", m_update_interval);
 
 	object_ptr<IStreamType> pTypeSignalValue;
 	if
@@ -44,7 +55,7 @@ cKeyboardControlFilter::cKeyboardControlFilter()
 
 QWidget* cKeyboardControlFilter::CreateView()
 {
-	m_pUiFileWidget = new cKeyboardControlWidget(nullptr, m_f64updateInterval);
+	m_pUiFileWidget = new cKeyboardControlWidget(nullptr, this);
 
 	connect(m_pUiFileWidget, SIGNAL(sendSteering(tFloat32)), this, SLOT(SendSteering(tFloat32)));
 	connect(m_pUiFileWidget, SIGNAL(sendSpeed(tFloat32)), this, SLOT(SendSpeed(tFloat32)));

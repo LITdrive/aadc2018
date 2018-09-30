@@ -32,7 +32,7 @@ else(AADC_FOUND)
    message(FATAL_ERROR "-- AADC not found")
 endif (AADC_FOUND)
 
-find_package(ADTF REQUIRED)
+find_package(ADTF 3.3.0 REQUIRED)
 message(STATUS "Found ADTF: ${ADTF_VERSION}")
 
 #--------------add private macros-----------------
@@ -43,12 +43,21 @@ include(${AADC_DIR}/AADCConfigVersion.cmake)
 include_directories(${AADC_DIR}/include)
 include_directories(${CMAKE_INSTALL_INCLUDE})
 
+# system services
+add_subdirectory(services)
 
-add_subdirectory(OpenCVTemplate)
-add_subdirectory(TemplateFilter)
-add_subdirectory(playground)
-#add_subdirectory(MQSensorStreamer)
+# utilities
+add_subdirectory(utils)
+
+# templates
+add_subdirectory(templates)
+
+# filters
 add_subdirectory(BirdsEyeView)
 add_subdirectory(FineLocalisation)
+add_subdirectory(LITD_FollowMe)
+add_subdirectory(LITD_EmergencyBreak)
 add_subdirectory(LITD_KeyboardControl)
 add_subdirectory(LITD_SpeedLimit)
+add_subdirectory(LITD_WheelSpeedController)
+add_subdirectory(LITD_ZMQ_Template)

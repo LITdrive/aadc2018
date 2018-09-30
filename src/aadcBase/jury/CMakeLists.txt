@@ -1,0 +1,3 @@
+add_subdirectory(JuryCommunication)
+add_subdirectory(JuryApplication)
+

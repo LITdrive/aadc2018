@@ -9,7 +9,7 @@
   <environment>
     <variable>
       <name>BIN_DIR</name>
-      <value>Z:/aadc2018-filter-porting/_install/bin/debug</value>
+      <value>Z:/2018/AADC-filter-porting_gitlab/_install/bin</value>
     </variable>
   </environment>
   <dependencies>
@@ -47,6 +47,9 @@
         <library>
           <url>$(ADTF_DIR)/3rdparty/qt5/bin/Qt5Quick.dll</url>
         </library>
+        <library>
+          <url>$(ADTF_DIR)/3rdparty/qt5/bin/Qt5Multimedia.dll</url>
+        </library>
       </libraries>
     </platform>
     <platform>
@@ -78,6 +81,9 @@
         </library>
         <library>
           <url>$(ADTF_DIR)/3rdparty/qt5/bin/Qt5Quickd.dll</url>
+        </library>
+        <library>
+          <url>$(ADTF_DIR)/3rdparty/qt5/bin/Qt5Multimediad.dll</url>
         </library>
       </libraries>
     </platform>
@@ -139,13 +145,61 @@
   </dependencies>
   <plugins>
     <plugin>
+      <url>$(BIN_DIR)/debug/sensor_visualization.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(BIN_DIR)/debug/car_controller.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(ADTF_DIR)/bin/default_core_objects.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(ADTF_DIR)/src/examples/bin/demo_qt_video_display.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(BIN_DIR)/debug/object_detection.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(BIN_DIR)/debug/fisheye_undistortion.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(BIN_DIR)/debug/marker_detector.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(BIN_DIR)/debug/camera_calibration.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(BIN_DIR)/debug/arduino_egomotion_sensor.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(BIN_DIR)/debug/arduino_us_sensors.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(BIN_DIR)/debug/arduino_battery_sensor.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(BIN_DIR)/debug/basler_camera.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(BIN_DIR)/debug/universal_camera.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(BIN_DIR)/debug/laser_scanner.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(BIN_DIR)/debug/arduino_actuator.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(ADTF_DIR)/bin/adtf_playback_input.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(ADTF_DIR)/bin/adtf_recorder.adtfplugin</url>
+    </plugin>
+    <plugin>
       <url>$(ADTF_DIR)/bin/adtf_kernel.adtfplugin</url>
     </plugin>
     <plugin>
       <url>$(ADTF_DIR)/bin/adtf_clock.adtfplugin</url>
-    </plugin>
-    <plugin>
-      <url>$(ADTF_DIR)/bin/default_core_objects.adtfplugin</url>
     </plugin>
     <plugin>
       <url>$(ADTF_DIR)/bin/adtf_signal_registry.adtfplugin</url>
@@ -166,81 +220,90 @@
       <url>$(ADTF_DIR)/bin/adtf_sample_stream_trace_view_ui.adtfplugin</url>
     </plugin>
     <plugin>
-      <url>$(ADTF_DIR)/src/examples/bin/demo_qt_video_display.adtfplugin</url>
-    </plugin>
-    <plugin>
-      <url>$(ADTF_DIR)/addons/displaytoolbox/bin/signal_tree_view.adtfplugin</url>
-    </plugin>
-    <plugin>
-      <url>$(ADTF_DIR)/addons/displaytoolbox/bin/signal_table_view.adtfplugin</url>
-    </plugin>
-    <plugin>
-      <url>$(ADTF_DIR)/bin/debug/adtf_file_support.adtfplugin</url>
+      <url>$(ADTF_DIR)/bin/adtf_file_support.adtfplugin</url>
     </plugin>
     <plugin>
       <url>$(ADTF_DIR)/bin/adtf_playback.adtfplugin</url>
     </plugin>
     <plugin>
-      <url>$(ADTF_DIR)/bin/adtf_playback_input.adtfplugin</url>
+      <url>$(ADTF_DIR)/addons/displaytoolbox/bin/signal_table_view.adtfplugin</url>
     </plugin>
     <plugin>
-      <url>$(ADTF_DIR)/bin/adtf_recorder.adtfplugin</url>
-    </plugin>
-    <plugin>
-      <url>$(BIN_DIR)/arduino_egomotion_sensor.adtfplugin</url>
-    </plugin>
-    <plugin>
-      <url>$(BIN_DIR)/arduino_us_sensors.adtfplugin</url>
-    </plugin>
-    <plugin>
-      <url>$(BIN_DIR)/arduino_actuator.adtfplugin</url>
-    </plugin>
-    <plugin>
-      <url>$(BIN_DIR)/arduino_battery_sensor.adtfplugin</url>
-    </plugin>
-    <plugin>
-      <url>$(BIN_DIR)/fisheye_undistortion.adtfplugin</url>
-    </plugin>
-    <plugin>
-      <url>$(BIN_DIR)/marker_detector.adtfplugin</url>
-    </plugin>
-    <plugin>
-      <url>$(BIN_DIR)/sensor_visualization.adtfplugin</url>
-    </plugin>
-    <plugin>
-      <url>$(BIN_DIR)/opencv_template.adtfplugin</url>
-    </plugin>
-    <plugin>
-      <url>$(BIN_DIR)/object_detection.adtfplugin</url>
-    </plugin>
-    <plugin>
-      <url>$(BIN_DIR)/laser_scanner.adtfplugin</url>
-    </plugin>
-    <plugin>
-      <url>$(BIN_DIR)/basler_camera.adtfplugin</url>
-    </plugin>
-    <plugin>
-      <url>$(BIN_DIR)/universal_camera.adtfplugin</url>
+      <url>$(ADTF_DIR)/addons/displaytoolbox/bin/signal_tree_view.adtfplugin</url>
     </plugin>
     <plugin>
       <url>$(ADTF_DIR)/addons/displaytoolbox/bin/signal_scope_view.adtfplugin</url>
     </plugin>
     <plugin>
-      <url>$(BIN_DIR)/car_controller.adtfplugin</url>
+      <url>$(BIN_DIR)/debug/jury_communication_tcp.adtfplugin</url>
     </plugin>
     <plugin>
-      <url>$(BIN_DIR)/camera_calibration.adtfplugin</url>
+      <url>$(BIN_DIR)/debug/driver_module.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(BIN_DIR)/debug/microphone.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(BIN_DIR)/debug/audio_visualization.adtfplugin</url>
     </plugin>
   </plugins>
   <debug_plugins>
+    <plugin>
+      <url>$(BIN_DIR)/debug/sensor_visualization.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(BIN_DIR)/debug/car_controller.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(ADTF_DIR)/bin/debug/default_core_objects.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(ADTF_DIR)/src/examples/bin/debug/demo_qt_video_display.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(BIN_DIR)/debug/object_detection.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(BIN_DIR)/debug/fisheye_undistortion.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(BIN_DIR)/debug/marker_detector.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(BIN_DIR)/debug/camera_calibration.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(BIN_DIR)/debug/arduino_egomotion_sensor.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(BIN_DIR)/debug/arduino_us_sensors.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(BIN_DIR)/debug/arduino_battery_sensor.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(BIN_DIR)/debug/basler_camera.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(BIN_DIR)/debug/universal_camera.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(BIN_DIR)/debug/laser_scanner.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(BIN_DIR)/debug/arduino_actuator.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(ADTF_DIR)/bin/debug/adtf_playback_input.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(ADTF_DIR)/bin/debug/adtf_recorder.adtfplugin</url>
+    </plugin>
     <plugin>
       <url>$(ADTF_DIR)/bin/debug/adtf_kernel.adtfplugin</url>
     </plugin>
     <plugin>
       <url>$(ADTF_DIR)/bin/debug/adtf_clock.adtfplugin</url>
-    </plugin>
-    <plugin>
-      <url>$(ADTF_DIR)/bin/debug/default_core_objects.adtfplugin</url>
     </plugin>
     <plugin>
       <url>$(ADTF_DIR)/bin/debug/adtf_signal_registry.adtfplugin</url>
@@ -261,70 +324,31 @@
       <url>$(ADTF_DIR)/bin/debug/adtf_sample_stream_trace_view_ui.adtfplugin</url>
     </plugin>
     <plugin>
-      <url>$(ADTF_DIR)/addons/displaytoolbox/bin/debug/signal_tree_view.adtfplugin</url>
-    </plugin>
-    <plugin>
-      <url>$(ADTF_DIR)/addons/displaytoolbox/bin/debug/signal_table_view.adtfplugin</url>
-    </plugin>
-    <plugin>
-      <url>$(ADTF_DIR)/bin/adtf_file_support.adtfplugin</url>
+      <url>$(ADTF_DIR)/bin/debug/adtf_file_support.adtfplugin</url>
     </plugin>
     <plugin>
       <url>$(ADTF_DIR)/bin/debug/adtf_playback.adtfplugin</url>
     </plugin>
     <plugin>
-      <url>$(ADTF_DIR)/bin/debug/adtf_playback_input.adtfplugin</url>
+      <url>$(ADTF_DIR)/addons/displaytoolbox/bin/debug/signal_table_view.adtfplugin</url>
     </plugin>
     <plugin>
-      <url>$(ADTF_DIR)/src/examples/bin/debug/demo_qt_video_display.adtfplugin</url>
-    </plugin>
-    <plugin>
-      <url>$(ADTF_DIR)/bin/debug/adtf_recorder.adtfplugin</url>
-    </plugin>
-    <plugin>
-      <url>$(BIN_DIR)/arduino_egomotion_sensor.adtfplugin</url>
-    </plugin>
-    <plugin>
-      <url>$(BIN_DIR)/arduino_us_sensors.adtfplugin</url>
-    </plugin>
-    <plugin>
-      <url>$(BIN_DIR)/arduino_actuator.adtfplugin</url>
-    </plugin>
-    <plugin>
-      <url>$(BIN_DIR)/arduino_battery_sensor.adtfplugin</url>
-    </plugin>
-    <plugin>
-      <url>$(BIN_DIR)/fisheye_undistortion.adtfplugin</url>
-    </plugin>
-    <plugin>
-      <url>$(BIN_DIR)/marker_detector.adtfplugin</url>
-    </plugin>
-    <plugin>
-      <url>$(BIN_DIR)/sensor_visualization.adtfplugin</url>
-    </plugin>
-    <plugin>
-      <url>$(BIN_DIR)/opencv_template.adtfplugin</url>
-    </plugin>
-    <plugin>
-      <url>$(BIN_DIR)/object_detection.adtfplugin</url>
-    </plugin>
-    <plugin>
-      <url>$(BIN_DIR)/laser_scanner.adtfplugin</url>
-    </plugin>
-    <plugin>
-      <url>$(BIN_DIR)/basler_camera.adtfplugin</url>
-    </plugin>
-    <plugin>
-      <url>$(BIN_DIR)/universal_camera.adtfplugin</url>
+      <url>$(ADTF_DIR)/addons/displaytoolbox/bin/debug/signal_tree_view.adtfplugin</url>
     </plugin>
     <plugin>
       <url>$(ADTF_DIR)/addons/displaytoolbox/bin/debug/signal_scope_view.adtfplugin</url>
     </plugin>
     <plugin>
-      <url>$(BIN_DIR)/car_controller.adtfplugin</url>
+      <url>$(BIN_DIR)/debug/jury_communication_tcp.adtfplugin</url>
     </plugin>
     <plugin>
-      <url>$(BIN_DIR)/camera_calibration.adtfplugin</url>
+      <url>$(BIN_DIR)/debug/driver_module.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(BIN_DIR)/debug/microphone.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(BIN_DIR)/debug/audio_visualization.adtfplugin</url>
     </plugin>
   </debug_plugins>
   <services>
@@ -392,6 +416,11 @@
       <classid>signal_scope_view.ui_service.adtf_disptb.cid</classid>
       <objectid>signal_scope_view.ui_service.adtf_disptb</objectid>
       <runlevel>session</runlevel>
+    </service>
+    <service>
+      <classid>zeromq.service.adtf.cid</classid>
+      <objectid>zeromq.service.adtf</objectid>
+      <runlevel>system</runlevel>
     </service>
   </services>
 </system>

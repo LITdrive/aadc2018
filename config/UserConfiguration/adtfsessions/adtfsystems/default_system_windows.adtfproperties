@@ -29,10 +29,19 @@
           <properties>
             <property>
               <name>media_description_files</name>
-              <value>../../../../../description/aadc.description</value>
+              <value>../../../../description/aadc.description</value>
               <type>cFilenameList</type>
             </property>
+            <property>
+              <name>provide_signals</name>
+              <value>true</value>
+              <type>tBool</type>
+            </property>
           </properties>
+        </property_set>
+        <property_set>
+          <name>services/log_view.ui_service.adtf</name>
+          <properties/>
         </property_set>
       </property_sets>
     </property_package>

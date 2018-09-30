@@ -32,7 +32,7 @@ else(AADC_FOUND)
    message(FATAL_ERROR "-- AADC not found")
 endif (AADC_FOUND)
 
-find_package(ADTF REQUIRED)
+find_package(ADTF 3.3.0 REQUIRED)
 message(STATUS "Found ADTF: ${ADTF_VERSION}")
 
 #--------------add private macros-----------------
@@ -46,4 +46,5 @@ include_directories(${CMAKE_INSTALL_INCLUDE})
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/../../doc doc)
 add_subdirectory(arduino)
 add_subdirectory(position)
+add_subdirectory(jury)
 
