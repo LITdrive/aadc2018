@@ -40,7 +40,9 @@ class ZmqServer:
 
     def disconnect(self):
         if self._socket:
-            self._socket.disconnect()
+            # TODO: unbinding is not buggy (https://github.com/zeromq/pyzmq/issues/1025)
+            # self._socket.unbind()
+            pass
 
     @staticmethod
     def _unpack_image(blob, height, width):
