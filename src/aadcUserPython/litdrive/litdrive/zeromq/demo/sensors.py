@@ -4,13 +4,7 @@
 
 import json
 
-from ..zeromq.server import ZmqServer
-
-# open a server for the filter
-zmq = ZmqServer("tcp://*:5555",
-                ["tSignalValue", "tBoolSignalValue", "tWheelData",
-                 "tInerMeasUnitData", "tUltrasonicStruct", "tVoltageStruct"],
-                ["tSignalValue", "tBoolSignalValue"])
+from ..server import ZmqServer
 
 
 def process(signal, bool_signal, wheel, imu, us, voltage):
@@ -29,8 +23,15 @@ def process(signal, bool_signal, wheel, imu, us, voltage):
     return signal_out, bool_out
 
 
-try:
-    zmq.connect()
-    zmq.run(process, return_dict=True)
-finally:
-    zmq.disconnect()
+if __name__ == "__main__":
+    # open a server for the filter
+    zmq = ZmqServer("tcp://*:5555",
+                    ["tSignalValue", "tBoolSignalValue", "tWheelData",
+                     "tInerMeasUnitData", "tUltrasonicStruct", "tVoltageStruct"],
+                    ["tSignalValue", "tBoolSignalValue"])
+
+    try:
+        zmq.connect()
+        zmq.run(process, return_dict=True)
+    finally:
+        zmq.disconnect()
