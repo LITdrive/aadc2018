@@ -885,10 +885,6 @@
           <properties/>
         </property_set>
         <property_set>
-          <name>streaming_graphs/playback_graph/connections/ADTFDAT File Player.rear_video_Filter Graph Dock.rear_cam</name>
-          <properties/>
-        </property_set>
-        <property_set>
           <name>streaming_graphs/playback_graph/streaming_dock_in_ports/laser_scanner</name>
           <properties/>
         </property_set>
@@ -1521,6 +1517,36 @@
         </property_set>
         <property_set>
           <name>services/signal_scope_view.ui_service.adtf_disptb</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>services/zeromq.service.adtf</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/sample_streams/road_sign_ext_stream</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/connections/marker_detection.road_sign_ext_Sample Stream.</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/active_runners/Thread Runner</name>
+          <properties>
+            <property>
+              <name>thread_is_cyclic</name>
+              <value>false</value>
+              <type>tBool</type>
+            </property>
+          </properties>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/sample_streams/speed_stream</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/sample_streams/trajectory_stream</name>
           <properties/>
         </property_set>
       </property_sets>

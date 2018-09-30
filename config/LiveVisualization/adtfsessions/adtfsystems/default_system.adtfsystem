@@ -9,7 +9,7 @@
   <environment>
     <variable>
       <name>BIN_DIR</name>
-      <value>/home/aadc/AADC/_install/linux64/bin</value>
+      <value>/home/aadc/share/adtf/_install/linux64/bin</value>
     </variable>
   </environment>
   <dependencies>
@@ -139,13 +139,13 @@
   </dependencies>
   <plugins>
     <plugin>
-      <url>$(BIN_DIR)/sensor_visualization.adtfplugin</url>
+      <url>$(BIN_DIR)/debug/sensor_visualization.adtfplugin</url>
     </plugin>
     <plugin>
-      <url>$(BIN_DIR)/car_controller.adtfplugin</url>
+      <url>$(BIN_DIR)/debug/car_controller.adtfplugin</url>
     </plugin>
     <plugin>
-      <url>$(BIN_DIR)/converter_wheels.adtfplugin</url>
+      <url>$(BIN_DIR)/debug/converter_wheels.adtfplugin</url>
     </plugin>
     <plugin>
       <url>$(ADTF_DIR)/bin/default_core_objects.adtfplugin</url>
@@ -154,22 +154,22 @@
       <url>$(ADTF_DIR)/src/examples/bin/demo_qt_video_display.adtfplugin</url>
     </plugin>
     <plugin>
-      <url>$(BIN_DIR)/object_detection.adtfplugin</url>
+      <url>$(BIN_DIR)/debug/object_detection.adtfplugin</url>
     </plugin>
     <plugin>
-      <url>$(BIN_DIR)/driver_module.adtfplugin</url>
+      <url>$(BIN_DIR)/debug/driver_module.adtfplugin</url>
     </plugin>
     <plugin>
-      <url>$(BIN_DIR)/audio_visualization.adtfplugin</url>
+      <url>$(BIN_DIR)/debug/audio_visualization.adtfplugin</url>
     </plugin>
     <plugin>
-      <url>$(BIN_DIR)/fisheye_undistortion.adtfplugin</url>
+      <url>$(BIN_DIR)/debug/fisheye_undistortion.adtfplugin</url>
     </plugin>
     <plugin>
-      <url>$(BIN_DIR)/marker_detector.adtfplugin</url>
+      <url>$(BIN_DIR)/debug/marker_detector.adtfplugin</url>
     </plugin>
     <plugin>
-      <url>$(BIN_DIR)/camera_calibration.adtfplugin</url>
+      <url>$(BIN_DIR)/debug/camera_calibration.adtfplugin</url>
     </plugin>
     <plugin>
       <url>$(BIN_DIR)/debug/arduino_egomotion_sensor.adtfplugin</url>
@@ -181,13 +181,13 @@
       <url>$(BIN_DIR)/debug/arduino_battery_sensor.adtfplugin</url>
     </plugin>
     <plugin>
-      <url>$(BIN_DIR)/basler_camera.adtfplugin</url>
+      <url>$(BIN_DIR)/debug/basler_camera.adtfplugin</url>
     </plugin>
     <plugin>
-      <url>$(BIN_DIR)/universal_camera.adtfplugin</url>
+      <url>$(BIN_DIR)/debug/universal_camera.adtfplugin</url>
     </plugin>
     <plugin>
-      <url>$(BIN_DIR)/laser_scanner.adtfplugin</url>
+      <url>$(BIN_DIR)/debug/laser_scanner.adtfplugin</url>
     </plugin>
     <plugin>
       <url>$(BIN_DIR)/debug/arduino_actuator.adtfplugin</url>
@@ -199,7 +199,7 @@
       <url>$(BIN_DIR)/debug/jury_communication_tcp.adtfplugin</url>
     </plugin>
     <plugin>
-      <url>$(BIN_DIR)/microphone.adtfplugin</url>
+      <url>$(BIN_DIR)/debug/microphone.adtfplugin</url>
     </plugin>
     <plugin>
       <url>$(ADTF_DIR)/bin/adtf_recorder.adtfplugin</url>
@@ -235,13 +235,19 @@
       <url>$(ADTF_DIR)/bin/adtf_playback.adtfplugin</url>
     </plugin>
     <plugin>
-      <url>$(ADTF_DIR)/addons/display-toolbox/bin/signal_table_view.adtfplugin</url>
+      <url>$(ADTF_DIR)/addons/displaytoolbox/bin/signal_table_view.adtfplugin</url>
     </plugin>
     <plugin>
-      <url>$(ADTF_DIR)/addons/display-toolbox/bin/signal_tree_view.adtfplugin</url>
+      <url>$(ADTF_DIR)/addons/displaytoolbox/bin/signal_tree_view.adtfplugin</url>
     </plugin>
     <plugin>
-      <url>$(ADTF_DIR)/addons/display-toolbox/bin/signal_scope_view.adtfplugin</url>
+      <url>$(ADTF_DIR)/addons/displaytoolbox/bin/signal_scope_view.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(BIN_DIR)/debug/zeromq_service.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(BIN_DIR)/debug/litd_zmq_decision.adtfplugin</url>
     </plugin>
   </plugins>
   <debug_plugins>
@@ -342,13 +348,19 @@
       <url>$(ADTF_DIR)/bin/debug/adtf_playback.adtfplugin</url>
     </plugin>
     <plugin>
-      <url>$(ADTF_DIR)/addons/display-toolbox/bin/debug/signal_table_view.adtfplugin</url>
+      <url>$(ADTF_DIR)/addons/displaytoolbox/bin/debug/signal_table_view.adtfplugin</url>
     </plugin>
     <plugin>
-      <url>$(ADTF_DIR)/addons/display-toolbox/bin/debug/signal_tree_view.adtfplugin</url>
+      <url>$(ADTF_DIR)/addons/displaytoolbox/bin/debug/signal_tree_view.adtfplugin</url>
     </plugin>
     <plugin>
-      <url>$(ADTF_DIR)/addons/display-toolbox/bin/debug/signal_scope_view.adtfplugin</url>
+      <url>$(ADTF_DIR)/addons/displaytoolbox/bin/debug/signal_scope_view.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(BIN_DIR)/debug/zeromq_service.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(BIN_DIR)/debug/litd_zmq_decision.adtfplugin</url>
     </plugin>
   </debug_plugins>
   <services>
