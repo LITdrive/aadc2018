@@ -41,6 +41,8 @@ Tensor YOLOHandler::forward_path(Mat camera_image) {
     const float * source_data = (float*) image.data;
 
     // copying the data into the corresponding tensor
+    float minR = 255;
+    float maxR = 0;
     for (int y = 0; y < height; ++y) {
         const float* source_row = source_data + (y * width * depth);
         for (int x = 0; x < width; ++x) {
@@ -52,8 +54,18 @@ Tensor YOLOHandler::forward_path(Mat camera_image) {
             input_tensor_mapped(0, y, x, 0) = *source_R;
             input_tensor_mapped(0, y, x, 1) = *source_G;
             input_tensor_mapped(0, y, x, 2) = *source_B;
+
+            if ( input_tensor_mapped(0, y, x, 0) < minR ) {
+                minR = input_tensor_mapped(0, y, x, 0);
+            }
+
+            if ( input_tensor_mapped(0, y, x, 0) > maxR ) {
+                maxR = input_tensor_mapped(0, y, x, 0);
+            }
         }
     }
+
+    LOG(INFO) << "min " << minR << " max " << maxR << std::endl;
 
     Status run_status = session->Run({{"input", input_tensor}},
                                         {"output"}, {}, &outputs);
