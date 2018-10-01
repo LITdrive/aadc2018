@@ -32,9 +32,7 @@ Tensor readTensorFromMat(const Mat &mat) {
     Tensor inputTensor(tensorflow::DT_FLOAT, tensorflow::TensorShape({1, height, width, depth}));
     auto inputTensorMapped = inputTensor.tensor<float, 4>();
 
-    cv::Mat frame;
-    mat.convertTo(frame, CV_8UC3);
-    const tensorflow::uint8* source_data = (tensorflow::uint8*)frame.data;
+    const tensorflow::uint8* source_data = (tensorflow::uint8*)mat.data;
 
     for (int y=0; y<height; y++){
         const tensorflow::uint8* source_row = source_data + (y*width*depth);
