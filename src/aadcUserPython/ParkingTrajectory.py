@@ -33,12 +33,12 @@ class ParkingTrajectoryGenerator:
     # Points of Parking Trajectory
     __parkingTrajectoryPoints_x_rear_axle = np.zeros(2*__num_points_per_segment)
     __parkingTrajectoryPoints_y_rear_axle = np.zeros(2*__num_points_per_segment)
-    __parkingTrajectoryPoints_x_front_axle = np.zeros(2*__num_points_per_segment)
-    __parkingTrajectoryPoints_y_front_axle = np.zeros(2*__num_points_per_segment)
+    #__parkingTrajectoryPoints_x_front_axle = np.zeros(2*__num_points_per_segment)
+    #__parkingTrajectoryPoints_y_front_axle = np.zeros(2*__num_points_per_segment)
     __pullOutLeftTrajectoryPoints_x_rear_axle = np.zeros(2*__num_points_per_segment)
     __pullOutLeftTrajectoryPoints_y_rear_axle = np.zeros(2*__num_points_per_segment)
-    __pullOutLeftTrajectoryPoints_x_front_axle = np.zeros(2*__num_points_per_segment)
-    __pullOutLeftTrajectoryPoints_y_front_axle = np.zeros(2*__num_points_per_segment)
+    #__pullOutLeftTrajectoryPoints_x_front_axle = np.zeros(2*__num_points_per_segment)
+    #__pullOutLeftTrajectoryPoints_y_front_axle = np.zeros(2*__num_points_per_segment)
 
     # Heading of Parking Trajectory
     __parkingTrajectoryHeading_rear_axle = np.zeros(2*__num_points_per_segment)
