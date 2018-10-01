@@ -3,7 +3,7 @@ import numpy as np
 import cv2
 from predict_boxes_yolo_v1 import postprocess
 
-image_path = "/home/mohamed/tensorflow/sample_img/barbie.jpg"
+image_path = "/home/mohamed/tensorflow/sample_img/car_img_resized.jpg"
 frozen_network_path = "/home/mohamed/tensorflow/network/frozen-yolo-tiny-aadc.pb"
 
 
@@ -47,7 +47,7 @@ with tf.Session(graph=graph) as sess:
     })
 
     # get boxes
-    boxes = postprocess(y_out[0], image)
+    boxes = postprocess(y_out[0])
     # unpack boxes
     for b in boxes:
         left, right, top, bot, mess, max_indx, confidence = b
