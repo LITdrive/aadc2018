@@ -22,9 +22,7 @@ THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS AS IS AND ANY EXPRESS OR I
 /* notes to check
 [] actual speed has to be in car-struct
 [] is the given point normal to car position?
-
 */
-
 
 ADTF_PLUGIN(LABEL_STANLEY_CONTROL_FILTER, cStanleyControl)
 
@@ -142,7 +140,6 @@ cStanleyControl::cStanleyControl()
 	});
 }
 
-
 //implement the Configure function to read ALL Properties
 tResult cStanleyControl::Configure()
 {
@@ -170,6 +167,8 @@ tResult cStanleyControl::ProcessPosition(tTimeStamp tmTimeOfTrigger)
 	vehicleActualRearAxlePosition.y = position.f32y;
 	vehicleActualRearAxlePosition.h = position.f32heading;
 
+	calculateActualFrontAxlePosition();
+	getNextVirtualPointOnPoly();
 	calcSteeringAngle();
 
 	object_ptr<ISample> pWriteSample;
@@ -184,7 +183,6 @@ tResult cStanleyControl::ProcessPosition(tTimeStamp tmTimeOfTrigger)
 	}
 
 	m_SteeringWriter << pWriteSample << flush << trigger;
-
 
 	RETURN_NOERROR;
 }
@@ -212,18 +210,18 @@ tResult cStanleyControl::ProcessTrajectories(tTimeStamp tmTimeOfTrigger){
 	}
 
 	updatePolyList(trajectory);
-	// TODO
+	// TODO trajectory -> trajectories
 
 	RETURN_NOERROR;
 }
 
-void cStanleyControl::calculateFrontAxlePosition(LITD_VirtualPoint rearAxlePosition, LITD_VirtualPoint *frontAxlePosition) {
-	double dx = cos(rearAxlePosition.h)*VEHICLE_AXIS_DISTANCE;
-	double dy = sin(rearAxlePosition.h)*VEHICLE_AXIS_DISTANCE;
+void cStanleyControl::calculateActualFrontAxlePosition() {
+	double dx = cos(vehicleActualRearAxlePosition.h)*VEHICLE_AXIS_DISTANCE;
+	double dy = sin(vehicleActualRearAxlePosition.h)*VEHICLE_AXIS_DISTANCE;
 
-	frontAxlePosition->x = rearAxlePosition.x + dx;
-	frontAxlePosition->x = rearAxlePosition.y + dy;
-	frontAxlePosition->x = rearAxlePosition.h;
+	vehicleActualFrontAxlePosition.x = vehicleActualRearAxlePosition.x + dx;
+	vehicleActualFrontAxlePosition.y = vehicleActualRearAxlePosition.y + dy;
+	vehicleActualFrontAxlePosition.h = vehicleActualRearAxlePosition.h;
 }
 
 void cStanleyControl::updatePolyList(tTrajectory trajectory) {
@@ -238,8 +236,26 @@ void cStanleyControl::updatePolyList(tTrajectory trajectory) {
 		trajectoryArray[i] = trajectory;
 	}*/
 
-	trajectoryArray[0] = trajectoryArray[1];
-	trajectoryArray[1] = trajectory;
+	if (poly_completed)
+	{
+		trajectoryArray[0] = trajectoryArray[last_min_dist_poly_index];
+		last_min_dist_poly_index = actual_min_dist_poly_index;
+
+		for (int i = 1; i < TRAJECTORY_ARRAY_LEN; i++)
+		{
+			// TODO: trajectoryArray[i] = trajectories[i]
+			trajectoryArray[i] = trajectory;
+		}
+	}
+
+	else
+	{
+		for (int i = 0; i < TRAJECTORY_ARRAY_LEN; i++)
+		{
+			// TODO: trajectoryArray[i] = trajectories[i]
+			trajectoryArray[i] = trajectory;
+		}
+	}	
 }
 
 /* void cStanleyControl::updateStep(poly_t polys[], uint8_t polyLen, LITD_VirtualPoint actPos) {
@@ -259,57 +275,63 @@ void cStanleyControl::updatePolyList(tTrajectory trajectory) {
 	steeringAngle = calcSteeringAngle(frontAxlePosition, idealPoint, carSpeed);
 } */
 
-void cStanleyControl::getNextVirtualPointOnPoly(tTrajectory trajectories[], uint8_t polyLen, tTrajectory* idealPolyPoint, LITD_VirtualPoint* idealPoint, LITD_VirtualPoint carPosition) {
+void cStanleyControl::getNextVirtualPointOnPoly() {
 
-	LITD_VirtualPoint actPoint;
+	LITD_VirtualPoint actualPoint;
 	double min_dist = DBL_MAX;
-	int min_poly_index = 0;
+	//min_dist_poly_index = 0;
 	double min_poly_p = 0;
+	poly_completed = false;
 	double min_dist_x = DBL_MAX;
 	double min_dist_y = DBL_MAX;
 	double min_dist_h = 0;
 
 	for (int i = 0; i<TRAJECTORY_ARRAY_LEN; i++)
 	{
-		for (int j = 0; j <= POINTS_PER_POLY; j++)
+		for (double j = trajectoryArray[i].start; j <= trajectoryArray[i].end; j+=1/POINTS_PER_POLY)
 		{
 			// p = [0, 1]
-			double p = j / POINTS_PER_POLY;
-			calcVirtualPointfromPoly(&trajectories[i], p, &actPoint);
+			calcVirtualPointfromPoly(trajectoryArray[i], j, &actualPoint);
 
 			//calc norm to carPosition
-			double dist = sqrt(pow(actPoint.x - carPosition.x, 2) + pow(actPoint.y - carPosition.y, 2));
+			double dist = sqrt(pow(actualPoint.x - vehicleActualFrontAxlePosition.x, 2) + pow(actualPoint.y - vehicleActualFrontAxlePosition.y, 2));
 
 			if (dist < min_dist)
 			{
 				min_dist = dist;
-				min_poly_index = i;
-				min_poly_p = p;
-				min_dist_x = actPoint.x;
-				min_dist_y = actPoint.y;
-				min_dist_h = actPoint.h;
+				actual_min_dist_poly_index = i;
+				min_poly_p = j;
+				vehicleTargetFrontAxlePosition.x = actualPoint.x;
+				vehicleTargetFrontAxlePosition.y = actualPoint.y;
+				vehicleTargetFrontAxlePosition.h = actualPoint.h;
 			}
 		}
 	}
 
+	if (actual_min_dist_poly_index != last_min_dist_poly_index)
+	{
+		poly_completed = true;
+		//last_min_dist_poly_index = actual_min_dist_poly_index;
+	}
+
 	// Function value and ID of Poly with smallest distance to given car point
-	idealPolyPoint->id = trajectories[min_poly_index].id;
+	// idealPolyPoint->id = trajectories[actual_min_dist_poly_index].id;
 	// TODO: not compiling, there is no parameter p
 	// idealPolyPoint->p = min_poly_p;
 
 	// Point on Poly with smallest distance to given car point
-	idealPoint->x = min_dist_x;
-	idealPoint->y = min_dist_y;
-	idealPoint->h = min_dist_h;
+	//idealPoint->x = min_dist_x;
+	//idealPoint->y = min_dist_y;
+	//idealPoint->h = min_dist_h;
 }
 
-void cStanleyControl::calcVirtualPointfromPoly(tTrajectory* poly, double p, LITD_VirtualPoint* vp) {
-	double x = poly->ax * pow(p, 3) + poly->bx * pow(p, 2) + poly->cx * p + poly->dx;
-	double y = poly->ay * pow(p, 3) + poly->by * pow(p, 2) + poly->cy * p + poly->dy;
+void cStanleyControl::calcVirtualPointfromPoly(tTrajectory poly, double p, LITD_VirtualPoint* vp) {
+	double x = poly.ax*pow(p, 3) + poly.bx*pow(p, 2) + poly.cx*p + poly.dx;
+	double y = poly.ay*pow(p, 3) + poly.by*pow(p, 2) + poly.cy*p + poly.dy;
 
 	//tangente durch erste ableitung berechnen
-	double x_der = poly->ax * pow(p, 2) + poly->bx * p + poly->cx;
-	double y_der = poly->ay * pow(p, 2) + poly->by * p + poly->cy;
+	double x_der = poly.ax*pow(p, 2) + poly.bx*p + poly.cx;
+	double y_der = poly.ay*pow(p, 2) + poly.by*p + poly.cy;
 
 	double heading = wrapTo2Pi(atan2(y_der, x_der));
 

@@ -97,6 +97,9 @@ private:
 	tFloat64 vehicleActualPosition_x, vehicleActualPosition_y, vehicleActualHeading, vehicleActualSpeed;*/
     tFloat64 vehicleSteeringAngle;
 	tFloat64 vehicleSpeed;
+	int actual_min_dist_poly_index = 0;
+	int last_min_dist_poly_index = 0;
+	bool poly_completed;
 	//::tPosition vehicleActualPosition;
 	::tTrajectory trajectoryArray[TRAJECTORY_ARRAY_LEN];
     LITD_VirtualPoint vehicleActualRearAxlePosition, vehicleActualFrontAxlePosition, vehicleTargetFrontAxlePosition;
@@ -118,15 +121,24 @@ public:
 
     tResult ProcessTrajectories(tTimeStamp tmTimeOfTrigger);
 
-	void calculateFrontAxlePosition(LITD_VirtualPoint rearAxlePosition, LITD_VirtualPoint* frontAxlePosition);
+	void calculateActualFrontAxlePosition();
+
+	//void calculateFrontAxlePosition(LITD_VirtualPoint rearAxlePosition, LITD_VirtualPoint* frontAxlePosition);
 
 	tResult ProcessPosition(tTimeStamp tmTimeOfTrigger);
 
 	void updatePolyList(tTrajectory trajectory);
 
-	void getNextVirtualPointOnPoly(tTrajectory trajectories[], uint8_t polyLen, tTrajectory* idealPolyPoint, LITD_VirtualPoint* idealPoint, LITD_VirtualPoint carPosition);
+	//void getNextVirtualPointOnPoly(tTrajectory trajectories[], uint8_t polyLen, tTrajectory* idealPolyPoint, LITD_VirtualPoint* idealPoint, LITD_VirtualPoint carPosition);
 
-	void calcVirtualPointfromPoly(tTrajectory* poly, double p, LITD_VirtualPoint * vp);
+	//void getNextVirtualPointOnPoly(tTrajectory trajectories[], LITD_VirtualPoint carPosition);
+
+	void getNextVirtualPointOnPoly();
+
+	void calcVirtualPointfromPoly(tTrajectory poly, double p, LITD_VirtualPoint * vp);
+
+	//void calcVirtualPointfromPoly(tTrajectory * poly, double p, LITD_VirtualPoint * vp);
+
 
 };
 
