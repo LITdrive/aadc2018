@@ -304,6 +304,11 @@ void cStanleyControl::getNextVirtualPointOnPoly() {
 				vehicleTargetFrontAxlePosition.x = actualPoint.x;
 				vehicleTargetFrontAxlePosition.y = actualPoint.y;
 				vehicleTargetFrontAxlePosition.h = actualPoint.h;
+
+				if (trajectoryArray[i].backwards)
+				{
+					vehicleTargetFrontAxlePosition.h = wrapTo2Pi(vehicleTargetFrontAxlePosition.h + M_PI);
+				}
 			}
 		}
 	}
