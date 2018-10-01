@@ -143,6 +143,29 @@ cStanleyControl::cStanleyControl()
 //implement the Configure function to read ALL Properties
 tResult cStanleyControl::Configure()
 {
+	// Fixed Polynomials of a cirle arc and a straight for testing
+	// Circle Arc
+	// 0.3443 x + 0.3115 x - 1.656 x + 0.363
+	trajectoryArray[0].ax = 0.3443;
+	trajectoryArray[0].bx = 0.3115;
+	trajectoryArray[0].cx = -1.656;
+	trajectoryArray[0].dx = 0.363;
+	// -0.3443 x + 1.344 x + 2.22e-16
+	trajectoryArray[0].ay = -0.3443;
+	trajectoryArray[0].by = 1.344;
+	trajectoryArray[0].cy = 0;
+	trajectoryArray[0].dy = 0;
+	// straight
+	// -0.339 x + 0.702
+	trajectoryArray[0].ax = -0.339;
+	trajectoryArray[0].bx = 0.702;
+	trajectoryArray[0].cx = 0;
+	trajectoryArray[0].dx = 0;
+	trajectoryArray[0].ay = 0;
+	trajectoryArray[0].by = 0;
+	trajectoryArray[0].cy = 0;
+	trajectoryArray[0].dy = 0;
+
     RETURN_NOERROR;
 }
 
@@ -209,7 +232,8 @@ tResult cStanleyControl::ProcessTrajectories(tTimeStamp tmTimeOfTrigger){
 		RETURN_IF_FAILED(oDecoder.GetElementValue(m_ddlTrajectoryIndex.backwards, &trajectory.backwards));
 	}
 
-	updatePolyList(trajectory);
+	// TODO Not needed for testing, uncomment afterwards
+	//updatePolyList(trajectory);
 	// TODO trajectory -> trajectories
 
 	RETURN_NOERROR;
