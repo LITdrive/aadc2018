@@ -118,6 +118,9 @@
    <element alignment="1" arraysize="1" byteorder="LE" bytepos="128" name="classId" type="tUInt64" />
    <element alignment="1" arraysize="1" byteorder="LE" bytepos="136" name="probValue" type="tFloat64" />
   </struct>
+  <struct alignment="1" name="tYOLONetOutput" version="1">
+   <element alignment="1" arraysize="588" byteorder="LE" bytepos="0" name="f32NodeValue" type="tFloat32" />
+  </struct>
  </structs>
  <streams>
  </streams>

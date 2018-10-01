@@ -72,6 +72,7 @@ tResult cLITD_ObjectDetection::Process(tTimeStamp tmTimeOfTrigger)
 {
     object_ptr<const ISample> pReadSample;
     Tensor output;
+    float output_array[588];
 
     while (IS_OK(m_oReader.GetNextSample(pReadSample)))
     {
@@ -85,10 +86,34 @@ tResult cLITD_ObjectDetection::Process(tTimeStamp tmTimeOfTrigger)
 
             //Do the image processing and copy to destination image buffer
             output = yolo_handler.forward_path(inputImage);
+            tensorflow::TTypes<float>::Flat output_flat = output.flat<float>();
+
+            for (int i = 0; i < 588; i++) {
+                output_array[i] = output_flat(i);
+            }
+
             LOG_INFO("forward path done: %d", output.dim_size(1));
             // TODO: write output tensor on output pin
         }
     }
-    
+
+    object_ptr<ISample> pWriteSample;
+    if (IS_OK(alloc_sample(pWriteSample)))
+    {
+
+        LOG_INFO("forward path done: %d and writing", output.dim_size(1));
+        LOG_INFO("output array vals %f %f %f", output_array[0], output_array[1], output_array[2]);
+        auto oCodec = m_YNOStructSampleFactory.MakeCodecFor(pWriteSample);
+
+        RETURN_IF_FAILED(oCodec.SetElementValue(m_ddtYOLONetOutputStruct.nodeValues, &output_array));
+
+        std::cout << m_ddtYOLONetOutputStruct.nodeValues << std::endl;
+        //RETURN_IF_FAILED_DESC(oCodec.SetElementValue(m_ddlSignalValueId.timeStamp, m_pClock->GetStreamTime()), "Failed@setting time %ld",m_pClock->GetStreamTime());
+
+    }
+
+    m_oWriter << pWriteSample << flush << trigger;
+    LOG_INFO("Wrote output array");
+
     RETURN_NOERROR;
 }
