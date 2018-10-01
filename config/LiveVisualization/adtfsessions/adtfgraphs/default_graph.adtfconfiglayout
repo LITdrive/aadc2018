@@ -1473,8 +1473,8 @@
         <layout_set>
           <name>graphs/default_filter_graph/sample_streams/stream_marker_detector</name>
           <boundary>
-            <x>550</x>
-            <y>189</y>
+            <x>510</x>
+            <y>187</y>
             <width>0</width>
             <height>0</height>
           </boundary>
@@ -10398,8 +10398,8 @@
         <layout_set>
           <name>graphs/default_filter_graph/filters/LITD_ObjectDetection_cf</name>
           <boundary>
-            <x>597</x>
-            <y>376</y>
+            <x>840</x>
+            <y>56</y>
             <width>0</width>
             <height>0</height>
           </boundary>
@@ -10424,7 +10424,7 @@
           <connection_layout>
             <name/>
             <centerLineIsManual>true</centerLineIsManual>
-            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsX>520</centerLineAbsX>
             <centerLineAbsY>0</centerLineAbsY>
             <centerLineStraight>false</centerLineStraight>
           </connection_layout>
@@ -10443,6 +10443,57 @@
             <centerLineIsManual>true</centerLineIsManual>
             <centerLineAbsX>0</centerLineAbsX>
             <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/default_filter_graph/sample_streams/Sample Stream</name>
+          <boundary>
+            <x>483</x>
+            <y>166</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/default_filter_graph/connections/marker_detection.undistorted_video_Sample Stream.</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/default_filter_graph/connections/Sample Stream._LITD_ObjectDetection_cf.input</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>729</centerLineAbsX>
+            <centerLineAbsY>173</centerLineAbsY>
             <centerLineStraight>false</centerLineStraight>
           </connection_layout>
         </layout_set>

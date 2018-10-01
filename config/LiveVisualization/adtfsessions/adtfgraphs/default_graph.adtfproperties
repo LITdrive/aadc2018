@@ -1260,18 +1260,6 @@
           <properties/>
         </property_set>
         <property_set>
-          <name>graphs/default_filter_graph/filters/LITD_ObjectDetection_cf</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/connections/stream_marker_detector._LITD_ObjectDetection_cf.input</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/filters/LITD_ObjectDetection_cf/input_pins/input</name>
-          <properties/>
-        </property_set>
-        <property_set>
           <name>services/kernel.service.adtf</name>
           <properties/>
         </property_set>
@@ -1321,6 +1309,26 @@
         </property_set>
         <property_set>
           <name>services/signal_scope_view.ui_service.adtf_disptb</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/filters/LITD_ObjectDetection_cf</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/sample_streams/Sample Stream</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/connections/marker_detection.undistorted_video_Sample Stream.</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/connections/Sample Stream._LITD_ObjectDetection_cf.input</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/filters/LITD_ObjectDetection_cf/input_pins/input</name>
           <properties/>
         </property_set>
       </property_sets>
