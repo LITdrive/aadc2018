@@ -19,7 +19,7 @@ include_directories(${Protobuf_INCLUDE_DIRS} ${EIGEN3_INCLUDE_DIRS} ${TENSORFLOW
 
 
 # Declare the executable target built from your sources
-add_executable(${PROJECT_NAME} loader.cpp)
+add_executable(${PROJECT_NAME} YOLOHandler.cpp YOLOHandler.h)
 
 
 install(TARGETS ${PROJECT_NAME} DESTINATION bin/application CONFIGURATIONS RelWithDebInfo Release)
