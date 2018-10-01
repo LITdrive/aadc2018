@@ -35,6 +35,13 @@ class cLITD_ObjectDetection : public cTriggerFunction
 {
 private:
 
+    struct tYOLONetOutputStruct
+    {
+        tSize nodeValues;
+    } m_ddtYOLONetOutputStruct;
+
+    // The template data sample factory
+    adtf::mediadescription::cSampleCodecFactory m_YNOStructSampleFactory;
     //Pins
     /*! Reader of an InPin. */
     cPinReader m_oReader;

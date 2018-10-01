@@ -31,10 +31,20 @@ cLITD_ObjectDetection::cLITD_ObjectDetection()
     const adtf::ucom::object_ptr<IStreamType> pType = adtf::ucom::make_object_ptr<cStreamType>(stream_meta_type_image());
     set_stream_type_image_format(*pType, m_sImageFormat);
 
+    object_ptr<IStreamType> pTypeTemplateData;
+    if IS_OK(adtf::mediadescription::ant::create_adtf_default_stream_type_from_service("tYOLONetOutput", pTypeTemplateData, m_YNOStructSampleFactory))
+    {
+        adtf_ddl::access_element::find_array_index(m_YNOStructSampleFactory, cString("f32NodeValue"), m_ddtYOLONetOutputStruct.nodeValues);
+    }
+    else
+    {
+        LOG_WARNING("No mediadescription for tYOLONetOutput found!");
+    }
+
     //Register input pin
     Register(m_oReader, "input", pType);
     //Register output pin
-    Register(m_oWriter, "output", pType);
+    Register(m_oWriter, "output", pTypeTemplateData);
 
     //register callback for type changes
     m_oReader.SetAcceptTypeCallback([this](const adtf::ucom::ant::iobject_ptr<const adtf::streaming::ant::IStreamType>& pType) -> tResult
