@@ -19,7 +19,6 @@ THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS �AS IS� AND ANY EXPRES
 #ifndef AADC_USER_YOLOHANDLER_H
 #define AADC_USER_YOLOHANDLER_H
 
-
 #include "tensorflow/core/public/session.h"
 #include "tensorflow/core/platform/env.h"
 #include "tensorflow/core/lib/io/path.h"
@@ -50,9 +49,10 @@ class YOLOHandler {
     GraphDef graph_def;
 
 public:
-    Status load_graph();
+    Status load_graph(string graph_path);
     Tensor forward_path(Mat image);
 };
+
 
 
 #endif //AADC_USER_YOLOHANDLER_H

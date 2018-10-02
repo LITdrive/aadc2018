@@ -61,4 +61,5 @@ __pycache__/
 ipython_config.py
 .python-version
 
-src/aadcUser/tensorflowPlayground/data
+# machine learning models
+/configuration_files/models/

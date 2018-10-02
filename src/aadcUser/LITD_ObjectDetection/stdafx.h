@@ -32,7 +32,5 @@ THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS �AS IS� AND ANY EXPRES
 #include <opencv2/opencv.hpp>
 #include <stdlib.h>
 
-#include "YOLOHandler.h"
-
 using namespace std;
 using namespace cv;

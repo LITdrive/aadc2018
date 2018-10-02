@@ -19,12 +19,13 @@ THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS AS IS AND ANY EXPRESS OR I
 
 
 ADTF_TRIGGER_FUNCTION_FILTER_PLUGIN(CID_COPENCVTEMPLATE_DATA_TRIGGERED_FILTER,
-                                    "LITD_ObjectDetection_cf",
+                                    "LITD ObjectDetection",
                                     cLITD_ObjectDetection,
                                     adtf::filter::pin_trigger({ "input" }));
 
 cLITD_ObjectDetection::cLITD_ObjectDetection()
 {
+    RegisterPropertyVariable("tensorflow model path", m_model_path);
 
     //create and set inital input format type
     m_sImageFormat.m_strFormatName = ADTF_IMAGE_FORMAT(RGB_24);
@@ -51,19 +52,22 @@ cLITD_ObjectDetection::cLITD_ObjectDetection()
     {
         return ChangeType(m_oReader, m_sImageFormat, *pType.Get(), m_oWriter);
     });
-
-    Status load_graph_status = yolo_handler.load_graph();
-    if (!load_graph_status.ok()) {
-        std::cout << load_graph_status.ToString() << "\n";
-    } else {
-        LOG_INFO("loaded YOLO network");
-    }
 }
 
 tResult cLITD_ObjectDetection::Configure()
 {
     //get clock object
     RETURN_IF_FAILED(_runtime->GetObject(m_pClock));
+
+    // load model
+    cFilename modelPath = m_model_path;
+    adtf::services::ant::adtf_resolve_macros(modelPath);
+    Status load_graph_status = yolo_handler.load_graph(modelPath.GetPtr());
+    if (!load_graph_status.ok()) {
+        LOG_INFO("Load graph status: %s", load_graph_status.ToString().c_str());
+    } else {
+        LOG_INFO("loaded YOLO network");
+    }
     
     RETURN_NOERROR;
 }

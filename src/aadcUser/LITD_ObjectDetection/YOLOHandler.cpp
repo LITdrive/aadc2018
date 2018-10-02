@@ -16,13 +16,11 @@ THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS �AS IS� AND ANY EXPRES
 * $Author:: hart#$  $Date:: 2017-05-19 08:12:10#$ $Rev:: 63515   $
 **********************************************************************/
 
+#include "stdafx.h"
 #include "YOLOHandler.h"
 
-Status YOLOHandler::load_graph() {
-    string graph = "data/frozen-yolo-tiny-aadc.pb";
-    string root_dir = "/home/aadc/AADC/src/aadcUser/LITD_ObjectDetection/";
-    string graph_path = tensorflow::io::JoinPath(root_dir, graph);
-
+Status YOLOHandler::load_graph(string graph_path) {
+    LOG_INFO("Loading tensorflow model from '%s'", graph_path.c_str());
     Status load_graph_status =
             ReadBinaryProto(tensorflow::Env::Default(), graph_path, &graph_def);
     if (!load_graph_status.ok()) {

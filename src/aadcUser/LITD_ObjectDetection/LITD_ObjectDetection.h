@@ -16,8 +16,10 @@ THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS AS IS AND ANY EXPRESS OR I
 
 #pragma once
 
+#include "YOLOHandler.h"
+
 //*************************************************************************************************
-#define CID_COPENCVTEMPLATE_DATA_TRIGGERED_FILTER "litd_objectdetection_filter.filter.user.aadc.cid"
+#define CID_COPENCVTEMPLATE_DATA_TRIGGERED_FILTER "litd_objectdetection.filter.user.aadc.cid"
 
 using namespace adtf_util;
 using namespace ddl;
@@ -56,6 +58,9 @@ private:
 
     /*! The clock */
     object_ptr<adtf::services::IReferenceClock> m_pClock;
+    
+    /*! tensorflow model path */
+	property_variable<cFilename> m_model_path = cFilename(cString("../../../../configuration_files/models/frozen-yolo-tiny-aadc.pb"));
 
 
 public:
