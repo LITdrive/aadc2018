@@ -62,6 +62,11 @@ private:
     /*! tensorflow model path */
 	property_variable<cFilename> m_model_path = cFilename(cString("../../../../configuration_files/models/frozen-yolo-tiny-aadc.pb"));
 
+	/* only take every nth trigger */
+	property_variable<tInt> m_subsample_factor = 1;
+    
+	/* count number of samples for applying the subsample factor */
+	int m_num_samples = 0;
 
 public:
 

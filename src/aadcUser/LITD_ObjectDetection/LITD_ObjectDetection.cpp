@@ -26,6 +26,7 @@ ADTF_TRIGGER_FUNCTION_FILTER_PLUGIN(CID_COPENCVTEMPLATE_DATA_TRIGGERED_FILTER,
 cLITD_ObjectDetection::cLITD_ObjectDetection()
 {
     RegisterPropertyVariable("tensorflow model path", m_model_path);
+	RegisterPropertyVariable("subsample factor", m_subsample_factor);
 
     //create and set inital input format type
     m_sImageFormat.m_strFormatName = ADTF_IMAGE_FORMAT(RGB_24);
@@ -74,6 +75,11 @@ tResult cLITD_ObjectDetection::Configure()
 
 tResult cLITD_ObjectDetection::Process(tTimeStamp tmTimeOfTrigger)
 {
+    // subsample the triggers (only take every nth trigger)
+	m_num_samples++;
+	if (m_num_samples % m_subsample_factor != 0)
+		RETURN_NOERROR;
+    
     object_ptr<const ISample> pReadSample;
     Tensor output;
     float output_array[588];
