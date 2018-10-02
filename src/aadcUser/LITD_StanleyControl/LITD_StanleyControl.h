@@ -137,6 +137,8 @@ public:
 
 	void calcVirtualPointfromPoly(tTrajectory poly, double p, LITD_VirtualPoint * vp);
 
+	void mapSteeringAngle();
+
 	//void calcVirtualPointfromPoly(tTrajectory * poly, double p, LITD_VirtualPoint * vp);
 
 

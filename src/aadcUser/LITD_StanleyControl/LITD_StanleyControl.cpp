@@ -204,6 +204,8 @@ tResult cStanleyControl::ProcessPosition(tTimeStamp tmTimeOfTrigger)
 	LOG_INFO("Point of SetPoint: x: %f, y: %f, h: %f", vehicleTargetFrontAxlePosition.x, vehicleTargetFrontAxlePosition.y, vehicleTargetFrontAxlePosition.h );
 	calcSteeringAngle();
 	LOG_INFO("SteeringAngle in grad: %f", vehicleSteeringAngle * 180.0 / M_PI );
+	mapSteeringAngle();
+	
 
 	object_ptr<ISample> pWriteSample;
 
@@ -381,4 +383,12 @@ void cStanleyControl::calcVirtualPointfromPoly(tTrajectory poly, double p, LITD_
 	vp->x = x;
 	vp->y = y;
 	vp->h = heading;
+}
+
+void cStanleyControl::mapSteeringAngle(){
+    tFloat32  rad2degree  = 180.0 / M_PI;
+	double maxAngle = 45;
+    vehicleSteeringAngle = (vehicleSteeringAngle * rad2degree) / maxAngle * (-100);   
+    LOG_INFO("SteeringAngle in steps: %f", vehicleSteeringAngle );
+
 }
