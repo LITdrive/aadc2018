@@ -32,4 +32,3 @@ target_link_libraries(${PROJECT_NAME} LINK_PUBLIC ${Protobuf_LIBRARIES} ${TENSOR
 
 #this is to add a folder within the ADTF solution
 set_property(TARGET ${PROJECT_NAME} PROPERTY FOLDER templates)
-set_property(TARGET ${PROJECT_NAME}_pdgen PROPERTY FOLDER templates)
