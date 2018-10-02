@@ -7,6 +7,14 @@ endif(AADC_FOUND)
 set(AADC_OPENCV_FOUND FALSE)
 set(AADC_PYLON_FOUND FALSE)
 set(AADC_BOOST_FOUND FALSE)
+
+# check if this is a build on one of the aadc cars
+cmake_host_system_information(RESULT HOSTNAME_VAR QUERY HOSTNAME)
+set (THIS_IS_A_CAR FALSE)
+if ((${HOSTNAME_VAR} STREQUAL "annika") OR (${HOSTNAME_VAR} STREQUAL "bob") OR (${HOSTNAME_VAR} STREQUAL "charlie"))
+	set (THIS_IS_A_CAR TRUE)
+endif()
+
 #-------------------------------------------------------
 #-------ADTF Dir----------------------------------------
 #-------------------------------------------------------
@@ -93,6 +101,7 @@ endif(Boost_FOUND)
 #--------lib protobuf------------------------------------------
 #------------------------------------------------------------------	
 
+if (THIS_IS_A_CAR)
 if(UNIX)
 	set(protobuf_MODULE_COMPATIBLE TRUE)	
 	FIND_PACKAGE(Protobuf 3.5.0 REQUIRED)
@@ -105,11 +114,13 @@ if(UNIX)
 else(UNIX)
 	message(STATUS "Skipping Protobuf lib on Windows.")
 endif(UNIX)
+endif(THIS_IS_A_CAR)
 
 #------------------------------------------------------------------	
 #--------lib eigen------------------------------------------
 #------------------------------------------------------------------	
 
+if (THIS_IS_A_CAR)
 if(UNIX)	
 	FIND_PACKAGE(Eigen3 3.3.4 REQUIRED PATHS "/opt/eigen/3.3.4")
 
@@ -121,11 +132,13 @@ if(UNIX)
 else(UNIX)
 	message(STATUS "Skipping Eigen lib on Windows.")
 endif(UNIX)
+endif(THIS_IS_A_CAR)
 
 #------------------------------------------------------------------	
 #--------lib tensorflow------------------------------------------
 #------------------------------------------------------------------	
 
+if (THIS_IS_A_CAR)
 if(UNIX)
 	set(TENSORFLOW_DIR "/opt/tensorflow/1.8.0")
 	set(TENSORFLOW_INCLUDE_DIRS "${TENSORFLOW_DIR}/include")
@@ -155,6 +168,7 @@ if(UNIX)
 else(UNIX)
 	message(STATUS "Skipping Tensorflow libs on Windows.")
 endif(UNIX)
+endif(THIS_IS_A_CAR)
        
 
 #-----------------------------------------------------------
