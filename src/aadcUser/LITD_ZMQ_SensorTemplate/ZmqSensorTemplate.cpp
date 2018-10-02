@@ -13,11 +13,11 @@ THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS AS IS AND ANY EXPRESS OR I
 
 **********************************************************************/
 
-#include "ZmqTemplate.h"
+#include "ZmqSensorTemplate.h"
 
-ADTF_PLUGIN(LABEL_LITD_ZMQ_TEMPLATE, cZmqTemplateFilter)
+ADTF_PLUGIN(LABEL_LITD_ZMQ_SENSOR_TEMPLATE, cZmqSensorTemplate)
 
-cZmqTemplateFilter::cZmqTemplateFilter()
+cZmqSensorTemplate::cZmqSensorTemplate()
 {
 	// input pin names and types
 	m_inputs.emplace_back("signal_in", SignalValue);
@@ -26,12 +26,11 @@ cZmqTemplateFilter::cZmqTemplateFilter()
 	m_inputs.emplace_back("imu", InerMeasUnitData);
 	m_inputs.emplace_back("ultrasonic", Ultrasonic);
 	m_inputs.emplace_back("voltage", Voltage);
-	m_inputs.emplace_back("image", Image);
 
 	// output pin names and types
 	m_outputs.emplace_back("signal_out", SignalValue);
 	m_outputs.emplace_back("bool_out", BoolSignalValue);
 
 	// pipe out the data whenever there are new samples on these pins
-	m_triggers.emplace_back("image");
+	m_triggers.emplace_back("imu");
 }

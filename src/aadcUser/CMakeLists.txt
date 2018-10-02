@@ -60,7 +60,9 @@ add_subdirectory(LITD_EmergencyBreak)
 add_subdirectory(LITD_KeyboardControl)
 add_subdirectory(LITD_SpeedLimit)
 add_subdirectory(LITD_WheelSpeedController)
-add_subdirectory(LITD_ZMQ_Template)
+add_subdirectory(LITD_ZMQ_Decision)
+add_subdirectory(LITD_ZMQ_ImageTemplate)
+add_subdirectory(LITD_ZMQ_SensorTemplate)
 
 # only build the tensorflow stuff on the cars
 if (THIS_IS_A_CAR)

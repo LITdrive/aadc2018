@@ -118,6 +118,23 @@
    <element alignment="1" arraysize="1" byteorder="LE" bytepos="128" name="classId" type="tUInt64" />
    <element alignment="1" arraysize="1" byteorder="LE" bytepos="136" name="probValue" type="tFloat64" />
   </struct>
+  <struct alignment="1" name="tTrajectory" version="1">
+   <element alignment="1" arraysize="1" byteorder="LE" bytepos="0" name="id" type="tUInt32" />
+   <element alignment="1" arraysize="1" byteorder="LE" bytepos="4" name="ax" type="tFloat32" />
+   <element alignment="1" arraysize="1" byteorder="LE" bytepos="8" name="bx" type="tFloat32" />
+   <element alignment="1" arraysize="1" byteorder="LE" bytepos="12" name="cx" type="tFloat32" />
+   <element alignment="1" arraysize="1" byteorder="LE" bytepos="16" name="dx" type="tFloat32" />
+   <element alignment="1" arraysize="1" byteorder="LE" bytepos="20" name="ay" type="tFloat32" />
+   <element alignment="1" arraysize="1" byteorder="LE" bytepos="24" name="by" type="tFloat32" />
+   <element alignment="1" arraysize="1" byteorder="LE" bytepos="28" name="cy" type="tFloat32" />
+   <element alignment="1" arraysize="1" byteorder="LE" bytepos="32" name="dy" type="tFloat32" />
+   <element alignment="1" arraysize="1" byteorder="LE" bytepos="36" name="start" type="tFloat32" />
+   <element alignment="1" arraysize="1" byteorder="LE" bytepos="40" name="end" type="tFloat32" />
+   <element alignment="1" arraysize="1" byteorder="LE" bytepos="44" name="backwards" type="tBool" />
+  </struct>
+  <struct alignment="1" name="tTrajectoryArray" version="1">
+   <element alignment="1" arraysize="5" byteorder="LE" bytepos="0" name="trajectories" type="tTrajectory" />
+  </struct>
   <struct alignment="1" name="tYOLONetOutput" version="1">
    <element alignment="1" arraysize="588" byteorder="LE" bytepos="0" name="f32NodeValue" type="tFloat32" />
   </struct>

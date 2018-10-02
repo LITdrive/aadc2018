@@ -38,7 +38,9 @@ enum eZmqStruct
 	Ultrasonic,
 	Voltage,
 	PolarCoordinate,
-	LaserScanner
+	LaserScanner,
+	Trajectory,
+	TrajectoryArray
 };
 
 /*! pin name and type tuple */
@@ -257,4 +259,59 @@ private:
 		tSize size;
 		tSize scanArray;
 	} m_ddlLSDataId{};
+
+	// position
+	cSampleCodecFactory m_PositionSampleFactory;
+	object_ptr<IStreamType> m_PositionStreamType = nullptr;
+
+	struct
+	{
+		tSize f32x;
+		tSize f32y;
+		tSize f32radius;
+		tSize f32speed;
+		tSize f32heading;
+	} m_ddlPositionIndex{};
+
+	// trajectory
+	cSampleCodecFactory m_TrajectorySampleFactory;
+	object_ptr<IStreamType> m_TrajectoryStreamType = nullptr;
+
+	struct
+	{
+		tSize id;
+		tSize ax;
+		tSize bx;
+		tSize cx;
+		tSize dx;
+		tSize ay;
+		tSize by;
+		tSize cy;
+		tSize dy;
+		tSize start;
+		tSize end;
+		tSize backwards;
+	} m_ddlTrajectoryIndex{};
+
+	// jury
+	cSampleCodecFactory m_JuryStructSampleFactory;
+	object_ptr<IStreamType> m_JuryStructStreamType = nullptr;
+
+	struct
+	{
+		tSize i16ActionID;
+		tSize i16ManeuverEntry;
+	} m_ddlJuryStructIndex{};
+
+	// road signs
+	cSampleCodecFactory m_RoadSignExtSampleFactory;
+	object_ptr<IStreamType> m_RoadSignExtStreamType = nullptr;
+
+	struct
+	{
+		tSize id;
+		tSize size;
+		tSize tvec;
+		tSize rvec;
+	} m_ddlRoadSignExtIndex{};
 };

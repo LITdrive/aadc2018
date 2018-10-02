@@ -1,4 +1,4 @@
-/*********************************************************************
+﻿/*********************************************************************
 Copyright (c) 2018
 Audi Autonomous Driving Cup. All rights reserved.
 
@@ -13,26 +13,18 @@ THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS AS IS AND ANY EXPRESS OR I
 
 **********************************************************************/
 
-#pragma once
+#include "ZmqImageTemplate.h"
 
-#ifdef WIN32
-#include <windows.h>
-#endif
+ADTF_PLUGIN(LABEL_LITD_ZMQ_IMAGE_TEMPLATE, cZmqImageTemplate)
 
-#include <adtf_filtersdk.h>
+cZmqImageTemplate::cZmqImageTemplate()
+{
+	// input pin names and types
+	m_inputs.emplace_back("image", Image);
 
-#include <zmq.hpp>
+	// output pin names and types
+	// m_outputs.emplace_back("signal", SignalValue);
 
-#include "../../services/zeromq/zeromq_service_intf.h"
-
-using namespace adtf_util;
-using namespace ddl;
-using namespace adtf::ucom;
-using namespace adtf::base;
-using namespace adtf::streaming;
-using namespace adtf::streaming::ant;
-using namespace adtf::mediadescription;
-using namespace adtf::filter;
-using namespace adtf::filter::ant;
-
-using namespace std;
+	// pipe out the data whenever there are new samples on these pins
+	m_triggers.emplace_back("image");
+}

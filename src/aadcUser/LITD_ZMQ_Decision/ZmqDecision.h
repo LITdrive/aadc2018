@@ -15,24 +15,18 @@ THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS AS IS AND ANY EXPRESS OR I
 
 #pragma once
 
-#ifdef WIN32
-#include <windows.h>
-#endif
+#include "../utils/zeromq/ZmqBase.h"
 
-#include <adtf_filtersdk.h>
+#define CID_LITD_ZMQ_DECISION  "litd_zmq_decision.filter.user.aadc.cid"
+#define LABEL_LITD_ZMQ_DECISION  "LITD ZMQ Decision"
 
-#include <zmq.hpp>
+class cZmqDecision : public cZmqBase
+{
+public:
+	ADTF_CLASS_ID_NAME(cZmqDecision, CID_LITD_ZMQ_DECISION, LABEL_LITD_ZMQ_DECISION);
 
-#include "../../services/zeromq/zeromq_service_intf.h"
+	ADTF_CLASS_DEPENDENCIES(REQUIRE_INTERFACE(IZeroMQService),
+		REQUIRE_INTERFACE(adtf::services::IReferenceClock));
 
-using namespace adtf_util;
-using namespace ddl;
-using namespace adtf::ucom;
-using namespace adtf::base;
-using namespace adtf::streaming;
-using namespace adtf::streaming::ant;
-using namespace adtf::mediadescription;
-using namespace adtf::filter;
-using namespace adtf::filter::ant;
-
-using namespace std;
+	cZmqDecision();
+};
