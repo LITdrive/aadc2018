@@ -190,6 +190,13 @@ typedef struct
 } tTrajectoryArray;
 #pragma pack(pop)
 
+#pragma pack(push,1)
+typedef struct
+{
+    tFloat32 f32NodeValue[588];
+} tYOLONetOutput;
+#pragma pack(pop)
+
 // The following types are assumed to be known:
 // tInt8
 // tInt16
