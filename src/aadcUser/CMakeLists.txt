@@ -64,3 +64,5 @@ add_subdirectory(LITD_ZMQ_Template)
 add_subdirectory(LITD_LaneGenerator)
 add_subdirectory(LITD_StanleyControl)
 add_subdirectory(LITD_IMULocalization)
+
+add_subdirectory(LITD_PositionMux)
