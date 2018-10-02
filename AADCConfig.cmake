@@ -36,7 +36,7 @@ endif(WIN32)
 #-------------------------------------------------------
 #-------Eigen (header-only)-----------------------------
 #-------------------------------------------------------
-set (EIGEN3_INCLUDE_DIR "${AADC_DIR}/include/Eigen")
+set (EIGEN3_INCLUDE_DIRS_HEADER_ONLY "${AADC_DIR}/include/Eigen")
 
 #-------------------------------------------------------
 #------- OpenCV 3.4.2 ----------------------------------
@@ -102,6 +102,8 @@ if(UNIX)
 	else (Protobuf_FOUND)
 		message(FATAL_ERROR "Protobuf lib not found")
 	endif (Protobuf_FOUND)
+else(UNIX)
+	message(STATUS "Skipping Protobuf lib on Windows.")
 endif(UNIX)
 
 #------------------------------------------------------------------	
@@ -116,9 +118,9 @@ if(UNIX)
 	else (Eigen3_FOUND)
 		message(FATAL_ERROR "Eigen not found")
 	endif (Eigen3_FOUND)
+else(UNIX)
+	message(STATUS "Skipping Eigen lib on Windows.")
 endif(UNIX)
-
-
 
 #------------------------------------------------------------------	
 #--------lib tensorflow------------------------------------------
@@ -149,7 +151,9 @@ if(UNIX)
 	else (TENSORFLOW_LIBS)
 		message(FATAL_ERROR "Tensorflow lib not found under ${TENSORFLOW_DIR}")
 	endif (TENSORFLOW_LIBS)
-         
+
+else(UNIX)
+	message(STATUS "Skipping Tensorflow libs on Windows.")
 endif(UNIX)
        
 
