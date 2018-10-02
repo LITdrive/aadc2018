@@ -59,6 +59,7 @@ cLITD_PositionMux::cLITD_PositionMux()
 //implement the Configure function to read ALL Properties
 tResult cLITD_PositionMux::Configure()
 {
+    muxState = defaultMuxState;
     RETURN_IF_FAILED(_runtime->GetObject(m_pClock));
     RETURN_NOERROR;
 }

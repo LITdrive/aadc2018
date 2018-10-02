@@ -32,7 +32,7 @@ class cLITD_PositionMux : public cTriggerFunction
 {
 private:
 
-    int muxState = 0;
+    int muxState = -1;
 
     /*! A position identifier*/
     struct tPositionIndex
