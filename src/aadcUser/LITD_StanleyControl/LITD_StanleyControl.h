@@ -13,19 +13,25 @@ THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS AS IS AND ANY EXPRESS OR I
 
 **********************************************************************/
 
+//TODO:
+
+//punkt zum regeln für stanley controller ein paar cm vor der achse annehmen. Sonst ist es möglich, dass der punkt leihct hinter der vorderachse liegt und somit nicht regelbar ist
+//initial heading bei IMU kontrollieren, scheint nicht zu funktionieren.
+
 #pragma once
 
 #include "stdafx.h"
 #include "LITD_VirtualPoint.h"
 #include <aadc_structs.h>
+#include "../utils/properties/FilePropertiesObserver.h"
 
 //*************************************************************************************************
 #define CID_STANLEY_CONTROL_FILTER "litd_stanley_control.filter.user.aadc.cid"
 #define LABEL_STANLEY_CONTROL_FILTER "LITD StanleyControl"
-#define STANLEY_GAIN 1.5
-#define VEHICLE_AXIS_DISTANCE 0.36 // in m
+
+#define VEHICLE_AXIS_DISTANCE  0.36 // in m 
 #define TRAJECTORY_ARRAY_LEN 2
-#define POINTS_PER_POLY 2
+#define POINTS_PER_POLY 10
 
 using namespace adtf_util;
 using namespace ddl;
@@ -48,6 +54,11 @@ public:
 private:
 
     void calcSteeringAngle();
+
+	property_variable<cFilename> m_properties_file = cFilename("../../../../configuration_files/properties/stanleycontrol_pid.ini");
+	FilePropertiesObserver* m_properties;
+    property_variable<tBool>       m_bShowDebug = tFalse;
+
 
 	/* tPosition */
 	struct
@@ -105,7 +116,8 @@ private:
     LITD_VirtualPoint vehicleActualRearAxlePosition, vehicleActualFrontAxlePosition, vehicleTargetFrontAxlePosition;
 
     //controller params
-    //const double stanleyGain = 1.5;
+    double stanleyGain = 1.5;
+	double maxAngle = 45;
 
 public:
 

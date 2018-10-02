@@ -57,7 +57,7 @@ void cStanleyControl::calcSteeringAngle(){
     double theta_c =  wrapTo2Pi(vehicleTargetFrontAxlePosition.h) - wrapTo2Pi(vehicleActualFrontAxlePosition.h);
 
     //calc steering-angle with stanley-approach
-    vehicleSteeringAngle = theta_c + atan2(STANLEY_GAIN*e, vehicleSpeed);
+    vehicleSteeringAngle = theta_c + atan2(stanleyGain * e, vehicleSpeed);
 
     //Debug Messages
     /*std::cout << "-----------------------" << std::endl;
@@ -75,6 +75,13 @@ cStanleyControl::cStanleyControl()
 {
 	/* tPosition */
 	object_ptr<IStreamType> pTypePositionData;
+
+	RegisterPropertyVariable("dynamic properties path", m_properties_file);
+
+    // load properties file for dynamic properties
+	m_properties = new FilePropertiesObserver(static_cast<string>(cString(m_properties_file)));
+	m_properties->ReloadProperties();
+
 	if IS_OK(adtf::mediadescription::ant::create_adtf_default_stream_type_from_service("tPosition", pTypePositionData, m_PositionSampleFactory))
 	{
 		adtf_ddl::access_element::find_index(m_PositionSampleFactory, cString("f32x"), m_ddlPositionIndex.f32x);
@@ -149,29 +156,29 @@ tResult cStanleyControl::Configure()
 	// Fixed Polynomials of a cirle arc and a straight for testing
 	// Circle Arc
 	// 0.3443 x + 0.3115 x - 1.656 x + 0.363
-	trajectoryArray[0].start = 0;
-	trajectoryArray[0].end = 1;
-	trajectoryArray[0].ax = 0.3443;
-	trajectoryArray[0].bx = 0.3115;
-	trajectoryArray[0].cx = -1.656;
-	trajectoryArray[0].dx = 0.363;
-	// -0.3443 x + 1.344 x + 2.22e-16
-	trajectoryArray[0].ay = -0.3443;
-	trajectoryArray[0].by = 1.344;
-	trajectoryArray[0].cy = 0;
-	trajectoryArray[0].dy = 0;
-	// straight
-	// -0.339 x + 0.702
 	trajectoryArray[1].start = 0;
 	trajectoryArray[1].end = 1;
-	trajectoryArray[1].ax = -0.339;
-	trajectoryArray[1].bx = 0.702;
-	trajectoryArray[1].cx = 0;
-	trajectoryArray[1].dx = 0;
+	trajectoryArray[1].ax = 0.702;
+	trajectoryArray[1].bx = 1.656;
+	trajectoryArray[1].cx = -0.3115;
+	trajectoryArray[1].dx = 0.3443;
+	// -0.3443 x + 1.344 x + 2.22e-16
 	trajectoryArray[1].ay = 0;
 	trajectoryArray[1].by = 0;
-	trajectoryArray[1].cy = 0;
-	trajectoryArray[1].dy = 0;
+	trajectoryArray[1].cy = 1.344;
+	trajectoryArray[1].dy = 0.3443;
+	// straight
+	// -0.339 x + 0.702
+	trajectoryArray[0].start = 0;
+	trajectoryArray[0].end = 1;
+	trajectoryArray[0].ax = 0.363;
+	trajectoryArray[0].bx =  0.339;
+	trajectoryArray[0].cx = 0;
+	trajectoryArray[0].dx = 0;
+	trajectoryArray[0].ay = 0;
+	trajectoryArray[0].by = 0;
+	trajectoryArray[0].cy = 0;
+	trajectoryArray[0].dy = 0;
 
     RETURN_NOERROR;
 }
@@ -180,6 +187,12 @@ tResult cStanleyControl::ProcessPosition(tTimeStamp tmTimeOfTrigger)
 {
 	::tPosition position;
 	LOG_INFO("Hellof from ProcessPosition" );
+
+	//Read Property-File
+	m_properties->TriggerPropertiesReload(80); // reload the file every 2 seconds with a 25 msec timer
+	stanleyGain = m_properties->GetFloat("stanley_gain");
+    maxAngle = m_properties->GetFloat("max_angle");
+
 	object_ptr<const ISample> pReadSample;
 	if (IS_OK(m_ActualPointReader.GetNextSample(pReadSample))) {
 		auto oDecoder = m_PositionSampleFactory.MakeDecoderFor(*pReadSample);
@@ -197,11 +210,13 @@ tResult cStanleyControl::ProcessPosition(tTimeStamp tmTimeOfTrigger)
 	vehicleActualRearAxlePosition.x = position.f32x;
 	vehicleActualRearAxlePosition.y = position.f32y;
 	vehicleActualRearAxlePosition.h = position.f32heading;
+	LOG_INFO("Point of BackPosition: x: %f, y: %f, h: %f", vehicleActualRearAxlePosition.x, vehicleActualRearAxlePosition.y, vehicleActualRearAxlePosition.h  * 180.0 / M_PI);
+
 
 	calculateActualFrontAxlePosition();
-	LOG_INFO("Point of FrontPosition: x: %f, y: %f, h: %f", vehicleActualFrontAxlePosition.x, vehicleActualFrontAxlePosition.y, vehicleActualFrontAxlePosition.h );
+	LOG_INFO("Point of FrontPosition: x: %f, y: %f, h: %f", vehicleActualFrontAxlePosition.x, vehicleActualFrontAxlePosition.y, vehicleActualFrontAxlePosition.h * 180.0 / M_PI );
 	getNextVirtualPointOnPoly();
-	LOG_INFO("Point of SetPoint: x: %f, y: %f, h: %f", vehicleTargetFrontAxlePosition.x, vehicleTargetFrontAxlePosition.y, vehicleTargetFrontAxlePosition.h );
+	LOG_INFO("Point of SetPoint: x: %f, y: %f, h: %f", vehicleTargetFrontAxlePosition.x, vehicleTargetFrontAxlePosition.y, vehicleTargetFrontAxlePosition.h * 180.0 / M_PI );
 	calcSteeringAngle();
 	LOG_INFO("SteeringAngle in grad: %f", vehicleSteeringAngle * 180.0 / M_PI );
 	mapSteeringAngle();
@@ -329,12 +344,10 @@ void cStanleyControl::getNextVirtualPointOnPoly() {
 		{
 			// p = [0, 1]
 			calcVirtualPointfromPoly(trajectoryArray[i], j, &actualPoint);
-			
-			LOG_INFO("Inkrement: %f", (trajectoryArray[i].end-trajectoryArray[i].start)/POINTS_PER_POLY );
 
 			//calc norm to carPosition
 			double dist = sqrt(pow(actualPoint.x - vehicleActualFrontAxlePosition.x, 2) + pow(actualPoint.y - vehicleActualFrontAxlePosition.y, 2));
-			LOG_INFO("Dist: %f at point j: %f", dist, j );
+			
 			if (dist < min_dist)
 			{
 				min_dist = dist;
@@ -351,6 +364,7 @@ void cStanleyControl::getNextVirtualPointOnPoly() {
 			}
 		}
 	}
+	LOG_INFO("Point from Poly is: x: %f, y: %f, h: %f", vehicleTargetFrontAxlePosition.x, vehicleTargetFrontAxlePosition.y, vehicleTargetFrontAxlePosition.h * 80.0 / M_PI );
 	LOG_INFO("End of trajektorie loop" );
 
 	if (actual_min_dist_poly_index != last_min_dist_poly_index)
@@ -371,14 +385,21 @@ void cStanleyControl::getNextVirtualPointOnPoly() {
 }
 
 void cStanleyControl::calcVirtualPointfromPoly(tTrajectory poly, double p, LITD_VirtualPoint* vp) {
-	double x = poly.ax*pow(p, 3) + poly.bx*pow(p, 2) + poly.cx*p + poly.dx;
-	double y = poly.ay*pow(p, 3) + poly.by*pow(p, 2) + poly.cy*p + poly.dy;
+	double x = poly.dx*pow(p, 3) + poly.cx*pow(p, 2) + poly.bx*p + poly.ax;
+	double y = poly.dy*pow(p, 3) + poly.cy*pow(p, 2) + poly.by*p + poly.ay;
 
 	//tangente durch erste ableitung berechnen
-	double x_der = poly.ax*pow(p, 2) + poly.bx*p + poly.cx;
-	double y_der = poly.ay*pow(p, 2) + poly.by*p + poly.cy;
+	double x_der = poly.dx*pow(p, 2) + poly.cx*p + poly.bx;
+	double y_der = poly.dy*pow(p, 2) + poly.cy*p + poly.by;
+
+	
+
+	//LOG_INFO("Derivation Points: x_der: %f, y_der: %f", x_der, y_der );
 
 	double heading = wrapTo2Pi(atan2(y_der, x_der));
+	//double heading = wrapTo2Pi(atan2(y_p-y_m, x_p-x_m));
+
+	
 
 	vp->x = x;
 	vp->y = y;
@@ -387,7 +408,6 @@ void cStanleyControl::calcVirtualPointfromPoly(tTrajectory poly, double p, LITD_
 
 void cStanleyControl::mapSteeringAngle(){
     tFloat32  rad2degree  = 180.0 / M_PI;
-	double maxAngle = 45;
     vehicleSteeringAngle = (vehicleSteeringAngle * rad2degree) / maxAngle * (-100);   
     LOG_INFO("SteeringAngle in steps: %f", vehicleSteeringAngle );
 
