@@ -89,7 +89,7 @@ cStanleyControl::cStanleyControl()
 	}
 
 	/* tTrajectory */
-	object_ptr<IStreamType> pTypeTrajectoryData;
+	/*object_ptr<IStreamType> pTypeTrajectoryData;
 	if IS_OK(adtf::mediadescription::ant::create_adtf_default_stream_type_from_service("tTrajectory", pTypeTrajectoryData, m_TrajectorySampleFactory))
 	{
 		adtf_ddl::access_element::find_index(m_TrajectorySampleFactory, cString("id"), m_ddlTrajectoryIndex.id);
@@ -108,7 +108,7 @@ cStanleyControl::cStanleyControl()
 	else
 	{
 		LOG_WARNING("No mediadescription for tTrajectory found!");
-	}
+	}*/
 
 	/* tSignalValue */
 	object_ptr<IStreamType> pTypeSignalValue;
@@ -125,13 +125,15 @@ cStanleyControl::cStanleyControl()
 
     //Register input pins
 	create_pin(*this, m_ActualPointReader, "actual_point", pTypePositionData);
-	create_pin(*this, m_TrajectoryReader, "inTrajectories", pTypeTrajectoryData);
+	//create_pin(*this, m_TrajectoryReader, "inTrajectories", pTypeTrajectoryData);
 	//Register output pin
 	filter_create_pin(*this, m_SteeringWriter, "steering", pTypeSignalValue);
 		
 	create_inner_pipe(*this, cString::Format("%s_trigger", "actual_point"), "actual_point", [&](tTimeStamp tmTime) -> tResult
 	{
-		return ProcessTrajectories(tmTime);
+		LOG_INFO("Hello out of inner pipe" );
+		//return ProcessTrajectories(tmTime);
+		return ProcessPosition(tmTime);
 	});
 
 	create_inner_pipe(*this, cString::Format("%s_trigger", "trajectories"), "trajectories", [&](tTimeStamp tmTime) -> tResult
@@ -143,9 +145,12 @@ cStanleyControl::cStanleyControl()
 //implement the Configure function to read ALL Properties
 tResult cStanleyControl::Configure()
 {
+	LOG_INFO("Configure is running now!");
 	// Fixed Polynomials of a cirle arc and a straight for testing
 	// Circle Arc
 	// 0.3443 x + 0.3115 x - 1.656 x + 0.363
+	trajectoryArray[0].start = 0;
+	trajectoryArray[0].end = 1;
 	trajectoryArray[0].ax = 0.3443;
 	trajectoryArray[0].bx = 0.3115;
 	trajectoryArray[0].cx = -1.656;
@@ -157,14 +162,16 @@ tResult cStanleyControl::Configure()
 	trajectoryArray[0].dy = 0;
 	// straight
 	// -0.339 x + 0.702
-	trajectoryArray[0].ax = -0.339;
-	trajectoryArray[0].bx = 0.702;
-	trajectoryArray[0].cx = 0;
-	trajectoryArray[0].dx = 0;
-	trajectoryArray[0].ay = 0;
-	trajectoryArray[0].by = 0;
-	trajectoryArray[0].cy = 0;
-	trajectoryArray[0].dy = 0;
+	trajectoryArray[1].start = 0;
+	trajectoryArray[1].end = 1;
+	trajectoryArray[1].ax = -0.339;
+	trajectoryArray[1].bx = 0.702;
+	trajectoryArray[1].cx = 0;
+	trajectoryArray[1].dx = 0;
+	trajectoryArray[1].ay = 0;
+	trajectoryArray[1].by = 0;
+	trajectoryArray[1].cy = 0;
+	trajectoryArray[1].dy = 0;
 
     RETURN_NOERROR;
 }
@@ -172,6 +179,7 @@ tResult cStanleyControl::Configure()
 tResult cStanleyControl::ProcessPosition(tTimeStamp tmTimeOfTrigger)
 {
 	::tPosition position;
+	LOG_INFO("Hellof from ProcessPosition" );
 	object_ptr<const ISample> pReadSample;
 	if (IS_OK(m_ActualPointReader.GetNextSample(pReadSample))) {
 		auto oDecoder = m_PositionSampleFactory.MakeDecoderFor(*pReadSample);
@@ -191,8 +199,11 @@ tResult cStanleyControl::ProcessPosition(tTimeStamp tmTimeOfTrigger)
 	vehicleActualRearAxlePosition.h = position.f32heading;
 
 	calculateActualFrontAxlePosition();
+	LOG_INFO("Point of FrontPosition: x: %f, y: %f, h: %f", vehicleActualFrontAxlePosition.x, vehicleActualFrontAxlePosition.y, vehicleActualFrontAxlePosition.h );
 	getNextVirtualPointOnPoly();
+	LOG_INFO("Point of SetPoint: x: %f, y: %f, h: %f", vehicleTargetFrontAxlePosition.x, vehicleTargetFrontAxlePosition.y, vehicleTargetFrontAxlePosition.h );
 	calcSteeringAngle();
+	LOG_INFO("SteeringAngle in grad: %f", vehicleSteeringAngle * 180.0 / M_PI );
 
 	object_ptr<ISample> pWriteSample;
 
@@ -312,14 +323,16 @@ void cStanleyControl::getNextVirtualPointOnPoly() {
 
 	for (int i = 0; i<TRAJECTORY_ARRAY_LEN; i++)
 	{
-		for (double j = trajectoryArray[i].start; j <= trajectoryArray[i].end; j+=1/POINTS_PER_POLY)
+		for (double j = trajectoryArray[i].start; j <= trajectoryArray[i].end; j+=(trajectoryArray[i].end-trajectoryArray[i].start)/POINTS_PER_POLY)
 		{
 			// p = [0, 1]
 			calcVirtualPointfromPoly(trajectoryArray[i], j, &actualPoint);
+			
+			LOG_INFO("Inkrement: %f", (trajectoryArray[i].end-trajectoryArray[i].start)/POINTS_PER_POLY );
 
 			//calc norm to carPosition
 			double dist = sqrt(pow(actualPoint.x - vehicleActualFrontAxlePosition.x, 2) + pow(actualPoint.y - vehicleActualFrontAxlePosition.y, 2));
-
+			LOG_INFO("Dist: %f at point j: %f", dist, j );
 			if (dist < min_dist)
 			{
 				min_dist = dist;
@@ -336,6 +349,7 @@ void cStanleyControl::getNextVirtualPointOnPoly() {
 			}
 		}
 	}
+	LOG_INFO("End of trajektorie loop" );
 
 	if (actual_min_dist_poly_index != last_min_dist_poly_index)
 	{

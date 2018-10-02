@@ -25,7 +25,7 @@ THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS AS IS AND ANY EXPRESS OR I
 #define STANLEY_GAIN 1.5
 #define VEHICLE_AXIS_DISTANCE 0.36 // in m
 #define TRAJECTORY_ARRAY_LEN 2
-#define POINTS_PER_POLY 10
+#define POINTS_PER_POLY 2
 
 using namespace adtf_util;
 using namespace ddl;
