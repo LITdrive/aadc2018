@@ -25,50 +25,58 @@ On Windows, do the following:
 	md build; cd build
 	cmake -G "Visual Studio 14 2015 Win64" ..
 	cmake --build . --target INSTALL --config Release
-	
-### Tensorflow 1.8.0
-Download archive from [google drive](https://drive.google.com/open?id=1CMnu1d_IwQAnup0BKL_es4i4T6XQRdqB), extract and copy to `/opt/tensorflow/1.8.0`
 
-Pass information to ADTF:
+### Nvidia Driver 396.xx
 
-    sudo touch /etc/ld.so.conf.d/tensorflow.conf
-    sudo gedit /etc/ld.so.conf.d/tensorflow.conf
-    
-Write `/opt/tensorflow/1.8.0/lib` inside the file, save and close
+**Linux-only!**
 
-Reload the lookup table:
-    
-    sudo ldconfig
- 
-
-### Eigen 3.3.4
-Download archive from [google drive](https://drive.google.com/open?id=1CMnu1d_IwQAnup0BKL_es4i4T6XQRdqB), extract and copy to `/opt/eigen/3.3.4`
-
-### Protobuf 3.5.0
-prepare environment
-
-    sudo apt-get install autoconf automake libtool curl make g++ unzip
-    
-To get the source, download release for cpp v3.5 format .tar.gz or .zip packages in the release page:
-       https://github.com/google/protobuf/releases/latest
-
-unzip, go to unzipped folder and execute:
-
-    ./configure
-    make
-    make check
-    sudo make install
-    sudo ldconfig # refresh shared library cache.
-
-### Nvidia driver 396.xx
-    
     sudo add-apt-repository ppa:graphics-drivers/ppa
     sudo apt update
     sudo apt install nvidia-396
-    
-restart machine and check with 
+
+Restart machine and check with
 
     nvidia-smi
+
+### Eigen 3.3.4
+
+**Linux-only!** Download the precompiled archive from [here](https://drive.google.com/file/d/1m8tXbVHjtSuV_cpZmR51T1Z4Kzz9et-3/view?usp=sharing), extract and copy this to `/opt/eigen/3.3.4` (such that you have `share` and `include` folders in there). Next, configure the shared library.
+
+### Protobuf 3.5.0
+
+**Linux-only!** We need to build Protobuf. Prepare the environment with
+
+    sudo apt-get update
+    sudo apt-get install autoconf automake libtool curl make g++ unzip
+
+Next, download and extract the package
+
+    cd /opt
+    sudo wget https://github.com/protocolbuffers/protobuf/releases/download/v3.5.1/protobuf-cpp-3.5.1.tar.gz -O /tmp/protobuf.tar.gz
+    sudo mkdir protobuf
+    sudo tar -xzf /tmp/protobuf.tar.gz -C protobuf
+    sudo chown -R aadc:aadc protobuf
+
+Next, configure, make, install and update the shared library path
+
+    cd /opt/protobuf/protobuf-3.5.1
+    chmod +x configure
+    ./configure
+    make -j5
+    make check -j5
+    sudo make install
+    sudo ldconfig
+
+The libraries should have been installed to `/usr/local/lib`, you can check this with
+
+    ls /usr/local/lib/ | grep proto
+
+### Tensorflow 1.8.0
+
+**Linux-only!** Download the precompiled archive from [here](https://drive.google.com/file/d/1lY8VUlROLTkavQFePoHVidur-TpKr1fj/view?usp=sharing), extract and copy this to `/opt/tensorflow/1.8.0` (such that you have `external`, `include` and `lib` folders in there). Next, configure the shared library.
+
+    echo '/opt/tensorflow/1.8.0/lib' | sudo tee /etc/ld.so.conf.d/tensorflow.conf
+    sudo ldconfig
 
 ## Structure
 
