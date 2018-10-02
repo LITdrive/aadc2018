@@ -29,3 +29,7 @@ install(TARGETS ${PROJECT_NAME} DESTINATION bin/debug/application CONFIGURATIONS
 # Link your application with tensorflow libraries
 target_link_libraries(${PROJECT_NAME} LINK_PUBLIC ${OpenCV_LIBS})
 target_link_libraries(${PROJECT_NAME} LINK_PUBLIC ${Protobuf_LIBRARIES} ${TENSORFLOW_LIBS} )
+
+#this is to add a folder within the ADTF solution
+set_property(TARGET ${PROJECT_NAME} PROPERTY FOLDER templates)
+set_property(TARGET ${PROJECT_NAME}_pdgen PROPERTY FOLDER templates)
