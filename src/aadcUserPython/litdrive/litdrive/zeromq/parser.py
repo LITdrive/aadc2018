@@ -27,21 +27,27 @@ def _read_structs(nodes):
 
     # read struct definitions
     for node in nodes:
-        elements = [(e.attrib['name'], e.attrib['type']) for e in node]
-        data[node.attrib['name']] = elements
+        arraysize = node.attrib['arraysize'] if 'arraysize' in node.attrib else 1
+        elements = [(int(e.attrib['arraysize']), e.attrib['name'], e.attrib['type']) for e in node]
+        data[node.attrib['name']] = (arraysize, elements)
 
     def __resolve_nested_definition(elements, i):
-        name_, type_ = elements[i]
+        arraysize_, name_, type_ = elements[i]
         if type_ not in baseTypes:
-            resolved = data[type_].copy()
-            elements[i] = {name_: resolved}
+            resolved = data[type_][1].copy()
+            elements[i] = {name_: (arraysize_, resolved)}
             for j in range(len(resolved)):
                 __resolve_nested_definition(resolved, j)
 
     # resolve nested definitions
     for name, elements in data.items():
-        for i in range(len(elements)):
-            __resolve_nested_definition(elements, i)
+        for i in range(len(elements[1])):
+            __resolve_nested_definition(elements[1], i)
+
+    # remove top level tuple
+    tmp, data = data, {}
+    for key, (_, value) in tmp.items():
+        data[key] = value
 
     return data
 
@@ -52,10 +58,11 @@ def _build_format_string(node, level=0):
 
     for element in node:
         if isinstance(element, dict):
-            for key in element:
-                fmt += _build_format_string(element[key], level=level + 1)
+            for key, (arraysize_, value_) in element.items():
+                fmt += _build_format_string(value_, level=level + 1) * arraysize_
         else:
-            fmt += baseTypes[element[1]]
+            arraysize_, name_, type_ = element
+            fmt += baseTypes[type_] * arraysize_
 
     return fmt
 
@@ -87,11 +94,19 @@ def unpack_dict(data, dtype=None, fmt_str=None):
     def __unpack_dict(elements, i, result):
         for element in elements:
             if isinstance(element, dict):
-                for key in element:
-                    result[key] = {}
-                    i = __unpack_dict(element[key], i, result[key])
+                for key, (arraysize_, value_) in element.items():
+                    if arraysize_ == 1:
+                        result[key] = {}
+                        i = __unpack_dict(value_, i, result[key])
+                    else:
+                        result[key] = []
+                        for _ in range(arraysize_):
+                            inner_dict = {}
+                            result[key].append(inner_dict)
+                            i = __unpack_dict(value_, i, inner_dict)
             else:
-                result[element[0]] = tuples[i] if tuples else None
+                arraysize_, name_, type_ = element
+                result[name_] = tuples[i] if arraysize_ == 1 else tuples[i:(i + arraysize_)]
                 i += 1
         return i
 
