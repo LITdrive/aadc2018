@@ -46,14 +46,14 @@ def _read_structs(nodes):
     return data
 
 
-def _build_format_string(node):
+def _build_format_string(node, level=0):
     """ Build the format string for struct.pack() and struct.unpack() """
-    fmt = ""
+    fmt = "<" if level == 0 else ""
 
     for element in node:
         if isinstance(element, dict):
             for key in element:
-                fmt += _build_format_string(element[key])
+                fmt += _build_format_string(element[key], level=level + 1)
         else:
             fmt += baseTypes[element[1]]
 
