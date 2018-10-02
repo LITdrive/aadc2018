@@ -1260,6 +1260,117 @@
           <properties/>
         </property_set>
         <property_set>
+          <name>graphs/default_filter_graph/sample_streams/Sample Stream</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/connections/marker_detection.undistorted_video_Sample Stream.</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/filters/LITD ObjectDetection</name>
+          <properties>
+            <property>
+              <name>trigger/tensorflow model path</name>
+              <value>../../../../configuration_files/models/frozen-yolo-tiny-aadc.pb</value>
+              <type>cFilename</type>
+            </property>
+            <property>
+              <name>trigger/subsample factor</name>
+              <value>15</value>
+              <type>tInt32</type>
+            </property>
+          </properties>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/filters/LITD ZMQ Decision</name>
+          <properties>
+            <property>
+              <name>ZeroMQ Socket Address</name>
+              <value>tcp://192.168.2.117:5555</value>
+              <type>cString</type>
+            </property>
+          </properties>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/active_runners/Thread Runner</name>
+          <properties>
+            <property>
+              <name>thread_is_cyclic</name>
+              <value>false</value>
+              <type>tBool</type>
+            </property>
+          </properties>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/connections/Thread Runner._LITD ZMQ Decision.zmq_thread</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/sample_streams/Sample Stream_1</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/connections/LITD ObjectDetection.output_Sample Stream_1.</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/connections/Sample Stream_1._LITD ZMQ Decision.yolo_front</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/connections/Sample Stream._LITD ObjectDetection.input</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/connections/iner_meas_unit._LITD ZMQ Decision.imu</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/connections/ultrasonic_struct._LITD ZMQ Decision.ultrasonic</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/filters/LITD ZMQ Decision/runners/zmq_thread</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/filters/LITD ObjectDetection/output_pins/output</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/filters/LITD ZMQ Decision/input_pins/yolo_front</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/filters/LITD ObjectDetection/input_pins/input</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/filters/LITD ZMQ Decision/input_pins/imu</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/filters/LITD ZMQ Decision/input_pins/ultrasonic</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/filters/LITD ZMQ Decision/input_pins/road_signs</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/sample_streams/Sample Stream_2</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/connections/marker_detection.road_sign_ext_Sample Stream_2.</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/connections/Sample Stream_2._LITD ZMQ Decision.road_signs</name>
+          <properties/>
+        </property_set>
+        <property_set>
           <name>services/kernel.service.adtf</name>
           <properties/>
         </property_set>
@@ -1312,23 +1423,7 @@
           <properties/>
         </property_set>
         <property_set>
-          <name>graphs/default_filter_graph/filters/LITD_ObjectDetection_cf</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/sample_streams/Sample Stream</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/connections/marker_detection.undistorted_video_Sample Stream.</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/connections/Sample Stream._LITD_ObjectDetection_cf.input</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/filters/LITD_ObjectDetection_cf/input_pins/input</name>
+          <name>services/zeromq.service.adtf</name>
           <properties/>
         </property_set>
       </property_sets>

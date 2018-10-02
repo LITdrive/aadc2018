@@ -9,7 +9,7 @@
   <environment>
     <variable>
       <name>BIN_DIR</name>
-      <value>/home/aadc/AADC/_install/linux64/bin</value>
+      <value>/home/aadc/share/adtf/_install/linux64/bin</value>
     </variable>
   </environment>
   <dependencies>
@@ -148,6 +148,9 @@
       <url>$(BIN_DIR)/debug/litd_objectdetection_filter.adtfplugin</url>
     </plugin>
     <plugin>
+      <url>$(BIN_DIR)/debug/litd_zmq_decision.adtfplugin</url>
+    </plugin>
+    <plugin>
       <url>$(ADTF_DIR)/bin/debug/default_core_objects.adtfplugin</url>
     </plugin>
     <plugin>
@@ -234,6 +237,9 @@
     <plugin>
       <url>$(ADTF_DIR)/addons/displaytoolbox/bin/signal_scope_view.adtfplugin</url>
     </plugin>
+    <plugin>
+      <url>$(BIN_DIR)/debug/zeromq_service.adtfplugin</url>
+    </plugin>
   </plugins>
   <debug_plugins>
     <plugin>
@@ -244,6 +250,9 @@
     </plugin>
     <plugin>
       <url>$(BIN_DIR)/debug/litd_objectdetection_filter.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(BIN_DIR)/debug/litd_zmq_decision.adtfplugin</url>
     </plugin>
     <plugin>
       <url>$(ADTF_DIR)/bin/debug/default_core_objects.adtfplugin</url>
@@ -332,6 +341,9 @@
     <plugin>
       <url>$(ADTF_DIR)/addons/displaytoolbox/bin/debug/signal_scope_view.adtfplugin</url>
     </plugin>
+    <plugin>
+      <url>$(BIN_DIR)/debug/zeromq_service.adtfplugin</url>
+    </plugin>
   </debug_plugins>
   <services>
     <service>
@@ -398,6 +410,11 @@
       <classid>signal_scope_view.ui_service.adtf_disptb.cid</classid>
       <objectid>signal_scope_view.ui_service.adtf_disptb</objectid>
       <runlevel>session</runlevel>
+    </service>
+    <service>
+      <classid>zeromq.service.adtf.cid</classid>
+      <objectid>zeromq.service.adtf</objectid>
+      <runlevel>system</runlevel>
     </service>
   </services>
 </system>

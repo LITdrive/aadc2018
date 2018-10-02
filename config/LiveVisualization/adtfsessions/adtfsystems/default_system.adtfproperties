@@ -71,6 +71,10 @@
           <name>services/signal_scope_view.ui_service.adtf_disptb</name>
           <properties/>
         </property_set>
+        <property_set>
+          <name>services/zeromq.service.adtf</name>
+          <properties/>
+        </property_set>
       </property_sets>
     </property_package>
   </property_packages>
