@@ -36,7 +36,7 @@ void FineLocator::setPixelMetricTransformer(PixelMetricTransformer pixel2metric)
 }
 
 float* FineLocator::localize(Mat img_bv, float theta, Point2f pos, float pictureOffset, int size) {
-    double angleSum = 0, weightedAngleOff = 0, weightedXSum = 0, weightedYSum = 0, anglemax=0 ;
+    double angleSum = 0, weightedAngleOff = 0, weightedXSum = 0, weightedYSum = 0, anglemax = -1;
     for(double angleOff= angleMin; angleOff <= angleMax; angleOff += angleInc) {
         // origin world coordinates -> car location
         double x_pic = pos.x + pictureOffset*cos(theta + angleOff*DEGTORAD), y_pic = pos.y + pictureOffset*sin(theta + angleOff*DEGTORAD);
@@ -92,24 +92,34 @@ float* FineLocator::localize(Mat img_bv, float theta, Point2f pos, float picture
         Mat reverse;
         invertAffineTransform(combined, reverse);
         Mat location_global = reverse * Mat(Vec3d(max_loc_weighted_x/sum + img_bv.size[1]/2.0, max_loc_weighted_y / sum + img_bv.size[0], 1));
-        /*weightedAngleOff += angleOff * ma;
+        /*
+        weightedAngleOff += angleOff * ma;
         angleSum += ma;
-        */Point2d pos_m = pmt.toMeter(location_global.at<double>(0), location_global.at<double>(1));/*
+        */
+        Point2d pos_m = pmt.toMeter(location_global.at<double>(0), location_global.at<double>(1));
+        /*
         weightedXSum += ma*(pos_m.x - pictureOffset*cos(theta + angleOff*DEGTORAD));
-        weightedYSum += ma*(pos_m.y - pictureOffset*sin(theta + angleOff*DEGTORAD));*/
-        if(ma > anglemax){
+        weightedYSum += ma*(pos_m.y - pictureOffset*sin(theta + angleOff*DEGTORAD));
+        */
+        if(ma > anglemax) {
             anglemax = ma;
             weightedXSum = pos_m.x - pictureOffset*cos(theta + angleOff*DEGTORAD);
             weightedYSum = pos_m.y - pictureOffset*sin(theta + angleOff*DEGTORAD);
-            angleSum = 1;
             weightedAngleOff = angleOff;
+            angleSum = 1;
         }
     }
-
-    ret[0] = weightedXSum/angleSum;
-    ret[1] = weightedYSum/angleSum;
-    ret[2] = (weightedAngleOff/angleSum)*DEGTORAD;
-    ret[3] = angleSum/9/angleCnt;
+    if (anglemax > 0){
+        ret[0] = weightedXSum/angleSum;
+        ret[1] = weightedYSum/angleSum;
+        ret[2] = (weightedAngleOff/angleSum)*DEGTORAD;
+        ret[3] = angleSum/9/angleCnt;
+    } else { // return safe default Values
+        ret[0] = pos.x;
+        ret[1] = pos.y;
+        ret[2] = theta;
+        ret[3] = 0;
+    }
     return ret;
 }
 
