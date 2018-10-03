@@ -17,6 +17,7 @@ THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS AS IS AND ANY EXPRESS OR I
 
 #include <aadc_structs.h>
 
+#include <cstring>
 #include <sstream>
 #include <algorithm>
 
@@ -608,7 +609,8 @@ tResult cZmqBase::ProcessInputs(tTimeStamp tmTimeOfTrigger)
 					
 				case YoloNetOutput:
 					PROCESS_INPUT_SAMPLE_HELPER(tYOLONetOutput, {
-						RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlYoloNetOutputIndex.f32NodeValue, &data->f32NodeValue));
+						const tFloat32* nodeValues = static_cast<const tFloat32*>(sampleDecoder.GetElementAddress(m_ddlYoloNetOutputIndex.f32NodeValue));
+						memcpy(&data->f32NodeValue, nodeValues, sizeof data->f32NodeValue);
 					});
 
 				default:
