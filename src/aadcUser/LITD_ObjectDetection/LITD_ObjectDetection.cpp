@@ -82,7 +82,7 @@ tResult cLITD_ObjectDetection::Process(tTimeStamp tmTimeOfTrigger)
     
     object_ptr<const ISample> pReadSample;
     Tensor output;
-    float output_array[588];
+    tFloat32 output_array[588];
     int flag = 0;
     while (IS_OK(m_oReader.GetNextSample(pReadSample)))
     {
@@ -95,6 +95,7 @@ tResult cLITD_ObjectDetection::Process(tTimeStamp tmTimeOfTrigger)
                                    CV_8UC3, const_cast<unsigned char*>(static_cast<const unsigned char*>(pReadBuffer->GetPtr())));
 
             //Do the image processing and copy to destination image buffer
+            // TODO: use .data() instead
             output = yolo_handler.forward_path(inputImage);
             tensorflow::TTypes<float>::Flat output_flat = output.flat<float>();
 
@@ -112,7 +113,8 @@ tResult cLITD_ObjectDetection::Process(tTimeStamp tmTimeOfTrigger)
         {
             auto oCodec = m_YNOStructSampleFactory.MakeCodecFor(pWriteSample);
 
-            RETURN_IF_FAILED(oCodec.SetElementValue(m_ddtYOLONetOutputStruct.nodeValues, &output_array));
+            tFloat32 *nodeValues = static_cast<tFloat32*>(oCodec.GetElementAddress(m_ddtYOLONetOutputStruct.nodeValues));
+            memcpy(nodeValues, output_array, sizeof output_array);
         }
 
         m_oWriter << pWriteSample << flush << trigger;
