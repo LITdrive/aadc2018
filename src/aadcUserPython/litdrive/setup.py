@@ -5,36 +5,37 @@ from distutils.core import setup
 from setuptools.extension import Extension
 from Cython.Build import cythonize
 
+ext_modules = []
 if os.name == 'nt':
     ext_modules = [
-        Extension("darkflow_utils.nms",
-                  sources=["darkflow_utils/nms.pyx"],
+        Extension("litdrive.util.darkflow.nms",
+                  sources=["litdrive/util/darkflow/nms.pyx"],
                   include_dirs=[np.get_include()]
                   ),
-        Extension("darkflow_utils.cy_yolo2_findboxes",
-                  sources=["darkflow_utils/cy_yolo2_findboxes.pyx"],
+        Extension("litdrive.util.darkflow.cy_yolo2_findboxes",
+                  sources=["litdrive/util/darkflow/cy_yolo2_findboxes.pyx"],
                   include_dirs=[np.get_include()]
                   ),
-        Extension("darkflow_utils.cy_yolo_findboxes",
-                  sources=["darkflow_utils/cy_yolo_findboxes.pyx"],
+        Extension("litdrive.util.darkflow.cy_yolo_findboxes",
+                  sources=["litdrive/util/darkflow/cy_yolo_findboxes.pyx"],
                   include_dirs=[np.get_include()]
                   )
     ]
 
 elif os.name == 'posix':
     ext_modules = [
-        Extension("darkflow_utils.nms",
-                  sources=["darkflow_utils/nms.pyx"],
+        Extension("litdrive.util.darkflow.nms",
+                  sources=["litdrive/util/darkflow/nms.pyx"],
                   include_dirs=[np.get_include()],
                   libraries=["m"]
                   ),
-        Extension("darkflow_utils.cy_yolo2_findboxes",
-                  sources=["darkflow_utils/cy_yolo2_findboxes.pyx"],
+        Extension("litdrive.util.darkflow.cy_yolo2_findboxes",
+                  sources=["litdrive/util/darkflow/cy_yolo2_findboxes.pyx"],
                   include_dirs=[np.get_include()],
                   libraries=["m"]
                   ),
-        Extension("darkflow_utils.cy_yolo_findboxes",
-                  sources=["darkflow_utils/cy_yolo_findboxes.pyx"],
+        Extension("litdrive.util.darkflow.cy_yolo_findboxes",
+                  sources=["litdrive/util/darkflow/cy_yolo_findboxes.pyx"],
                   include_dirs=[np.get_include()],
                   libraries=["m"]
                   )

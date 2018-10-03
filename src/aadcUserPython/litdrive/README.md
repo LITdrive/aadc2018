@@ -22,6 +22,8 @@ Or, alternativley, with pip:
 
     pip3 install -r requirements.txt
 
-How to build the `darkflow_utils`:
+### Build Cython dependencies
+
+The module `litdrive.util.darkflow` has Cython code that needs to be built first:
 
 	python setup.py build_ext --inplace

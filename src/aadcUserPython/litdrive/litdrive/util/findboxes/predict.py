@@ -1,7 +1,8 @@
-import tensorflow as tf
-import numpy as np
 import cv2
-from predict_boxes_yolo_v1 import postprocess
+import numpy as np
+import tensorflow as tf
+
+from .predict_boxes_yolo_v1 import postprocess
 
 image_path = "/home/mohamed/tensorflow/sample_img/car_img_resized.jpg"
 frozen_network_path = "/home/mohamed/tensorflow/network/frozen-yolo-tiny-aadc.pb"

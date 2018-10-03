@@ -1,8 +1,6 @@
 import numpy as np
-import cv2
-import os
-import json
-from darkflow_utils.cy_yolo_findboxes import yolo_box_constructor
+
+from ..darkflow.cy_yolo_findboxes import yolo_box_constructor
 
 
 def process_box(meta, b, h, w, threshold):
