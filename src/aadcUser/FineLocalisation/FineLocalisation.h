@@ -19,7 +19,8 @@ THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS AS IS AND ANY EXPRESS OR I
 #include "PixelMetricTransformer.h"
 
 //*************************************************************************************************
-#define CID_CBIRDS_EYE_VIEW_DATA_TRIGGERED_FILTER "finelocalisation_filter.filter.user.aadc.cid"
+#define CID_FINE_LOCALISATION_DATA_TRIGGERED_FILTER "finelocalisation.filter.user.aadc.cid"
+
 
 using namespace adtf_util;
 using namespace ddl;
@@ -86,12 +87,12 @@ private:
     property_variable<tFloat32> mat11 =-139.5;
     property_variable<tFloat32> mat12 = 567;
     property_variable<tFloat32> axleToPicture = 0.73;
-    property_variable<tFloat32> headingOffset = 90;
+    property_variable<tFloat32> headingOffset = 00;
     property_variable<cFilename> mapPath = cFilename("/home/aadc/share/adtf/data/scaledMap.png");
     property_variable<tInt32> propSearchSpaceSize = 20;
-    property_variable<tInt32> angleIterCnt = 5;
-    property_variable<tFloat32> angleRangeMin = -2;
-    property_variable<tFloat32> angleRangeMax =  2;
+    property_variable<tInt32> angleIterCnt = 11;
+    property_variable<tFloat32> angleRangeMin = -5;
+    property_variable<tFloat32> angleRangeMax =  5;
     property_variable<tInt32> subSampleRate =  30;
     tInt32 sampleCnt = 0;
 

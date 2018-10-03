@@ -22,7 +22,7 @@ THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS AS IS AND ANY EXPRESS OR I
 
 #define DEG2RAD M_PI/180
 
-ADTF_TRIGGER_FUNCTION_FILTER_PLUGIN(CID_CBIRDS_EYE_VIEW_DATA_TRIGGERED_FILTER,
+ADTF_TRIGGER_FUNCTION_FILTER_PLUGIN(CID_FINE_LOCALISATION_DATA_TRIGGERED_FILTER,
                                     "LITD_FineLocalisation",
                                     cFineLocalisation,
                                     adtf::filter::pin_trigger({ "inBirdsEye" }));
@@ -143,29 +143,28 @@ tResult cFineLocalisation::Process(tTimeStamp tmTimeOfTrigger)
                 //create a opencv matrix from the media sample buffer
                 Mat bvImage = Mat(cv::Size(m_sImageFormat.m_ui32Width, m_sImageFormat.m_ui32Height), CV_8UC3,
                                   const_cast<unsigned char *>(static_cast<const unsigned char *>(pReadBuffer->GetPtr())));
-                //[x, y, headingOffset, confidence]
+                //[dx, dy, headingOffset, confidence]
                 auto start = std::chrono::system_clock::now();
                 float *location = locator.localize(bvImage, heading + headingOffset * DEG2RAD, Point2f(x, y),
                                                    axleToPicture, searchSpaceSize);
                 auto end = std::chrono::system_clock::now();
                 std::chrono::duration<double> diff = end - start;
                 LOG_INFO("Localization took %e s", diff.count());
-
+                if(location[3] > angleRangeMax || location[3] < angleRangeMin) LOG_ERROR("caclualted angle offset out of bounds: %f", location[3]);
                 object_ptr<ISample> pWriteSample;
                 RETURN_IF_FAILED(alloc_sample(pWriteSample, m_pClock->GetStreamTime()));
                 {
                     auto oCodec = m_PositionSampleFactory.MakeCodecFor(pWriteSample);
 
-                    RETURN_IF_FAILED(oCodec.SetElementValue(m_ddlPositionIndex.x, location[0]));
-                    RETURN_IF_FAILED(oCodec.SetElementValue(m_ddlPositionIndex.y, location[1]));
-                    RETURN_IF_FAILED(oCodec.SetElementValue(m_ddlPositionIndex.heading, heading + location[2]));
+                    RETURN_IF_FAILED(oCodec.SetElementValue(m_ddlPositionIndex.x, x + location[0]));
+                    RETURN_IF_FAILED(oCodec.SetElementValue(m_ddlPositionIndex.y, y + location[1]));
+                    RETURN_IF_FAILED(oCodec.SetElementValue(m_ddlPositionIndex.heading, heading - headingOffset*DEG2RAD + location[2]));
                     RETURN_IF_FAILED(oCodec.SetElementValue(m_ddlPositionIndex.speed, speed));
                 }
-                LOG_INFO("Wrote info %.2f %.2f %.4f",location[0], location[1], location[2]);
+                LOG_INFO("found deltas: %.2f %.2f %.4f",location[0], location[1], location[2]);
                 m_oPosWriter << pWriteSample << flush << trigger;
 
                 transmitSignalValue(m_oConfWriter, m_pClock->GetStreamTime(), m_SignalValueSampleFactory, m_ddlSignalValueId.timeStamp, 0, m_ddlSignalValueId.value, location[3]);
-
             }
             sampleCnt = 0;
         }

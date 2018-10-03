@@ -29,6 +29,7 @@ float rad2grad(float x){
 
 void FineLocator::setMap(char* pathToScaledMap){
     scaledMap = imread(pathToScaledMap);
+    if(scaledMap.empty()) cout << "\n\n\n\n\n\n\nERROR: no valid Image Supplied \n\n\n\n\n\n\n";
 }
 
 void FineLocator::setPixelMetricTransformer(PixelMetricTransformer pixel2metric){
@@ -88,6 +89,7 @@ float* FineLocator::localize(Mat img_bv, float theta, Point2f pos, float picture
                 max_loc_weighted_y += (mal.y + y_off) * curr_res;
             }
         }
+
         if(sum == 0) sum = 1e-6; //prevent div by 0 error
         Mat reverse;
         invertAffineTransform(combined, reverse);
@@ -109,15 +111,17 @@ float* FineLocator::localize(Mat img_bv, float theta, Point2f pos, float picture
             angleSum = 1;
         }
     }
+
     if (anglemax > 0){
-        ret[0] = weightedXSum/angleSum;
-        ret[1] = weightedYSum/angleSum;
+        ret[0] = weightedXSum/angleSum - pos.x;
+        ret[1] = weightedYSum/angleSum - pos.y;
         ret[2] = (weightedAngleOff/angleSum)*DEGTORAD;
         ret[3] = angleSum/9/angleCnt;
     } else { // return safe default Values
-        ret[0] = pos.x;
-        ret[1] = pos.y;
-        ret[2] = theta;
+        cout << "\n No Good Values found\n";
+        ret[0] = 0;
+        ret[1] = 0;
+        ret[2] = 0;
         ret[3] = 0;
     }
     return ret;
