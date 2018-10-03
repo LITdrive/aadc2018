@@ -552,9 +552,8 @@ tResult cZmqBase::ProcessInputs(tTimeStamp tmTimeOfTrigger)
 					break;
 
 				case LaserScanner:
-					{
-						// TODO: use zeromq zero-copy here!
-
+					PROCESS_INPUT_SAMPLE_HELPER(tLaserScannerData, {
+						// read the data points into a std::vector<tPolarCoordiante> first
 						tSize numOfScanPoints = 0;
 						tResult res = sampleDecoder.GetElementValue(m_ddlLSDataId.size, &numOfScanPoints);
 						const tPolarCoordiante* pCoordinates = reinterpret_cast<const tPolarCoordiante*>(sampleDecoder.GetElementAddress(m_ddlLSDataId.scanArray));
@@ -568,9 +567,13 @@ tResult cZmqBase::ProcessInputs(tTimeStamp tmTimeOfTrigger)
 							scan.push_back(scanPoint);
 						}
 
-						returncode = m_sck_pair->send(&scan[0], numOfScanPoints * sizeof(tPolarCoordiante));
-					}
-					break;
+						// set the size
+						RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlLSDataId.size, &data->ui32Size));
+						// set the array (and zero it first)
+						const tPolarCoordiante* scanArray = static_cast<const tPolarCoordiante*>(sampleDecoder.GetElementAddress(m_ddlLSDataId.scanArray));
+						memset(&data->tScanArray, 0, sizeof data->tScanArray);
+						memcpy(&data->tScanArray, scanArray, numOfScanPoints * sizeof(tPolarCoordiante));
+					});
 
 				case Trajectory:
 					PROCESS_INPUT_SAMPLE_HELPER(tTrajectory, {
