@@ -9,13 +9,14 @@ from ...util.findboxes.predict_boxes_yolo_v1 import postprocess
 
 
 def process(yolo):
-    yolo_ = np.array(yolo, dtype=np.float32)
+    if yolo:
+        yolo_ = np.array(yolo, dtype=np.float32)
 
-    # sort by last value (confidence)
-    bounding_boxes = postprocess(yolo_)
-    bounding_boxes = list(sorted(bounding_boxes, key=lambda box: -box[6]))
+        # sort by last value (confidence)
+        bounding_boxes = postprocess(yolo_)
+        bounding_boxes = list(sorted(bounding_boxes, key=lambda box: -box[6]))
 
-    print(bounding_boxes)
+        print(bounding_boxes)
 
     return None
 
