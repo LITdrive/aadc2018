@@ -16,17 +16,17 @@ THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS AS IS AND ANY EXPRESS OR I
 #include "stdafx.h"
 #include "LITD_ObjectDetection.h"
 #include "ADTF3_OpenCV_helper.h"
+#include <boost/thread/thread.hpp>
 
-
-ADTF_TRIGGER_FUNCTION_FILTER_PLUGIN(CID_COPENCVTEMPLATE_DATA_TRIGGERED_FILTER,
+ADTF_TRIGGER_FUNCTION_FILTER_PLUGIN(CID_LITD_OBJECT_DETECTION_THREAD_TRIGGERED_FILTER,
                                     "LITD ObjectDetection",
                                     cLITD_ObjectDetection,
-                                    adtf::filter::pin_trigger({ "input" }));
+                                    adtf::filter::thread_trigger(tTrue));
 
 cLITD_ObjectDetection::cLITD_ObjectDetection()
 {
     RegisterPropertyVariable("tensorflow model path", m_model_path);
-	RegisterPropertyVariable("subsample factor", m_subsample_factor);
+	RegisterPropertyVariable("sleep time [msec]", m_sleep_time);
 
     //create and set inital input format type
     m_sImageFormat.m_strFormatName = ADTF_IMAGE_FORMAT(RGB_24);
@@ -81,49 +81,51 @@ tResult cLITD_ObjectDetection::Configure()
 
 tResult cLITD_ObjectDetection::Process(tTimeStamp tmTimeOfTrigger)
 {
-    // subsample the triggers (only take every nth trigger)
-	m_num_samples++;
-	if (m_num_samples % m_subsample_factor != 0)
-		RETURN_NOERROR;
-    
-    object_ptr<const ISample> pReadSample;
-    Tensor output;
-    tFloat32 output_array[588];
-    int flag = 0;
-    while (IS_OK(m_oReader.GetNextSample(pReadSample)))
+    while (!m_runner_reset_signal)
     {
-        object_ptr_shared_locked<const ISampleBuffer> pReadBuffer;
-        //lock read buffer
-        if (IS_OK(pReadSample->Lock(pReadBuffer)))
+        object_ptr<const ISample> pReadSample;
+        Tensor output;
+        tFloat32 output_array[588];
+        int flag = 0;
+
+        if (IS_OK(m_oReader.GetLastSample(pReadSample)))
         {
-            //create a opencv matrix from the media sample buffer
-            Mat inputImage = Mat(cv::Size(m_sImageFormat.m_ui32Width, m_sImageFormat.m_ui32Height),
-                                   CV_8UC3, const_cast<unsigned char*>(static_cast<const unsigned char*>(pReadBuffer->GetPtr())));
+            object_ptr_shared_locked<const ISampleBuffer> pReadBuffer;
+            //lock read buffer
+            if (IS_OK(pReadSample->Lock(pReadBuffer)))
+            {
+                //create a opencv matrix from the media sample buffer
+                Mat inputImage = Mat(cv::Size(m_sImageFormat.m_ui32Width, m_sImageFormat.m_ui32Height),
+                                        CV_8UC3, const_cast<unsigned char*>(static_cast<const unsigned char*>(pReadBuffer->GetPtr())));
 
-            //Do the image processing and copy to destination image buffer
-            // TODO: use .data() instead
-            output = yolo_handler.forward_path(inputImage);
-            tensorflow::TTypes<float>::Flat output_flat = output.flat<float>();
+                //Do the image processing and copy to destination image buffer
+                // TODO: use .data() instead
+                output = yolo_handler.forward_path(inputImage);
+                tensorflow::TTypes<float>::Flat output_flat = output.flat<float>();
 
-            for (int i = 0; i < 588; i++) {
-                output_array[i] = output_flat(i);
+                for (int i = 0; i < 588; i++) {
+                    output_array[i] = output_flat(i);
+                }
+                flag = 1;
             }
-            flag = 1;
+
+            if (flag == 1) {
+                object_ptr<ISample> pWriteSample;
+
+                if (IS_OK(alloc_sample(pWriteSample)))
+                {
+                    auto oCodec = m_YNOStructSampleFactory.MakeCodecFor(pWriteSample);
+
+                    tFloat32 *nodeValues = static_cast<tFloat32*>(oCodec.GetElementAddress(m_ddtYOLONetOutputStruct.nodeValues));
+                    memcpy(nodeValues, output_array, sizeof output_array);
+                }
+
+                m_oWriter << pWriteSample << flush << trigger;
+            }
         }
-    }
 
-    if (flag == 1) {
-        object_ptr<ISample> pWriteSample;
-
-        if (IS_OK(alloc_sample(pWriteSample)))
-        {
-            auto oCodec = m_YNOStructSampleFactory.MakeCodecFor(pWriteSample);
-
-            tFloat32 *nodeValues = static_cast<tFloat32*>(oCodec.GetElementAddress(m_ddtYOLONetOutputStruct.nodeValues));
-            memcpy(nodeValues, output_array, sizeof output_array);
-        }
-
-        m_oWriter << pWriteSample << flush << trigger;
+        // good night
+        boost::this_thread::sleep(boost::posix_time::milliseconds(m_sleep_time));
     }
 
     RETURN_NOERROR;

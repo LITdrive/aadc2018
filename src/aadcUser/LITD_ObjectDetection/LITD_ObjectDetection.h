@@ -19,15 +19,17 @@ THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS AS IS AND ANY EXPRESS OR I
 #include "YOLOHandler.h"
 
 //*************************************************************************************************
-#define CID_COPENCVTEMPLATE_DATA_TRIGGERED_FILTER "litd_objectdetection.filter.user.aadc.cid"
+#define CID_LITD_OBJECT_DETECTION_THREAD_TRIGGERED_FILTER "litd_objectdetection.filter.user.aadc.cid"
 
 using namespace adtf_util;
 using namespace ddl;
 using namespace adtf::ucom;
 using namespace adtf::base;
 using namespace adtf::streaming;
+using namespace adtf::streaming::ant;
 using namespace adtf::mediadescription;
 using namespace adtf::filter;
+using namespace adtf::filter::ant;
 using namespace std;
 using namespace cv;
 
@@ -62,11 +64,13 @@ private:
     /*! tensorflow model path */
 	property_variable<cFilename> m_model_path = cFilename(cString("../../../../configuration_files/models/frozen-yolo-tiny-aadc.pb"));
 
-	/* only take every nth trigger */
-	property_variable<tInt> m_subsample_factor = 1;
+	/* processing rate */
+	property_variable<tInt> m_sleep_time = 200;
     
 	/* count number of samples for applying the subsample factor */
 	int m_num_samples = 0;
+
+    std::atomic<bool> m_runner_reset_signal { false };
 
 public:
 
