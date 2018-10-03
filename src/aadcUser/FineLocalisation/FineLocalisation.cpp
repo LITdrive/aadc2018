@@ -23,7 +23,7 @@ THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS AS IS AND ANY EXPRESS OR I
 #define DEG2RAD M_PI/180
 
 ADTF_TRIGGER_FUNCTION_FILTER_PLUGIN(CID_FINE_LOCALISATION_DATA_TRIGGERED_FILTER,
-                                    "LITD_FineLocalisation",
+                                    "LITD FineLocalisation",
                                     cFineLocalisation,
                                     adtf::filter::pin_trigger({ "inBirdsEye" }));
 
@@ -96,12 +96,12 @@ cFineLocalisation::cFineLocalisation()
 
 tResult cFineLocalisation::Configure()
 {
+    //TODO transfer data to new thread and start new thread
     //get clock object
     RETURN_IF_FAILED(_runtime->GetObject(m_pClock));
     string pathToMap = static_cast<string>(cString(mapPath));
     locator.setMap(const_cast<char*>(pathToMap.c_str()));
     locator.setAngleSearchSpace(angleRangeMin, angleRangeMax, angleIterCnt);
-    searchSpaceSize = propSearchSpaceSize;
     affineMat[0][0] = mat00;
     affineMat[0][1] = mat01;
     affineMat[0][2] = mat02;
@@ -109,6 +109,7 @@ tResult cFineLocalisation::Configure()
     affineMat[1][1] = mat11;
     affineMat[1][2] = mat12;
     locator.setPixelMetricTransformer(PixelMetricTransformer(affineMat));
+    locator.setSearchSpace(propSearchSpaceSize);
     sampleCnt = 0;
     RETURN_NOERROR;
 }
@@ -128,8 +129,8 @@ tResult cFineLocalisation::Process(tTimeStamp tmTimeOfTrigger)
         //adjust heading for inversion of back camera
         heading = heading + headingOffset*DEG2RAD;
         RETURN_IF_FAILED(oDecoder.GetElementValue(m_ddlPositionIndex.speed, &speed));
-        //LOG_INFO("recievedinfo %.2f %.2f", x, y);
         recievedPosition = true;
+
     } else {
         LOG_ERROR("!!Failed to read last Position Sample!!");
     }
@@ -140,13 +141,13 @@ tResult cFineLocalisation::Process(tTimeStamp tmTimeOfTrigger)
             object_ptr_shared_locked<const ISampleBuffer> pReadBuffer;
             //lock read buffer
             if (IS_OK(pReadSample->Lock(pReadBuffer))) {
+                //-------------------------- Send to new thread ----------------------------------
                 //create a opencv matrix from the media sample buffer
-                Mat bvImage = Mat(cv::Size(m_sImageFormat.m_ui32Width, m_sImageFormat.m_ui32Height), CV_8UC3,
-                                  const_cast<unsigned char *>(static_cast<const unsigned char *>(pReadBuffer->GetPtr())));
+                Mat bvImage = Mat(cv::Size(m_sImageFormat.m_ui32Width, m_sImageFormat.m_ui32Height), CV_8UC3, const_cast<unsigned char *>(static_cast<const unsigned char *>(pReadBuffer->GetPtr())));
+                //-------------------------- Start of new thread ----------------------------------
                 //[dx, dy, headingOffset, confidence]
                 auto start = std::chrono::system_clock::now();
-                float *location = locator.localize(bvImage, heading + headingOffset * DEG2RAD, Point2f(x, y),
-                                                   axleToPicture, searchSpaceSize);
+                float *location = locator.localize(bvImage, heading, x, y, axleToPicture);
                 auto end = std::chrono::system_clock::now();
                 std::chrono::duration<double> diff = end - start;
                 LOG_INFO("Localization took %e s", diff.count());
@@ -162,9 +163,10 @@ tResult cFineLocalisation::Process(tTimeStamp tmTimeOfTrigger)
                     RETURN_IF_FAILED(oCodec.SetElementValue(m_ddlPositionIndex.speed, speed));
                 }
                 LOG_INFO("found deltas: %.2f %.2f %.4f",location[0], location[1], location[2]);
+                transmitSignalValue(m_oConfWriter, m_pClock->GetStreamTime(), m_SignalValueSampleFactory, m_ddlSignalValueId.timeStamp, 0, m_ddlSignalValueId.value, location[3]);
                 m_oPosWriter << pWriteSample << flush << trigger;
 
-                transmitSignalValue(m_oConfWriter, m_pClock->GetStreamTime(), m_SignalValueSampleFactory, m_ddlSignalValueId.timeStamp, 0, m_ddlSignalValueId.value, location[3]);
+                //-------------------------- End of new thread ----------------------------------
             }
             sampleCnt = 0;
         }

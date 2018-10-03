@@ -20,6 +20,8 @@ private:
 
     float ret[4] = {0, 0, 0, 0};
 
+    int searchSpaceSize = 20;
+
     PixelMetricTransformer pmt;
 
 public:
@@ -34,9 +36,10 @@ public:
      *          returns a Point3f with x=x, y=y, z=confidence level
      * */
 
-    float* localize(Mat img_bv, float theta, Point2f pos, float offset, int size=20);
+    float* localize(Mat img_bv, float theta, float in_x, float in_y, float offset);
 
     void setMap(char* pathToScaledMap);
+    void setSearchSpace(int sss);
     void setPixelMetricTransformer(PixelMetricTransformer pixelMetricTransformer);
 
     void setAngleSearchSpace(float min, float max, int cnt);

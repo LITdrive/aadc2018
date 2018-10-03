@@ -23,8 +23,8 @@ FineLocator::~FineLocator() {
     scaledMap.release();
 }
 
-float rad2grad(float x){
-    return (float)(x*180.0f/M_PI);
+void FineLocator::setSearchSpace(int sss) {
+    searchSpaceSize = sss;
 }
 
 void FineLocator::setMap(char* pathToScaledMap){
@@ -36,8 +36,9 @@ void FineLocator::setPixelMetricTransformer(PixelMetricTransformer pixel2metric)
     pmt = pixel2metric;
 }
 
-float* FineLocator::localize(Mat img_bv, float theta, Point2f pos, float pictureOffset, int size) {
+float* FineLocator::localize(Mat img_bv, float theta, float in_x, float in_y, float pictureOffset) {
     double angleSum = 0, weightedAngleOff = 0, weightedXSum = 0, weightedYSum = 0, anglemax = -1;
+    Point2f pos = Point2f(in_x, in_y);
     for(double angleOff= angleMin; angleOff <= angleMax; angleOff += angleInc) {
         // origin world coordinates -> car location
         double x_pic = pos.x + pictureOffset*cos(theta + angleOff*DEGTORAD), y_pic = pos.y + pictureOffset*sin(theta + angleOff*DEGTORAD);
@@ -54,13 +55,13 @@ float* FineLocator::localize(Mat img_bv, float theta, Point2f pos, float picture
         rot(Rect(0, 0, 2, 2)).copyTo(car_rot(Rect(0, 0, 2, 2)));
         // car location -> picture location
         Mat offset = Mat::eye(3, 3, CV_64F);
-        offset.at<double>(0, 2) = img_bv.size[1] / 2.f + size / 2.f;
-        offset.at<double>(1, 2) = img_bv.size[0] + size / 2.f;
+        offset.at<double>(0, 2) = img_bv.size[1] / 2.f + searchSpaceSize / 2.f;
+        offset.at<double>(1, 2) = img_bv.size[0] + searchSpaceSize / 2.f;
         // combine in reverse order
         Mat combined = offset * car_rot * car_coord_shift;
         combined = combined(Rect(0, 0, 3, 2)).clone(); // only select the Affine Part of the Transformation
         Mat search_space;
-        warpAffine(scaledMap, search_space, combined, Size(img_bv.size[1] + size, img_bv.size[0] + size), INTER_LINEAR, BORDER_REPLICATE);
+        warpAffine(scaledMap, search_space, combined, Size(img_bv.size[1] + searchSpaceSize, img_bv.size[0] + searchSpaceSize), INTER_LINEAR, BORDER_REPLICATE);
         Mat search_result;
         matchTemplate(search_space, img_bv, search_result, TM_CCOEFF_NORMED);
         double mi, ma;
@@ -80,7 +81,7 @@ float* FineLocator::localize(Mat img_bv, float theta, Point2f pos, float picture
         float max_loc_weighted_x = 0, max_loc_weighted_y = 0, sum = 0;
         for (int x_off = -WEIGHT_SEARCH_SIZE; x_off <= WEIGHT_SEARCH_SIZE; x_off++) {
             for (int y_off = -WEIGHT_SEARCH_SIZE; y_off <= WEIGHT_SEARCH_SIZE; y_off++) {
-                if(mal.x + x_off < 0 || mal.x + x_off >= size || mal.y + y_off < 0 || mal.y + y_off >= size){
+                if(mal.x + x_off < 0 || mal.x + x_off >= searchSpaceSize || mal.y + y_off < 0 || mal.y + y_off >= searchSpaceSize){
                     continue; //TODO Correct Mathematical model
                 }
                 float curr_res = search_result.at<float>(mal.x + x_off, mal.y + y_off);
