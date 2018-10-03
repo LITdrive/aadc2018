@@ -22,10 +22,7 @@ THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS AS IS AND ANY EXPRESS OR I
 
 #define DEG2RAD M_PI/180
 
-ADTF_TRIGGER_FUNCTION_FILTER_PLUGIN(CID_FINE_LOCALISATION_DATA_TRIGGERED_FILTER,
-                                    "LITD FineLocalisation",
-                                    cFineLocalisation,
-                                    adtf::filter::pin_trigger({ "inBirdsEye" }));
+ADTF_PLUGIN(LABEL_FINE_LOCALISATION_FILTER, cFineLocalisation)
 
 cFineLocalisation::cFineLocalisation()
 {
@@ -36,7 +33,7 @@ cFineLocalisation::cFineLocalisation()
     set_stream_type_image_format(*pType, m_sImageFormat);
 
     //Register input pin
-    Register(m_oReader, "inBirdsEye", pType);
+    create_pin(*this, m_oReader, "inBirdsEye", pType);
 
     object_ptr<IStreamType> pTypePositionData;
     if IS_OK(adtf::mediadescription::ant::create_adtf_default_stream_type_from_service("tPosition", pTypePositionData, m_PositionSampleFactory))
@@ -51,12 +48,14 @@ cFineLocalisation::cFineLocalisation()
     {
         LOG_WARNING("No mediadescription for tPosition found!");
     }
+    object_ptr<const IStreamType> pConstTypePositionData = pTypePositionData;
+
 
     //Register input pin
-    Register(m_oPosReader, "inPosition", pTypePositionData);
+    create_pin(*this, m_oPosReader, "inPosition", pConstTypePositionData);
 
     //Register output pin
-    Register(m_oPosWriter, "outPosition", pTypePositionData);
+    filter_create_pin(*this, m_oPosWriter, "outPosition", pConstTypePositionData);
 
     object_ptr<IStreamType> pTypeSignalValue;
     if IS_OK(adtf::mediadescription::ant::create_adtf_default_stream_type_from_service("tSignalValue", pTypeSignalValue, m_SignalValueSampleFactory))
@@ -68,9 +67,9 @@ cFineLocalisation::cFineLocalisation()
     {
         LOG_INFO("No mediadescription for tSignalValue found!");
     }
+    object_ptr<const IStreamType> pConstTypeSignalValue = pTypeSignalValue;
 
-    Register(m_oConfWriter, "outConfidence", pTypeSignalValue);
-
+    filter_create_pin(*this, m_oConfWriter, "outConfidence", pConstTypeSignalValue);
 
     //register callback for type changes
     m_oReader.SetAcceptTypeCallback([this](const adtf::ucom::ant::iobject_ptr<const adtf::streaming::ant::IStreamType>& pType) -> tResult
@@ -92,6 +91,29 @@ cFineLocalisation::cFineLocalisation()
     RegisterPropertyVariable("Angle Range Min [°]", angleRangeMin);
     RegisterPropertyVariable("Angle Range Max [°]", angleRangeMax);
     RegisterPropertyVariable("Image subsample rate", subSampleRate);
+
+
+
+    create_inner_pipe(*this, cString::Format("%s_trigger", "inPosition"), "inPosition", [&](tTimeStamp tmTime) -> tResult
+    {
+        return ProcessPosition(tmTime);
+    });
+
+    create_inner_pipe(*this, cString::Format("%s_trigger", "inBirdsEye"), "inBirdsEye", [&](tTimeStamp tmTime) -> tResult
+    {
+        return ProcessImage(tmTime);
+    });
+}
+
+tResult cFineLocalisation::Init(const tInitStage eStage)
+{
+    RETURN_IF_FAILED(cFilter::Init(eStage));
+    if (eStage == StageFirst)
+    {
+        // press "Init"
+        RETURN_IF_FAILED(Configure());
+    }
+    RETURN_NOERROR;
 }
 
 tResult cFineLocalisation::Configure()
@@ -114,9 +136,8 @@ tResult cFineLocalisation::Configure()
     RETURN_NOERROR;
 }
 
-tResult cFineLocalisation::Process(tTimeStamp tmTimeOfTrigger)
-{
-    object_ptr<const ISample> pReadSample, pPosReadSample;
+tResult cFineLocalisation::ProcessPosition(tTimeStamp tmTimeOfTrigger){
+    object_ptr<const ISample> pPosReadSample;
 
     if(IS_OK(m_oPosReader.GetLastSample(pPosReadSample))) {
         auto oDecoder = m_PositionSampleFactory.MakeDecoderFor(*pPosReadSample);
@@ -134,6 +155,11 @@ tResult cFineLocalisation::Process(tTimeStamp tmTimeOfTrigger)
     } else {
         LOG_ERROR("!!Failed to read last Position Sample!!");
     }
+    RETURN_NOERROR;
+}
+
+tResult cFineLocalisation::ProcessImage(tTimeStamp tmTimeOfTrigger){
+    object_ptr<const ISample> pReadSample;
 
     while (IS_OK(m_oReader.GetNextSample(pReadSample)) && recievedPosition)
     {
@@ -172,6 +198,5 @@ tResult cFineLocalisation::Process(tTimeStamp tmTimeOfTrigger)
         }
         sampleCnt++;
     }
-    
     RETURN_NOERROR;
 }

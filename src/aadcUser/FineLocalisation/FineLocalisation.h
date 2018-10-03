@@ -19,7 +19,8 @@ THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS AS IS AND ANY EXPRESS OR I
 #include "PixelMetricTransformer.h"
 
 //*************************************************************************************************
-#define CID_FINE_LOCALISATION_DATA_TRIGGERED_FILTER "finelocalisation.filter.user.aadc.cid"
+#define CID_FINE_LOCALISATION_FILTER "finelocalisation.filter.user.aadc.cid"
+#define LABEL_FINE_LOCALISATION_FILTER "LITD FineLocalisation"
 
 
 using namespace adtf_util;
@@ -34,8 +35,15 @@ using namespace cv;
 
 
 /*! the main class of the open cv template. */
-class cFineLocalisation : public cTriggerFunction
+class cFineLocalisation : public cFilter
 {
+public:
+    ADTF_CLASS_ID_NAME(cFineLocalisation, CID_FINE_LOCALISATION_FILTER, LABEL_FINE_LOCALISATION_FILTER);
+    ADTF_CLASS_DEPENDENCIES(REQUIRE_INTERFACE(adtf::services::IReferenceClock));
+    // necessary for proper behaviour of the create_inner_pipe call
+    using cRuntimeBehaviour::RegisterRunner;
+    using cRuntimeBehaviour::RegisterInnerPipe;
+
 private:
 
     //Pins
@@ -109,18 +117,14 @@ public:
     /*! Destructor. */
     virtual ~cFineLocalisation() = default;
 
-    /**
-    * Overwrites the Configure
-    * This is to Read Properties prepare your Trigger Function
-    */
-    tResult Configure() override;
-    /**
-    * Overwrites the Process
-    * You need to implement the Reading and Writing of Samples within this function
-    * MIND: Do Reading until the Readers queues are empty or use the IPinReader::GetLastSample()
-    * This FUnction will be called if the Run() of the TriggerFunction was called.
-    */
-    tResult Process(tTimeStamp tmTimeOfTrigger) override;
+
+    tResult Init(const tInitStage eStage);
+
+    tResult Configure();
+
+
+    tResult ProcessImage(tTimeStamp tmTimeOfTrigger);
+    tResult ProcessPosition(tTimeStamp tmTimeOfTrigger);
 
 };
 
