@@ -27,12 +27,12 @@ def resize_input(im):
     h, w, c = [448, 448, 3]
     imsz = cv2.resize(im, (w, h))
     imsz = imsz / 255.
-    imsz = imsz[:,:,::-1]
+    imsz = imsz[:, :, ::-1]
     return imsz
 
 
 # We use our "load_graph" function
-graph = load_graph(frozen_network_path) #newest frozen yolo trained on 28/9/2018 optimize_inference
+graph = load_graph(frozen_network_path)  # newest frozen yolo trained on 28/9/2018 optimize_inference
 
 image = cv2.imread(image_path)
 image_resized = resize_input(image)
@@ -41,7 +41,7 @@ np_final = np.expand_dims(image_resized, axis=0)
 x = graph.get_tensor_by_name('import/input:0')
 y = graph.get_tensor_by_name('import/output:0')
 
-#We launch a Session
+# We launch a Session
 with tf.Session(graph=graph) as sess:
     y_out = sess.run(y, feed_dict={
         x: np_final
