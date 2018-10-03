@@ -60,16 +60,22 @@ tResult cLITD_ObjectDetection::Configure()
     //get clock object
     RETURN_IF_FAILED(_runtime->GetObject(m_pClock));
 
-    // load model
+    // check file path
     cFilename modelPath = m_model_path;
     adtf::services::ant::adtf_resolve_macros(modelPath);
+    if (!cFileSystem::Exists(modelPath))
+    {
+        RETURN_ERROR_DESC(ERR_INVALID_FILE, cString::Format("YOLO model file could not be loaded from %s", modelPath.GetPtr()));
+    }
+
+    // load model
     Status load_graph_status = yolo_handler.load_graph(modelPath.GetPtr());
     if (!load_graph_status.ok()) {
-        LOG_INFO("Load graph status: %s", load_graph_status.ToString().c_str());
+        LOG_ERROR("YOLO Graph Status: %s", load_graph_status.ToString().c_str());
     } else {
-        LOG_INFO("loaded YOLO network");
+        LOG_INFO("Successfully loaded YOLO network from %s", modelPath.GetPtr());
     }
-    
+
     RETURN_NOERROR;
 }
 
