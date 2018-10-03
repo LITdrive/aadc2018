@@ -24,6 +24,7 @@ cZmqSensorTemplate::cZmqSensorTemplate()
 	m_inputs.emplace_back("bool_in", BoolSignalValue);
 	m_inputs.emplace_back("wheel", WheelData);
 	m_inputs.emplace_back("imu", InerMeasUnitData);
+	m_inputs.emplace_back("lidar", LaserScanner);
 	m_inputs.emplace_back("ultrasonic", Ultrasonic);
 	m_inputs.emplace_back("voltage", Voltage);
 
