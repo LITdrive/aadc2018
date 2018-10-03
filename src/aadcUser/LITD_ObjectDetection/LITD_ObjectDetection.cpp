@@ -51,7 +51,7 @@ cLITD_ObjectDetection::cLITD_ObjectDetection()
     //register callback for type changes
     m_oReader.SetAcceptTypeCallback([this](const adtf::ucom::ant::iobject_ptr<const adtf::streaming::ant::IStreamType>& pType) -> tResult
     {
-        return ChangeType(m_oReader, m_sImageFormat, *pType.Get(), m_oWriter);
+        return ChangeType(m_oReader, m_sImageFormat, *pType.Get());
     });
 }
 
