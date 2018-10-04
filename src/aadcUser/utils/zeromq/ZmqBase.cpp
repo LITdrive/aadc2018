@@ -607,13 +607,14 @@ tResult cZmqBase::ProcessInputs(tTimeStamp tmTimeOfTrigger)
 
 				case TrajectoryArray:
 					PROCESS_INPUT_SAMPLE_HELPER(tTrajectoryArray, {
-						RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlTrajectoryArrayIndex.trajectories, &data->trajectories));
+						const tTrajectory* trajectories = static_cast<const tTrajectory*>(sampleDecoder.GetElementAddress(m_ddlTrajectoryArrayIndex.trajectories));
+						memcpy(&data->trajectories, trajectories, sizeof(tTrajectoryArray));
 					});
 					
 				case YoloNetOutput:
 					PROCESS_INPUT_SAMPLE_HELPER(tYOLONetOutput, {
 						const tFloat32* nodeValues = static_cast<const tFloat32*>(sampleDecoder.GetElementAddress(m_ddlYoloNetOutputIndex.f32NodeValue));
-						memcpy(&data->f32NodeValue, nodeValues, sizeof data->f32NodeValue);
+						memcpy(&data->f32NodeValue, nodeValues, sizeof(tYOLONetOutput));
 					});
 
 				default:
@@ -776,7 +777,8 @@ tResult cZmqBase::ProcessOutput(zmq::message_t* frame, const size_t index)
 
 	case TrajectoryArray:
 		PROCESS_OUTPUT_SAMPLE_HELPER(tTrajectoryArray, {
-			RETURN_IF_FAILED(sampleEncoder.SetElementValue(m_ddlTrajectoryArrayIndex.trajectories, data->trajectories));
+			tTrajectory* trajectories = static_cast<tTrajectory*>(sampleEncoder.GetElementAddress(m_ddlTrajectoryArrayIndex.trajectories));
+			memcpy(trajectories, &data->trajectories, sizeof(tTrajectoryArray));
 		});
 
 	case YoloNetOutput:
@@ -963,7 +965,7 @@ object_ptr<IStreamType>* cZmqBase::GetStreamType(const eZmqStruct sampleType)
 		});
 
 	case Trajectory:
-		STREAM_TYPE_DEFINITION_HELPER("tTrajectoryArray", m_TrajectoryStreamType, m_TrajectorySampleFactory, {
+		STREAM_TYPE_DEFINITION_HELPER("tTrajectory", m_TrajectoryStreamType, m_TrajectorySampleFactory, {
 			access_element::find_index(m_TrajectorySampleFactory, cString("id"), m_ddlTrajectoryIndex.id);
 			access_element::find_index(m_TrajectorySampleFactory, cString("ax"), m_ddlTrajectoryIndex.ax);
 			access_element::find_index(m_TrajectorySampleFactory, cString("bx"), m_ddlTrajectoryIndex.bx);
