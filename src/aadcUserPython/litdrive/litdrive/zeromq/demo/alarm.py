@@ -16,7 +16,7 @@ from os.path import dirname, join, abspath
 from ..server import ZmqServer
 
 #Parameters--------------
-p =  abspath(join(dirname(__file__), r'../../../../../../configuration_files/models'))
+p =  abspath(join(dirname(__file__), r'../../../../../../configuration_files/alarm'))
 thld = 0.6 #treshold for detection
 weights = np.asarray([7,10,8,10]) #weights for final dec. lr, es, cnn, nb_pca
 weights=weights/sum(weights)
