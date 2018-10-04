@@ -95,75 +95,62 @@ void cStanleyControl::calcSteeringAngle(){
 
 cStanleyControl::cStanleyControl()
 {
-	/* tPosition */
-	object_ptr<IStreamType> pTypePositionData;
-
 	RegisterPropertyVariable("dynamic properties path", m_properties_file);
 
+	/* tPosition */
+	object_ptr<IStreamType> pTypePositionData;
 	if IS_OK(adtf::mediadescription::ant::create_adtf_default_stream_type_from_service("tPosition", pTypePositionData, m_PositionSampleFactory))
 	{
-		adtf_ddl::access_element::find_index(m_PositionSampleFactory, cString("f32x"), m_ddlPositionIndex.f32x);
-		adtf_ddl::access_element::find_index(m_PositionSampleFactory, cString("f32y"), m_ddlPositionIndex.f32y);
-		adtf_ddl::access_element::find_index(m_PositionSampleFactory, cString("f32radius"), m_ddlPositionIndex.f32radius);
-		adtf_ddl::access_element::find_index(m_PositionSampleFactory, cString("f32speed"), m_ddlPositionIndex.f32speed);
-		adtf_ddl::access_element::find_index(m_PositionSampleFactory, cString("f32heading"), m_ddlPositionIndex.f32heading);
+		access_element::find_index(m_PositionSampleFactory, cString("f32x"), m_ddlPositionIndex.f32x);
+		access_element::find_index(m_PositionSampleFactory, cString("f32y"), m_ddlPositionIndex.f32y);
+		access_element::find_index(m_PositionSampleFactory, cString("f32radius"), m_ddlPositionIndex.f32radius);
+		access_element::find_index(m_PositionSampleFactory, cString("f32speed"), m_ddlPositionIndex.f32speed);
+		access_element::find_index(m_PositionSampleFactory, cString("f32heading"), m_ddlPositionIndex.f32heading);
 	}
 	else
 	{
 		LOG_WARNING("No mediadescription for tPosition found!");
 	}
 
-	/* tTrajectory */
-	/*object_ptr<IStreamType> pTypeTrajectoryData;
-	if IS_OK(adtf::mediadescription::ant::create_adtf_default_stream_type_from_service("tTrajectory", pTypeTrajectoryData, m_TrajectorySampleFactory))
+	/* tTrajectoryArray */
+	object_ptr<IStreamType> pTypeTrajectoryArrayData;
+	if IS_OK(adtf::mediadescription::ant::create_adtf_default_stream_type_from_service("tTrajectoryArray", pTypeTrajectoryArrayData, m_TrajectoryArraySampleFactory))
 	{
-		adtf_ddl::access_element::find_index(m_TrajectorySampleFactory, cString("id"), m_ddlTrajectoryIndex.id);
-		adtf_ddl::access_element::find_index(m_TrajectorySampleFactory, cString("ax"), m_ddlTrajectoryIndex.ax);
-		adtf_ddl::access_element::find_index(m_TrajectorySampleFactory, cString("bx"), m_ddlTrajectoryIndex.bx);
-		adtf_ddl::access_element::find_index(m_TrajectorySampleFactory, cString("cx"), m_ddlTrajectoryIndex.cx);
-		adtf_ddl::access_element::find_index(m_TrajectorySampleFactory, cString("dx"), m_ddlTrajectoryIndex.dx);
-		adtf_ddl::access_element::find_index(m_TrajectorySampleFactory, cString("ay"), m_ddlTrajectoryIndex.ay);
-		adtf_ddl::access_element::find_index(m_TrajectorySampleFactory, cString("by"), m_ddlTrajectoryIndex.by);
-		adtf_ddl::access_element::find_index(m_TrajectorySampleFactory, cString("cy"), m_ddlTrajectoryIndex.cy);
-		adtf_ddl::access_element::find_index(m_TrajectorySampleFactory, cString("dy"), m_ddlTrajectoryIndex.dy);
-		adtf_ddl::access_element::find_index(m_TrajectorySampleFactory, cString("start"), m_ddlTrajectoryIndex.start);
-		adtf_ddl::access_element::find_index(m_TrajectorySampleFactory, cString("end"), m_ddlTrajectoryIndex.end);
-		adtf_ddl::access_element::find_index(m_TrajectorySampleFactory, cString("backwards"), m_ddlTrajectoryIndex.backwards);
+		access_element::find_index(m_TrajectoryArraySampleFactory, cString("size"), m_ddlTrajectoryArrayIndex.size);
+		access_element::find_array_index(m_TrajectoryArraySampleFactory, cString("trajectories"), m_ddlTrajectoryArrayIndex.trajectories);
 	}
 	else
 	{
-		LOG_WARNING("No mediadescription for tTrajectory found!");
-	}*/
+		LOG_WARNING("No mediadescription for tTrajectoryArray found!");
+	}
 
 	/* tSignalValue */
 	object_ptr<IStreamType> pTypeSignalValue;
 	if IS_OK(adtf::mediadescription::ant::create_adtf_default_stream_type_from_service("tSignalValue", pTypeSignalValue, m_SignalValueSampleFactory))
 	{
-		adtf_ddl::access_element::find_index(m_SignalValueSampleFactory, cString("ui32ArduinoTimestamp"), m_ddlSignalValueId.timeStamp);
-		adtf_ddl::access_element::find_index(m_SignalValueSampleFactory, cString("f32Value"), m_ddlSignalValueId.value);
+		access_element::find_index(m_SignalValueSampleFactory, cString("ui32ArduinoTimestamp"), m_ddlSignalValueId.timeStamp);
+		access_element::find_index(m_SignalValueSampleFactory, cString("f32Value"), m_ddlSignalValueId.value);
 	}
 	else
 	{
 		LOG_INFO("No mediadescription for tSignalValue found!");
 	}
 
-
-    //Register input pins
+    // register input pins
 	create_pin(*this, m_ActualPointReader, "actual_point", pTypePositionData);
-	//create_pin(*this, m_TrajectoryReader, "inTrajectories", pTypeTrajectoryData);
-	//Register output pin
+	create_pin(*this, m_TrajectoryArrayReader, "trajectories", pTypeTrajectoryArrayData);
+
+	// register output pin
 	filter_create_pin(*this, m_SteeringWriter, "steering", pTypeSignalValue);
-		
+
 	create_inner_pipe(*this, cString::Format("%s_trigger", "actual_point"), "actual_point", [&](tTimeStamp tmTime) -> tResult
 	{
-		LOG_INFO("Hello out of inner pipe" );
-		//return ProcessTrajectories(tmTime);
 		return ProcessPosition(tmTime);
 	});
 
 	create_inner_pipe(*this, cString::Format("%s_trigger", "trajectories"), "trajectories", [&](tTimeStamp tmTime) -> tResult
 	{
-		return ProcessPosition(tmTime);
+		return ProcessTrajectories(tmTime);
 	});
 }
 
@@ -211,7 +198,7 @@ tResult cStanleyControl::Configure()
 tResult cStanleyControl::ProcessPosition(tTimeStamp tmTimeOfTrigger)
 {
 	::tPosition position;
-	LOG_INFO("Hellof from ProcessPosition" );
+	LOG_INFO("Hello from ProcessPosition" );
 
 	//Read Property-File
 	m_properties->TriggerPropertiesReload(80); // reload the file every 2 seconds with a 25 msec timer
@@ -265,31 +252,30 @@ tResult cStanleyControl::ProcessPosition(tTimeStamp tmTimeOfTrigger)
 	RETURN_NOERROR;
 }
 
-tResult cStanleyControl::ProcessTrajectories(tTimeStamp tmTimeOfTrigger){
-	::tTrajectory trajectory;
+tResult cStanleyControl::ProcessTrajectories(tTimeStamp tmTimeOfTrigger)
+{
 	object_ptr<const ISample> pReadSample;
-	if (IS_OK(m_TrajectoryReader.GetNextSample(pReadSample))) {
-		auto oDecoder = m_TrajectorySampleFactory.MakeDecoderFor(*pReadSample);
-
+	if (IS_OK(m_TrajectoryArrayReader.GetLastSample(pReadSample)))
+	{
+		/* read the tTrajectoryArray sample */
+		tTrajectoryArray trajectoryArray;
+		auto oDecoder = m_TrajectoryArraySampleFactory.MakeDecoderFor(*pReadSample);
 		RETURN_IF_FAILED(oDecoder.IsValid());
+		RETURN_IF_FAILED(oDecoder.GetElementValue(m_ddlTrajectoryArrayIndex.size, &trajectoryArray.size));
+		const auto* trajectories = static_cast<const tTrajectory*>(oDecoder.GetElementAddress(m_ddlTrajectoryArrayIndex.trajectories));
+		memcpy(&trajectoryArray.trajectories, trajectories, sizeof trajectoryArray.trajectories);
 
-		RETURN_IF_FAILED(oDecoder.GetElementValue(m_ddlTrajectoryIndex.id, &trajectory.id));
-		RETURN_IF_FAILED(oDecoder.GetElementValue(m_ddlTrajectoryIndex.ax, &trajectory.ax));
-		RETURN_IF_FAILED(oDecoder.GetElementValue(m_ddlTrajectoryIndex.bx, &trajectory.bx));
-		RETURN_IF_FAILED(oDecoder.GetElementValue(m_ddlTrajectoryIndex.cx, &trajectory.cx));
-		RETURN_IF_FAILED(oDecoder.GetElementValue(m_ddlTrajectoryIndex.dx, &trajectory.dx));
-		RETURN_IF_FAILED(oDecoder.GetElementValue(m_ddlTrajectoryIndex.ay, &trajectory.ay));
-		RETURN_IF_FAILED(oDecoder.GetElementValue(m_ddlTrajectoryIndex.by, &trajectory.by));
-		RETURN_IF_FAILED(oDecoder.GetElementValue(m_ddlTrajectoryIndex.cy, &trajectory.cy));
-		RETURN_IF_FAILED(oDecoder.GetElementValue(m_ddlTrajectoryIndex.dy, &trajectory.dy));
-		RETURN_IF_FAILED(oDecoder.GetElementValue(m_ddlTrajectoryIndex.start, &trajectory.start));
-		RETURN_IF_FAILED(oDecoder.GetElementValue(m_ddlTrajectoryIndex.end, &trajectory.end));
-		RETURN_IF_FAILED(oDecoder.GetElementValue(m_ddlTrajectoryIndex.backwards, &trajectory.backwards));
+		/* process the new trajectories */
+		for (tSize i = 0; i < trajectoryArray.size; i++)
+		{
+			tTrajectory t = trajectoryArray.trajectories[i];
+			LOG_DUMP("Trajectory [%d] x = %.2f + %.2fp + %.2fp² + %.2fp³, y = %.2f + %.2fp + %.2fp² + %.2fp³ with p = range(%.2f, %.2f) and direction = %s",
+				t.id, t.ax, t.bx, t.cx, t.dx, t.ay, t.by, t.cy, t.dy, t.start, t.end, t.backwards ? "backward" : "forward");
+
+			// TODO ...
+			// updatePolyList(t);
+		}
 	}
-
-	// TODO Not needed for testing, uncomment afterwards
-	//updatePolyList(trajectory);
-	// TODO trajectory -> trajectories
 
 	RETURN_NOERROR;
 }

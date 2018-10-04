@@ -72,24 +72,15 @@ private:
 	cSampleCodecFactory m_PositionSampleFactory;
 	cPinReader m_ActualPointReader;
 
-	/* tTrajectory */
+	/* tTrajectoryArray */
 	struct
 	{
-		tSize id;
-		tSize ax;
-		tSize bx;
-		tSize cx;
-		tSize dx;
-		tSize ay;
-		tSize by;
-		tSize cy;
-		tSize dy;
-		tSize start;
-		tSize end;
-		tSize backwards;
-	}  m_ddlTrajectoryIndex;
-	cSampleCodecFactory m_TrajectorySampleFactory;
-	cPinReader m_TrajectoryReader;
+		tSize size;
+		tSize trajectories;
+	} m_ddlTrajectoryArrayIndex{};
+
+	cSampleCodecFactory m_TrajectoryArraySampleFactory;
+	cPinReader m_TrajectoryArrayReader;
 
 	/* tSignalValue */
 	struct tSignalValueId
