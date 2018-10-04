@@ -18,7 +18,7 @@ THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS AS IS AND ANY EXPRESS OR I
 
 
 ADTF_TRIGGER_FUNCTION_FILTER_PLUGIN(CID_POSITIONMUX_DATA_TRIGGERED_FILTER,
-    "LITD_PositionMux",
+    "LITD PositionMux",
     cLITD_PositionMux,
     adtf::filter::pin_trigger({"in_pos0", "in_pos1", "in_pos2", "in_mux"}));
 
