@@ -96,7 +96,7 @@ private:
     property_variable<tFloat32> mat12 = 567;
     property_variable<tFloat32> axleToPicture = 0.73;
     property_variable<tFloat32> headingOffset = 00;
-    property_variable<cFilename> mapPath = cFilename("/home/aadc/share/adtf/data/scaledMap.png"); //TODO ask mario about relative paths
+    property_variable<cFilename> mapPath = cFilename("/home/aadc/share/adtf/data/scaledMap.png");
     property_variable<tInt32> propSearchSpaceSize = 20;
     property_variable<tInt32> angleIterCnt = 11;
     property_variable<tFloat32> angleRangeMin = -5;

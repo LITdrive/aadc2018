@@ -84,7 +84,9 @@ tResult cWheelSpeedController::Configure()
     m_f64accumulatedVariable = 0;
 
 	// load properties file for dynamic properties
-	m_properties = new FilePropertiesObserver(static_cast<string>(cString(m_properties_file)));
+    cFilename propertiesFileResolved = m_properties_file;
+	adtf::services::ant::adtf_resolve_macros(propertiesFileResolved);
+	m_properties = new FilePropertiesObserver(propertiesFileResolved.GetPtr());
 	m_properties->ReloadProperties();
 
     RETURN_IF_FAILED(_runtime->GetObject(m_pClock));

@@ -121,7 +121,9 @@ tResult cFineLocalisation::Configure()
     //TODO transfer data to new thread and start new thread
     //get clock object
     RETURN_IF_FAILED(_runtime->GetObject(m_pClock));
-    string pathToMap = static_cast<string>(cString(mapPath));
+    cFilename mapPathResolved = mapPath;
+    adtf::services::ant::adtf_resolve_macros(mapPathResolved);
+    string pathToMap = mapPathResolved.GetPtr();
     locator.setMap(const_cast<char*>(pathToMap.c_str()));
     locator.setAngleSearchSpace(angleRangeMin, angleRangeMax, angleIterCnt);
     affineMat[0][0] = mat00;

@@ -91,10 +91,6 @@ cStanleyControl::cStanleyControl()
 
 	RegisterPropertyVariable("dynamic properties path", m_properties_file);
 
-    // load properties file for dynamic properties
-	m_properties = new FilePropertiesObserver(static_cast<string>(cString(m_properties_file)));
-	m_properties->ReloadProperties();
-
 	if IS_OK(adtf::mediadescription::ant::create_adtf_default_stream_type_from_service("tPosition", pTypePositionData, m_PositionSampleFactory))
 	{
 		adtf_ddl::access_element::find_index(m_PositionSampleFactory, cString("f32x"), m_ddlPositionIndex.f32x);
@@ -166,6 +162,13 @@ cStanleyControl::cStanleyControl()
 tResult cStanleyControl::Configure()
 {
 	LOG_INFO("Configure is running now!");
+
+	// load properties file for dynamic properties
+	cFilename propertiesFileResolved = m_properties_file;
+	adtf::services::ant::adtf_resolve_macros(propertiesFileResolved);
+	m_properties = new FilePropertiesObserver(propertiesFileResolved.GetPtr());
+	m_properties->ReloadProperties();
+
 	// Fixed Polynomials of a cirle arc and a straight for testing
 	// Circle Arc
 	// 0.3443 x + 0.3115 x - 1.656 x + 0.363
