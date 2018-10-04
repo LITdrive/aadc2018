@@ -300,6 +300,7 @@ private:
 
 	struct
 	{
+		tSize size;
 		tSize trajectories;
 	} m_ddlTrajectoryArrayIndex{};
 

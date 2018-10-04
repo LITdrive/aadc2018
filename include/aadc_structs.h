@@ -186,7 +186,8 @@ typedef struct
 #pragma pack(push,1)
 typedef struct
 {
-    tTrajectory trajectories[5];
+	tUInt32 size;
+    tTrajectory trajectories[10];
 } tTrajectoryArray;
 #pragma pack(pop)
 

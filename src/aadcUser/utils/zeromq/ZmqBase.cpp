@@ -607,14 +607,15 @@ tResult cZmqBase::ProcessInputs(tTimeStamp tmTimeOfTrigger)
 
 				case TrajectoryArray:
 					PROCESS_INPUT_SAMPLE_HELPER(tTrajectoryArray, {
+						RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlTrajectoryArrayIndex.size, &data->size));
 						const tTrajectory* trajectories = static_cast<const tTrajectory*>(sampleDecoder.GetElementAddress(m_ddlTrajectoryArrayIndex.trajectories));
-						memcpy(&data->trajectories, trajectories, sizeof(tTrajectoryArray));
+						memcpy(&data->trajectories, trajectories, sizeof data->trajectories);
 					});
 					
 				case YoloNetOutput:
 					PROCESS_INPUT_SAMPLE_HELPER(tYOLONetOutput, {
 						const tFloat32* nodeValues = static_cast<const tFloat32*>(sampleDecoder.GetElementAddress(m_ddlYoloNetOutputIndex.f32NodeValue));
-						memcpy(&data->f32NodeValue, nodeValues, sizeof(tYOLONetOutput));
+						memcpy(&data->f32NodeValue, nodeValues, sizeof data->f32NodeValue);
 					});
 
 				default:
@@ -777,8 +778,9 @@ tResult cZmqBase::ProcessOutput(zmq::message_t* frame, const size_t index)
 
 	case TrajectoryArray:
 		PROCESS_OUTPUT_SAMPLE_HELPER(tTrajectoryArray, {
+			RETURN_IF_FAILED(sampleEncoder.SetElementValue(m_ddlTrajectoryArrayIndex.size, data->size));
 			tTrajectory* trajectories = static_cast<tTrajectory*>(sampleEncoder.GetElementAddress(m_ddlTrajectoryArrayIndex.trajectories));
-			memcpy(trajectories, &data->trajectories, sizeof(tTrajectoryArray));
+			memcpy(trajectories, &data->trajectories, sizeof data->trajectories);
 		});
 
 	case YoloNetOutput:
@@ -982,6 +984,7 @@ object_ptr<IStreamType>* cZmqBase::GetStreamType(const eZmqStruct sampleType)
 
 	case TrajectoryArray:
 		STREAM_TYPE_DEFINITION_HELPER("tTrajectoryArray", m_TrajectoryArrayStreamType, m_TrajectoryArraySampleFactory, {
+			access_element::find_index(m_TrajectoryArraySampleFactory, "size", m_ddlTrajectoryArrayIndex.size);
 			access_element::find_array_index(m_TrajectoryArraySampleFactory, "trajectories", m_ddlTrajectoryArrayIndex.trajectories);
 		});
 
