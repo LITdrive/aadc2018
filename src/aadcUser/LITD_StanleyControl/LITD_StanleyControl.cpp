@@ -46,7 +46,7 @@ void cStanleyControl::calcSteeringAngle(){
     //calc sign to steer in direction of road
     int sign = 1;
     double diff_heading_abs = wrapTo2Pi(atan2(diff(1), diff(0)));
-    if(wrapTo2Pi(diff_heading_abs - wrapTo2Pi(vehicleTargetFrontAxlePosition.h))> 4.712 ){
+    if(wrapTo2Pi(diff_heading_abs - wrapTo2Pi(vehicleTargetFrontAxlePosition.h)) > M_PI){
         sign = -1;
     }
 
@@ -55,13 +55,22 @@ void cStanleyControl::calcSteeringAngle(){
 	double e = diff.norm()*sign;
 
     //calc angle between car heading and point tangent
-    double theta_c =  wrapTo2Pi(vehicleTargetFrontAxlePosition.h) - wrapTo2Pi(vehicleActualFrontAxlePosition.h);
+    //double theta_c = wrapTo2Pi(vehicleActualFrontAxlePosition.h - vehicleTargetFrontAxlePosition.h);
+	double theta_c = wrapTo2Pi(vehicleTargetFrontAxlePosition.h - vehicleActualFrontAxlePosition.h);
+
+	//if (theta_c < 0)
+	//{
+	//	theta_c = 2 * M_PI + theta_c;
+	//}
 
     //calc steering-angle with stanley-approach
 	double dynamicStanleyPart = 0;
-	if(vehicleSpeed > 0.02){
+
+	if(vehicleSpeed > 0.02)
+	{
 		 dynamicStanleyPart = atan2(stanleyGain * e, vehicleSpeed);
 	}
+
     vehicleSteeringAngle = theta_c + dynamicStanleyPart;
 
     //Debug Messages
@@ -223,9 +232,11 @@ tResult cStanleyControl::ProcessPosition(tTimeStamp tmTimeOfTrigger)
 	}
 
 	vehicleSpeed = position.f32speed;
+	//vehicleSpeed = 0;
 	vehicleActualRearAxlePosition.x = position.f32x;
 	vehicleActualRearAxlePosition.y = position.f32y;
 	vehicleActualRearAxlePosition.h = wrapTo2Pi(position.f32heading);
+	//vehicleActualRearAxlePosition.h = M_PI/4;
 	LOG_INFO("Point of BackPosition: x: %f, y: %f, h: %f", vehicleActualRearAxlePosition.x, vehicleActualRearAxlePosition.y, vehicleActualRearAxlePosition.h  * 180.0 / M_PI);
 
 
@@ -415,17 +426,43 @@ void cStanleyControl::getNextVirtualPointOnPoly() {
 }
 
 void cStanleyControl::calcVirtualPointfromPoly(tTrajectory poly, double p, LITD_VirtualPoint* vp) {
+	double heading = 0;
+
 	double x = poly.dx*pow(p, 3) + poly.cx*pow(p, 2) + poly.bx*p + poly.ax;
 	double y = poly.dy*pow(p, 3) + poly.cy*pow(p, 2) + poly.by*p + poly.ay;
 
-	//tangente durch erste ableitung berechnen
-	double x_der = 3 * poly.dx*pow(p, 2) + 2 * poly.cx*p + poly.bx;
-	double y_der = 3 * poly.dy*pow(p, 2) + 2 * poly.cy*p + poly.by;
-	
+	// Poly ist Gerade
+	if (poly.dx == 0.0 && poly.cx == 0)
+	{
+		if (poly.bx > 0 && poly.by == 0)
+		{
+			heading = 0.0;
+		}
 
-	
+		else if (poly.bx < 0 && poly.by == 0)
+		{
+			heading = M_PI;
+		}
 
-	double heading = wrapTo2Pi(atan2(y_der, x_der));
+		else if (poly.by > 0 && poly.bx == 0)
+		{
+			heading = M_PI / 2;
+		}
+
+		else if (poly.by < 0 && poly.bx == 0)
+		{
+			heading = (3 / 2)*M_PI;
+		}
+	}
+
+	else
+	{
+		// Poly ist keine Gerade
+		double x_der = 3 * poly.dx*pow(p, 2) + 2 * poly.cx*p + poly.bx;
+		double y_der = 3 * poly.dy*pow(p, 2) + 2 * poly.cy*p + poly.by;
+
+		heading = wrapTo2Pi(atan2(y_der, x_der));
+	}
 	//LOG_INFO("Derivation Points: x_der: %f, y_der: %f from h: %f", x_der, y_der, heading );
 	//double heading = wrapTo2Pi(atan2(y_p-y_m, x_p-x_m));
 
@@ -442,7 +479,7 @@ void cStanleyControl::mapSteeringAngle(){
 
 	tFloat32  rad2degree  = 180.0 / M_PI;
 
-	if(vehicleSteeringAngle > 3/2 * M_PI){
+	if(vehicleSteeringAngle > 3/2 * M_PI && vehicleSteeringAngle < 2*M_PI){
 		vehicleSteeringAngle -= 2 * M_PI; 
 	}
 
