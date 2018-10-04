@@ -139,7 +139,6 @@
   <struct alignment="1" name="tYOLONetOutput" version="1">
    <element alignment="1" arraysize="588" byteorder="LE" bytepos="0" name="f32NodeValue" type="tFloat32" />
   </struct>
- </structs>
   <struct alignment="1" name="tVirtualPoint" version="1">
    <element alignment="1" arraysize="1" byteorder="LE" bytepos="0" name="f64x" type="tFloat64" />
    <element alignment="1" arraysize="1" byteorder="LE" bytepos="8" name="f64y" type="tFloat64" />
