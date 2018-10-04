@@ -4,19 +4,19 @@
 # anaconda base envrionment
 # python -m litdrive.zeromq.demo.alarm
 
-from ..server import ZmqServer
-import sounddevice as sd
 import time
-import matplotlib.pyplot as plt
 import numpy as np
-from pylab import *
-from keras.models import Model, load_model
-from multiprocessing import Process, Value, Array
-import sys
+import sounddevice as sd
+import matplotlib.pyplot as plt
+
+from sklearn.externals import joblib
+from keras.models import load_model
+from os.path import dirname, join, abspath
+
+from ..server import ZmqServer
 
 #Parameters--------------
-#TODO check how to input path --> via ADTF?
-p = '/home/aadc/AADC/configuration_files/models/'
+p =  abspath(join(dirname(__file__), r'../../../../../../configuration_files/models'))
 thld = 0.6 #treshold for detection
 weights = np.asarray([7,10,8,10]) #weights for final dec. lr, es, cnn, nb_pca
 weights=weights/sum(weights)
@@ -32,15 +32,15 @@ f_max = 3000
 scaling_mean, scaling_std = 7, 1 #old was 15, 3 (with matplotlib specgram)
 
 #------------------------
+
 sd.default.samplerate = fs
 sd.default.channels = 1
 
 # load the clf
-from sklearn.externals import joblib
-clf = joblib.load(p+'alarm_lr.pkl')#'alarm_lr_clf2.pkl')
-cnn = load_model(p+'alarm_cnn.h5')#"cnn_new.h5")
-nb = joblib.load(p+'alarm_nb_pca.pkl')#'nb_pca.pkl')
-pca = joblib.load(p+'alarm_pca.pkl')
+clf = joblib.load(join(p, 'alarm_lr.pkl'))#'alarm_lr_clf2.pkl')
+cnn = load_model(join(p, 'alarm_cnn.h5'))#"cnn_new.h5")
+nb = joblib.load(join(p, 'alarm_nb_pca.pkl'))#'nb_pca.pkl')
+pca = joblib.load(join(p, 'alarm_pca.pkl'))
 
 def computeEngineeringSol(spec):
     """

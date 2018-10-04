@@ -14,7 +14,7 @@ You need to execute every module from the project root (here), and call the pack
 
 ## Requirements
 
-Recreate the Python 3.7 environment with Anaconda:
+Recreate the Python 3.6 environment with Anaconda:
 
 	conda env create -f environment.yml
 	
