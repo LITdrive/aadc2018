@@ -8,12 +8,14 @@
 #include <unistd.h>
 #include <iostream>
 
+//tTrajectory trajectoryArray[]={{1, 1.0, 3.0, 0, 0, 0.3, 0, 0, 0, 0.0, 1.0, false}, {2, 3.9952610468117116, 2.0206452450494274, -1.6343288398544786, 0.3638816504006942, 0.29640852833373177, -0.10524904661576912, 1.8667688113651004, -1.0601398304865388, 0.0, 1.0, false}, {3, 4.75, 0, 0, 0, 1.0, 1.0, 0, 0, 0.0, 1.0, false}, {4, 4.74835287593694, 0.1841739862717955, -3.10433290115316, 1.175424652281273, 2.0021868938740806, 3.1603939930963354, -0.9870129997290068, -0.47682562786839433, 0.0, 1.0, false}, {5, 3.0, -1.0, 0, 0, 3.7, 0, 0, 0, 0.0, 1.0, false}, {6, 2.0304630239371155, -3.235305523528814, 1.3730152394151056, 0.16409658126758725, 3.7288073354191114, -0.3036732538081243, -1.5250352657277904, 0.13987157209282644, 0.0, 1.0, false}, {7, 0.32, 0, 0, 0, 2.0, -1.0, 0, 0, 0.0, 1.0, false}, {8, 0.32341785049048466, 0.0728448461473677, 0.6588196098948997, -0.052640267349361836, 1.0169617319674327, -1.4007740817665806, 0.5122483877334086, 0.1831935161357673, 0.0, 1.0, false}};
+
 LITD_VirtualCar::LITD_VirtualCar()
 {
-    carPosition.x = 0.0;
-    carPosition.y = -0.2;
+    carPosition.x = 1.2;
+    carPosition.y = 1.2;
     carPosition.h = 0.0;
-    carSpeed = 0.0;
+    carSpeed = 0.2;
 
     calculateBackPos(); 
 
@@ -25,10 +27,13 @@ LITD_VirtualCar::LITD_VirtualCar()
     vpOld.y = carPosition.y;
     vIntegrate = 0.0;
 
+    
+
+
     // Fixed Polynomials of a cirle arc and a straight for testing
 	// Circle Arc
 	// 0.3443 x + 0.3115 x - 1.656 x + 0.363
-	trajectoryArray[1].start = 0;
+	/*trajectoryArray[1].start = 0;
 	trajectoryArray[1].end = 1;
 	trajectoryArray[1].ax = 0.702;
 	trajectoryArray[1].bx = 1.656;
@@ -50,7 +55,7 @@ LITD_VirtualCar::LITD_VirtualCar()
 	trajectoryArray[0].ay = 0;
 	trajectoryArray[0].by = 0;
 	trajectoryArray[0].cy = 0;
-	trajectoryArray[0].dy = 0;
+	trajectoryArray[0].dy = 0;*/
 
 
 }
@@ -67,7 +72,7 @@ void LITD_VirtualCar::calcVirtualPointfromPoly(tTrajectory poly, double p, LITD_
 	
 
 	double heading = wrapTo2Pi(atan2(y_der, x_der));
-	//LOG_INFO("Derivation Points: x_der: %f, y_der: %f from h: %f", x_der, y_der, heading );
+	//printf("Derivation Points: x_der: %f, y_der: %f from h: %f\n", x_der, y_der, heading );
 	//double heading = wrapTo2Pi(atan2(y_p-y_m, x_p-x_m));
 
 	
@@ -84,7 +89,7 @@ void LITD_VirtualCar::getNextVirtualPointOnPoly() {
     double min_dist = 1000000000;
 	double min_poly_p = 0;
 	poly_completed = false;
-
+    tTrajectory trajectoryArray[]={{1, 1.0, 3.0, 0, 0, 0.3, 0, 0, 0, 0.0, 1.0, false}, {2, 3.9952610468117116, 2.0206452450494274, -1.6343288398544786, 0.3638816504006942, 0.29640852833373177, -0.10524904661576912, 1.8667688113651004, -1.0601398304865388, 0.0, 1.0, false}, {3, 4.75, 0, 0, 0, 1.0, 1.0, 0, 0, 0.0, 1.0, false}, {4, 4.74835287593694, 0.1841739862717955, -3.10433290115316, 1.175424652281273, 2.0021868938740806, 3.1603939930963354, -0.9870129997290068, -0.47682562786839433, 0.0, 1.0, false}, {5, 3.0, -1.0, 0, 0, 3.7, 0, 0, 0, 0.0, 1.0, false}, {6, 2.0304630239371155, -3.235305523528814, 1.3730152394151056, 0.16409658126758725, 3.7288073354191114, -0.3036732538081243, -1.5250352657277904, 0.13987157209282644, 0.0, 1.0, false}, {7, 0.32, 0, 0, 0, 2.0, -1.0, 0, 0, 0.0, 1.0, false}, {8, 0.32341785049048466, 0.0728448461473677, 0.6588196098948997, -0.052640267349361836, 1.0169617319674327, -1.4007740817665806, 0.5122483877334086, 0.1831935161357673, 0.0, 1.0, false}};
 
 	for (int i = 0; i<TRAJECTORY_ARRAY_LEN; i++)
 	{
@@ -113,21 +118,21 @@ void LITD_VirtualCar::getNextVirtualPointOnPoly() {
 					min_dist = dist;
 					actual_min_dist_poly_index = i;
 					min_poly_p = j;
-					carPosition.x = actualPoint.x;
-					carPosition.y = actualPoint.y;
-					carPosition.h = actualPoint.h;
+					vehicleTargetFrontAxlePosition.x = actualPoint.x;
+					vehicleTargetFrontAxlePosition.y = actualPoint.y;
+					vehicleTargetFrontAxlePosition.h = actualPoint.h;
 
-					if (trajectoryArray[i].backwards)
+					/*if (trajectoryArray[i].backwards)
 					{
-						carPosition.h = wrapTo2Pi(carPosition.h + M_PI);
-					}
+						vehicleTargetFrontAxlePosition.h = wrapTo2Pi(vehicleTargetFrontAxlePosition.h + M_PI);
+					}*/
 				}
 			}
 			//}
 		}
 	}
-	printf("Point from Poly is: x: %f, y: %f, h: %f", carPosition.x, carPosition.y, carPosition.h * 180.0 / M_PI );
-	printf("End of trajektorie loop" );
+	printf("Point from Poly is: x: %f, y: %f, h: %f\n", vehicleTargetFrontAxlePosition.x, vehicleTargetFrontAxlePosition.y, vehicleTargetFrontAxlePosition.h * 180.0 / M_PI );
+	printf("End of trajektorie loop\n" );
 
 	if (actual_min_dist_poly_index != last_min_dist_poly_index)
 	{
@@ -150,12 +155,12 @@ void LITD_VirtualCar::calcSteeringAngle(){
     double rad2degree = 180.0 / M_PI;
     //vector between car and virtualpoint
 	// call getNextVirtualPointOnPoly -> Result is vehicleTargetFrontAxlePosition
-    Vector2d diff = carPosition.getVector2d() - carPosition.getVector2d();
+    Vector2d diff = vehicleTargetFrontAxlePosition.getVector2d() - carPosition.getVector2d();
 
     //calc sign to steer in direction of road
     int sign = 1;
     double diff_heading_abs = wrapTo2Pi(atan2(diff(1), diff(0)));
-    if(wrapTo2Pi(diff_heading_abs - wrapTo2Pi(carPosition.h))> 4.712 ){
+    if(wrapTo2Pi(diff_heading_abs - wrapTo2Pi(carPosition.h))> M_PI ){
         sign = -1;
     }
 
@@ -167,20 +172,16 @@ void LITD_VirtualCar::calcSteeringAngle(){
     double theta_c =  wrapTo2Pi(vehicleTargetFrontAxlePosition.h) - wrapTo2Pi(carPosition.h);
 
     //calc steering-angle with stanley-approach
-	double dynamicStanleyPart = 0;
-	if(carSpeed > 0.02){
-		 dynamicStanleyPart = atan2(stanleyGain * e, carSpeed);
-	}
-    vehicleSteeringAngle = theta_c + dynamicStanleyPart;
+    vehicleSteeringAngle = theta_c + atan2(stanleyGain * e, carSpeed);
 
     //Debug Messages
     std::cout << "-----------------------" << std::endl;
     std::cout << "point heading : " << vehicleTargetFrontAxlePosition.h << "(" << rad2degree * vehicleTargetFrontAxlePosition.h << "°)" << std::endl;
-    std::cout << "car heading: " << carPosition.h << "(" << rad2degree * carPosition.h << "°)" << std::endl;
+    std::cout << "car heading: " << wrapTo2Pi(carPosition.h) << "(" << rad2degree * wrapTo2Pi(carPosition.h) << "°)" << std::endl;
     std::cout << "diff heading: " << diff_heading_abs << "(" << rad2degree * diff_heading_abs << "°)" << std::endl;
     std::cout << "e: " << e << std::endl;
     std::cout << "Theta_C: " << theta_c << "(" << rad2degree * theta_c << "°)" << std::endl;
-    std::cout << "Steering Angle: " << carSteeringAngle << "(" << rad2degree * carSteeringAngle << "°)" << std::endl;
+    std::cout << "Steering Angle: " << vehicleSteeringAngle << "(" << rad2degree * vehicleSteeringAngle << "°)" << std::endl;
     std::cout << "-----------------------" << std::endl;
 	
 
@@ -236,11 +237,19 @@ LITD_VirtualPoint LITD_VirtualCar::updateStep(double dtime)
 {
     calculateFrontkPos();
     char* buffer[1024];
-    printf( "Point of FrontPosition: x: %f, y: %f, h: %f", carPosition.x, carPosition.y, carPosition.h * 180.0 / M_PI );
+    printf( "Point of FrontPosition: x: %f, y: %f, h: %f\n", carPosition.x, carPosition.y, carPosition.h * 180.0 / M_PI );
 	getNextVirtualPointOnPoly();
-    printf("Point of SetPoint: x: %f, y: %f, h: %f", vehicleTargetFrontAxlePosition.x, vehicleTargetFrontAxlePosition.y, vehicleTargetFrontAxlePosition.h * 180.0 / M_PI );
+    printf("Point of SetPoint: x: %f, y: %f, h: %f\n", vehicleTargetFrontAxlePosition.x, vehicleTargetFrontAxlePosition.y, vehicleTargetFrontAxlePosition.h * 180.0 / M_PI );
 	calcSteeringAngle();
-	printf("SteeringAngle in grad: %f", vehicleSteeringAngle * 180.0 / M_PI );
+	printf("SteeringAngle in grad: %f\n", vehicleSteeringAngle * 180.0 / M_PI );
+
+    if(carSteeringAngle < -M_PI/4){
+        carSteeringAngle = -M_PI/4;
+        std::cout << "Steering angle < -45° "  << std::endl;
+    } else if(carSteeringAngle > M_PI/4){
+        carSteeringAngle = M_PI/4;
+        std::cout << "Steering angle > 45° "  << std::endl;
+    }
 	
 
    /* double rad2degree = 180.0 / M_PI; 
@@ -304,7 +313,7 @@ LITD_VirtualPoint LITD_VirtualCar::updateStep(double dtime)
 
     //calculateBackPos();
  
-    speedRegulator(dtime);
+    //speedRegulator(dtime);
     //calc next point of front axis
     LITD_VirtualPoint newFrontAxisPoint;
     //newFrontAxisPoint.x = carPosition.x+ cos(theta_c) * carSpeed  * dtime;

@@ -6,8 +6,8 @@
 
 #define CAR_AXIS_DIST 0.365
 #define SIM_STEPS 10
-#define TRAJECTORY_ARRAY_LEN 2
-#define POINTS_PER_POLY 10
+#define TRAJECTORY_ARRAY_LEN 8
+#define POINTS_PER_POLY 100
 
 
 class LITD_VirtualCar
@@ -68,7 +68,8 @@ public:
     //Simulation variables
     LITD_VirtualPoint vpOld;
 
-    tTrajectory trajectoryArray[TRAJECTORY_ARRAY_LEN];
+    //tTrajectory trajectoryArray[TRAJECTORY_ARRAY_LEN];
+
     bool poly_completed;
     int actual_min_dist_poly_index = 0;
 	int last_min_dist_poly_index = 0;

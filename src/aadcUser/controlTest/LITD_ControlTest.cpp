@@ -11,10 +11,10 @@
 #include "LITD_VirtualCar.h"
 
 
+
 #define PIXEL_PER_METER 80
 #define DTIME 0.1
 #define STRAIGHT_SPEED 0.5
-
 
 
 int main()
@@ -54,8 +54,18 @@ int main()
   cv::Mat mapImg(800, 800, CV_8UC3, cv::Scalar::all(255));
 
   cv::namedWindow( "VirtualPointMoverTest", cv::WINDOW_AUTOSIZE );// Create a window for display.
+  LITD_VirtualCar::tTrajectory trajectoryArray[]={{1, 1.0, 3.0, 0, 0, 0.3, 0, 0, 0, 0.0, 1.0, false}, {2, 3.9952610468117116, 2.0206452450494274, -1.6343288398544786, 0.3638816504006942, 0.29640852833373177, -0.10524904661576912, 1.8667688113651004, -1.0601398304865388, 0.0, 1.0, false}, {3, 4.75, 0, 0, 0, 1.0, 1.0, 0, 0, 0.0, 1.0, false}, {4, 4.74835287593694, 0.1841739862717955, -3.10433290115316, 1.175424652281273, 2.0021868938740806, 3.1603939930963354, -0.9870129997290068, -0.47682562786839433, 0.0, 1.0, false}, {5, 3.0, -1.0, 0, 0, 3.7, 0, 0, 0, 0.0, 1.0, false}, {6, 2.0304630239371155, -3.235305523528814, 1.3730152394151056, 0.16409658126758725, 3.7288073354191114, -0.3036732538081243, -1.5250352657277904, 0.13987157209282644, 0.0, 1.0, false}, {7, 0.32, 0, 0, 0, 2.0, -1.0, 0, 0, 0.0, 1.0, false}, {8, 0.32341785049048466, 0.0728448461473677, 0.6588196098948997, -0.052640267349361836, 1.0169617319674327, -1.4007740817665806, 0.5122483877334086, 0.1831935161357673, 0.0, 1.0, false}};
+  for(int i=0; i<8; i++){
+    for (double j = trajectoryArray[i].start; j <= trajectoryArray[i].end; j+=(trajectoryArray[i].end-trajectoryArray[i].start)/100){
+      LITD_VirtualPoint actualPoint;
+      vCar.calcVirtualPointfromPoly(trajectoryArray[i], j, &actualPoint);
+      cv::Point car(mapImg.size().width/2+PIXEL_PER_METER*actualPoint.x, mapImg.size().height/2 - PIXEL_PER_METER*actualPoint.y);
+      cv::circle(mapImg, car, 2, cv::Scalar::all(0), 1);
 
-  
+
+    }
+
+  }
 
   std::cout << "Car: " << std::endl;
   std::cout << "x: " << vCar.carPosition.x << std::endl;
@@ -65,6 +75,8 @@ int main()
 
 
   LITD_VirtualPoint vp;
+
+  
   
   while(running) {
     std::cout << "Loop start: x=" << vCar.carPosition.x << " y=" << vCar.carPosition.y << " h=" << vCar.carPosition.h << std::endl;
@@ -81,7 +93,7 @@ int main()
   //C++: void line  (InputOutputArray img, Point pt1, Point pt2, const Scalar& color, int thickness=1, int lineType=LINE_8, int shift=0 )
     
     cv::Point car(mapImg.size().width/2+PIXEL_PER_METER*vCar.carPosition.x, mapImg.size().height/2 - PIXEL_PER_METER*vCar.carPosition.y);
-    cv::circle(mapImg, car, 2, cv::Scalar::all(0), -1);
+    cv::circle(mapImg, car, 2, cv::Scalar::all(0), -3);
 
     cv::Point backPoint(mapImg.size().width/2+PIXEL_PER_METER*vCar.carBackPosition.x, mapImg.size().height/2 - PIXEL_PER_METER*vCar.carBackPosition.y);
     cv::line(mapImg,car, backPoint, cv::Scalar::all(0), 1);
@@ -100,7 +112,5 @@ int main()
 }
 //  ----------------------------------------------------------------------------
 
-void printCar(){
-  
-}
+
 
