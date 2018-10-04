@@ -20,6 +20,7 @@ THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS AS IS AND ANY EXPRESS OR I
 #endif
 
 #include <adtf_filtersdk.h>
+
 #include <zmq.hpp>
 
 #include "../../services/zeromq/zeromq_service_intf.h"

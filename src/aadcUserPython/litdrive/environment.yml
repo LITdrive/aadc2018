@@ -1,0 +1,16 @@
+name: aadc
+channels:
+  - defaults
+dependencies:
+  - python=3.6
+  - pyzmq=17.1.2
+  - scikit-learn=0.19.1
+  - numpy=1.15
+  - scipy=1.1
+  - lxml=4.2
+  - cython=0.28
+  - keras=2.2
+  - jupyterlab
+  - matplotlib
+  - pip:
+    - sounddevice>=0.3
