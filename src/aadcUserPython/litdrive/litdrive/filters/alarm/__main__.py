@@ -2,7 +2,7 @@
 #
 # run from /AADC/src/aadcUserPython/litdrive$
 # anaconda base envrionment
-# python -m litdrive.zeromq.demo.alarm
+# python -m litdrive.filters.alarm
 
 import time
 import numpy as np
@@ -13,7 +13,7 @@ from sklearn.externals import joblib
 from keras.models import load_model
 from os.path import dirname, join, abspath
 
-from ..server import ZmqServer
+from ...zeromq.server import ZmqServer
 
 #Parameters--------------
 p =  abspath(join(dirname(__file__), r'../../../../../../configuration_files/alarm'))
