@@ -16,9 +16,12 @@
 #define STRAIGHT_SPEED 0.5
 
 
+
 int main()
 {
   LITD_Map map;
+  LITD_VirtualCar vCar;
+  
   //Vertical straight between x 0->2
   if(map.addStraightElement(0.0, 2.0, -0.5, 0.5, 0.0, false)!=MAP_ENOERR) {
     std::cout << "Error adding straight element 0/0->2/0" << std::endl;
@@ -47,12 +50,12 @@ int main()
   std::cout << "Map generation complete!" << std::endl;
   map.selectNextManeuver(aadc::jury::maneuver::maneuver_straight);
 
-
+  
   cv::Mat mapImg(800, 800, CV_8UC3, cv::Scalar::all(255));
 
   cv::namedWindow( "VirtualPointMoverTest", cv::WINDOW_AUTOSIZE );// Create a window for display.
 
-  LITD_VirtualCar vCar;
+  
 
   std::cout << "Car: " << std::endl;
   std::cout << "x: " << vCar.carPosition.x << std::endl;
@@ -65,26 +68,21 @@ int main()
   
   while(running) {
     std::cout << "Loop start: x=" << vCar.carPosition.x << " y=" << vCar.carPosition.y << " h=" << vCar.carPosition.h << std::endl;
-    double offset = map.getPointOffset(vCar.carPosition);
-    vp=map.getNormalPoint(vCar.carPosition);
-    LITD_map_error_t err = map.getMapState();
-    if(err!=MAP_ENOERR) {
-      std::cout << "Error while generating new point: " << map.strerr(err) << std::endl;
-      running=false;
-      break;
-    }
-    std::cout << "Got virtual point: x=" << vp.x << " y=" << vp.y << " h=" << vp.h << "Offset=" << offset << std::endl;
-
-    cv::Point street(mapImg.size().width/2+PIXEL_PER_METER*vp.x, mapImg.size().height/2 - PIXEL_PER_METER*vp.y);
-    cv::circle(mapImg, street, 5, cv::Scalar::all(0));
-
-    cv::Point car(mapImg.size().width/2+PIXEL_PER_METER*vCar.carPosition.x, mapImg.size().height/2 - PIXEL_PER_METER*vCar.carPosition.y);
-    cv::circle(mapImg, car, 2, cv::Scalar::all(0), -1);
     
-    vp.speed = STRAIGHT_SPEED * map.getSpeedAdvisory();
-    vCar.updateStep(vp, DTIME);
+    
+
+    //cv::Point street(mapImg.size().width/2+PIXEL_PER_METER*vp.x, mapImg.size().height/2 - PIXEL_PER_METER*vp.y);
+    //cv::circle(mapImg, street, 5, cv::Scalar::all(0));
+
+    
+    
+    vCar.updateStep( DTIME);
   //C++: void circle(InputOutputArray img, Point center, int radius, const Scalar& color, int thickness=1, int lineType=LINE_8, int shift=0 )
   //C++: void line  (InputOutputArray img, Point pt1, Point pt2, const Scalar& color, int thickness=1, int lineType=LINE_8, int shift=0 )
+    
+    cv::Point car(mapImg.size().width/2+PIXEL_PER_METER*vCar.carPosition.x, mapImg.size().height/2 - PIXEL_PER_METER*vCar.carPosition.y);
+    cv::circle(mapImg, car, 2, cv::Scalar::all(0), -1);
+
     cv::Point backPoint(mapImg.size().width/2+PIXEL_PER_METER*vCar.carBackPosition.x, mapImg.size().height/2 - PIXEL_PER_METER*vCar.carBackPosition.y);
     cv::line(mapImg,car, backPoint, cv::Scalar::all(0), 1);
 
@@ -101,3 +99,8 @@ int main()
   }
 }
 //  ----------------------------------------------------------------------------
+
+void printCar(){
+  
+}
+
