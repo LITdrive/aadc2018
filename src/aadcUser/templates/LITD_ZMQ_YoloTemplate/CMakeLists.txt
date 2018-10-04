@@ -9,11 +9,11 @@ endif()
 include_directories(${ZMQ_INCLUDE_DIRS})
 
 set (HEADERS	ZmqYoloTemplate.h
-				../utils/zeromq/ZmqBase.h
+				../../utils/zeromq/ZmqBase.h
 				)
 
 set (SOURCES	ZmqYoloTemplate.cpp
-				../utils/zeromq/ZmqBase.cpp
+				../../utils/zeromq/ZmqBase.cpp
 				)
 
 adtf_add_filter(${PROJECT_NAME}

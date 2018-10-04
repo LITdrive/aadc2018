@@ -15,18 +15,18 @@ THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS AS IS AND ANY EXPRESS OR I
 
 #pragma once
 
-#include "../utils/zeromq/ZmqBase.h"
+#include "../../utils/zeromq/ZmqBase.h"
 
-#define CID_LITD_ZMQ_SENSOR_TEMPLATE  "litd_zmq_sensor_template.filter.user.aadc.cid"
-#define LABEL_LITD_ZMQ_SENSOR_TEMPLATE  "LITD ZMQ Sensor Template"
+#define CID_LITD_ZMQ_YOLO_TEMPLATE  "litd_zmq_yolo_template.filter.user.aadc.cid"
+#define LABEL_LITD_ZMQ_YOLO_TEMPLATE  "LITD ZMQ Yolo Template"
 
-class cZmqSensorTemplate : public cZmqBase
+class cZmqYoloTemplate : public cZmqBase
 {
 public:
-	ADTF_CLASS_ID_NAME(cZmqSensorTemplate, CID_LITD_ZMQ_SENSOR_TEMPLATE, LABEL_LITD_ZMQ_SENSOR_TEMPLATE);
+	ADTF_CLASS_ID_NAME(cZmqYoloTemplate, CID_LITD_ZMQ_YOLO_TEMPLATE, LABEL_LITD_ZMQ_YOLO_TEMPLATE);
 
 	ADTF_CLASS_DEPENDENCIES(REQUIRE_INTERFACE(IZeroMQService),
 		REQUIRE_INTERFACE(adtf::services::IReferenceClock));
 
-	cZmqSensorTemplate();
+	cZmqYoloTemplate();
 };

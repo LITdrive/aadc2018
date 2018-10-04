@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.10.0)
 
-project(litd_zmq_image_template)
+project(litd_zmq_sensor_template)
 
 if (NOT TARGET adtf::ui)
     find_package(ADTF COMPONENTS filtersdk ui)
@@ -8,12 +8,12 @@ endif()
 
 include_directories(${ZMQ_INCLUDE_DIRS})
 
-set (HEADERS	ZmqImageTemplate.h
-				../utils/zeromq/ZmqBase.h
+set (HEADERS	ZmqSensorTemplate.h
+				../../utils/zeromq/ZmqBase.h
 				)
 
-set (SOURCES	ZmqImageTemplate.cpp
-				../utils/zeromq/ZmqBase.cpp
+set (SOURCES	ZmqSensorTemplate.cpp
+				../../utils/zeromq/ZmqBase.cpp
 				)
 
 adtf_add_filter(${PROJECT_NAME}

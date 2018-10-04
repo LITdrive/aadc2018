@@ -15,7 +15,7 @@ THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS AS IS AND ANY EXPRESS OR I
 
 #pragma once
 
-#include "../utils/zeromq/ZmqBase.h"
+#include "../../utils/zeromq/ZmqBase.h"
 
 #define CID_LITD_ZMQ_IMAGE_TEMPLATE  "litd_zmq_image_template.filter.user.aadc.cid"
 #define LABEL_LITD_ZMQ_IMAGE_TEMPLATE  "LITD ZMQ Image Template"
