@@ -4,7 +4,7 @@ project(LITD_StanleyControl)
 
 include_directories(${OpenCV_INCLUDE_DIRS})
 include_directories(${Boost_INCLUDE_DIR})
-include_directories(${EIGEN3_INCLUDE_DIR})
+include_directories(${EIGEN3_INCLUDE_DIRS_HEADER_ONLY})
 
 set (SOURCEFILES    	stdafx.h 
 			            LITD_StanleyControl.h

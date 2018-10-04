@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.10.0)
 project(LITD_LaneGenerator)
 
 include_directories(${OpenCV_INCLUDE_DIRS})
-include_directories(${EIGEN3_INCLUDE_DIR})
+include_directories(${EIGEN3_INCLUDE_DIRS_HEADER_ONLY})
 
 if(CMAKE_COMPILER_IS_GNUCXX)
     add_definitions(-std=gnu++0x)
