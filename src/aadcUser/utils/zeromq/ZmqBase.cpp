@@ -17,6 +17,7 @@ THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS AS IS AND ANY EXPRESS OR I
 
 #include <aadc_structs.h>
 
+#include <cstring>
 #include <sstream>
 #include <algorithm>
 
@@ -453,8 +454,10 @@ tResult cZmqBase::ProcessInputs(tTimeStamp tmTimeOfTrigger)
 					});
 
 				case Driver:
-					LOG_ERROR("eZmqStruct 'Driver' not implemented.");
-					break;
+					PROCESS_INPUT_SAMPLE_HELPER(tDriverStruct, {
+						RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlDriverStructIndex.i16StateID, &data->i16StateID));
+						RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlDriverStructIndex.i16ManeuverEntry, &data->i16ManeuverEntry));
+					});
 
 				case SignalValue:
 					PROCESS_INPUT_SAMPLE_HELPER(tSignalValue, {
@@ -507,19 +510,28 @@ tResult cZmqBase::ProcessInputs(tTimeStamp tmTimeOfTrigger)
 					});
 
 				case Obstacle:
-					LOG_ERROR("eZmqStruct 'Obstacle' not implemented.");
-					break;
+					PROCESS_INPUT_SAMPLE_HELPER(tObstacle, {
+						RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlObstacleIndex.f32x, &data->f32x));
+						RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlObstacleIndex.f32y, &data->f32y));
+					});
 
 				case TrafficSign:
-					LOG_ERROR("eZmqStruct 'TrafficSign' not implemented.");
-					break;
+					PROCESS_INPUT_SAMPLE_HELPER(tTrafficSign, {
+						RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlTrafficSignIndex.i16Identifier, &data->i16Identifier));
+						RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlTrafficSignIndex.f32x, &data->f32x));
+						RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlTrafficSignIndex.f32y, &data->f32y));
+						RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlTrafficSignIndex.f32angle, &data->f32angle));
+					});
 
 				case ParkingSpace:
-					LOG_ERROR("eZmqStruct 'ParkingSpace' not implemented.");
-					break;
+					PROCESS_INPUT_SAMPLE_HELPER(tParkingSpace, {
+						RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlParkingSpaceIndex.i16Identifier, &data->i16Identifier));
+						RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlParkingSpaceIndex.f32x, &data->f32x));
+						RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlParkingSpaceIndex.f32y, &data->f32y));
+						RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlParkingSpaceIndex.ui16Status, &data->ui16Status));
+					});
 
 				case Ultrasonic:
-					// TODO: remove timestamps
 					PROCESS_INPUT_SAMPLE_HELPER(tUltrasonicStruct, {
 						RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlUltrasonicStructIndex.SideLeft.value, &data->tSideLeft.f32Value));
 						RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlUltrasonicStructIndex.SideLeft.timeStamp, &data->tSideLeft.ui32ArduinoTimestamp));
@@ -548,8 +560,10 @@ tResult cZmqBase::ProcessInputs(tTimeStamp tmTimeOfTrigger)
 					});
 
 				case PolarCoordinate:
-					LOG_ERROR("eZmqStruct 'PolarCoordinate' not implemented.");
-					break;
+					PROCESS_INPUT_SAMPLE_HELPER(tPolarCoordiante, {
+						RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlPolarCoordianteIndex.f32Radius, &data->f32Radius));
+						RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlPolarCoordianteIndex.f32Angle, &data->f32Angle));
+					});
 
 				case LaserScanner:
 					PROCESS_INPUT_SAMPLE_HELPER(tLaserScannerData, {
@@ -592,8 +606,15 @@ tResult cZmqBase::ProcessInputs(tTimeStamp tmTimeOfTrigger)
 					});
 
 				case TrajectoryArray:
-					LOG_ERROR("eZmqStruct 'TrajectoryArray' not implemented.");
-					break;
+					PROCESS_INPUT_SAMPLE_HELPER(tTrajectoryArray, {
+						RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlTrajectoryArrayIndex.trajectories, &data->trajectories));
+					});
+					
+				case YoloNetOutput:
+					PROCESS_INPUT_SAMPLE_HELPER(tYOLONetOutput, {
+						const tFloat32* nodeValues = static_cast<const tFloat32*>(sampleDecoder.GetElementAddress(m_ddlYoloNetOutputIndex.f32NodeValue));
+						memcpy(&data->f32NodeValue, nodeValues, sizeof data->f32NodeValue);
+					});
 
 				default:
 					LOG_ERROR("Unrecognized eZmqStruct %d while processing inputs.", pinType);
@@ -666,7 +687,7 @@ tResult cZmqBase::ProcessOutput(zmq::message_t* frame, const size_t index)
 		});
 
 	case Driver:
-		LOG_ERROR("eZmqStruct 'Driver' not implemented.");
+		LOG_ERROR("eZmqStruct 'Driver' not implemented for output pins.");
 		break;
 
 	case SignalValue:
@@ -703,7 +724,7 @@ tResult cZmqBase::ProcessOutput(zmq::message_t* frame, const size_t index)
 		});
 
 	case RoadSignExt:
-		LOG_ERROR("eZmqStruct 'RoadSignExt' not implemented.");
+		LOG_ERROR("eZmqStruct 'RoadSignExt' not implemented for output pins.");
 		break;
 
 	case Position:
@@ -716,25 +737,25 @@ tResult cZmqBase::ProcessOutput(zmq::message_t* frame, const size_t index)
 		});
 
 	case Obstacle:
-		LOG_ERROR("eZmqStruct 'Obstacle' not implemented.");
+		LOG_ERROR("eZmqStruct 'Obstacle' not implemented for output pins.");
 		break;
 	case TrafficSign:
-		LOG_ERROR("eZmqStruct 'TrafficSign' not implemented.");
+		LOG_ERROR("eZmqStruct 'TrafficSign' not implemented for output pins.");
 		break;
 	case ParkingSpace:
-		LOG_ERROR("eZmqStruct 'ParkingSpace' not implemented.");
+		LOG_ERROR("eZmqStruct 'ParkingSpace' not implemented for output pins.");
 		break;
 	case Ultrasonic:
-		LOG_ERROR("eZmqStruct 'Ultrasonic' not implemented.");
+		LOG_ERROR("eZmqStruct 'Ultrasonic' not implemented for output pins.");
 		break;
 	case Voltage:
-		LOG_ERROR("eZmqStruct 'Voltage' not implemented.");
+		LOG_ERROR("eZmqStruct 'Voltage' not implemented for output pins.");
 		break;
 	case PolarCoordinate:
-		LOG_ERROR("eZmqStruct 'PolarCoordinate' not implemented.");
+		LOG_ERROR("eZmqStruct 'PolarCoordinate' not implemented for output pins.");
 		break;
 	case LaserScanner:
-		LOG_ERROR("eZmqStruct 'LaserScanner' not implemented.");
+		LOG_ERROR("eZmqStruct 'LaserScanner' not implemented for output pins.");
 		break;
 
 	case Trajectory:
@@ -754,8 +775,13 @@ tResult cZmqBase::ProcessOutput(zmq::message_t* frame, const size_t index)
 		});
 
 	case TrajectoryArray:
-		LOG_ERROR("eZmqStruct 'TrajectoryArray' not implemented.");
-		break;
+		PROCESS_OUTPUT_SAMPLE_HELPER(tTrajectoryArray, {
+			RETURN_IF_FAILED(sampleEncoder.SetElementValue(m_ddlTrajectoryArrayIndex.trajectories, data->trajectories));
+		});
+
+	case YoloNetOutput:
+		LOG_ERROR("eZmqStruct 'YoloNetOutput' not implemented for output pins.");
+
 	default:
 		LOG_ERROR("Unrecognized eZmqStruct %d while processing outputs", pinType);
 	}
@@ -808,8 +834,10 @@ object_ptr<IStreamType>* cZmqBase::GetStreamType(const eZmqStruct sampleType)
 		});
 
 	case Driver:
-		LOG_ERROR("eZmqStruct 'Driver' not implemented.");
-		break;
+		STREAM_TYPE_DEFINITION_HELPER("tDriverStruct", m_DriverStructStreamType, m_DriverStructSampleFactory, {
+			access_element::find_index(m_DriverStructSampleFactory, cString("i16StateID"), m_ddlDriverStructIndex.i16StateID);
+			access_element::find_index(m_DriverStructSampleFactory, cString("i16ManeuverEntry"), m_ddlDriverStructIndex.i16ManeuverEntry);
+		});
 
 	case SignalValue:
 		STREAM_TYPE_DEFINITION_HELPER("tSignalValue", m_SignalValueStreamType, m_SignalValueSampleFactory, {
@@ -862,16 +890,26 @@ object_ptr<IStreamType>* cZmqBase::GetStreamType(const eZmqStruct sampleType)
 		});
 
 	case Obstacle:
-		LOG_ERROR("eZmqStruct 'Obstacle' not implemented.");
-		break;
+		STREAM_TYPE_DEFINITION_HELPER("tObstacle", m_ObstacleStreamType, m_ObstacleSampleFactory, {
+			access_element::find_index(m_ObstacleSampleFactory, cString("f32x"), m_ddlObstacleIndex.f32y);
+			access_element::find_index(m_ObstacleSampleFactory, cString("f32y"), m_ddlObstacleIndex.f32y);
+		});
 
 	case TrafficSign:
-		LOG_ERROR("eZmqStruct 'TrafficSign' not implemented.");
-		break;
+		STREAM_TYPE_DEFINITION_HELPER("tTrafficSign", m_TrafficSignStreamType, m_TrafficSignSampleFactory, {
+			access_element::find_index(m_TrafficSignSampleFactory, cString("i16Identifier"), m_ddlTrafficSignIndex.i16Identifier);
+			access_element::find_index(m_TrafficSignSampleFactory, cString("f32x"), m_ddlTrafficSignIndex.f32x);
+			access_element::find_index(m_TrafficSignSampleFactory, cString("f32y"), m_ddlTrafficSignIndex.f32y);
+			access_element::find_index(m_TrafficSignSampleFactory, cString("f32angle"), m_ddlTrafficSignIndex.f32angle);
+		});
 
 	case ParkingSpace:
-		LOG_ERROR("eZmqStruct 'ParkingSpace' not implemented.");
-		break;
+		STREAM_TYPE_DEFINITION_HELPER("tParkingSpace", m_ParkingSpaceStreamType, m_ParkingSpaceSampleFactory, {
+			access_element::find_index(m_ParkingSpaceSampleFactory, cString("i16Identifier"), m_ddlParkingSpaceIndex.i16Identifier);
+			access_element::find_index(m_ParkingSpaceSampleFactory, cString("f32x"), m_ddlParkingSpaceIndex.f32x);
+			access_element::find_index(m_ParkingSpaceSampleFactory, cString("f32y"), m_ddlParkingSpaceIndex.f32y);
+			access_element::find_index(m_ParkingSpaceSampleFactory, cString("ui16Status"), m_ddlParkingSpaceIndex.ui16Status);
+		});
 
 	case Ultrasonic:
 		STREAM_TYPE_DEFINITION_HELPER("tUltrasonicStruct", m_USDataStreamType, m_USDataSampleFactory, {
@@ -913,8 +951,10 @@ object_ptr<IStreamType>* cZmqBase::GetStreamType(const eZmqStruct sampleType)
 		});
 
 	case PolarCoordinate:
-		LOG_ERROR("eZmqStruct 'PolarCoordinate' not implemented.");
-		break;
+		STREAM_TYPE_DEFINITION_HELPER("tPolarCoordiante", m_PolarCoordianteStreamType, m_PolarCoordianteSampleFactory, {
+			access_element::find_index(m_PolarCoordianteSampleFactory, cString("f32Radius"), m_ddlPolarCoordianteIndex.f32Radius);
+			access_element::find_index(m_PolarCoordianteSampleFactory, cString("f32Angle"), m_ddlPolarCoordianteIndex.f32Angle);
+		});
 
 	case LaserScanner:
 		STREAM_TYPE_DEFINITION_HELPER("tLaserScannerData", m_LSStructStreamType, m_LSStructSampleFactory, {
@@ -923,7 +963,7 @@ object_ptr<IStreamType>* cZmqBase::GetStreamType(const eZmqStruct sampleType)
 		});
 
 	case Trajectory:
-		STREAM_TYPE_DEFINITION_HELPER("tTrajectory", m_TrajectoryStreamType, m_TrajectorySampleFactory, {
+		STREAM_TYPE_DEFINITION_HELPER("tTrajectoryArray", m_TrajectoryStreamType, m_TrajectorySampleFactory, {
 			access_element::find_index(m_TrajectorySampleFactory, cString("id"), m_ddlTrajectoryIndex.id);
 			access_element::find_index(m_TrajectorySampleFactory, cString("ax"), m_ddlTrajectoryIndex.ax);
 			access_element::find_index(m_TrajectorySampleFactory, cString("bx"), m_ddlTrajectoryIndex.bx);
@@ -939,8 +979,14 @@ object_ptr<IStreamType>* cZmqBase::GetStreamType(const eZmqStruct sampleType)
 		});
 
 	case TrajectoryArray:
-		LOG_ERROR("eZmqStruct 'TrajectoryArray' not implemented.");
-		break;
+		STREAM_TYPE_DEFINITION_HELPER("tTrajectoryArray", m_TrajectoryArrayStreamType, m_TrajectoryArraySampleFactory, {
+			access_element::find_array_index(m_TrajectoryArraySampleFactory, "trajectories", m_ddlTrajectoryArrayIndex.trajectories);
+		});
+
+	case YoloNetOutput:
+		STREAM_TYPE_DEFINITION_HELPER("tYOLONetOutput", m_YoloNetOutputStreamType, m_YoloNetOutputSampleFactory, {
+			access_element::find_array_index(m_YoloNetOutputSampleFactory, "f32NodeValue", m_ddlYoloNetOutputIndex.f32NodeValue);
+		});
 
 	default:
 		LOG_ERROR("Could not get or create stream type for unrecognized eZmqStruct %d", sampleType);
@@ -971,6 +1017,7 @@ size_t cZmqBase::GetStructSize(const eZmqStruct sampleType) const
 	case LaserScanner:			return sizeof(tLaserScannerData);
 	case Trajectory:			return sizeof(tTrajectory);
 	case TrajectoryArray:		return sizeof(tTrajectoryArray);
+	case YoloNetOutput:			return sizeof(tYOLONetOutput);
 	default:					LOG_ERROR("Could not request size for unrecognized eZmqStruct %d", sampleType);
 	}
 
@@ -983,22 +1030,23 @@ cSampleCodecFactory* cZmqBase::GetSampleFactory(const eZmqStruct sampleType)
 	{
 	case Image:					return nullptr;
 	case Jury:					return &m_JuryStructSampleFactory;
-	case Driver:				LOG_ERROR("eZmqStruct 'Driver' not implemented."); break;
+	case Driver:				return &m_DriverStructSampleFactory;
 	case SignalValue:			return &m_SignalValueSampleFactory;
 	case BoolSignalValue:		return &m_BoolSignalValueSampleFactory;
 	case WheelData:				return &m_WheelDataSampleFactory;
 	case InerMeasUnitData:		return &m_IMUDataSampleFactory;
 	case RoadSignExt:			return &m_RoadSignExtSampleFactory;
 	case Position:				return &m_PositionSampleFactory;
-	case Obstacle:				LOG_ERROR("eZmqStruct 'Obstacle' not implemented."); break;
-	case TrafficSign:			LOG_ERROR("eZmqStruct 'TrafficSign' not implemented."); break;
-	case ParkingSpace:			LOG_ERROR("eZmqStruct 'ParkingSpace' not implemented."); break;
+	case Obstacle:				return &m_ObstacleSampleFactory;
+	case TrafficSign:			return &m_TrafficSignSampleFactory;
+	case ParkingSpace:			return &m_ParkingSpaceSampleFactory;
 	case Ultrasonic:			return &m_USDataSampleFactory;
 	case Voltage:				return &m_VoltageStructSampleFactory;
-	case PolarCoordinate:		LOG_ERROR("eZmqStruct 'PolarCoordinate' not implemented."); break;
+	case PolarCoordinate:		return &m_PolarCoordianteSampleFactory;
 	case LaserScanner:			return &m_LSStructSampleFactory;
 	case Trajectory:			return &m_TrajectorySampleFactory;
-	case TrajectoryArray:		LOG_ERROR("eZmqStruct 'TrajectoryArray' not implemented."); break;
+	case TrajectoryArray:		return &m_TrajectoryArraySampleFactory;
+	case YoloNetOutput:			return &m_YoloNetOutputSampleFactory;
 	default:					LOG_ERROR("Could not get sample factory for unrecognized eZmqStruct %d", sampleType);
 	}
 

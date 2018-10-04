@@ -13,25 +13,69 @@ THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS AS IS AND ANY EXPRESS OR I
 
 **********************************************************************/
 
-#include "ZmqSensorTemplate.h"
 
-ADTF_PLUGIN(LABEL_LITD_ZMQ_SENSOR_TEMPLATE, cZmqSensorTemplate)
+#pragma once
 
-cZmqSensorTemplate::cZmqSensorTemplate()
+//*************************************************************************************************
+#define CID_COPENCVTEMPLATE_DATA_TRIGGERED_FILTER "tensorflowtemplate_filter.filter.user.aadc.cid"
+
+using namespace adtf_util;
+using namespace ddl;
+using namespace adtf::ucom;
+using namespace adtf::base;
+using namespace adtf::streaming;
+using namespace adtf::mediadescription;
+using namespace adtf::filter;
+using namespace std;
+
+// used to read image form camera sensor, is there another way to do this?
+using namespace cv;
+
+// Tensorflow.
+using namespace tensorflow;
+using namespace tensorflow::ops;
+
+/*! the main class of the open cv template. */
+class cTensorFlowTemplate : public cTriggerFunction
 {
-	// input pin names and types
-	m_inputs.emplace_back("signal_in", SignalValue);
-	m_inputs.emplace_back("bool_in", BoolSignalValue);
-	m_inputs.emplace_back("wheel", WheelData);
-	m_inputs.emplace_back("imu", InerMeasUnitData);
-	m_inputs.emplace_back("lidar", LaserScanner);
-	m_inputs.emplace_back("ultrasonic", Ultrasonic);
-	m_inputs.emplace_back("voltage", Voltage);
+private:
 
-	// output pin names and types
-	m_outputs.emplace_back("signal_out", SignalValue);
-	m_outputs.emplace_back("bool_out", BoolSignalValue);
+    //Pins
+    /*! Reader of an InPin. */
+    cPinReader m_oReader;
+    /*! Writer to an OutPin. */
+    cPinWriter m_oWriter;
 
-	// pipe out the data whenever there are new samples on these pins
-	m_triggers.emplace_back("imu");
-}
+    //Stream Formats
+    /*! The input format */
+    adtf::streaming::tStreamImageFormat m_sImageFormat;
+
+    /*! The clock */
+    object_ptr<adtf::services::IReferenceClock> m_pClock;
+
+
+public:
+
+    /*! Default constructor. */
+    cTensorFlowTemplate();
+
+
+    /*! Destructor. */
+    virtual ~cTensorFlowTemplate() = default;
+
+    /**
+    * Overwrites the Configure
+    * This is to Read Properties prepare your Trigger Function
+    */
+    tResult Configure() override;
+    /**
+    * Overwrites the Process
+    * You need to implement the Reading and Writing of Samples within this function
+    * MIND: Do Reading until the Readers queues are empty or use the IPinReader::GetLastSample()
+    * This FUnction will be called if the Run() of the TriggerFunction was called.
+    */
+    tResult Process(tTimeStamp tmTimeOfTrigger) override;
+};
+
+
+//*************************************************************************************************

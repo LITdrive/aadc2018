@@ -8,3 +8,4 @@ dependencies:
   - numpy=1.15
   - scipy=1.1
   - lxml=4.2
+  - cython=0.28

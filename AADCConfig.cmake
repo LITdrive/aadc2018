@@ -7,6 +7,14 @@ endif(AADC_FOUND)
 set(AADC_OPENCV_FOUND FALSE)
 set(AADC_PYLON_FOUND FALSE)
 set(AADC_BOOST_FOUND FALSE)
+
+# check if this is a build on one of the aadc cars
+cmake_host_system_information(RESULT HOSTNAME_VAR QUERY HOSTNAME)
+set (THIS_IS_A_CAR FALSE)
+if ((${HOSTNAME_VAR} STREQUAL "annika") OR (${HOSTNAME_VAR} STREQUAL "bob") OR (${HOSTNAME_VAR} STREQUAL "charlie"))
+	set (THIS_IS_A_CAR TRUE)
+endif()
+
 #-------------------------------------------------------
 #-------ADTF Dir----------------------------------------
 #-------------------------------------------------------
@@ -36,7 +44,7 @@ endif(WIN32)
 #-------------------------------------------------------
 #-------Eigen (header-only)-----------------------------
 #-------------------------------------------------------
-set (EIGEN3_INCLUDE_DIR "${AADC_DIR}/include/Eigen")
+set (EIGEN3_INCLUDE_DIRS_HEADER_ONLY "${AADC_DIR}/include/Eigen")
 
 #-------------------------------------------------------
 #------- OpenCV 3.4.2 ----------------------------------
@@ -87,7 +95,81 @@ if(Boost_FOUND)
 	# UNIX: do not forget to add the path to LD_LIBRARY_PATH: add /opt/boost/1.66.0/lib to file /etc/ld.so.conf.d/boost.conf
 else(Boost_FOUND)
 	message(FATAL_ERROR "Boost not found." )		
-endif(Boost_FOUND)          
+endif(Boost_FOUND)
+
+#------------------------------------------------------------------	
+#--------lib protobuf------------------------------------------
+#------------------------------------------------------------------	
+
+if (THIS_IS_A_CAR)
+if(UNIX)
+	set(protobuf_MODULE_COMPATIBLE TRUE)	
+	FIND_PACKAGE(Protobuf 3.5.0 REQUIRED)
+
+	if (Protobuf_FOUND)
+		message(STATUS "Found Protobuf lib with version ${Protobuf_VERSION}, libs are: ${Protobuf_LIBRARIES}; Include Dir is ${Protobuf_INCLUDE_DIRS}")
+	else (Protobuf_FOUND)
+		message(FATAL_ERROR "Protobuf lib not found")
+	endif (Protobuf_FOUND)
+else(UNIX)
+	message(STATUS "Skipping Protobuf lib on Windows.")
+endif(UNIX)
+endif(THIS_IS_A_CAR)
+
+#------------------------------------------------------------------	
+#--------lib eigen------------------------------------------
+#------------------------------------------------------------------	
+
+if (THIS_IS_A_CAR)
+if(UNIX)	
+	FIND_PACKAGE(Eigen3 3.3.4 REQUIRED PATHS "/opt/eigen/3.3.4")
+
+	if (Eigen3_FOUND)
+		message(STATUS "Found Eigen ${EIGEN3_VERSION_STRING} ; Include Dir is ${EIGEN3_INCLUDE_DIRS}")
+	else (Eigen3_FOUND)
+		message(FATAL_ERROR "Eigen not found")
+	endif (Eigen3_FOUND)
+else(UNIX)
+	message(STATUS "Skipping Eigen lib on Windows.")
+endif(UNIX)
+endif(THIS_IS_A_CAR)
+
+#------------------------------------------------------------------	
+#--------lib tensorflow------------------------------------------
+#------------------------------------------------------------------	
+
+if (THIS_IS_A_CAR)
+if(UNIX)
+	set(TENSORFLOW_DIR "/opt/tensorflow/1.8.0")
+	set(TENSORFLOW_INCLUDE_DIRS "${TENSORFLOW_DIR}/include")
+
+
+	FIND_LIBRARY(TENSORFLOW_LIB NAMES 
+		tensorflow_cc
+		PATHS 
+		"${TENSORFLOW_DIR}/lib"
+		)
+
+	FIND_LIBRARY(TENSORFLOW_FRAMEWORK NAMES 
+		tensorflow_framework
+		PATHS 
+		"${TENSORFLOW_DIR}/lib"
+		)
+
+	set(TENSORFLOW_LIBS "${TENSORFLOW_LIB};${TENSORFLOW_FRAMEWORK}")	
+		
+		
+	if (TENSORFLOW_LIBS)
+		message(STATUS "Found Tensorflow. Tensorflow libs are: ${TENSORFLOW_LIBS}; Include Dir is ${TENSORFLOW_INCLUDE_DIRS}")
+	else (TENSORFLOW_LIBS)
+		message(FATAL_ERROR "Tensorflow lib not found under ${TENSORFLOW_DIR}")
+	endif (TENSORFLOW_LIBS)
+
+else(UNIX)
+	message(STATUS "Skipping Tensorflow libs on Windows.")
+endif(UNIX)
+endif(THIS_IS_A_CAR)
+       
 
 #-----------------------------------------------------------
 #--------lib pylon------------------------------------------

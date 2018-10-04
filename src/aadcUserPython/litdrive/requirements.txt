@@ -3,3 +3,4 @@ numpy>=1.15
 scipy>=1.1
 matplotlib>=3.0
 lxml>=4.2
+cython>=0.28

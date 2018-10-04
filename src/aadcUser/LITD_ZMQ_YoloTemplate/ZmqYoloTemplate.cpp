@@ -13,25 +13,15 @@ THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS AS IS AND ANY EXPRESS OR I
 
 **********************************************************************/
 
-#include "ZmqSensorTemplate.h"
+#include "ZmqYoloTemplate.h"
 
-ADTF_PLUGIN(LABEL_LITD_ZMQ_SENSOR_TEMPLATE, cZmqSensorTemplate)
+ADTF_PLUGIN(LABEL_LITD_ZMQ_YOLO_TEMPLATE, cZmqYoloTemplate)
 
-cZmqSensorTemplate::cZmqSensorTemplate()
+cZmqYoloTemplate::cZmqYoloTemplate()
 {
 	// input pin names and types
-	m_inputs.emplace_back("signal_in", SignalValue);
-	m_inputs.emplace_back("bool_in", BoolSignalValue);
-	m_inputs.emplace_back("wheel", WheelData);
-	m_inputs.emplace_back("imu", InerMeasUnitData);
-	m_inputs.emplace_back("lidar", LaserScanner);
-	m_inputs.emplace_back("ultrasonic", Ultrasonic);
-	m_inputs.emplace_back("voltage", Voltage);
-
-	// output pin names and types
-	m_outputs.emplace_back("signal_out", SignalValue);
-	m_outputs.emplace_back("bool_out", BoolSignalValue);
+	m_inputs.emplace_back("yolo", YoloNetOutput);
 
 	// pipe out the data whenever there are new samples on these pins
-	m_triggers.emplace_back("imu");
+	m_triggers.emplace_back("yolo");
 }
