@@ -51,7 +51,8 @@ void cStanleyControl::calcSteeringAngle(){
     }
 
     //calc normal distance of tangent to car (e)
-    double e = (vehicleTargetFrontAxlePosition.getVector2d() - vehicleActualFrontAxlePosition.getVector2d()).norm() * sign;
+    // double e = (vehicleTargetFrontAxlePosition.getVector2d() - vehicleActualFrontAxlePosition.getVector2d()).norm() * sign;
+	double e = diff.norm()*sign;
 
     //calc angle between car heading and point tangent
     double theta_c =  wrapTo2Pi(vehicleTargetFrontAxlePosition.h) - wrapTo2Pi(vehicleActualFrontAxlePosition.h);
@@ -345,21 +346,25 @@ void cStanleyControl::getNextVirtualPointOnPoly() {
 			// p = [0, 1]
 			calcVirtualPointfromPoly(trajectoryArray[i], j, &actualPoint);
 
-			//calc norm to carPosition
-			double dist = sqrt(pow(actualPoint.x - vehicleActualFrontAxlePosition.x, 2) + pow(actualPoint.y - vehicleActualFrontAxlePosition.y, 2));
-			
-			if (dist < min_dist)
+			// Target Point on Polynom has to be in front of the actual position of the front axle
+			if (vehicleActualFrontAxlePosition.h == 0 && actualPoint.x > vehicleActualFrontAxlePosition.x || vehicleActualFrontAxlePosition.h == M_PI && actualPoint.x < vehicleActualFrontAxlePosition.x || vehicleActualFrontAxlePosition.h == M_PI/2 && actualPoint.y > vehicleActualFrontAxlePosition.y || vehicleActualFrontAxlePosition.h == (3/2)*M_PI && actualPoint.y > vehicleActualFrontAxlePosition.y || vehicleActualFrontAxlePosition.h > 0 && vehicleActualFrontAxlePosition.h < M_PI/2 && actualPoint.x > vehicleActualFrontAxlePosition.x && actualPoint.y > vehicleActualFrontAxlePosition.y || vehicleActualFrontAxlePosition.h > M_PI/2 && vehicleActualFrontAxlePosition.h < M_PI && actualPoint.x < vehicleActualFrontAxlePosition.x && actualPoint.y > vehicleActualFrontAxlePosition.y || vehicleActualFrontAxlePosition.h > M_PI && vehicleActualFrontAxlePosition.h < (3/2)*M_PI && actualPoint.x < vehicleActualFrontAxlePosition.x && actualPoint.y < vehicleActualFrontAxlePosition.y || vehicleActualFrontAxlePosition.h > (3/2)*M_PI && vehicleActualFrontAxlePosition.h < 2*M_PI && actualPoint.x > vehicleActualFrontAxlePosition.x && actualPoint.y < vehicleActualFrontAxlePosition.y)
 			{
-				min_dist = dist;
-				actual_min_dist_poly_index = i;
-				min_poly_p = j;
-				vehicleTargetFrontAxlePosition.x = actualPoint.x;
-				vehicleTargetFrontAxlePosition.y = actualPoint.y;
-				vehicleTargetFrontAxlePosition.h = actualPoint.h;
+				//calc norm to carPosition
+				double dist = sqrt(pow(actualPoint.x - vehicleActualFrontAxlePosition.x, 2) + pow(actualPoint.y - vehicleActualFrontAxlePosition.y, 2));
 
-				if (trajectoryArray[i].backwards)
+				if (dist < min_dist)
 				{
-					vehicleTargetFrontAxlePosition.h = wrapTo2Pi(vehicleTargetFrontAxlePosition.h + M_PI);
+					min_dist = dist;
+					actual_min_dist_poly_index = i;
+					min_poly_p = j;
+					vehicleTargetFrontAxlePosition.x = actualPoint.x;
+					vehicleTargetFrontAxlePosition.y = actualPoint.y;
+					vehicleTargetFrontAxlePosition.h = actualPoint.h;
+
+					if (trajectoryArray[i].backwards)
+					{
+						vehicleTargetFrontAxlePosition.h = wrapTo2Pi(vehicleTargetFrontAxlePosition.h + M_PI);
+					}
 				}
 			}
 		}
