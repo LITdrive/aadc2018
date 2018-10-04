@@ -58,7 +58,11 @@ void cStanleyControl::calcSteeringAngle(){
     double theta_c =  wrapTo2Pi(vehicleTargetFrontAxlePosition.h) - wrapTo2Pi(vehicleActualFrontAxlePosition.h);
 
     //calc steering-angle with stanley-approach
-    vehicleSteeringAngle = theta_c + atan2(stanleyGain * e, vehicleSpeed);
+	double dynamicStanleyPart = 0;
+	if(vehicleSpeed > 0.02){
+		 dynamicStanleyPart = atan2(stanleyGain * e, vehicleSpeed);
+	}
+    vehicleSteeringAngle = theta_c + dynamicStanleyPart;
 
     //Debug Messages
     /*std::cout << "-----------------------" << std::endl;
@@ -69,6 +73,14 @@ void cStanleyControl::calcSteeringAngle(){
     std::cout << "Theta_C: " << theta_c << "(" << rad2degree * theta_c << "°)" << std::endl;
     std::cout << "Steering Angle: " << carSteeringAngle << "(" << rad2degree * carSteeringAngle << "°)" << std::endl;
     std::cout << "-----------------------" << std::endl;*/
+	LOG_INFO("-----------------------");
+	LOG_INFO("POINT_Heading in °: %f", vehicleTargetFrontAxlePosition.h *rad2degree);
+	LOG_INFO("Car Heading in °: %f", vehicleActualFrontAxlePosition.h *rad2degree);
+	LOG_INFO("Diff Heading in °: %f", diff_heading_abs *rad2degree);
+	LOG_INFO("Stanley e: %f", e);
+	LOG_INFO("Stanley Theta in °: %f", theta_c *rad2degree);
+	LOG_INFO("Steering Angle in °: %f", vehicleSteeringAngle *rad2degree);
+	LOG_INFO("-----------------------");
 
 }
 
@@ -210,7 +222,7 @@ tResult cStanleyControl::ProcessPosition(tTimeStamp tmTimeOfTrigger)
 	vehicleSpeed = position.f32speed;
 	vehicleActualRearAxlePosition.x = position.f32x;
 	vehicleActualRearAxlePosition.y = position.f32y;
-	vehicleActualRearAxlePosition.h = position.f32heading;
+	vehicleActualRearAxlePosition.h = wrapTo2Pi(position.f32heading);
 	LOG_INFO("Point of BackPosition: x: %f, y: %f, h: %f", vehicleActualRearAxlePosition.x, vehicleActualRearAxlePosition.y, vehicleActualRearAxlePosition.h  * 180.0 / M_PI);
 
 
@@ -347,11 +359,20 @@ void cStanleyControl::getNextVirtualPointOnPoly() {
 			calcVirtualPointfromPoly(trajectoryArray[i], j, &actualPoint);
 
 			// Target Point on Polynom has to be in front of the actual position of the front axle
-			if (vehicleActualFrontAxlePosition.h == 0 && actualPoint.x > vehicleActualFrontAxlePosition.x || vehicleActualFrontAxlePosition.h == M_PI && actualPoint.x < vehicleActualFrontAxlePosition.x || vehicleActualFrontAxlePosition.h == M_PI/2 && actualPoint.y > vehicleActualFrontAxlePosition.y || vehicleActualFrontAxlePosition.h == (3/2)*M_PI && actualPoint.y > vehicleActualFrontAxlePosition.y || vehicleActualFrontAxlePosition.h > 0 && vehicleActualFrontAxlePosition.h < M_PI/2 && actualPoint.x > vehicleActualFrontAxlePosition.x && actualPoint.y > vehicleActualFrontAxlePosition.y || vehicleActualFrontAxlePosition.h > M_PI/2 && vehicleActualFrontAxlePosition.h < M_PI && actualPoint.x < vehicleActualFrontAxlePosition.x && actualPoint.y > vehicleActualFrontAxlePosition.y || vehicleActualFrontAxlePosition.h > M_PI && vehicleActualFrontAxlePosition.h < (3/2)*M_PI && actualPoint.x < vehicleActualFrontAxlePosition.x && actualPoint.y < vehicleActualFrontAxlePosition.y || vehicleActualFrontAxlePosition.h > (3/2)*M_PI && vehicleActualFrontAxlePosition.h < 2*M_PI && actualPoint.x > vehicleActualFrontAxlePosition.x && actualPoint.y < vehicleActualFrontAxlePosition.y)
-			{
+			//if ((vehicleActualFrontAxlePosition.h == 0.0  && actualPoint.x > vehicleActualFrontAxlePosition.x) || (vehicleActualFrontAxlePosition.h == M_PI && actualPoint.x < vehicleActualFrontAxlePosition.x) || (vehicleActualFrontAxlePosition.h == M_PI/2 && actualPoint.y > vehicleActualFrontAxlePosition.y) || (vehicleActualFrontAxlePosition.h == (3/2)*M_PI && actualPoint.y > vehicleActualFrontAxlePosition.y) || (vehicleActualFrontAxlePosition.h > 0 && vehicleActualFrontAxlePosition.h < M_PI/2 && actualPoint.x > vehicleActualFrontAxlePosition.x && actualPoint.y > vehicleActualFrontAxlePosition.y) || (vehicleActualFrontAxlePosition.h > M_PI/2 && vehicleActualFrontAxlePosition.h < M_PI && actualPoint.x < vehicleActualFrontAxlePosition.x && actualPoint.y > vehicleActualFrontAxlePosition.y) || (vehicleActualFrontAxlePosition.h > M_PI && vehicleActualFrontAxlePosition.h < (3/2)*M_PI && actualPoint.x < vehicleActualFrontAxlePosition.x && actualPoint.y < vehicleActualFrontAxlePosition.y) || (vehicleActualFrontAxlePosition.h > (3/2)*M_PI && vehicleActualFrontAxlePosition.h < 2*M_PI && actualPoint.x > vehicleActualFrontAxlePosition.x && actualPoint.y < vehicleActualFrontAxlePosition.y))
+			//if ((vehicleActualFrontAxlePosition.h >= (3/2)*M_PI && vehicleActualFrontAxlePosition.h <= M_PI/2 && actualPoint.x > vehicleActualFrontAxlePosition.x) || (vehicleActualFrontAxlePosition.h >= M_PI/2 && vehicleActualFrontAxlePosition.h <= (3/2)*M_PI && actualPoint.x < vehicleActualFrontAxlePosition.x) || (vehicleActualFrontAxlePosition.h >= 0 && vehicleActualFrontAxlePosition.h <= M_PI && actualPoint.y > vehicleActualFrontAxlePosition.y) || (vehicleActualFrontAxlePosition.h >= M_PI && vehicleActualFrontAxlePosition.h <= 2*M_PI && actualPoint.y < vehicleActualFrontAxlePosition.y))
+			//{
+			
+			//calc vector from carfrontposition to actualpoint
+			double x_vec = actualPoint.x - vehicleActualFrontAxlePosition.x;
+			double y_vec = actualPoint.y - vehicleActualFrontAxlePosition.y;
+			double angleFromCarToActualPoint = atan2(y_vec, x_vec);
+			//LOG_INFO("Angle from Car to NextPoint: %f", angleFromCarToActualPoint * 180.0 / M_PI );
+			if(angleFromCarToActualPoint <= M_PI/2 || angleFromCarToActualPoint >= 3/2 * M_PI){
+
 				//calc norm to carPosition
 				double dist = sqrt(pow(actualPoint.x - vehicleActualFrontAxlePosition.x, 2) + pow(actualPoint.y - vehicleActualFrontAxlePosition.y, 2));
-
+				//LOG_INFO("In fancy logic-if" );
 				if (dist < min_dist)
 				{
 					min_dist = dist;
@@ -367,9 +388,10 @@ void cStanleyControl::getNextVirtualPointOnPoly() {
 					}
 				}
 			}
+			//}
 		}
 	}
-	LOG_INFO("Point from Poly is: x: %f, y: %f, h: %f", vehicleTargetFrontAxlePosition.x, vehicleTargetFrontAxlePosition.y, vehicleTargetFrontAxlePosition.h * 80.0 / M_PI );
+	LOG_INFO("Point from Poly is: x: %f, y: %f, h: %f", vehicleTargetFrontAxlePosition.x, vehicleTargetFrontAxlePosition.y, vehicleTargetFrontAxlePosition.h * 180.0 / M_PI );
 	LOG_INFO("End of trajektorie loop" );
 
 	if (actual_min_dist_poly_index != last_min_dist_poly_index)
@@ -394,14 +416,14 @@ void cStanleyControl::calcVirtualPointfromPoly(tTrajectory poly, double p, LITD_
 	double y = poly.dy*pow(p, 3) + poly.cy*pow(p, 2) + poly.by*p + poly.ay;
 
 	//tangente durch erste ableitung berechnen
-	double x_der = poly.dx*pow(p, 2) + poly.cx*p + poly.bx;
-	double y_der = poly.dy*pow(p, 2) + poly.cy*p + poly.by;
+	double x_der = 3 * poly.dx*pow(p, 2) + 2 * poly.cx*p + poly.bx;
+	double y_der = 3 * poly.dy*pow(p, 2) + 2 * poly.cy*p + poly.by;
+	
 
 	
 
-	//LOG_INFO("Derivation Points: x_der: %f, y_der: %f", x_der, y_der );
-
 	double heading = wrapTo2Pi(atan2(y_der, x_der));
+	//LOG_INFO("Derivation Points: x_der: %f, y_der: %f from h: %f", x_der, y_der, heading );
 	//double heading = wrapTo2Pi(atan2(y_p-y_m, x_p-x_m));
 
 	
@@ -412,8 +434,25 @@ void cStanleyControl::calcVirtualPointfromPoly(tTrajectory poly, double p, LITD_
 }
 
 void cStanleyControl::mapSteeringAngle(){
-    tFloat32  rad2degree  = 180.0 / M_PI;
-    vehicleSteeringAngle = (vehicleSteeringAngle * rad2degree) / maxAngle * (-100);   
+
+	// it should be regardless for this function if the angle is between -90 and +90 degree or 270 to 90 degree
+
+	tFloat32  rad2degree  = 180.0 / M_PI;
+
+	if(vehicleSteeringAngle > 3/2 * M_PI){
+		vehicleSteeringAngle -= 2 * M_PI; 
+	}
+
+	 if(vehicleSteeringAngle < -M_PI/4){
+            vehicleSteeringAngle = -M_PI/4;
+            LOG_INFO("Steering angle truncated to -45°!");
+    } else if(vehicleSteeringAngle > M_PI/4){
+            vehicleSteeringAngle = M_PI/4;
+            LOG_INFO("Steering angle truncated to 45°!");
+    }
+
+
+    vehicleSteeringAngle = (vehicleSteeringAngle * rad2degree) / maxAngle * (-100); 
     LOG_INFO("SteeringAngle in steps: %f", vehicleSteeringAngle );
 
 }

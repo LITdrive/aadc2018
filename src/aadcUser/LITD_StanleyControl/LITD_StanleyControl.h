@@ -55,7 +55,7 @@ private:
 
     void calcSteeringAngle();
 
-	property_variable<cFilename> m_properties_file = cFilename("../../../../configuration_files/properties/stanleycontrol_pid.ini");
+	property_variable<cFilename> m_properties_file = cFilename("/home/aadc/share/adtf/configuration_files/properties/stanleycontrol_pid.ini");
 	FilePropertiesObserver* m_properties;
     property_variable<tBool>       m_bShowDebug = tFalse;
 
