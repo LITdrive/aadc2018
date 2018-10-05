@@ -219,17 +219,12 @@ tResult cStanleyControl::Configure()
 	localTrajectoryArray[0].dy = 0;
 
 	// Parking
-	/* Parking start Point x : -0.6369718092383394
-	Parking start Point y : 1.0000000000000004
-	Parking end Point x : 0.702
-	Parking end Point y : 0 */
-
-	parkingStartPoint.x = -0.6369718092383394;
+	/*parkingStartPoint.x = -0.6369718092383394;
 	parkingStartPoint.y = 1.0000000000000004;
 	parkingStartPoint.h = M_PI / 2;
 	parkingTargetPoint.x = 0.702;
 	parkingTargetPoint.y = 0.0;
-	parkingTargetPoint.h = M_PI;
+	parkingTargetPoint.h = M_PI;*/
 
     RETURN_NOERROR;
 }
