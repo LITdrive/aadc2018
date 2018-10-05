@@ -354,11 +354,12 @@ tResult cStanleyControl::ProcessTrajectories(tTimeStamp tmTimeOfTrigger)
 			tTrajectory t = trajectoryArray.trajectories[i];
 			LOG_DUMP("Trajectory [%d] x = %.2f + %.2fp + %.2fp² + %.2fp³, y = %.2f + %.2fp + %.2fp² + %.2fp³ with p = range(%.2f, %.2f) and direction = %s",
 				t.id, t.ax, t.bx, t.cx, t.dx, t.ay, t.by, t.cy, t.dy, t.start, t.end, t.backwards ? "backward" : "forward");
-
+			// TODO: Poly with ID 0 -> Reset
 			// TODO: Not sure if this is smart
 			if (t.backwards)
 			{
 				// If we have to drive a polynomial backwards we have to park 
+				// TODO: parkingStartPoint und parkingTargetPoint durch einsetzen in Parkpolynome (p = 1 auf Kreisbogen, p = 0 auf Gerade) berechnen
 				parking = true;
 			}
 
