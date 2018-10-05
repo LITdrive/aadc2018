@@ -689,8 +689,10 @@ tResult cZmqBase::ProcessOutput(zmq::message_t* frame, const size_t index)
 		});
 
 	case Driver:
-		LOG_ERROR("eZmqStruct 'Driver' not implemented for output pins.");
-		break;
+		PROCESS_OUTPUT_SAMPLE_HELPER(tDriverStruct, {
+			RETURN_IF_FAILED(sampleEncoder.SetElementValue(m_ddlDriverStructIndex.i16StateID, data->i16StateID));
+			RETURN_IF_FAILED(sampleEncoder.SetElementValue(m_ddlDriverStructIndex.i16ManeuverEntry, data->i16ManeuverEntry));
+		});
 
 	case SignalValue:
 		PROCESS_OUTPUT_SAMPLE_HELPER(tSignalValue, {
