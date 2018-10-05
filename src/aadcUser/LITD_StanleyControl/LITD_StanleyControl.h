@@ -30,7 +30,7 @@ THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS AS IS AND ANY EXPRESS OR I
 #define LABEL_STANLEY_CONTROL_FILTER "LITD StanleyControl"
 
 #define VEHICLE_AXIS_DISTANCE  0.36 // in m 
-#define TRAJECTORY_ARRAY_LEN 8
+#define TRAJECTORY_ARRAY_LEN 2
 #define POINTS_PER_POLY 100
 // TODO: Anpassen
 #define MAX_DIST_TO_PARKING_POSITION 0.01 // m
@@ -106,7 +106,7 @@ private:
 	int last_min_dist_poly_index = 0;
 	bool poly_completed;
 	//::tPosition vehicleActualPosition;
-	//::tTrajectory localTrajectoryArray[TRAJECTORY_ARRAY_LEN];
+	::tTrajectory localTrajectoryArray[TRAJECTORY_ARRAY_LEN];
     LITD_VirtualPoint vehicleActualRearAxlePosition, vehicleActualFrontAxlePosition, vehicleTargetFrontAxlePosition;
 
     //controller params of Stanley
