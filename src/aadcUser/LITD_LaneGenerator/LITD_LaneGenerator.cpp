@@ -19,7 +19,7 @@ THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS AS IS AND ANY EXPRESS OR I
 
 
 ADTF_TRIGGER_FUNCTION_FILTER_PLUGIN(CID_LANE_GENERATOR_DATA_TRIGGERED_FILTER,
-                                    "LITD_LaneGenerator",
+                                    "LITD LaneGenerator",
                                     LITD_LaneGenerator,
                                     adtf::filter::pin_trigger({ "tPosition input" }));
 

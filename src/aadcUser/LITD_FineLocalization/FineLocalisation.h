@@ -19,8 +19,8 @@ THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS AS IS AND ANY EXPRESS OR I
 #include "PixelMetricTransformer.h"
 
 //*************************************************************************************************
-#define CID_FINE_LOCALISATION_FILTER "finelocalisation.filter.user.aadc.cid"
-#define LABEL_FINE_LOCALISATION_FILTER "LITD FineLocalisation"
+#define CID_FINE_LOCALISATION_FILTER "finelocalization.filter.user.aadc.cid"
+#define LABEL_FINE_LOCALISATION_FILTER "LITD FineLocalization"
 
 
 using namespace adtf_util;

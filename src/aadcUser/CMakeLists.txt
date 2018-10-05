@@ -53,8 +53,8 @@ add_subdirectory(utils)
 add_subdirectory(templates)
 
 # filters
-add_subdirectory(BirdsEyeView)
-add_subdirectory(FineLocalisation)
+add_subdirectory(LITD_BirdsEyeView)
+add_subdirectory(LITD_FineLocalization)
 add_subdirectory(LITD_FollowMe)
 add_subdirectory(LITD_EmergencyBreak)
 add_subdirectory(LITD_KeyboardControl)
