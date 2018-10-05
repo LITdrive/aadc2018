@@ -191,7 +191,6 @@ tResult cStanleyControl::Configure()
 	m_properties = new FilePropertiesObserver(propertiesFileResolved.GetPtr());
 	m_properties->ReloadProperties();
 
-	/*
 	// Fixed Polynomials of a cirle arc and a straight for testing
 	// Circle Arc
 	// 0.3443 x + 0.3115 x - 1.656 x + 0.363
@@ -217,20 +216,15 @@ tResult cStanleyControl::Configure()
 	localTrajectoryArray[0].ay = 0;
 	localTrajectoryArray[0].by = 0;
 	localTrajectoryArray[0].cy = 0;
-	localTrajectoryArray[0].dy = 0;*/
+	localTrajectoryArray[0].dy = 0;
 
 	// Parking
-	/* Parking start Point x : -0.6369718092383394
-	Parking start Point y : 1.0000000000000004
-	Parking end Point x : 0.702
-	Parking end Point y : 0 */
-
-	parkingStartPoint.x = -0.6369718092383394;
+	/*parkingStartPoint.x = -0.6369718092383394;
 	parkingStartPoint.y = 1.0000000000000004;
 	parkingStartPoint.h = M_PI / 2;
 	parkingTargetPoint.x = 0.702;
 	parkingTargetPoint.y = 0.0;
-	parkingTargetPoint.h = M_PI;
+	parkingTargetPoint.h = M_PI;*/
 
     RETURN_NOERROR;
 }
@@ -352,7 +346,7 @@ tResult cStanleyControl::ProcessTrajectories(tTimeStamp tmTimeOfTrigger)
 
 		// TODO: Ev. nochmal überdenken
 		// Save last Poly
-		//localTrajectoryArray[0] = localTrajectoryArray[actual_min_dist_poly_index];
+		localTrajectoryArray[0] = localTrajectoryArray[actual_min_dist_poly_index];
 
 		/* process the new trajectories */
 		for (tSize i = 0; i < trajectoryArray.size; i++)
@@ -370,7 +364,7 @@ tResult cStanleyControl::ProcessTrajectories(tTimeStamp tmTimeOfTrigger)
 			}
 
 			// Add received polys to local array of polys
-			//localTrajectoryArray[i + 1] = t;
+			localTrajectoryArray[i + 1] = t;
 		}
 	}
 
@@ -398,7 +392,7 @@ void cStanleyControl::updatePolyList(tTrajectory trajectory) {
 		trajectoryArray[i] = trajectory;
 	}*/
 
-	/*if (poly_completed)
+	if (poly_completed)
 	{
 		localTrajectoryArray[0] = localTrajectoryArray[last_min_dist_poly_index];
 		last_min_dist_poly_index = actual_min_dist_poly_index;
@@ -417,7 +411,7 @@ void cStanleyControl::updatePolyList(tTrajectory trajectory) {
 			// TODO: trajectoryArray[i] = trajectories[i]
 			localTrajectoryArray[i] = trajectory;
 		}
-	}*/	
+	}	
 }
 
 /* void cStanleyControl::updateStep(poly_t polys[], uint8_t polyLen, LITD_VirtualPoint actPos) {
@@ -448,7 +442,6 @@ void cStanleyControl::getNextVirtualPointOnPoly() {
 	double min_dist_y = DBL_MAX;
 	double min_dist_h = 0;
 
-	tTrajectory localTrajectoryArray[]={{1, 1.0, 3.0, 0, 0, 0.3, 0, 0, 0, 0.0, 1.0, false}, {2, 3.9952610468117116, 2.0206452450494274, -1.6343288398544786, 0.3638816504006942, 0.29640852833373177, -0.10524904661576912, 1.8667688113651004, -1.0601398304865388, 0.0, 1.0, false}, {3, 4.75, 0, 0, 0, 1.0, 1.0, 0, 0, 0.0, 1.0, false}, {4, 4.74835287593694, 0.1841739862717955, -3.10433290115316, 1.175424652281273, 2.0021868938740806, 3.1603939930963354, -0.9870129997290068, -0.47682562786839433, 0.0, 1.0, false}, {5, 3.0, -1.0, 0, 0, 3.7, 0, 0, 0, 0.0, 1.0, false}, {6, 2.0304630239371155, -3.235305523528814, 1.3730152394151056, 0.16409658126758725, 3.7288073354191114, -0.3036732538081243, -1.5250352657277904, 0.13987157209282644, 0.0, 1.0, false}, {7, 0.32, 0, 0, 0, 2.0, -1.0, 0, 0, 0.0, 1.0, false}, {8, 0.32341785049048466, 0.0728448461473677, 0.6588196098948997, -0.052640267349361836, 1.0169617319674327, -1.4007740817665806, 0.5122483877334086, 0.1831935161357673, 0.0, 1.0, false}};
 	for (int i = 0; i<TRAJECTORY_ARRAY_LEN; i++)
 	{
 		for (double j = localTrajectoryArray[i].start; j <= localTrajectoryArray[i].end; j+=(localTrajectoryArray[i].end-localTrajectoryArray[i].start)/POINTS_PER_POLY)
