@@ -32,6 +32,8 @@ THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS AS IS AND ANY EXPRESS OR I
 #define VEHICLE_AXIS_DISTANCE  0.36 // in m 
 #define TRAJECTORY_ARRAY_LEN 2
 #define POINTS_PER_POLY 100
+#define MAX_DIST_TO_PARKING_POSITION 0.01 // m
+#define MAX_DIFF_HEADING_TO_PARKING_POSITION 1 // rad
 
 using namespace adtf_util;
 using namespace ddl;
@@ -103,12 +105,28 @@ private:
 	int last_min_dist_poly_index = 0;
 	bool poly_completed;
 	//::tPosition vehicleActualPosition;
-	::tTrajectory trajectoryArray[TRAJECTORY_ARRAY_LEN];
+	::tTrajectory localTrajectoryArray[TRAJECTORY_ARRAY_LEN];
     LITD_VirtualPoint vehicleActualRearAxlePosition, vehicleActualFrontAxlePosition, vehicleTargetFrontAxlePosition;
 
-    //controller params
-    double stanleyGain = 1.5;
-	double maxAngle = 45;
+    //controller params of Stanley
+	double stanleyGain = 1.5;
+	double maxAngleDegrees = 45;
+
+	// Controller parameters of Staurated Control for Parking
+	bool parking = false;
+	bool parkingStartPointReached = false;
+	bool parkingFinished = false;
+	LITD_VirtualPoint parkingStartPoint;
+	LITD_VirtualPoint parkingTargetPoint;
+	const double K_t = 8;
+	const double K = 5.85;
+	const double a_0 = 0.17;
+	const double u = tan(maxAngleDegrees*(M_PI/180.0)) / VEHICLE_AXIS_DISTANCE;
+	// TODO: Input pin with parking flag
+	// TODO: Input pin with parking start point
+	// TODO: Output pin for poly_completed
+	// TODO: Ev. Output pin for poly completed
+	// TODO: Ev. Input pin for parking finished position
 
 public:
 
