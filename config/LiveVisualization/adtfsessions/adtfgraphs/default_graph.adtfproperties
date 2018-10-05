@@ -1264,6 +1264,16 @@
               <value>1.000000</value>
               <type>tFloat32</type>
             </property>
+            <property>
+              <name>y Startposition in m</name>
+              <value>0.200000</value>
+              <type>tFloat32</type>
+            </property>
+            <property>
+              <name>x Startposition in m</name>
+              <value>1.500000</value>
+              <type>tFloat32</type>
+            </property>
           </properties>
         </property_set>
         <property_set>
@@ -1396,18 +1406,6 @@
           <properties/>
         </property_set>
         <property_set>
-          <name>graphs/default_filter_graph/filters/LITD_StanleyControl</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/connections/Position._LITD_StanleyControl.inPositionIs</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/filters/LITD_StanleyControl/input_pins/inPositionIs</name>
-          <properties/>
-        </property_set>
-        <property_set>
           <name>graphs/default_filter_graph/sample_streams/Sample Stream</name>
           <properties/>
         </property_set>
@@ -1420,19 +1418,23 @@
           <properties/>
         </property_set>
         <property_set>
-          <name>graphs/default_filter_graph/connections/Sample Stream._LITD_StanleyControl.inPositionSet</name>
+          <name>graphs/default_filter_graph/filters/LITD StanleyControl</name>
           <properties/>
         </property_set>
         <property_set>
-          <name>graphs/default_filter_graph/filters/LITD_StanleyControl/input_pins/inPositionSet</name>
+          <name>graphs/default_filter_graph/connections/LITD StanleyControl.steering_steering_out.</name>
           <properties/>
         </property_set>
         <property_set>
-          <name>graphs/default_filter_graph/connections/LITD_StanleyControl.output_steering_out.</name>
+          <name>graphs/default_filter_graph/filters/LITD StanleyControl/output_pins/steering</name>
           <properties/>
         </property_set>
         <property_set>
-          <name>graphs/default_filter_graph/filters/LITD_StanleyControl/output_pins/output</name>
+          <name>graphs/default_filter_graph/connections/Position._LITD StanleyControl.actual_point</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/filters/LITD StanleyControl/input_pins/actual_point</name>
           <properties/>
         </property_set>
         <property_set>

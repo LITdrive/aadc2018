@@ -9,7 +9,7 @@
   <environment>
     <variable>
       <name>BIN_DIR</name>
-      <value>/home/aadc/AADC/_install/linux64/bin</value>
+      <value>/home/aadc/share/adtf/_install/linux64/bin</value>
     </variable>
   </environment>
   <dependencies>
@@ -139,28 +139,22 @@
   </dependencies>
   <plugins>
     <plugin>
-      <url>/home/aadc/share/adtf/_install/linux64/bin/sensor_visualization.adtfplugin</url>
+      <url>$(BIN_DIR)/debug/sensor_visualization.adtfplugin</url>
     </plugin>
     <plugin>
-      <url>/home/aadc/share/adtf/_install/linux64/bin/car_controller.adtfplugin</url>
+      <url>$(BIN_DIR)/debug/car_controller.adtfplugin</url>
     </plugin>
     <plugin>
-      <url>/home/aadc/share/adtf/_install/linux64/bin/LITD_IMULocalization.adtfplugin</url>
+      <url>$(BIN_DIR)/debug/LITD_IMULocalization.adtfplugin</url>
     </plugin>
     <plugin>
-      <url>/home/aadc/share/adtf/_install/linux64/bin/converter_wheels.adtfplugin</url>
+      <url>$(BIN_DIR)/debug/converter_wheels.adtfplugin</url>
     </plugin>
     <plugin>
-      <url>/home/aadc/share/adtf/_install/linux64/bin/litd_keyboard_control.adtfplugin</url>
+      <url>$(BIN_DIR)/debug/litd_keyboard_control.adtfplugin</url>
     </plugin>
     <plugin>
-      <url>/home/aadc/share/adtf/_install/linux64/bin/finelocalisation_filter.adtfplugin</url>
-    </plugin>
-    <plugin>
-      <url>/home/aadc/share/adtf/_install/linux64/bin/LITD_LaneGenerator.adtfplugin</url>
-    </plugin>
-    <plugin>
-      <url>/home/aadc/share/adtf/_install/linux64/bin/LITD_StanleyControl.adtfplugin</url>
+      <url>$(BIN_DIR)/debug/LITD_LaneGenerator.adtfplugin</url>
     </plugin>
     <plugin>
       <url>$(ADTF_DIR)/bin/default_core_objects.adtfplugin</url>
@@ -169,40 +163,40 @@
       <url>$(ADTF_DIR)/src/examples/bin/demo_qt_video_display.adtfplugin</url>
     </plugin>
     <plugin>
-      <url>/home/aadc/share/adtf/_install/linux64/bin/opencv_template.adtfplugin</url>
+      <url>$(BIN_DIR)/debug/opencv_template.adtfplugin</url>
     </plugin>
     <plugin>
-      <url>/home/aadc/share/adtf/_install/linux64/bin/object_detection.adtfplugin</url>
+      <url>$(BIN_DIR)/debug/object_detection.adtfplugin</url>
     </plugin>
     <plugin>
-      <url>/home/aadc/share/adtf/_install/linux64/bin/fisheye_undistortion.adtfplugin</url>
+      <url>$(BIN_DIR)/debug/fisheye_undistortion.adtfplugin</url>
     </plugin>
     <plugin>
-      <url>/home/aadc/share/adtf/_install/linux64/bin/marker_detector.adtfplugin</url>
+      <url>$(BIN_DIR)/debug/marker_detector.adtfplugin</url>
     </plugin>
     <plugin>
-      <url>/home/aadc/share/adtf/_install/linux64/bin/camera_calibration.adtfplugin</url>
+      <url>$(BIN_DIR)/debug/camera_calibration.adtfplugin</url>
     </plugin>
     <plugin>
-      <url>/home/aadc/share/adtf/_install/linux64/bin/arduino_egomotion_sensor.adtfplugin</url>
+      <url>$(BIN_DIR)/debug/arduino_egomotion_sensor.adtfplugin</url>
     </plugin>
     <plugin>
-      <url>/home/aadc/share/adtf/_install/linux64/bin/arduino_us_sensors.adtfplugin</url>
+      <url>$(BIN_DIR)/debug/arduino_us_sensors.adtfplugin</url>
     </plugin>
     <plugin>
-      <url>/home/aadc/share/adtf/_install/linux64/bin/arduino_battery_sensor.adtfplugin</url>
+      <url>$(BIN_DIR)/debug/arduino_battery_sensor.adtfplugin</url>
     </plugin>
     <plugin>
-      <url>/home/aadc/share/adtf/_install/linux64/bin/basler_camera.adtfplugin</url>
+      <url>$(BIN_DIR)/debug/basler_camera.adtfplugin</url>
     </plugin>
     <plugin>
-      <url>/home/aadc/share/adtf/_install/linux64/bin/universal_camera.adtfplugin</url>
+      <url>$(BIN_DIR)/debug/universal_camera.adtfplugin</url>
     </plugin>
     <plugin>
-      <url>/home/aadc/share/adtf/_install/linux64/bin/laser_scanner.adtfplugin</url>
+      <url>$(BIN_DIR)/debug/laser_scanner.adtfplugin</url>
     </plugin>
     <plugin>
-      <url>/home/aadc/share/adtf/_install/linux64/bin/arduino_actuator.adtfplugin</url>
+      <url>$(BIN_DIR)/debug/arduino_actuator.adtfplugin</url>
     </plugin>
     <plugin>
       <url>$(ADTF_DIR)/bin/adtf_playback_input.adtfplugin</url>
@@ -249,31 +243,28 @@
     <plugin>
       <url>$(ADTF_DIR)/addons/displaytoolbox/bin/signal_scope_view.adtfplugin</url>
     </plugin>
+    <plugin>
+      <url>$(BIN_DIR)/debug/LITD_StanleyControl.adtfplugin</url>
+    </plugin>
   </plugins>
   <debug_plugins>
     <plugin>
-      <url>/home/aadc/share/adtf/_install/linux64/bin/debug/sensor_visualization.adtfplugin</url>
+      <url>$(BIN_DIR)/debug/sensor_visualization.adtfplugin</url>
     </plugin>
     <plugin>
-      <url>/home/aadc/share/adtf/_install/linux64/bin/debug/car_controller.adtfplugin</url>
+      <url>$(BIN_DIR)/debug/car_controller.adtfplugin</url>
     </plugin>
     <plugin>
-      <url>/home/aadc/share/adtf/_install/linux64/bin/debug/LITD_IMULocalization.adtfplugin</url>
+      <url>$(BIN_DIR)/debug/LITD_IMULocalization.adtfplugin</url>
     </plugin>
     <plugin>
-      <url>/home/aadc/share/adtf/_install/linux64/bin/debug/converter_wheels.adtfplugin</url>
+      <url>$(BIN_DIR)/debug/converter_wheels.adtfplugin</url>
     </plugin>
     <plugin>
-      <url>/home/aadc/share/adtf/_install/linux64/bin/debug/litd_keyboard_control.adtfplugin</url>
+      <url>$(BIN_DIR)/debug/litd_keyboard_control.adtfplugin</url>
     </plugin>
     <plugin>
-      <url>/home/aadc/share/adtf/_install/linux64/bin/debug/finelocalisation_filter.adtfplugin</url>
-    </plugin>
-    <plugin>
-      <url>/home/aadc/share/adtf/_install/linux64/bin/debug/LITD_LaneGenerator.adtfplugin</url>
-    </plugin>
-    <plugin>
-      <url>/home/aadc/share/adtf/_install/linux64/bin/debug/LITD_StanleyControl.adtfplugin</url>
+      <url>$(BIN_DIR)/debug/LITD_LaneGenerator.adtfplugin</url>
     </plugin>
     <plugin>
       <url>$(ADTF_DIR)/bin/debug/default_core_objects.adtfplugin</url>
@@ -282,40 +273,40 @@
       <url>$(ADTF_DIR)/src/examples/bin/debug/demo_qt_video_display.adtfplugin</url>
     </plugin>
     <plugin>
-      <url>/home/aadc/share/adtf/_install/linux64/bin/debug/opencv_template.adtfplugin</url>
+      <url>$(BIN_DIR)/debug/opencv_template.adtfplugin</url>
     </plugin>
     <plugin>
-      <url>/home/aadc/share/adtf/_install/linux64/bin/debug/object_detection.adtfplugin</url>
+      <url>$(BIN_DIR)/debug/object_detection.adtfplugin</url>
     </plugin>
     <plugin>
-      <url>/home/aadc/share/adtf/_install/linux64/bin/debug/fisheye_undistortion.adtfplugin</url>
+      <url>$(BIN_DIR)/debug/fisheye_undistortion.adtfplugin</url>
     </plugin>
     <plugin>
-      <url>/home/aadc/share/adtf/_install/linux64/bin/debug/marker_detector.adtfplugin</url>
+      <url>$(BIN_DIR)/debug/marker_detector.adtfplugin</url>
     </plugin>
     <plugin>
-      <url>/home/aadc/share/adtf/_install/linux64/bin/debug/camera_calibration.adtfplugin</url>
+      <url>$(BIN_DIR)/debug/camera_calibration.adtfplugin</url>
     </plugin>
     <plugin>
-      <url>/home/aadc/share/adtf/_install/linux64/bin/debug/arduino_egomotion_sensor.adtfplugin</url>
+      <url>$(BIN_DIR)/debug/arduino_egomotion_sensor.adtfplugin</url>
     </plugin>
     <plugin>
-      <url>/home/aadc/share/adtf/_install/linux64/bin/debug/arduino_us_sensors.adtfplugin</url>
+      <url>$(BIN_DIR)/debug/arduino_us_sensors.adtfplugin</url>
     </plugin>
     <plugin>
-      <url>/home/aadc/share/adtf/_install/linux64/bin/debug/arduino_battery_sensor.adtfplugin</url>
+      <url>$(BIN_DIR)/debug/arduino_battery_sensor.adtfplugin</url>
     </plugin>
     <plugin>
-      <url>/home/aadc/share/adtf/_install/linux64/bin/debug/basler_camera.adtfplugin</url>
+      <url>$(BIN_DIR)/debug/basler_camera.adtfplugin</url>
     </plugin>
     <plugin>
-      <url>/home/aadc/share/adtf/_install/linux64/bin/debug/universal_camera.adtfplugin</url>
+      <url>$(BIN_DIR)/debug/universal_camera.adtfplugin</url>
     </plugin>
     <plugin>
-      <url>/home/aadc/share/adtf/_install/linux64/bin/debug/laser_scanner.adtfplugin</url>
+      <url>$(BIN_DIR)/debug/laser_scanner.adtfplugin</url>
     </plugin>
     <plugin>
-      <url>/home/aadc/share/adtf/_install/linux64/bin/debug/arduino_actuator.adtfplugin</url>
+      <url>$(BIN_DIR)/debug/arduino_actuator.adtfplugin</url>
     </plugin>
     <plugin>
       <url>$(ADTF_DIR)/bin/debug/adtf_playback_input.adtfplugin</url>
@@ -361,6 +352,9 @@
     </plugin>
     <plugin>
       <url>$(ADTF_DIR)/addons/displaytoolbox/bin/debug/signal_scope_view.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(BIN_DIR)/debug/LITD_StanleyControl.adtfplugin</url>
     </plugin>
   </debug_plugins>
   <services>

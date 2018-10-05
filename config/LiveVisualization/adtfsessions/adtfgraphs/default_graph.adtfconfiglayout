@@ -10296,12 +10296,12 @@
         <layout_set>
           <name>graphs/default_filter_graph/filters/LITD_IMULocalization</name>
           <boundary>
-            <x>1091</x>
+            <x>1088</x>
             <y>498</y>
             <width>0</width>
             <height>0</height>
           </boundary>
-          <selected>false</selected>
+          <selected>true</selected>
           <connection_layout>
             <name/>
             <centerLineIsManual>true</centerLineIsManual>
@@ -10811,7 +10811,7 @@
             <width>0</width>
             <height>0</height>
           </boundary>
-          <selected>false</selected>
+          <selected>true</selected>
           <connection_layout>
             <name/>
             <centerLineIsManual>true</centerLineIsManual>
@@ -10958,6 +10958,91 @@
         </layout_set>
         <layout_set>
           <name>graphs/default_filter_graph/filters/LITD_StanleyControl/output_pins/output</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/default_filter_graph/filters/LITD StanleyControl</name>
+          <boundary>
+            <x>1522</x>
+            <y>830</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/default_filter_graph/connections/LITD StanleyControl.steering_steering_out.</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/default_filter_graph/filters/LITD StanleyControl/output_pins/steering</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/default_filter_graph/connections/Position._LITD StanleyControl.actual_point</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/default_filter_graph/filters/LITD StanleyControl/input_pins/actual_point</name>
           <boundary>
             <x>0</x>
             <y>0</y>

@@ -154,19 +154,16 @@
           <binding_clients/>
         </filter>
         <filter>
-          <name>LITD_StanleyControl</name>
-          <class_id>LITD_StanleyControl.filter.user.aadc.cid</class_id>
+          <name>LITD StanleyControl</name>
+          <class_id>litd_stanley_control.filter.user.aadc.cid</class_id>
           <input_pins>
             <pin>
-              <name>inPositionIs</name>
-            </pin>
-            <pin>
-              <name>inPositionSet</name>
+              <name>actual_point</name>
             </pin>
           </input_pins>
           <output_pins>
             <pin>
-              <name>output</name>
+              <name>steering</name>
             </pin>
           </output_pins>
           <runners/>
@@ -659,21 +656,6 @@
           <sync>true</sync>
         </connection>
         <connection>
-          <name>Position._LITD_StanleyControl.inPositionIs</name>
-          <source_connector_path>
-            <connector/>
-            <component>Position</component>
-            <portbindingobject/>
-          </source_connector_path>
-          <destination_connector_path>
-            <connector>inPositionIs</connector>
-            <component>LITD_StanleyControl</component>
-            <portbindingobject/>
-          </destination_connector_path>
-          <priority>0</priority>
-          <sync>true</sync>
-        </connection>
-        <connection>
           <name>LITD_LaneGenerator.tPosition normal-point_Sample Stream.</name>
           <source_connector_path>
             <connector>tPosition normal-point</connector>
@@ -689,30 +671,30 @@
           <sync>true</sync>
         </connection>
         <connection>
-          <name>Sample Stream._LITD_StanleyControl.inPositionSet</name>
+          <name>LITD StanleyControl.steering_steering_out.</name>
           <source_connector_path>
-            <connector/>
-            <component>Sample Stream</component>
+            <connector>steering</connector>
+            <component>LITD StanleyControl</component>
             <portbindingobject/>
           </source_connector_path>
           <destination_connector_path>
-            <connector>inPositionSet</connector>
-            <component>LITD_StanleyControl</component>
+            <connector/>
+            <component>steering_out</component>
             <portbindingobject/>
           </destination_connector_path>
           <priority>0</priority>
           <sync>true</sync>
         </connection>
         <connection>
-          <name>LITD_StanleyControl.output_steering_out.</name>
+          <name>Position._LITD StanleyControl.actual_point</name>
           <source_connector_path>
-            <connector>output</connector>
-            <component>LITD_StanleyControl</component>
+            <connector/>
+            <component>Position</component>
             <portbindingobject/>
           </source_connector_path>
           <destination_connector_path>
-            <connector/>
-            <component>steering_out</component>
+            <connector>actual_point</connector>
+            <component>LITD StanleyControl</component>
             <portbindingobject/>
           </destination_connector_path>
           <priority>0</priority>
