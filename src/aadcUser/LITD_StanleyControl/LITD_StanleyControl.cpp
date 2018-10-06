@@ -260,7 +260,7 @@ tResult cStanleyControl::ProcessPosition(tTimeStamp tmTimeOfTrigger)
 	//vehicleActualRearAxlePosition.h = M_PI/4;
 	LOG_INFO("Point of BackPosition: x: %f, y: %f, h: %f", vehicleActualRearAxlePosition.x, vehicleActualRearAxlePosition.y, vehicleActualRearAxlePosition.h  * 180.0 / M_PI);
 
-	if (parking)
+	if (false && parking)
 	{
 		if (!parkingStartPointReached && !parkingFinished) {
 			Vector2d diffParkingStartPosition = parkingStartPoint.getVector2d() - vehicleActualRearAxlePosition.getVector2d();
