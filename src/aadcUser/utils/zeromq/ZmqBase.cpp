@@ -625,6 +625,15 @@ tResult cZmqBase::ProcessInputs(tTimeStamp tmTimeOfTrigger)
 						RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlPolynomPointIndex.parameter, &data->parameter));
 					});
 
+				case Classification:
+					PROCESS_INPUT_SAMPLE_HELPER(tClassification , {
+						const tChar* className = static_cast<const tChar*>(sampleDecoder.GetElementAddress(m_ddlClassificationIndex.className));
+						memset(&data->className, 0, sizeof data->className);
+						memcpy(&data->className, className, sizeof data->className);
+						RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlClassificationIndex.classId, &data->classId));
+						RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlClassificationIndex.probValue, &data->probValue));
+					});
+
 				default:
 					LOG_ERROR("Unrecognized eZmqStruct %d while processing inputs.", pinType);
 				}
@@ -800,6 +809,9 @@ tResult cZmqBase::ProcessOutput(zmq::message_t* frame, const size_t index)
 			RETURN_IF_FAILED(sampleEncoder.SetElementValue(m_ddlPolynomPointIndex.id, data->id));
 			RETURN_IF_FAILED(sampleEncoder.SetElementValue(m_ddlPolynomPointIndex.parameter, data->parameter));
 		});
+
+	case Classification:
+		LOG_ERROR("eZmqStruct 'Classification' not implemented for output pins.");
 
 	default:
 		LOG_ERROR("Unrecognized eZmqStruct %d while processing outputs", pinType);
@@ -1014,6 +1026,13 @@ object_ptr<IStreamType>* cZmqBase::GetStreamType(const eZmqStruct sampleType)
 			access_element::find_index(m_PolynomPointSampleFactory, cString("parameter"), m_ddlPolynomPointIndex.parameter);
 		});
 
+	case Classification:
+		STREAM_TYPE_DEFINITION_HELPER("tClassification", m_ClassificationStreamType, m_ClassificationSampleFactory, {
+			access_element::find_array_index(m_ClassificationSampleFactory, "className", m_ddlClassificationIndex.className);
+			access_element::find_index(m_ClassificationSampleFactory, "classId", m_ddlClassificationIndex.classId);
+			access_element::find_index(m_ClassificationSampleFactory, "probValue", m_ddlClassificationIndex.probValue);
+		});
+
 	default:
 		LOG_ERROR("Could not get or create stream type for unrecognized eZmqStruct %d", sampleType);
 	}
@@ -1045,6 +1064,7 @@ size_t cZmqBase::GetStructSize(const eZmqStruct sampleType) const
 	case TrajectoryArray:		return sizeof(tTrajectoryArray);
 	case YoloNetOutput:			return sizeof(tYOLONetOutput);
 	case PolynomPoint:			return sizeof(tPolynomPoint);
+	case Classification:		return sizeof(tClassification);
 	default:					LOG_ERROR("Could not request size for unrecognized eZmqStruct %d", sampleType);
 	}
 
@@ -1075,6 +1095,7 @@ cSampleCodecFactory* cZmqBase::GetSampleFactory(const eZmqStruct sampleType)
 	case TrajectoryArray:		return &m_TrajectoryArraySampleFactory;
 	case YoloNetOutput:			return &m_YoloNetOutputSampleFactory;
 	case PolynomPoint:			return &m_PolynomPointSampleFactory;
+	case Classification:		return &m_ClassificationSampleFactory;
 	default:					LOG_ERROR("Could not get sample factory for unrecognized eZmqStruct %d", sampleType);
 	}
 

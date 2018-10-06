@@ -42,7 +42,8 @@ enum eZmqStruct
 	Trajectory,
 	TrajectoryArray,
 	YoloNetOutput,
-	PolynomPoint
+	PolynomPoint,
+	Classification
 };
 
 /*! pin name and type tuple */
@@ -399,4 +400,15 @@ private:
 		tSize id;
 		tSize parameter;
 	} m_ddlPolynomPointIndex{};
+
+	// classification
+	cSampleCodecFactory m_ClassificationSampleFactory;
+	object_ptr<IStreamType> m_ClassificationStreamType = nullptr;
+
+	struct
+	{
+		tSize className;
+		tSize classId;
+		tSize probValue;
+	} m_ddlClassificationIndex{};
 };

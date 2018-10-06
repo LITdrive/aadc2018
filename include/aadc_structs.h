@@ -206,6 +206,15 @@ typedef struct
 } tPolynomPoint;
 #pragma pack(pop)
 
+#pragma pack(push,1)
+typedef struct
+{
+	tChar className[128];
+	tUInt64 classId;
+	tFloat64 probValue;
+} tClassification;
+#pragma pack(pop)
+
 // The following types are assumed to be known:
 // tInt8
 // tInt16
