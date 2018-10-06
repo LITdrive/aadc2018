@@ -213,10 +213,11 @@ tResult cLITD_IMULocalization::ProcessImu(tTimeStamp tmTimeOfTrigger)
 	object_ptr<const ISample> pReadSample;
 	while (IS_OK(m_oReaderIMU.GetNextSample(pReadSample)))
 	{
+	    if(m_isFirst) continue;
 		// predict
 		ProcessInerMeasUnitSample(tmTimeOfTrigger, *pReadSample);
 	}
-
+    m_isFirst = false;
 	RETURN_NOERROR;
 }
 

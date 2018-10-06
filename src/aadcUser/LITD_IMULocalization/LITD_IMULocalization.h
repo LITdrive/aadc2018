@@ -64,7 +64,6 @@ private:
     adtf::base::property_variable<tFloat32> m_f32HeadingOffset = 0.0f;
 
 
-
     /*! Reader of an InPin speed. */
     cPinReader m_oReaderSpeed;
     /*! Reader of an InPin IMU. */
@@ -150,7 +149,7 @@ private:
 
     tBool m_isInitialized; /*! initialization state of the filter */
 
-
+    tBool m_isFirst = true;
 
     /*! Number of 32s */
     tInt m_ui32Cnt;
