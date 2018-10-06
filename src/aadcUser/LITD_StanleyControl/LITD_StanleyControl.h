@@ -128,6 +128,7 @@ private:
 	// TODO: Output pin for poly_completed
 	// TODO: Ev. Output pin for poly completed
 	// TODO: Ev. Input pin for parking finished position
+	bool trajectoriesRecieved = false;
 
 public:
 
