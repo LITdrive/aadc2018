@@ -619,6 +619,12 @@ tResult cZmqBase::ProcessInputs(tTimeStamp tmTimeOfTrigger)
 						memcpy(&data->f32NodeValue, nodeValues, sizeof data->f32NodeValue);
 					});
 
+				case PolynomPoint:
+					PROCESS_INPUT_SAMPLE_HELPER(tPolynomPoint, {
+						RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlPolynomPointIndex.id, &data->id));
+						RETURN_IF_FAILED(sampleDecoder.GetElementValue(m_ddlPolynomPointIndex.parameter, &data->parameter));
+					});
+
 				default:
 					LOG_ERROR("Unrecognized eZmqStruct %d while processing inputs.", pinType);
 				}
@@ -788,6 +794,12 @@ tResult cZmqBase::ProcessOutput(zmq::message_t* frame, const size_t index)
 
 	case YoloNetOutput:
 		LOG_ERROR("eZmqStruct 'YoloNetOutput' not implemented for output pins.");
+
+	case PolynomPoint:
+		PROCESS_OUTPUT_SAMPLE_HELPER(tPolynomPoint, {
+			RETURN_IF_FAILED(sampleEncoder.SetElementValue(m_ddlPolynomPointIndex.id, data->id));
+			RETURN_IF_FAILED(sampleEncoder.SetElementValue(m_ddlPolynomPointIndex.parameter, data->parameter));
+		});
 
 	default:
 		LOG_ERROR("Unrecognized eZmqStruct %d while processing outputs", pinType);
@@ -996,6 +1008,12 @@ object_ptr<IStreamType>* cZmqBase::GetStreamType(const eZmqStruct sampleType)
 			access_element::find_array_index(m_YoloNetOutputSampleFactory, "f32NodeValue", m_ddlYoloNetOutputIndex.f32NodeValue);
 		});
 
+	case PolynomPoint:
+		STREAM_TYPE_DEFINITION_HELPER("tPolynomPoint", m_PolynomPointStreamType, m_PolynomPointSampleFactory, {
+			access_element::find_index(m_PolynomPointSampleFactory, cString("id"), m_ddlPolynomPointIndex.id);
+			access_element::find_index(m_PolynomPointSampleFactory, cString("parameter"), m_ddlPolynomPointIndex.parameter);
+		});
+
 	default:
 		LOG_ERROR("Could not get or create stream type for unrecognized eZmqStruct %d", sampleType);
 	}
@@ -1026,6 +1044,7 @@ size_t cZmqBase::GetStructSize(const eZmqStruct sampleType) const
 	case Trajectory:			return sizeof(tTrajectory);
 	case TrajectoryArray:		return sizeof(tTrajectoryArray);
 	case YoloNetOutput:			return sizeof(tYOLONetOutput);
+	case PolynomPoint:			return sizeof(tPolynomPoint);
 	default:					LOG_ERROR("Could not request size for unrecognized eZmqStruct %d", sampleType);
 	}
 
@@ -1055,6 +1074,7 @@ cSampleCodecFactory* cZmqBase::GetSampleFactory(const eZmqStruct sampleType)
 	case Trajectory:			return &m_TrajectorySampleFactory;
 	case TrajectoryArray:		return &m_TrajectoryArraySampleFactory;
 	case YoloNetOutput:			return &m_YoloNetOutputSampleFactory;
+	case PolynomPoint:			return &m_PolynomPointSampleFactory;
 	default:					LOG_ERROR("Could not get sample factory for unrecognized eZmqStruct %d", sampleType);
 	}
 

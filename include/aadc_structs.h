@@ -198,6 +198,14 @@ typedef struct
 } tYOLONetOutput;
 #pragma pack(pop)
 
+#pragma pack(push,1)
+typedef struct
+{
+    tUInt32 id;
+    tFloat32 parameter;
+} tPolynomPoint;
+#pragma pack(pop)
+
 // The following types are assumed to be known:
 // tInt8
 // tInt16
