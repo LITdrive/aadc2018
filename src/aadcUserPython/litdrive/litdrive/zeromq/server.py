@@ -24,13 +24,15 @@ class ZmqServer:
         self._input_fmts = [FORMATS[e] for e in self._inputs]
         self._output_fmts = [FORMATS[e] for e in self._outputs]
 
-        self._context = zmq.Context()
+        self._context = None
         self._socket = None
 
     def connect(self):
-        if not self._socket:
-            self.disconnect()
-
+        self.disconnect()
+        
+        # create the context
+        self._context = zmq.Context()
+        
         # open REP socket and do not wait (linger) at close time
         self._socket = self._context.socket(zmq.REP)
         self._socket.setsockopt(zmq.LINGER, 0)
@@ -40,9 +42,10 @@ class ZmqServer:
 
     def disconnect(self):
         if self._socket:
-            # TODO: unbinding is not buggy (https://github.com/zeromq/pyzmq/issues/1025)
-            # self._socket.unbind()
-            pass
+            self._socket.close()
+        if self._context:
+            self._context.destroy()
+            self._context.term()
 
     @staticmethod
     def _unpack_image(blob, height, width):
