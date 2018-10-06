@@ -19,7 +19,7 @@ THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS AS IS AND ANY EXPRESS OR I
 
 
 ADTF_TRIGGER_FUNCTION_FILTER_PLUGIN(CID_CBIRDS_EYE_VIEW_DATA_TRIGGERED_FILTER,
-                                    "BirdsEyeView_cf",
+                                    "LITD BirdsEyeView",
                                     cBirdsEyeView,
                                     adtf::filter::pin_trigger({ "input" }));
 

@@ -47,6 +47,10 @@
           <name>services/log_view.ui_service.adtf</name>
           <properties/>
         </property_set>
+        <property_set>
+          <name>services/zeromq.service.adtf</name>
+          <properties/>
+        </property_set>
       </property_sets>
     </property_package>
   </property_packages>

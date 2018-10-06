@@ -1,14 +1,17 @@
 cmake_minimum_required(VERSION 3.10.0)
 
-project(finelocalisation_filter)
+project(litd_finelocalization_filter)
 
 include_directories(${OpenCV_INCLUDE_DIRS})
 
-set (SOURCEFILES    	stdafx.h 
-						FineLocalisation.h
-						FineLocalisation.cpp
+set (SOURCEFILES    	stdafx.h
+                        PixelMetricTransformer.h
+                        PixelMetricTransformer.cpp
                         FineLocator.h
-                        FineLocator.cpp)
+                        FineLocator.cpp
+                        FineLocalisation.h
+						FineLocalisation.cpp
+                        )
 
 adtf_add_filter(${PROJECT_NAME}
 				${SOURCEFILES}

@@ -35,7 +35,7 @@ void FilePropertiesObserver::TriggerPropertiesReload(int subsampleFactor)
 
 float FilePropertiesObserver::GetFloat(string propertyName)
 {
-	return m_property_tree->get("float." + propertyName, 0.0f);
+	return m_property_tree->get("float." + propertyName, std::numeric_limits<float>::quiet_NaN());
 }
 
 int FilePropertiesObserver::GetInt(string propertyName)

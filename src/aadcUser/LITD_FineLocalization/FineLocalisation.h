@@ -13,11 +13,15 @@ THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS AS IS AND ANY EXPRESS OR I
 
 **********************************************************************/
 
-
 #pragma once
+#include "stdafx.h"
+#include "FineLocator.h"
+#include "PixelMetricTransformer.h"
 
 //*************************************************************************************************
-#define CID_CBIRDS_EYE_VIEW_DATA_TRIGGERED_FILTER "finelocalisation_filter.filter.user.aadc.cid"
+#define CID_FINE_LOCALISATION_FILTER "finelocalization.filter.user.aadc.cid"
+#define LABEL_FINE_LOCALISATION_FILTER "LITD FineLocalization"
+
 
 using namespace adtf_util;
 using namespace ddl;
@@ -31,23 +35,77 @@ using namespace cv;
 
 
 /*! the main class of the open cv template. */
-class cFineLocalisation : public cTriggerFunction
+class cFineLocalisation : public cFilter
 {
+public:
+    ADTF_CLASS_ID_NAME(cFineLocalisation, CID_FINE_LOCALISATION_FILTER, LABEL_FINE_LOCALISATION_FILTER);
+    ADTF_CLASS_DEPENDENCIES(REQUIRE_INTERFACE(adtf::services::IReferenceClock));
+    // necessary for proper behaviour of the create_inner_pipe call
+    using cRuntimeBehaviour::RegisterRunner;
+    using cRuntimeBehaviour::RegisterInnerPipe;
+
 private:
 
     //Pins
     /*! Reader of an InPin. */
     cPinReader m_oReader;
+    cPinReader m_oPosReader;
     /*! Writer to an OutPin. */
-    cPinWriter m_oWriter;
+    cPinWriter m_oPosWriter;
+    cPinWriter m_oConfWriter;
 
+    /*! A position identifier*/
+    struct tPositionIndex
+    {
+        tSize x;
+        tSize y;
+        tSize radius;
+        tSize speed;
+        tSize heading;
+    } m_ddlPositionIndex;
+
+    /*! A signal value identifier. */
+    struct tSignalValueId
+    {
+        tSize timeStamp;
+        tSize value;
+    } m_ddlSignalValueId;
+
+    /*! The position signal value sample factory */
+    cSampleCodecFactory m_PositionSampleFactory;
+    /*! The signal value sample factory */
+    cSampleCodecFactory m_SignalValueSampleFactory;
     //Stream Formats
-        /*! The input format */
+    /*! The input format */
+
     adtf::streaming::tStreamImageFormat m_sImageFormat;
 
     /*! The clock */
     object_ptr<adtf::services::IReferenceClock> m_pClock;
 
+    tFloat32 x, y, speed, heading;
+
+    FineLocator locator;
+    // [ 142.8,    0. ,   25. ],
+    // [   0. , -139.5,  567. ]
+    property_variable<tFloat32> mat00 = 142.8;
+    property_variable<tFloat32> mat01 = 0;
+    property_variable<tFloat32> mat02 = 25;
+    property_variable<tFloat32> mat10 = 0;
+    property_variable<tFloat32> mat11 =-139.5;
+    property_variable<tFloat32> mat12 = 567;
+    property_variable<tFloat32> axleToPicture = 0.73;
+    property_variable<tFloat32> headingOffset = 00;
+    property_variable<cFilename> mapPath = cFilename("/home/aadc/share/adtf/data/scaledMap.png");
+    property_variable<tInt32> propSearchSpaceSize = 20;
+    property_variable<tInt32> angleIterCnt = 11;
+    property_variable<tFloat32> angleRangeMin = -5;
+    property_variable<tFloat32> angleRangeMax =  5;
+    property_variable<tInt32> subSampleRate =  30;
+    tInt32 sampleCnt = 0;
+
+    double affineMat [2][3] = {{mat00, mat01, mat02}, {mat10, mat11, mat12}};
+    bool recievedPosition = false;
 
 
 public:
@@ -59,18 +117,14 @@ public:
     /*! Destructor. */
     virtual ~cFineLocalisation() = default;
 
-    /**
-    * Overwrites the Configure
-    * This is to Read Properties prepare your Trigger Function
-    */
-    tResult Configure() override;
-    /**
-    * Overwrites the Process
-    * You need to implement the Reading and Writing of Samples within this function
-    * MIND: Do Reading until the Readers queues are empty or use the IPinReader::GetLastSample()
-    * This FUnction will be called if the Run() of the TriggerFunction was called.
-    */
-    tResult Process(tTimeStamp tmTimeOfTrigger) override;
+
+    tResult Init(const tInitStage eStage);
+
+    tResult Configure();
+
+
+    tResult ProcessImage(tTimeStamp tmTimeOfTrigger);
+    tResult ProcessPosition(tTimeStamp tmTimeOfTrigger);
 
 };
 
