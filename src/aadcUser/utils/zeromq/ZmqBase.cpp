@@ -161,6 +161,7 @@ tResult cZmqBase::InitializePins(std::vector<ZmqPinDef> &pin_definitions, const 
 						object_ptr<const IStreamType> pTypeInput;
 						*m_pinReaders[pinName] >> pTypeInput;
 						get_stream_type_image_format(m_sImageFormat, *pTypeInput);
+						LOG_INFO("'%s' resolution changed to %d x %d", pinName.c_str(), m_sImageFormat.m_ui32Width, m_sImageFormat.m_ui32Height);
 					}
 					else
 					{
