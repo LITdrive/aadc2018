@@ -83,28 +83,37 @@ def globalToLocal(x,y,heading,global_compl):
     ang_deg = (np.angle(local_compl, deg=True)-heading) #rotate
     return toComplex(np.abs(local_compl),ang_deg) #and calc0
 
-MAP_X = 20
-MAP_Y = 20
-RES = 10
+MAP_X = 30
+MAP_Y = 30
+RES = 20
 obst_map = np.zeros((MAP_X*RES,MAP_Y*RES))
+GPoints = 6 #gaussian points
 
-def updateMap(ldr_compl,x=10,y=10,heading=0, decay=0.6):
+def updateMap(ldr_compl,x=7,y=15,heading=0, decay=0.6):
     points = localToGlobal(x,y,heading,ldr_compl)
     points*=RES
     global obst_map
     M = np.zeros(obst_map.shape)
     M[points.imag.astype(int),points.real.astype(int)]=1
-    GM = signal.convolve2d(M, getSimpleGauss(), boundary='symm', mode='same')
-    obst_map+=GM
+    #GM = signal.convolve2d(M, Gau, boundary='symm', mode='same')
+    for p in points:
+        r=p.imag.astype(int)
+        c=p.real.astype(int)
+        try:
+            M[r-GPoints//2:r+GPoints//2,c-GPoints//2:c+GPoints//2]+=Gau
+        except:
+            print('out of array')
+    obst_map+=M
 
 
 def getSimpleGauss():
-    fwhm=RES//2
-    x = np.arange(0, RES, 1, float)
-    y = np.arange(0, RES, 1, float)[:,np.newaxis]  
-    x0 = RES//2
-    y0 = RES//2 
+    fwhm=GPoints//2
+    x = np.arange(0, GPoints, 1, float)
+    y = np.arange(0, GPoints, 1, float)[:,np.newaxis]  
+    x0 = GPoints//2
+    y0 = GPoints//2 
     return np.exp(-4*np.log(2) * ((x-x0)**2 + (y-y0)**2) / fwhm**2)
+Gau = getSimpleGauss()
 
 def getGauss(point):
     print(point)
@@ -180,7 +189,7 @@ def process(imu,lidar,speed,ultraSonic): #TODO remove IMU and Speed
     print(ob_found)
 
     updateMap(dist_compl)
-    plotMap()
+    #plotMap()
 
     signal_out = (1337, 42)
     bool_out = (7331, False) #TODO timestamp????
