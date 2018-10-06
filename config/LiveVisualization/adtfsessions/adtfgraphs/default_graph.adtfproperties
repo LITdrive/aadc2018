@@ -25,10 +25,6 @@
           <properties/>
         </property_set>
         <property_set>
-          <name>graphs/default_filter_graph/streaming_in_ports/ultrasonic_struct</name>
-          <properties/>
-        </property_set>
-        <property_set>
           <name>graphs/default_filter_graph/sample_streams/stream_marker_detector</name>
           <properties/>
         </property_set>
@@ -80,15 +76,7 @@
           <properties/>
         </property_set>
         <property_set>
-          <name>graphs/default_filter_graph/streaming_in_ports/iner_meas_unit</name>
-          <properties/>
-        </property_set>
-        <property_set>
           <name>streaming_graphs/default_streaming_graph/streaming_dock_in_ports/wheel_left</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/streaming_in_ports/wheel_left</name>
           <properties/>
         </property_set>
         <property_set>
@@ -105,18 +93,6 @@
         </property_set>
         <property_set>
           <name>streaming_graphs/default_streaming_graph/streaming_sources/Arduino EgoMotion Sensor/output_pins/wheel_right</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/streaming_in_ports/wheel_right</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/streaming_out_ports/steering_out</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/streaming_out_ports/speed_out</name>
           <properties/>
         </property_set>
         <property_set>
@@ -198,42 +174,6 @@
           <properties/>
         </property_set>
         <property_set>
-          <name>graphs/default_filter_graph/filters/Sensor Visualization</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/connections/iner_meas_unit._Sensor Visualization.iner_meas_unit</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/filters/Sensor Visualization/input_pins/iner_meas_unit</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/connections/ultrasonic_struct._Sensor Visualization.ultrasonic_struct</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/filters/Sensor Visualization/input_pins/ultrasonic_struct</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/connections/wheel_left._Sensor Visualization.wheel_left</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/filters/Sensor Visualization/input_pins/wheel_left</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/connections/wheel_right._Sensor Visualization.wheel_right</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/filters/Sensor Visualization/input_pins/wheel_right</name>
-          <properties/>
-        </property_set>
-        <property_set>
           <name>streaming_graphs/default_streaming_graph/streaming_dock_out_ports/steering_out</name>
           <properties/>
         </property_set>
@@ -259,38 +199,6 @@
         </property_set>
         <property_set>
           <name>streaming_graphs/default_streaming_graph/streaming_sources/Arduino Battery Sensor/output_pins/voltage_struct</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/streaming_in_ports/voltage_struct</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/filters/Sensor Visualization/input_pins/voltage_struct</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/streaming_out_ports/head_light</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/streaming_out_ports/turn_signal_left</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/streaming_out_ports/turn_signal_right</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/streaming_out_ports/brake_light</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/streaming_out_ports/reverse_light</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/streaming_out_ports/hazard_light</name>
           <properties/>
         </property_set>
         <property_set>
@@ -388,26 +296,6 @@
           </properties>
         </property_set>
         <property_set>
-          <name>streaming_graphs/default_streaming_graph/streaming_sources/Universal Camera</name>
-          <properties>
-            <property>
-              <name>streamHeight</name>
-              <value>480</value>
-              <type>tInt32</type>
-            </property>
-            <property>
-              <name>streamWidth</name>
-              <value>640</value>
-              <type>tInt32</type>
-            </property>
-            <property>
-              <name>flipVertical</name>
-              <value>true</value>
-              <type>tBool</type>
-            </property>
-          </properties>
-        </property_set>
-        <property_set>
           <name>streaming_graphs/default_streaming_graph/streaming_dock_in_ports/rear_cam</name>
           <properties/>
         </property_set>
@@ -416,35 +304,11 @@
           <properties/>
         </property_set>
         <property_set>
-          <name>streaming_graphs/default_streaming_graph/streaming_sources/Universal Camera/output_pins/output</name>
-          <properties/>
-        </property_set>
-        <property_set>
           <name>streaming_graphs/default_streaming_graph/sample_streams/stream_rear_cam</name>
           <properties/>
         </property_set>
         <property_set>
-          <name>streaming_graphs/default_streaming_graph/connections/Universal Camera.output_Sample Stream_7.</name>
-          <properties/>
-        </property_set>
-        <property_set>
           <name>streaming_graphs/default_streaming_graph/connections/Sample Stream_7._Filter Graph Dock.rear_cam</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/streaming_in_ports/laser_scanner</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/connections/laser_scanner._Sensor Visualization.laser_scanner</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/filters/Sensor Visualization/input_pins/laser_scanner</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/connections/voltage_struct._Sensor Visualization.voltage_struct</name>
           <properties/>
         </property_set>
         <property_set>
@@ -499,74 +363,6 @@
           <properties/>
         </property_set>
         <property_set>
-          <name>graphs/default_filter_graph/filters/Car Controller</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/connections/Car Controller.steering_steering_out.</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/filters/Car Controller/output_pins/steering</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/connections/Car Controller.speed_speed_out.</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/filters/Car Controller/output_pins/speed</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/connections/Car Controller.brake_light_brake_light.</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/filters/Car Controller/output_pins/brake_light</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/connections/Car Controller.reverse_light_reverse_light.</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/filters/Car Controller/output_pins/reverse_light</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/connections/Car Controller.head_light_head_light.</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/filters/Car Controller/output_pins/head_light</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/connections/Car Controller.turn_signal_left_turn_signal_left.</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/filters/Car Controller/output_pins/turn_signal_left</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/connections/Car Controller.turn_signal_right_turn_signal_right.</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/filters/Car Controller/output_pins/turn_signal_right</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/connections/Car Controller.hazard_light_hazard_light.</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/filters/Car Controller/output_pins/hazard_light</name>
-          <properties/>
-        </property_set>
-        <property_set>
           <name>streaming_graphs/default_streaming_graph/streaming_sinks/Arduino Actuator/input_pins/brake_light</name>
           <properties/>
         </property_set>
@@ -576,18 +372,6 @@
         </property_set>
         <property_set>
           <name>streaming_graphs/default_streaming_graph/connections/Filter Graph Dock.head_light_Arduino Actuator.head_light</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>streaming_graphs/default_streaming_graph/streaming_sources/Laser Scanner</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>streaming_graphs/default_streaming_graph/connections/Laser Scanner.output_Sample Stream_6.</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>streaming_graphs/default_streaming_graph/streaming_sources/Laser Scanner/output_pins/output</name>
           <properties/>
         </property_set>
         <property_set>
@@ -1372,30 +1156,6 @@
           <properties/>
         </property_set>
         <property_set>
-          <name>graphs/default_filter_graph/filters/ConverterWheels</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/connections/wheel_left._ConverterWheels.wheel_left</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/filters/ConverterWheels/input_pins/wheel_left</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/connections/wheel_right._ConverterWheels.wheel_right</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/filters/ConverterWheels/input_pins/wheel_right</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/filters/ConverterWheels/output_pins/vehicle_speed</name>
-          <properties/>
-        </property_set>
-        <property_set>
           <name>streaming_graphs/devel_streaming_graph/streaming_dock_out_ports/speed_measured</name>
           <properties/>
         </property_set>
@@ -1468,6 +1228,50 @@
           <properties/>
         </property_set>
         <property_set>
+          <name>graphs/default_filter_graph/active_runners/Thread Runner</name>
+          <properties>
+            <property>
+              <name>thread_is_cyclic</name>
+              <value>false</value>
+              <type>tBool</type>
+            </property>
+          </properties>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/filters/LITD ZMQ Image Template</name>
+          <properties>
+            <property>
+              <name>ZeroMQ Subsample Factor</name>
+              <value>15</value>
+              <type>tInt32</type>
+            </property>
+          </properties>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/sample_streams/undistorted_video_stream</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/connections/undistorted_video_stream._LITD ZMQ Image Template.image</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/filters/LITD ZMQ Image Template/input_pins/image</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/connections/Thread Runner._LITD ZMQ Image Template.zmq_thread</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/filters/LITD ZMQ Image Template/runners/zmq_thread</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/connections/stream_marker_detector._undistorted_video_stream.</name>
+          <properties/>
+        </property_set>
+        <property_set>
           <name>services/kernel.service.adtf</name>
           <properties/>
         </property_set>
@@ -1521,32 +1325,6 @@
         </property_set>
         <property_set>
           <name>services/zeromq.service.adtf</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/sample_streams/road_sign_ext_stream</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/connections/marker_detection.road_sign_ext_Sample Stream.</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/active_runners/Thread Runner</name>
-          <properties>
-            <property>
-              <name>thread_is_cyclic</name>
-              <value>false</value>
-              <type>tBool</type>
-            </property>
-          </properties>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/sample_streams/speed_stream</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/sample_streams/trajectory_stream</name>
           <properties/>
         </property_set>
       </property_sets>
