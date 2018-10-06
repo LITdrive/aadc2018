@@ -357,7 +357,18 @@
         </property_set>
         <property_set>
           <name>streaming_graphs/default_streaming_graph/streaming_sinks/TCP Sender</name>
-          <properties/>
+          <properties>
+            <property>
+              <name>sink/interface</name>
+              <value>127.0.0.1</value>
+              <type>cString</type>
+            </property>
+            <property>
+              <name>sink/port</name>
+              <value>54322</value>
+              <type>tUInt32</type>
+            </property>
+          </properties>
         </property_set>
         <property_set>
           <name>streaming_graphs/default_streaming_graph/connections/Filter Graph Dock.positon_TCP Sender.position</name>
@@ -443,11 +454,23 @@
         </property_set>
         <property_set>
           <name>streaming_graphs/default_streaming_graph/streaming_sources/Jury Communication TCP Receiver</name>
-          <properties/>
+          <properties>
+            <property>
+              <name>Enable console log</name>
+              <value>true</value>
+              <type>tBool</type>
+            </property>
+          </properties>
         </property_set>
         <property_set>
           <name>streaming_graphs/default_streaming_graph/streaming_sinks/Jury Communication TCP Sender</name>
-          <properties/>
+          <properties>
+            <property>
+              <name>Enable console log</name>
+              <value>true</value>
+              <type>tBool</type>
+            </property>
+          </properties>
         </property_set>
         <property_set>
           <name>streaming_graphs/default_streaming_graph/streaming_dock_in_ports/jury_struct</name>
@@ -598,7 +621,7 @@
           <properties>
             <property>
               <name>MarkerPos/Optional Roadsign File</name>
-              <value/>
+              <value>../../../../configuration_files/roadSigns.xml</value>
               <type>cFilename</type>
             </property>
           </properties>
@@ -837,7 +860,23 @@
         </property_set>
         <property_set>
           <name>graphs/localization_graph/filters/LITD FineLocalization Front</name>
-          <properties/>
+          <properties>
+            <property>
+              <name>search space size</name>
+              <value>30</value>
+              <type>tInt32</type>
+            </property>
+            <property>
+              <name>Image subsample rate</name>
+              <value>15</value>
+              <type>tInt32</type>
+            </property>
+            <property>
+              <name>Path to Map</name>
+              <value>../../../../data/scaledMap.png</value>
+              <type>cFilename</type>
+            </property>
+          </properties>
         </property_set>
         <property_set>
           <name>graphs/localization_graph/connections/birds_eye_front_stream._LITD FineLocalization Front.inBirdsEye</name>
@@ -876,7 +915,7 @@
           <properties>
             <property>
               <name>trigger/Default Mux State</name>
-              <value>2</value>
+              <value>0</value>
               <type>tInt32</type>
             </property>
           </properties>
@@ -1131,7 +1170,13 @@
         </property_set>
         <property_set>
           <name>graphs/decision_graph/active_runners/Trajectory Timer</name>
-          <properties/>
+          <properties>
+            <property>
+              <name>timer_period_micro_sec</name>
+              <value>1000000</value>
+              <type>tInt64</type>
+            </property>
+          </properties>
         </property_set>
         <property_set>
           <name>graphs/decision_graph/connections/Trajectory Timer._LITD ZMQ Trajectory Template.signal_trigger</name>
@@ -1147,7 +1192,23 @@
         </property_set>
         <property_set>
           <name>graphs/preprocess_graph/filters/ConverterWheels</name>
-          <properties/>
+          <properties>
+            <property>
+              <name>trigger/direction derived from speed controller actuator value</name>
+              <value>false</value>
+              <type>tBool</type>
+            </property>
+            <property>
+              <name>trigger/enable filtering</name>
+              <value>true</value>
+              <type>tBool</type>
+            </property>
+            <property>
+              <name>trigger/filter constant of first order</name>
+              <value>0.500000</value>
+              <type>tFloat32</type>
+            </property>
+          </properties>
         </property_set>
         <property_set>
           <name>graphs/preprocess_graph/filters/Fisheye Undistortion Front</name>
@@ -1957,7 +2018,13 @@
         </property_set>
         <property_set>
           <name>graphs/control_graph/filters/LITD StanleyControl</name>
-          <properties/>
+          <properties>
+            <property>
+              <name>dynamic properties path</name>
+              <value>../../../../configuration_files/properties/stanleycontrol_pid.ini</value>
+              <type>cFilename</type>
+            </property>
+          </properties>
         </property_set>
         <property_set>
           <name>graphs/control_graph/output_data_ports/throttle</name>
@@ -2044,40 +2111,14 @@
           <properties/>
         </property_set>
         <property_set>
-          <name>services/kernel.service.adtf</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>services/reference_clock.service.adtf</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>services/signal_registry.service.adtf</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>services/media_description.service.adtf</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>services/qt_xsystem.ui_service.adtf</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>services/adtf_file_support.service.adtf</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>services/log_view.ui_service.adtf</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>services/zeromq.service.adtf</name>
-          <properties/>
-        </property_set>
-        <property_set>
           <name>graphs/control_graph/filters/LITD WheelSpeedController</name>
-          <properties/>
+          <properties>
+            <property>
+              <name>trigger/dynamic properties path</name>
+              <value>../../../../configuration_files/properties/wheelspeedcontroller_pid.ini</value>
+              <type>cFilename</type>
+            </property>
+          </properties>
         </property_set>
         <property_set>
           <name>graphs/control_graph/filters/LITD Keyboard Control</name>
@@ -2085,7 +2126,13 @@
         </property_set>
         <property_set>
           <name>graphs/control_graph/filters/LITD Speed Limit</name>
-          <properties/>
+          <properties>
+            <property>
+              <name>trigger/MAX speed allowed</name>
+              <value>20.000000</value>
+              <type>tFloat32</type>
+            </property>
+          </properties>
         </property_set>
         <property_set>
           <name>graphs/control_graph/input_data_ports/measured_speed</name>
@@ -2180,31 +2227,11 @@
           <properties/>
         </property_set>
         <property_set>
-          <name>graphs/decision_graph/sample_streams/maneuver_list_stream</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/decision_graph/connections/maneuver_list._maneuver_list_stream.</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/decision_graph/connections/maneuver_list_stream._Driver Module.maneuver_list</name>
-          <properties/>
-        </property_set>
-        <property_set>
           <name>graphs/default_filter_graph/subgraphs/decision</name>
           <properties/>
         </property_set>
         <property_set>
           <name>graphs/default_filter_graph/subgraphs/control</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/connections/front_cam._preprocess.front_cam</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/connections/rear_cam._preprocess.rear_cam</name>
           <properties/>
         </property_set>
         <property_set>
@@ -2216,43 +2243,11 @@
           <properties/>
         </property_set>
         <property_set>
-          <name>graphs/default_filter_graph/connections/preprocess.front_cam_undistorted_localization.front_cam</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/connections/preprocess.rear_cam_undistorted_localization.rear_cam</name>
-          <properties/>
-        </property_set>
-        <property_set>
           <name>graphs/default_filter_graph/connections/road_sign_map._localization.road_sign_map</name>
           <properties/>
         </property_set>
         <property_set>
-          <name>graphs/default_filter_graph/sample_streams/position_stream</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/connections/position_stream._position.</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/connections/localization.pos_imu_position_stream.</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/connections/front_cam._decision.front_cam</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/connections/rear_cam._decision.rear_cam</name>
-          <properties/>
-        </property_set>
-        <property_set>
           <name>graphs/default_filter_graph/sample_streams/measured_speed_stream</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/connections/preprocess.marker_video_visualization.front_cam</name>
           <properties/>
         </property_set>
         <property_set>
@@ -2288,10 +2283,6 @@
           <properties/>
         </property_set>
         <property_set>
-          <name>graphs/default_filter_graph/connections/position_stream._visualization.position</name>
-          <properties/>
-        </property_set>
-        <property_set>
           <name>graphs/default_filter_graph/connections/jury_struct._decision.jury_struct</name>
           <properties/>
         </property_set>
@@ -2321,10 +2312,6 @@
         </property_set>
         <property_set>
           <name>graphs/default_filter_graph/connections/ultrasonic_struct._decision.ultrasonic_struct</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/connections/position_stream._decision.position</name>
           <properties/>
         </property_set>
         <property_set>
@@ -2400,18 +2387,6 @@
           <properties/>
         </property_set>
         <property_set>
-          <name>graphs/default_filter_graph/connections/position_stream._control.position</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/connections/decision.trajectories_control.trajectories</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/connections/decision.desired_speed_control.desired_speed</name>
-          <properties/>
-        </property_set>
-        <property_set>
           <name>graphs/default_filter_graph/connections/decision.driver_struct_driver_struct_stream.</name>
           <properties/>
         </property_set>
@@ -2460,14 +2435,6 @@
           <properties/>
         </property_set>
         <property_set>
-          <name>graphs/default_filter_graph/connections/localization.confidence_front_decision.loc_confidence_front</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/connections/localization.confidence_rear_decision.loc_confidence_rear</name>
-          <properties/>
-        </property_set>
-        <property_set>
           <name>graphs/default_filter_graph/sample_streams/position_mux_stream</name>
           <properties/>
         </property_set>
@@ -2477,6 +2444,190 @@
         </property_set>
         <property_set>
           <name>graphs/default_filter_graph/connections/position_mux_stream._localization.position_mux</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/sample_streams/front_cam_undistorted_stream</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/sample_streams/rear_cam_undistorted_stream</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/connections/preprocess.rear_cam_undistorted_Sample Stream_1.</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/connections/Sample Stream_1._localization.rear_cam</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/connections/preprocess.front_cam_undistorted_Sample Stream.</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/connections/Sample Stream._localization.front_cam</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/sample_streams/maneuver_list_stream</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/connections/maneuver_list._maneuver_list_stream.</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/connections/maneuver_list_stream._Driver Module.maneuver_list</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/sample_streams/front_cam_stream</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/sample_streams/rear_cam_stream</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/connections/front_cam._front_cam_stream.</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/connections/front_cam_stream._decision.front_cam</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/connections/front_cam_stream._preprocess.front_cam</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/connections/rear_cam._rear_cam_stream.</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/connections/rear_cam_stream._preprocess.rear_cam</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/connections/rear_cam_stream._decision.rear_cam</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/sample_streams/marker_video</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/connections/marker_video._visualization.front_cam</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/connections/preprocess.marker_video_marker_video.</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/sample_streams/confidence_front_stream</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/sample_streams/confidence_rear_stream</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/connections/localization.confidence_front_confidence_front_stream.</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/connections/localization.confidence_rear_confidence_rear_stream.</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/connections/confidence_rear_stream._decision.loc_confidence_rear</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/connections/confidence_front_stream._decision.loc_confidence_front</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/sample_streams/position_stream</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/connections/localization.pos_imu_position_stream.</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/connections/position_stream._position.</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/connections/position_stream._control.position</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/connections/position_stream._decision.position</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/connections/position_stream._visualization.position</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/sample_streams/trajectories_stream</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/sample_streams/desired_speed_stream</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/connections/decision.trajectories_trajectories_stream.</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/connections/trajectories_stream._control.trajectories</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/connections/decision.desired_speed_desired_speed_stream.</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/connections/desired_speed_stream._control.desired_speed</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>services/kernel.service.adtf</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>services/reference_clock.service.adtf</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>services/signal_registry.service.adtf</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>services/media_description.service.adtf</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>services/qt_xsystem.ui_service.adtf</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>services/adtf_file_support.service.adtf</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>services/log_view.ui_service.adtf</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>services/zeromq.service.adtf</name>
           <properties/>
         </property_set>
       </property_sets>

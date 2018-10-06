@@ -912,8 +912,8 @@
         <layout_set>
           <name>graphs/default_filter_graph/streaming_in_ports/iner_meas_unit</name>
           <boundary>
-            <x>399</x>
-            <y>631</y>
+            <x>91</x>
+            <y>603</y>
             <width>0</width>
             <height>0</height>
           </boundary>
@@ -2481,7 +2481,7 @@
             <width>0</width>
             <height>0</height>
           </boundary>
-          <selected>false</selected>
+          <selected>true</selected>
           <connection_layout>
             <name/>
             <centerLineIsManual>true</centerLineIsManual>
@@ -2876,7 +2876,7 @@
           <connection_layout>
             <name/>
             <centerLineIsManual>true</centerLineIsManual>
-            <centerLineAbsX>1366</centerLineAbsX>
+            <centerLineAbsX>1322</centerLineAbsX>
             <centerLineAbsY>0</centerLineAbsY>
             <centerLineStraight>false</centerLineStraight>
           </connection_layout>
@@ -3190,7 +3190,7 @@
         <layout_set>
           <name>streaming_graphs/default_streaming_graph/streaming_sources/Jury Communication TCP Receiver</name>
           <boundary>
-            <x>160</x>
+            <x>161</x>
             <y>1071</y>
             <width>0</width>
             <height>0</height>
@@ -3212,7 +3212,7 @@
             <width>0</width>
             <height>0</height>
           </boundary>
-          <selected>true</selected>
+          <selected>false</selected>
           <connection_layout>
             <name/>
             <centerLineIsManual>true</centerLineIsManual>
@@ -4669,7 +4669,7 @@
         <layout_set>
           <name>graphs/localization_graph/filters/LITD FineLocalization Front</name>
           <boundary>
-            <x>959</x>
+            <x>958</x>
             <y>62</y>
             <width>0</width>
             <height>0</height>
@@ -4687,7 +4687,7 @@
           <name>graphs/localization_graph/filters/LITD PositionMux</name>
           <boundary>
             <x>1261</x>
-            <y>583</y>
+            <y>582</y>
             <width>0</width>
             <height>0</height>
           </boundary>
@@ -6386,12 +6386,12 @@
         <layout_set>
           <name>graphs/visualization_graph/filters/Qt Video Display Rear</name>
           <boundary>
-            <x>709</x>
+            <x>708</x>
             <y>466</y>
             <width>0</width>
             <height>0</height>
           </boundary>
-          <selected>false</selected>
+          <selected>true</selected>
           <connection_layout>
             <name/>
             <centerLineIsManual>true</centerLineIsManual>
@@ -6795,11 +6795,11 @@
           <name>graphs/preprocess_graph/filters/ConverterWheels</name>
           <boundary>
             <x>455</x>
-            <y>384</y>
+            <y>382</y>
             <width>0</width>
             <height>0</height>
           </boundary>
-          <selected>false</selected>
+          <selected>true</selected>
           <connection_layout>
             <name/>
             <centerLineIsManual>true</centerLineIsManual>
@@ -6811,7 +6811,7 @@
         <layout_set>
           <name>graphs/preprocess_graph/filters/Fisheye Undistortion Front</name>
           <boundary>
-            <x>419</x>
+            <x>418</x>
             <y>174</y>
             <width>0</width>
             <height>0</height>
@@ -8035,12 +8035,12 @@
         <layout_set>
           <name>graphs/decision_graph/input_data_ports/maneuver_list</name>
           <boundary>
-            <x>677</x>
-            <y>94</y>
+            <x>663</x>
+            <y>92</y>
             <width>0</width>
             <height>0</height>
           </boundary>
-          <selected>false</selected>
+          <selected>true</selected>
           <connection_layout>
             <name/>
             <centerLineIsManual>true</centerLineIsManual>
@@ -10739,7 +10739,7 @@
           <name>graphs/control_graph/filters/LITD WheelSpeedController</name>
           <boundary>
             <x>733</x>
-            <y>179</y>
+            <y>177</y>
             <width>0</width>
             <height>0</height>
           </boundary>
@@ -10772,8 +10772,8 @@
         <layout_set>
           <name>graphs/control_graph/filters/LITD Speed Limit</name>
           <boundary>
-            <x>1189</x>
-            <y>171</y>
+            <x>1191</x>
+            <y>170</y>
             <width>0</width>
             <height>0</height>
           </boundary>
@@ -11214,8 +11214,8 @@
         <layout_set>
           <name>graphs/default_filter_graph/subgraphs/control</name>
           <boundary>
-            <x>1544</x>
-            <y>673</y>
+            <x>1614</x>
+            <y>681</y>
             <width>0</width>
             <height>0</height>
           </boundary>
@@ -11257,7 +11257,7 @@
           <connection_layout>
             <name/>
             <centerLineIsManual>true</centerLineIsManual>
-            <centerLineAbsX>404</centerLineAbsX>
+            <centerLineAbsX>375</centerLineAbsX>
             <centerLineAbsY>0</centerLineAbsY>
             <centerLineStraight>false</centerLineStraight>
           </connection_layout>
@@ -11508,7 +11508,7 @@
             <width>0</width>
             <height>0</height>
           </boundary>
-          <selected>false</selected>
+          <selected>true</selected>
           <connection_layout>
             <name/>
             <centerLineIsManual>true</centerLineIsManual>
@@ -11529,7 +11529,7 @@
           <connection_layout>
             <name/>
             <centerLineIsManual>true</centerLineIsManual>
-            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsX>1240</centerLineAbsX>
             <centerLineAbsY>0</centerLineAbsY>
             <centerLineStraight>false</centerLineStraight>
           </connection_layout>
@@ -11682,7 +11682,7 @@
           <connection_layout>
             <name/>
             <centerLineIsManual>true</centerLineIsManual>
-            <centerLineAbsX>586</centerLineAbsX>
+            <centerLineAbsX>325</centerLineAbsX>
             <centerLineAbsY>0</centerLineAbsY>
             <centerLineStraight>false</centerLineStraight>
           </connection_layout>
@@ -12209,7 +12209,7 @@
           <connection_layout>
             <name/>
             <centerLineIsManual>true</centerLineIsManual>
-            <centerLineAbsX>1371</centerLineAbsX>
+            <centerLineAbsX>1322</centerLineAbsX>
             <centerLineAbsY>0</centerLineAbsY>
             <centerLineStraight>false</centerLineStraight>
           </connection_layout>
@@ -12522,6 +12522,482 @@
         </layout_set>
         <layout_set>
           <name>graphs/default_filter_graph/connections/position_mux_stream._localization.position_mux</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/default_filter_graph/sample_streams/front_cam_undistorted_stream</name>
+          <boundary>
+            <x>777</x>
+            <y>412</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/default_filter_graph/sample_streams/rear_cam_undistorted_stream</name>
+          <boundary>
+            <x>752</x>
+            <y>449</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/default_filter_graph/connections/preprocess.rear_cam_undistorted_Sample Stream_1.</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>668</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/default_filter_graph/connections/Sample Stream_1._localization.rear_cam</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/default_filter_graph/connections/preprocess.front_cam_undistorted_Sample Stream.</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>647</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/default_filter_graph/connections/Sample Stream._localization.front_cam</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/decision_graph/sample_streams/maneuver_list_stream</name>
+          <boundary>
+            <x>838</x>
+            <y>69</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/default_filter_graph/sample_streams/front_cam_stream</name>
+          <boundary>
+            <x>307</x>
+            <y>732</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/default_filter_graph/sample_streams/rear_cam_stream</name>
+          <boundary>
+            <x>297</x>
+            <y>792</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/default_filter_graph/sample_streams/Sample Stream_2</name>
+          <boundary>
+            <x>227</x>
+            <y>898</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/default_filter_graph/connections/front_cam_stream._decision.front_cam</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>867</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/default_filter_graph/connections/rear_cam_stream._decision.rear_cam</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>849</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/default_filter_graph/sample_streams/marker_video</name>
+          <boundary>
+            <x>643</x>
+            <y>235</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/default_filter_graph/connections/marker_video._visualization.front_cam</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/default_filter_graph/connections/preprocess.marker_video_marker_video.</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/default_filter_graph/sample_streams/confidence_front_stream</name>
+          <boundary>
+            <x>1188</x>
+            <y>565</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/default_filter_graph/sample_streams/confidence_rear_stream</name>
+          <boundary>
+            <x>1170</x>
+            <y>609</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/default_filter_graph/connections/localization.confidence_front_confidence_front_stream.</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/default_filter_graph/connections/localization.confidence_rear_confidence_rear_stream.</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/default_filter_graph/connections/confidence_rear_stream._decision.loc_confidence_rear</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/default_filter_graph/connections/confidence_front_stream._decision.loc_confidence_front</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/default_filter_graph/sample_streams/position_stream</name>
+          <boundary>
+            <x>1270</x>
+            <y>485</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/default_filter_graph/sample_streams/trajectories_stream</name>
+          <boundary>
+            <x>1500</x>
+            <y>792</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/default_filter_graph/sample_streams/desired_speed_stream</name>
+          <boundary>
+            <x>1546</x>
+            <y>826</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/default_filter_graph/connections/decision.trajectories_trajectories_stream.</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/default_filter_graph/connections/trajectories_stream._control.trajectories</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/default_filter_graph/connections/decision.desired_speed_desired_speed_stream.</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/default_filter_graph/connections/desired_speed_stream._control.desired_speed</name>
           <boundary>
             <x>0</x>
             <y>0</y>

@@ -103,15 +103,6 @@
   </dependencies>
   <plugins>
     <plugin>
-      <url>$(BIN_DIR)/debug/marker_detector.adtfplugin</url>
-    </plugin>
-    <plugin>
-      <url>$(BIN_DIR)/debug/converter_wheels.adtfplugin</url>
-    </plugin>
-    <plugin>
-      <url>$(BIN_DIR)/debug/marker_positioning.adtfplugin</url>
-    </plugin>
-    <plugin>
       <url>$(ADTF_DIR)/bin/default_core_objects.adtfplugin</url>
     </plugin>
     <plugin>
@@ -122,6 +113,9 @@
     </plugin>
     <plugin>
       <url>$(BIN_DIR)/debug/litd_birdseyeview_filter.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(BIN_DIR)/debug/marker_positioning.adtfplugin</url>
     </plugin>
     <plugin>
       <url>$(BIN_DIR)/debug/LITD_IMULocalization.adtfplugin</url>
@@ -148,7 +142,25 @@
       <url>$(BIN_DIR)/debug/driver_module.adtfplugin</url>
     </plugin>
     <plugin>
+      <url>$(BIN_DIR)/debug/converter_wheels.adtfplugin</url>
+    </plugin>
+    <plugin>
       <url>$(BIN_DIR)/debug/fisheye_undistortion.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(BIN_DIR)/debug/marker_detector.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(BIN_DIR)/debug/LITD_StanleyControl.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(BIN_DIR)/debug/litd_wheel_speed_controller.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(BIN_DIR)/debug/litd_keyboard_control.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(BIN_DIR)/debug/litd_speed_limit.adtfplugin</url>
     </plugin>
     <plugin>
       <url>$(BIN_DIR)/debug/arduino_battery_sensor.adtfplugin</url>
@@ -201,29 +213,8 @@
     <plugin>
       <url>$(BIN_DIR)/debug/zeromq_service.adtfplugin</url>
     </plugin>
-    <plugin>
-      <url>$(BIN_DIR)/debug/LITD_StanleyControl.adtfplugin</url>
-    </plugin>
-    <plugin>
-      <url>$(BIN_DIR)/debug/litd_wheel_speed_controller.adtfplugin</url>
-    </plugin>
-    <plugin>
-      <url>$(BIN_DIR)/debug/litd_keyboard_control.adtfplugin</url>
-    </plugin>
-    <plugin>
-      <url>$(BIN_DIR)/debug/litd_speed_limit.adtfplugin</url>
-    </plugin>
   </plugins>
   <debug_plugins>
-    <plugin>
-      <url>$(BIN_DIR)/debug/marker_detector.adtfplugin</url>
-    </plugin>
-    <plugin>
-      <url>$(BIN_DIR)/debug/converter_wheels.adtfplugin</url>
-    </plugin>
-    <plugin>
-      <url>$(BIN_DIR)/debug/marker_positioning.adtfplugin</url>
-    </plugin>
     <plugin>
       <url>$(ADTF_DIR)/bin/debug/default_core_objects.adtfplugin</url>
     </plugin>
@@ -235,6 +226,9 @@
     </plugin>
     <plugin>
       <url>$(BIN_DIR)/debug/litd_birdseyeview_filter.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(BIN_DIR)/debug/marker_positioning.adtfplugin</url>
     </plugin>
     <plugin>
       <url>$(BIN_DIR)/debug/LITD_IMULocalization.adtfplugin</url>
@@ -261,7 +255,25 @@
       <url>$(BIN_DIR)/debug/driver_module.adtfplugin</url>
     </plugin>
     <plugin>
+      <url>$(BIN_DIR)/debug/converter_wheels.adtfplugin</url>
+    </plugin>
+    <plugin>
       <url>$(BIN_DIR)/debug/fisheye_undistortion.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(BIN_DIR)/debug/marker_detector.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(BIN_DIR)/debug/LITD_StanleyControl.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(BIN_DIR)/debug/litd_wheel_speed_controller.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(BIN_DIR)/debug/litd_keyboard_control.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(BIN_DIR)/debug/litd_speed_limit.adtfplugin</url>
     </plugin>
     <plugin>
       <url>$(BIN_DIR)/debug/arduino_battery_sensor.adtfplugin</url>
@@ -313,18 +325,6 @@
     </plugin>
     <plugin>
       <url>$(BIN_DIR)/debug/zeromq_service.adtfplugin</url>
-    </plugin>
-    <plugin>
-      <url>$(BIN_DIR)/debug/LITD_StanleyControl.adtfplugin</url>
-    </plugin>
-    <plugin>
-      <url>$(BIN_DIR)/debug/litd_wheel_speed_controller.adtfplugin</url>
-    </plugin>
-    <plugin>
-      <url>$(BIN_DIR)/debug/litd_keyboard_control.adtfplugin</url>
-    </plugin>
-    <plugin>
-      <url>$(BIN_DIR)/debug/litd_speed_limit.adtfplugin</url>
     </plugin>
   </debug_plugins>
   <services>
