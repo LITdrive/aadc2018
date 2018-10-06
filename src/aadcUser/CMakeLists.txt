@@ -67,6 +67,7 @@ add_subdirectory(LITD_LaneGenerator)
 add_subdirectory(LITD_StanleyControl)
 add_subdirectory(LITD_IMULocalization)
 add_subdirectory(LITD_PositionMux)
+add_subdirectory(LITD_JuryFileCopy)
 
 # only build the tensorflow stuff on the cars
 if (THIS_IS_A_CAR)
