@@ -35,6 +35,12 @@
         <library>
           <url>$(ADTF_DIR)/3rdparty/qt5/bin/Qt5OpenGL.dll</url>
         </library>
+        <library>
+          <url>$(ADTF_DIR)/3rdparty/qt5/bin/Qt5Concurrent.dll</url>
+        </library>
+        <library>
+          <url>$(ADTF_DIR)/3rdparty/qt5/bin/Qt5PrintSupport.dll</url>
+        </library>
       </libraries>
     </platform>
     <platform>
@@ -54,6 +60,12 @@
         </library>
         <library>
           <url>$(ADTF_DIR)/3rdparty/qt5/bin/Qt5OpenGLd.dll</url>
+        </library>
+        <library>
+          <url>$(ADTF_DIR)/3rdparty/qt5/bin/Qt5Concurrentd.dll</url>
+        </library>
+        <library>
+          <url>$(ADTF_DIR)/3rdparty/qt5/bin/Qt5PrintSupportd.dll</url>
         </library>
       </libraries>
     </platform>
@@ -89,6 +101,12 @@
         </library>
         <library>
           <url>$(ADTF_DIR)/3rdparty/qt5/lib/libQt5XcbQpa.so</url>
+        </library>
+        <library>
+          <url>$(ADTF_DIR)/3rdparty/qt5/lib/libQt5Concurrent.so</url>
+        </library>
+        <library>
+          <url>$(ADTF_DIR)/3rdparty/qt5/lib/libQt5PrintSupport.so</url>
         </library>
       </libraries>
     </platform>
@@ -213,6 +231,15 @@
     <plugin>
       <url>$(BIN_DIR)/debug/zeromq_service.adtfplugin</url>
     </plugin>
+    <plugin>
+      <url>$(ADTF_DIR)/addons/displaytoolbox/bin/signal_scope_view.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(ADTF_DIR)/addons/displaytoolbox/bin/signal_table_view.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(ADTF_DIR)/addons/displaytoolbox/bin/signal_tree_view.adtfplugin</url>
+    </plugin>
   </plugins>
   <debug_plugins>
     <plugin>
@@ -325,6 +352,15 @@
     </plugin>
     <plugin>
       <url>$(BIN_DIR)/debug/zeromq_service.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(ADTF_DIR)/addons/displaytoolbox/bin/debug/signal_scope_view.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(ADTF_DIR)/addons/displaytoolbox/bin/debug/signal_table_view.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(ADTF_DIR)/addons/displaytoolbox/bin/debug/signal_tree_view.adtfplugin</url>
     </plugin>
   </debug_plugins>
   <services>

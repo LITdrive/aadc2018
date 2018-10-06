@@ -756,7 +756,18 @@
         </property_set>
         <property_set>
           <name>graphs/localization_graph/filters/LITD IMULocalization</name>
-          <properties/>
+          <properties>
+            <property>
+              <name>x Startposition in m</name>
+              <value>1.000000</value>
+              <type>tFloat32</type>
+            </property>
+            <property>
+              <name>y Startposition in m</name>
+              <value>0.500000</value>
+              <type>tFloat32</type>
+            </property>
+          </properties>
         </property_set>
         <property_set>
           <name>graphs/localization_graph/connections/speed_stream._LITD IMULocalization.speed</name>

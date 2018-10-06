@@ -1590,6 +1590,7 @@
           </output_pins>
           <runners/>
           <init_priority>0</init_priority>
+          <deactivated>false</deactivated>
           <binding_servers/>
           <binding_clients/>
         </filter>
@@ -2119,6 +2120,7 @@
             <portbindingobject/>
           </destination_connector_path>
           <priority>0</priority>
+          <deactivated>false</deactivated>
           <sync>true</sync>
         </connection>
         <connection>
@@ -2134,6 +2136,7 @@
             <portbindingobject/>
           </destination_connector_path>
           <priority>0</priority>
+          <deactivated>false</deactivated>
           <sync>true</sync>
         </connection>
         <connection>
@@ -2149,6 +2152,7 @@
             <portbindingobject/>
           </destination_connector_path>
           <priority>0</priority>
+          <deactivated>false</deactivated>
           <sync>true</sync>
         </connection>
         <connection>
@@ -2164,6 +2168,7 @@
             <portbindingobject/>
           </destination_connector_path>
           <priority>0</priority>
+          <deactivated>false</deactivated>
           <sync>true</sync>
         </connection>
         <connection>
@@ -2195,6 +2200,7 @@
             <portbindingobject/>
           </destination_connector_path>
           <priority>0</priority>
+          <deactivated>false</deactivated>
           <sync>true</sync>
         </connection>
         <connection>
