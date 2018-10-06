@@ -21,9 +21,13 @@ cZmqDecision::cZmqDecision()
 {
 	// input pin names and types
 	m_inputs.emplace_back("jury", Jury);
+	m_inputs.emplace_back("jury_data_update", BoolSignalValue);
 
 	m_inputs.emplace_back("yolo_front", YoloNetOutput);
 	m_inputs.emplace_back("yolo_back", YoloNetOutput);
+
+	m_inputs.emplace_back("lenet_front", Classification);
+	m_inputs.emplace_back("lenet_back", Classification);
 
 	m_inputs.emplace_back("position", Position);
 	m_inputs.emplace_back("confidence_front", SignalValue);
@@ -35,8 +39,8 @@ cZmqDecision::cZmqDecision()
 	m_inputs.emplace_back("ultrasonic", Ultrasonic);
 	m_inputs.emplace_back("imu", InerMeasUnitData);
 
-	m_inputs.emplace_back("controller_leverage", SignalValue);
-	m_inputs.emplace_back("controller_feedback", SignalValue);
+	m_inputs.emplace_back("controller_leverage", PolynomPoint);
+	m_inputs.emplace_back("controller_feedback", PolynomPoint);
 
 	m_inputs.emplace_back("siren", BoolSignalValue);
 
