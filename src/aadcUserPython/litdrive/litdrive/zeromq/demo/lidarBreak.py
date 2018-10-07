@@ -62,9 +62,8 @@ def process(lidar,wheelSteeringPercent,speed):
     is_obst_ahead = checkObstaclesAhead(ldr_compl,tireAngle,maxLen=BREMSWEG+SAFETY,threshold=3)
     print('\r Obst. ahead (tireAngle=',tireAngle,'):',is_obst_ahead,end='  ')
 
-    signal_out = (1337, 42)
     bool_out = (7331, is_obst_ahead) #TODO timestamp????
-    return signal_out, bool_out
+    return [bool_out]
 
 def checkObstaclesAhead(ldr_compl,tireAngle, maxLen=0.3,threshold=2):
     """
@@ -93,7 +92,7 @@ if __name__ == "__main__":
     # open a server for the filter
     zmq = ZmqServer("tcp://*:5557",
                     ["tLaserScannerData","tSignalValue","tSignalValue"],
-                    ["tSignalValue", "tBoolSignalValue"])
+                    ["tBoolSignalValue"])
     try:
         zmq.connect()
         zmq.run(process, return_dict=False)

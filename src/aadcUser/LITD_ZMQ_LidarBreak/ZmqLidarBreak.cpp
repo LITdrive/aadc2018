@@ -20,14 +20,13 @@ ADTF_PLUGIN(LABEL_LITD_ZMQ_LIDAR_Break, cZmqLidarBreak)
 cZmqLidarBreak::cZmqLidarBreak()
 {
 	// input pin names and types
-	m_inputs.emplace_back("LaserScanner", LaserScanner);
-	m_inputs.emplace_back("steeringLockAngle", SignalValue);
+	m_inputs.emplace_back("lidar", LaserScanner);
+	m_inputs.emplace_back("steering_servo", SignalValue);
 	m_inputs.emplace_back("speed", SignalValue);
 
 	// output pin names and types
-	m_outputs.emplace_back("signal_out", SignalValue);
-	m_outputs.emplace_back("bool_out", BoolSignalValue);
+	m_outputs.emplace_back("break", BoolSignalValue);
 
 	// pipe out the data whenever there are new samples on these pins
-	m_triggers.emplace_back("LaserScanner");
+	m_triggers.emplace_back("lidar");
 }
