@@ -5,8 +5,8 @@
 #include "YOLOHandler.h"
 
 Status YOLOHandler::load_graph() {
-    string graph = "data/frozen-yolo-tiny-aadc.pb";
-    string root_dir = "/home/aadc/AADC/src/aadcUser/tensorflowPlayground/";
+    string graph = "data/frozen-yolo-voc.pb";
+    string root_dir = "/home/aadc/share/adtf/src/aadcUser/templates/tensorflowPlayground";
     string graph_path = tensorflow::io::JoinPath(root_dir, graph);
 
     Status load_graph_status =
@@ -62,7 +62,14 @@ Tensor YOLOHandler::forward_path(Mat camera_image) {
     std::vector<Tensor> outputs;
     Tensor inputTensor;
 
-    resize(camera_image, image, Size(height, width));
+    //resize(camera_image, image, Size(height, width));
+    int x = 380;
+    int x_plus_offset = 448;
+    cv::Rect myROI(x, x, x_plus_offset, x_plus_offset);
+    image = camera_image(myROI);
+
+
+
     inputTensor = readTensorFromMat(image);
 
     Status run_status = session->Run({{"input", inputTensor}},
@@ -76,9 +83,7 @@ Tensor YOLOHandler::forward_path(Mat camera_image) {
 }
 
 int main(int argc, char* argv[]) {
-    string root_dir = "/home/aadc/AADC/src/aadcUser/tensorflowPlayground/";
-    Mat image = imread("/home/aadc/AADC/src/aadcUser/tensorflowPlayground/data/car_img.jpg");
-
+    Mat image = imread("/home/aadc/Downloads/pic.jpg");
     YOLOHandler yolo_handler;
     Status load_graph_status = yolo_handler.load_graph();
     if (!load_graph_status.ok()) {

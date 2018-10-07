@@ -65,13 +65,15 @@ Tensor readTensorFromMat(const Mat &mat) {
 }
 
 Tensor YOLOHandler::forward_path(Mat camera_image) {
-    int height = 448;
-    int width = 448;
     Mat image;
     std::vector<Tensor> outputs;
     Tensor inputTensor;
 
-    resize(camera_image, image, Size(height, width));
+    int x = 380;
+    int x_plus_offset = 448;
+    cv::Rect myROI(x, x, x_plus_offset, x_plus_offset);
+    image = camera_image(myROI);
+
     inputTensor = readTensorFromMat(image);
 
     Status run_status = session->Run({{"input", inputTensor}},

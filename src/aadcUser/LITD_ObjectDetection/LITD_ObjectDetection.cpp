@@ -85,7 +85,8 @@ tResult cLITD_ObjectDetection::Process(tTimeStamp tmTimeOfTrigger)
     {
         object_ptr<const ISample> pReadSample;
         Tensor output;
-        tFloat32 output_array[588];
+        int size_output_array = 45125;
+        tFloat32 output_array[size_output_array];
         int flag = 0;
 
         if (IS_OK(m_oReader.GetLastSample(pReadSample)))
@@ -98,20 +99,15 @@ tResult cLITD_ObjectDetection::Process(tTimeStamp tmTimeOfTrigger)
                 Mat inputImage = Mat(cv::Size(m_sImageFormat.m_ui32Width, m_sImageFormat.m_ui32Height),
                                         CV_8UC3, const_cast<unsigned char*>(static_cast<const unsigned char*>(pReadBuffer->GetPtr())));
 
-                // Setup a rectangle to define your region of interest
-                int8 x = 380;
-                int8 x_plus_offset = x+448;
-
-                cv::Rect myROI(x, x, x_plus_offset, x_plus_offset);
-
-                cv::Mat croppedImage = inputImage(myROI);
 
                 //Do the image processing and copy to destination image buffer
                 // TODO: use .data() instead
-                output = yolo_handler.forward_path(croppedImage);
+                LOG_INFO("forward path starts");
+                output = yolo_handler.forward_path(inputImage);
+                LOG_INFO("forward path done");
                 tensorflow::TTypes<float>::Flat output_flat = output.flat<float>();
 
-                for (int i = 0; i < 588; i++) {
+                for (int i = 0; i < size_output_array; i++) {
                     output_array[i] = output_flat(i);
                 }
                 flag = 1;
