@@ -114,11 +114,11 @@ float* FineLocator::localize(Mat img_bv, float theta, float in_x, float in_y, fl
         }
     }
 
-    if (anglemax > 0){
+    if (anglemax > 0.2){
         ret[0] = weightedXSum/angleSum - pos.x;
         ret[1] = weightedYSum/angleSum - pos.y;
         ret[2] = (weightedAngleOff/angleSum)*DEGTORAD;
-        ret[3] = angleSum/9/angleCnt;
+        ret[3] = anglemax;
     } else { // return safe default Values
         cout << "\n No Good Values found\n";
         ret[0] = 0;
