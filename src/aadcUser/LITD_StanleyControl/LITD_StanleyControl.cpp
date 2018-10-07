@@ -40,7 +40,9 @@ tResult cStanleyControl::Init(const tInitStage eStage)
 void cStanleyControl::calcSteeringAngle(){
 	double rad2degree = 180.0 / M_PI;
 
-	if (!parking || parking && !parkingStartPointReached || parking && parkingFinished)
+	
+	//if (!parking || parking && !parkingStartPointReached || parking && parkingFinished)
+	if (!parking) //parking handling only through trajectories
 	{
 		// No Parking -> Drive with Stanley
 		
@@ -264,7 +266,9 @@ tResult cStanleyControl::ProcessPosition(tTimeStamp tmTimeOfTrigger)
 
 	if (false && parking)
 	{
-		if (!parkingStartPointReached && !parkingFinished) {
+		//irrelevant for parking --> will be handled by decision-network
+
+		/*if (!parkingStartPointReached && !parkingFinished) {
 			Vector2d diffParkingStartPosition = parkingStartPoint.getVector2d() - vehicleActualRearAxlePosition.getVector2d();
 			double distToParkingStartPosition = sqrt(pow(diffParkingStartPosition(1), 2) + pow(diffParkingStartPosition(2), 2));
 			double diffHeadingToParkingStartPosition = abs(wrapTo2Pi(atan2(diffParkingStartPosition(2), diffParkingStartPosition(1)) - M_PI / 2));
@@ -292,7 +296,7 @@ tResult cStanleyControl::ProcessPosition(tTimeStamp tmTimeOfTrigger)
 			parkingStartPointReached = false;
 			parkingFinished = false;
 			parking = false;
-		}
+		}*/
 	}
 
 	else
@@ -418,22 +422,7 @@ void cStanleyControl::updatePolyList(tTrajectory trajectory) {
 	}	
 }
 
-/* void cStanleyControl::updateStep(poly_t polys[], uint8_t polyLen, LITD_VirtualPoint actPos) {
-	LITD_VirtualPoint frontAxlePosition;
-	LITD_VirtualPoint idealPoint;
-	polyPoint_t idealPolyPoint;
-	double carSpeed = 0;
 
-	// actPos = Position of the rear axle of the vehicle (reference point)
-	updatePolyList(polys, polyLen);
-
-	calculateFrontAxlePosition(actPos, &frontAxlePosition);
-
-	getNextVirtualPointOnPoly(polys, polyLen, &idealPolyPoint, &idealPoint, frontAxlePosition);
-
-	//calc Steeringangle
-	steeringAngle = calcSteeringAngle(frontAxlePosition, idealPoint, carSpeed);
-} */
 
 void cStanleyControl::getNextVirtualPointOnPoly() {
 
@@ -467,7 +456,7 @@ void cStanleyControl::getNextVirtualPointOnPoly() {
 			//calc vector from carfrontposition to actualpoint
 			double x_vec = actualPoint.x - vehicleActualFrontAxlePosition.x;
 			double y_vec = actualPoint.y - vehicleActualFrontAxlePosition.y;
-			double angleFromCarToActualPoint = atan2(y_vec, x_vec);
+			double angleFromCarToActualPoint = wrapTo2Pi(atan2(y_vec, x_vec));
 			//if(DEBUG_STANLEY) LOG_INFO("Angle from Car to NextPoint: %f", angleFromCarToActualPoint * 180.0 / M_PI );
 			if(angleFromCarToActualPoint <= M_PI/2 || angleFromCarToActualPoint >= 3/2 * M_PI){
 
