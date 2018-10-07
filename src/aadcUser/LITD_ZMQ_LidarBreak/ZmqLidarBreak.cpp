@@ -13,51 +13,21 @@ THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS AS IS AND ANY EXPRESS OR I
 
 **********************************************************************/
 
-#include "ZmqDecision.h"
+#include "ZmqLidarBreak.h"
 
-ADTF_PLUGIN(LABEL_LITD_ZMQ_DECISION, cZmqDecision)
+ADTF_PLUGIN(LABEL_LITD_ZMQ_LIDAR_Break, cZmqLidarBreak)
 
-cZmqDecision::cZmqDecision()
+cZmqLidarBreak::cZmqLidarBreak()
 {
 	// input pin names and types
-	m_inputs.emplace_back("jury", Jury);
-	m_inputs.emplace_back("jury_data_update", BoolSignalValue);
-
-	m_inputs.emplace_back("yolo_front", YoloNetOutput);
-	m_inputs.emplace_back("yolo_back", YoloNetOutput);
-
-	m_inputs.emplace_back("lenet_front", Classification);
-	m_inputs.emplace_back("lenet_back", Classification);
-
-	m_inputs.emplace_back("position", Position);
-	m_inputs.emplace_back("confidence_front", SignalValue);
-	m_inputs.emplace_back("confidence_rear", SignalValue);
-	m_inputs.emplace_back("measured_speed", SignalValue);
-
-	m_inputs.emplace_back("signs", RoadSignExt);
-	m_inputs.emplace_back("lidar", LaserScanner);
-	m_inputs.emplace_back("ultrasonic", Ultrasonic);
-	m_inputs.emplace_back("imu", InerMeasUnitData);
-
-	m_inputs.emplace_back("controller_leverage", PolynomPoint);
-	m_inputs.emplace_back("controller_feedback", PolynomPoint);
-
-	m_inputs.emplace_back("siren", BoolSignalValue);
+	m_inputs.emplace_back("LaserScanner", LaserScanner);
+	m_inputs.emplace_back("steeringLockAngle", SignalValue);
+	m_inputs.emplace_back("speed", SignalValue);
 
 	// output pin names and types
-	m_outputs.emplace_back("jury_states", Driver);
-
-	m_outputs.emplace_back("desired_speed", SignalValue);
-	m_outputs.emplace_back("trajectories", TrajectoryArray);
-
-	m_outputs.emplace_back("position_mux", SignalValue);
-
-	m_outputs.emplace_back("turn_signal_right", BoolSignalValue);
-	m_outputs.emplace_back("turn_signal_left", BoolSignalValue);
-	m_outputs.emplace_back("hazard_light", BoolSignalValue);
-	m_outputs.emplace_back("brake_light", BoolSignalValue);
-	m_outputs.emplace_back("reverse_light", BoolSignalValue);
+	m_outputs.emplace_back("signal_out", SignalValue);
+	m_outputs.emplace_back("bool_out", BoolSignalValue);
 
 	// pipe out the data whenever there are new samples on these pins
-	m_triggers.emplace_back("position");
+	m_triggers.emplace_back("LaserScanner");
 }

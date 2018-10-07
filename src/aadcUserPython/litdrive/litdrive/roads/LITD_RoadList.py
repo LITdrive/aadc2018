@@ -10,7 +10,9 @@ class RoadDecisions(IntEnum):
     STRAIGHT=2
     RIGHT=3
     MERGE=4
-    MAX=5
+    INVALID=5
+    END=6
+    MAX=6
 
 
 class RoadList:
@@ -193,11 +195,11 @@ class LaneElementPoly3(LaneElement):
         y_der=np.poly1d(np.polyder(self.y_poly))
         return (x_der, y_der)
 
-    def calcArcLength(self):
+    def calcArcLength(self, start_p=0.0, end_p=1.0):
         deriv=self.calcPolyDerivate()
         x_der=deriv[0]
         y_der=deriv[1]
-        res = scipy.integrate.quad(lambda p: np.sqrt(np.polyval(x_der,p)**2+np.polyval(y_der, p)**2), 0, 1)
+        res = scipy.integrate.quad(lambda p: np.sqrt(np.polyval(x_der,p)**2+np.polyval(y_der, p)**2), start_p, end_p)
         return res[0]
 
     def getArcLength(self):

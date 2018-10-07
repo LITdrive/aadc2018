@@ -145,6 +145,10 @@
    <element alignment="1" arraysize="1" byteorder="LE" bytepos="16" name="f64Heading" type="tFloat64" />
    <element alignment="1" arraysize="1" byteorder="LE" bytepos="24" name="f64Speed" type="tFloat64" />
   </struct>
+  <struct alignment="1" name="tPolynomPoint" version="1">
+   <element alignment="1" arraysize="1" byteorder="LE" bytepos="0" name="id" type="tUInt32" />
+   <element alignment="1" arraysize="1" byteorder="LE" bytepos="4" name="parameter" type="tFloat32" />
+  </struct>
  </structs>
  <streams>
  </streams>

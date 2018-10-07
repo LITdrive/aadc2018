@@ -62,10 +62,12 @@ add_subdirectory(LITD_SpeedLimit)
 add_subdirectory(LITD_WheelSpeedController)
 add_subdirectory(LITD_ZMQ_Decision)
 add_subdirectory(LITD_ZMQ_AlarmClf)
+add_subdirectory(LITD_ZMQ_LidarBreak)
 add_subdirectory(LITD_LaneGenerator)
 add_subdirectory(LITD_StanleyControl)
 add_subdirectory(LITD_IMULocalization)
 add_subdirectory(LITD_PositionMux)
+add_subdirectory(LITD_JuryFileCopy)
 
 # only build the tensorflow stuff on the cars
 if (THIS_IS_A_CAR)

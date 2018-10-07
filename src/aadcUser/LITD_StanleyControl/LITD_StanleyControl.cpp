@@ -164,12 +164,26 @@ cStanleyControl::cStanleyControl()
 		LOG_WARNING("No mediadescription for tSignalValue found!");
 	}
 
+	/* tPolynomPoint */
+	object_ptr<IStreamType> pTypePolynomPoint;
+	if IS_OK(adtf::mediadescription::ant::create_adtf_default_stream_type_from_service("tPolynomPoint", pTypePolynomPoint, m_PolynomPointSampleFactory))
+	{
+		access_element::find_index(m_PolynomPointSampleFactory, cString("id"), m_ddlPolynomPointIndex.id);
+		access_element::find_index(m_PolynomPointSampleFactory, cString("parameter"), m_ddlPolynomPointIndex.parameter);
+	}
+	else
+	{
+		LOG_INFO("No mediadescription for tPolynomPoint found!");
+	}
+
     // register input pins
 	create_pin(*this, m_ActualPointReader, "actual_point", pTypePositionData);
 	create_pin(*this, m_TrajectoryArrayReader, "trajectories", pTypeTrajectoryArrayData);
 
 	// register output pin
 	filter_create_pin(*this, m_SteeringWriter, "steering", pTypeSignalValue);
+	filter_create_pin(*this, m_PolyFinishedWriter, "poly_finished", pTypePolynomPoint);
+	filter_create_pin(*this, m_PolyTargetPointWriter, "poly_target_point", pTypePolynomPoint);
 
 	create_inner_pipe(*this, cString::Format("%s_trigger", "actual_point"), "actual_point", [&](tTimeStamp tmTime) -> tResult
 	{
@@ -321,18 +335,42 @@ tResult cStanleyControl::ProcessPosition(tTimeStamp tmTimeOfTrigger)
 	mapSteeringAngle();
 	
 
-	object_ptr<ISample> pWriteSample;
-
-	if (IS_OK(alloc_sample(pWriteSample)))
+	object_ptr<ISample> pWriteSampleSteering;
+	if (IS_OK(alloc_sample(pWriteSampleSteering)))
 	{
-
-		auto oCodec = m_SignalValueSampleFactory.MakeCodecFor(pWriteSample);
-
+		auto oCodec = m_SignalValueSampleFactory.MakeCodecFor(pWriteSampleSteering);
 		RETURN_IF_FAILED(oCodec.SetElementValue(m_ddlSignalValueId.value, vehicleSteeringAngle));
-
+		m_SteeringWriter << pWriteSampleSteering << flush << trigger;
 	}
 
-	m_SteeringWriter << pWriteSample << flush << trigger;
+	// TODO: WRITE SAMPLE IF WE FINISHED A POLYNOMIAL
+	// TODO: WRITE SAMPLE IF WE FINISHED A POLYNOMIAL
+	object_ptr<ISample> pWriteSamplePolyFinished;
+	if (IS_OK(alloc_sample(pWriteSamplePolyFinished)))
+	{
+		tUInt32 id_finished = 42;
+
+		auto oCodec = m_SignalValueSampleFactory.MakeCodecFor(pWriteSamplePolyFinished);
+		RETURN_IF_FAILED(oCodec.SetElementValue(m_ddlPolynomPointIndex.id, id_finished));
+		RETURN_IF_FAILED(oCodec.SetElementValue(m_ddlPolynomPointIndex.parameter, 0));
+		// TODO: Uncomment if done.
+		// m_PolyFinishedWriter << pWriteSamplePolyFinished << flush << trigger;
+	}
+
+	// TODO: WRITE SAMPLE WITH OUR TARGET POINT
+	// TODO: WRITE SAMPLE WITH OUR TARGET POINT
+	object_ptr<ISample> pWriteSampleTargetPoint;
+	if (IS_OK(alloc_sample(pWriteSampleTargetPoint)))
+	{
+		tUInt32 id_current = 42;
+		tFloat32 p_ansatz = 0.5;
+
+		auto oCodec = m_SignalValueSampleFactory.MakeCodecFor(pWriteSampleTargetPoint);
+		RETURN_IF_FAILED(oCodec.SetElementValue(m_ddlPolynomPointIndex.id, id_current));
+		RETURN_IF_FAILED(oCodec.SetElementValue(m_ddlPolynomPointIndex.parameter, p_ansatz));
+		// TODO: Uncomment if done.
+		// m_PolyTargetPointWriter << pWriteSampleTargetPoint << flush << trigger;
+	}
 
 	RETURN_NOERROR;
 }

@@ -94,6 +94,16 @@ private:
 	cSampleCodecFactory m_SignalValueSampleFactory;
 	cPinWriter m_SteeringWriter;
 
+	/* tPolynomPoint */
+	struct
+	{
+		tSize id;
+		tSize parameter;
+	} m_ddlPolynomPointIndex;
+	cSampleCodecFactory m_PolynomPointSampleFactory;
+	cPinWriter m_PolyFinishedWriter;
+	cPinWriter m_PolyTargetPointWriter;
+
 	/*// Parameters of Polynomial
 	tFloat64 poly_x_a, poly_x_b, poly_x_c, poly_x_d, poly_y_a, poly_y_b, poly_y_c, poly_y_d;
 	// Actual vehicle position

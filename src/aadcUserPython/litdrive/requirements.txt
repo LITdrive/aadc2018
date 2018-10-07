@@ -1,10 +1,13 @@
+testpath<0.4
+setuptools<39.1
+numpy>=1.13.3,<=1.14.5
 pyzmq==17.1.2
 scikit-learn==0.19.1
-numpy>=1.15
 scipy>=1.1
 lxml>=4.2
 cython>=0.28
 keras>=2.2
+PyHamcrest>=1.9
 sounddevice>=0.3
 jupyterlab
 matplotlib

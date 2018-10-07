@@ -14,24 +14,14 @@ THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS AS IS AND ANY EXPRESS OR I
 **********************************************************************/
 
 #pragma once
+#include <zmq.hpp>
+#define _USE_MATH_DEFINES
 #include "stdafx.h"
 #include "FineLocator.h"
-#include "PixelMetricTransformer.h"
 
 //*************************************************************************************************
 #define CID_FINE_LOCALISATION_FILTER "finelocalization.filter.user.aadc.cid"
 #define LABEL_FINE_LOCALISATION_FILTER "LITD FineLocalization"
-
-
-using namespace adtf_util;
-using namespace ddl;
-using namespace adtf::ucom;
-using namespace adtf::base;
-using namespace adtf::streaming;
-using namespace adtf::mediadescription;
-using namespace adtf::filter;
-using namespace std;
-using namespace cv;
 
 
 /*! the main class of the open cv template. */
@@ -39,7 +29,9 @@ class cFineLocalisation : public cFilter
 {
 public:
     ADTF_CLASS_ID_NAME(cFineLocalisation, CID_FINE_LOCALISATION_FILTER, LABEL_FINE_LOCALISATION_FILTER);
-    ADTF_CLASS_DEPENDENCIES(REQUIRE_INTERFACE(adtf::services::IReferenceClock));
+	ADTF_CLASS_DEPENDENCIES(REQUIRE_INTERFACE(IZeroMQService),
+		REQUIRE_INTERFACE(adtf::services::IReferenceClock));
+
     // necessary for proper behaviour of the create_inner_pipe call
     using cRuntimeBehaviour::RegisterRunner;
     using cRuntimeBehaviour::RegisterInnerPipe;
@@ -83,6 +75,27 @@ private:
     /*! The clock */
     object_ptr<adtf::services::IReferenceClock> m_pClock;
 
+	/*! ZeroMQ context and socket */
+	object_ptr<IZeroMQService> m_pZeroMQService;
+	zmq::socket_t* m_sck_pair = nullptr;
+
+	/*! synchronized start signal for the thread */
+	std::condition_variable m_runner_cv;
+	std::mutex m_runner_mutex;
+	bool m_parent_ready = false;
+
+	/* how many messages shall be queued in memory at a maximum (actual limit might be 60 - 70% lower) */
+	tInt m_queue_length = 10;
+
+	/* stop signal for the thread */
+	std::atomic<bool> m_runner_reset_signal{ false };
+
+	/*! mutex for shared access to position */
+	std::mutex m_position_mutex;
+
+	/* the deconfiguration routine can only be done once */
+	bool m_deconfigured = false;
+
     tFloat32 x, y, speed, heading;
 
     FineLocator locator;
@@ -113,18 +126,34 @@ public:
     /*! Default constructor. */
     cFineLocalisation();
 
-
     /*! Destructor. */
-    virtual ~cFineLocalisation() = default;
+    ~cFineLocalisation() override;
 
+    tResult Init(tInitStage eStage) override;
 
-    tResult Init(const tInitStage eStage);
+	tResult Shutdown(tInitStage eStage) override;
+
+	tResult Start() override;
+
+	tResult Stop() override;
 
     tResult Configure();
 
+	tResult Deconfigure();
 
-    tResult ProcessImage(tTimeStamp tmTimeOfTrigger);
-    tResult ProcessPosition(tTimeStamp tmTimeOfTrigger);
+private:
+
+	tResult AcceptImage(tTimeStamp tmTimeOfTrigger);
+
+	tResult ProcessPosition(tTimeStamp tmTimeOfTrigger);
+
+	tResult ProcessImage(Mat* bvImage);
+
+	tResult TransmitResult(float* location);
+
+	tResult InitializeFineLocalizationThread();
+
+	std::string GetPairSocketAddress() const;
 
 };
 

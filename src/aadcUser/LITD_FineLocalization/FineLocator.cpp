@@ -2,6 +2,7 @@
 // Created by Stefan on 23.08.2018.
 //
 
+#define _USE_MATH_DEFINES
 #include "FineLocator.h"
 #include "stdafx.h"
 #include <math.h>

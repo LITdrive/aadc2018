@@ -17,8 +17,8 @@ from ...zeromq.server import ZmqServer
 
 #Parameters--------------
 p =  abspath(join(dirname(__file__), r'../../../../../../configuration_files/alarm'))
-thld = 0.6 #treshold for detection
-weights = np.asarray([7,10,8,10]) #weights for final dec. lr, es, cnn, nb_pca
+thld = 0.65 #treshold for detection
+weights = np.asarray([7,10,9,8]) #weights for final dec. lr, es, cnn, nb_pca
 weights=weights/sum(weights)
 is_debugging=False #debugging mode
 # don't touch those ;)
@@ -49,7 +49,7 @@ def computeEngineeringSol(spec):
     """
     a=np.nan_to_num(spec[[73, 96, 97, 98, 121, 122]])
     a-=a.mean()
-    a/=a.std()
+    a/=a.std() #TODO check for 0 std
 
     b=np.nan_to_num( np.roll(spec[[71, 88, 89, 90, 91, 123, 124]], 17,axis=1) )
     b-=b.mean()
@@ -90,11 +90,14 @@ def getSireneProb():
     #compute spectrogram
     #spectrum, freqs, t, im = specgram(sig.flatten(),Fs=fs,NFFT=nfft,scale='dB',noverlap=0)
     spectrum, freqs, t = mySpec(sig.flatten(),fs,nfft)
-    
+
     freqidx = (freqs>f_min)*(freqs<f_max) #TODO move out of here to make more efficient
+    if sum(spectrum[freqidx]<=0)>0: 
+        print('No Microphone Signal =S --> get the mic running ;); Set timer to min 1.5 seconds')
+        return 0.0
     X = (np.log(spectrum[freqidx])+scaling_mean)/scaling_std #scale
     
-    X=np.nan_to_num(X) #make sure there are no nan's in there
+    X=np.nan_to_num(X[:85,:34]) #make sure there are no nan's in there
     Xc = X.reshape(1,-1)[:,:2890]
     # linear regression:
     prob = clf.predict_proba((Xc+8)/3)[:,1][0] #makes it a little bit more robust ;)
