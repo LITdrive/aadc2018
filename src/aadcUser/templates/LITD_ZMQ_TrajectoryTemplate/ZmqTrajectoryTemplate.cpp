@@ -20,12 +20,12 @@ ADTF_PLUGIN(LABEL_LITD_ZMQ_TRAJECTORY_TEMPLATE, cZmqTrajectoryTemplate)
 cZmqTrajectoryTemplate::cZmqTrajectoryTemplate()
 {
 	// input pin names and types
-	m_inputs.emplace_back("signal", SignalValue);
+	m_inputs.emplace_back("timer", SignalValue);
 
 	// output pin names and types
 	m_outputs.emplace_back("trajectory", Trajectory);
 	m_outputs.emplace_back("trajectory_array", TrajectoryArray);
 
 	// pipe out the data whenever there are new samples on these pins
-	m_triggers.emplace_back("signal");
+	m_triggers.emplace_back("timer");
 }

@@ -20,11 +20,11 @@ ADTF_PLUGIN(LABEL_LITD_ZMQ_ALARM_CLF, cZmqAlarmClf)
 cZmqAlarmClf::cZmqAlarmClf()
 {
 	// input pin names and types
-	m_inputs.emplace_back("signal", SignalValue);
+	m_inputs.emplace_back("timer", BoolSignalValue);
 
 	// output pin names and types
-	m_outputs.emplace_back("alarm", BoolSignalValue);
+	m_outputs.emplace_back("siren", BoolSignalValue);
 
 	// pipe out the data whenever there are new samples on these pins
-	m_triggers.emplace_back("signal");
+	m_triggers.emplace_back("timer");
 }
