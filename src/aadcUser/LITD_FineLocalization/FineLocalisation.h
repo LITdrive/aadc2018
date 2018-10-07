@@ -84,6 +84,9 @@ private:
 	std::mutex m_runner_mutex;
 	bool m_parent_ready = false;
 
+	/* how many messages shall be queued in memory at a maximum (actual limit might be 60 - 70% lower) */
+	tInt m_queue_length = 10;
+
 	/* stop signal for the thread */
 	std::atomic<bool> m_runner_reset_signal{ false };
 
@@ -113,9 +116,6 @@ private:
     property_variable<tFloat32> angleRangeMax =  5;
     property_variable<tInt32> subSampleRate =  30;
     tInt32 sampleCnt = 0;
-
-	/* how many messages shall be queued in memory at a maximum (actual limit might be 60 - 70% lower) */
-	property_variable<tInt> m_queue_length = 10;
 
     double affineMat [2][3] = {{mat00, mat01, mat02}, {mat10, mat11, mat12}};
     bool recievedPosition = false;

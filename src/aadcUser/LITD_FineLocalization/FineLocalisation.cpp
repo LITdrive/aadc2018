@@ -246,9 +246,9 @@ tResult cFineLocalisation::AcceptImage(tTimeStamp tmTimeOfTrigger)
 				const size_t imageSize = 3 * m_sImageFormat.m_ui32Width * m_sImageFormat.m_ui32Height;
 
 				// send width, height and the image buffer (each value will be copied into the message buffer)
-				if (m_sck_pair->send(&m_sImageFormat.m_ui32Width, sizeof m_sImageFormat.m_ui32Width, ZMQ_SNDMORE))
-					if (m_sck_pair->send(&m_sImageFormat.m_ui32Height, sizeof m_sImageFormat.m_ui32Height, ZMQ_SNDMORE))
-						if (m_sck_pair->send(pReadBuffer->GetPtr(), imageSize))
+				if (m_sck_pair->send(&m_sImageFormat.m_ui32Width, sizeof m_sImageFormat.m_ui32Width, ZMQ_SNDMORE | ZMQ_DONTWAIT))
+					if (m_sck_pair->send(&m_sImageFormat.m_ui32Height, sizeof m_sImageFormat.m_ui32Height, ZMQ_SNDMORE | ZMQ_DONTWAIT))
+						if (m_sck_pair->send(pReadBuffer->GetPtr(), imageSize, ZMQ_DONTWAIT))
 							returncode = true;
 
 				if (!returncode)
