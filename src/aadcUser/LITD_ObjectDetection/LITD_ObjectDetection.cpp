@@ -81,11 +81,12 @@ tResult cLITD_ObjectDetection::Configure()
 
 tResult cLITD_ObjectDetection::Process(tTimeStamp tmTimeOfTrigger)
 {
+    LOG_INFO("forward path called");
     while (!m_runner_reset_signal)
     {
         object_ptr<const ISample> pReadSample;
         Tensor output;
-        int size_output_array = 45125;
+        int size_output_array = 24500;
         tFloat32 output_array[size_output_array];
         int flag = 0;
 
