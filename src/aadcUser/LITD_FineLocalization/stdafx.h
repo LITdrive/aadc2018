@@ -23,14 +23,22 @@ THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS “AS IS” AND ANY EXPRESS OR
 #include <windows.h>
 #endif
 
-//adtf
-#include <adtf3.h>
-#include <adtf_platform_inc.h>
-#include <a_utils_platform_inc.h>
-#include <adtf_systemsdk.h>
+#include <adtf_filtersdk.h>
 
 #include <opencv2/opencv.hpp>
-#include <stdlib.h>
+#include <zmq.hpp>
+
+#include "../services/zeromq/zeromq_service_intf.h"
+
+using namespace adtf_util;
+using namespace ddl;
+using namespace adtf::ucom;
+using namespace adtf::base;
+using namespace adtf::streaming;
+using namespace adtf::streaming::ant;
+using namespace adtf::mediadescription;
+using namespace adtf::filter;
+using namespace adtf::filter::ant;
 
 using namespace std;
 using namespace cv;

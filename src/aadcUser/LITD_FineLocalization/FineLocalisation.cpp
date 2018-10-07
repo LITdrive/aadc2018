@@ -13,11 +13,10 @@ THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS AS IS AND ANY EXPRESS OR I
 
 **********************************************************************/
 
-#include "stdafx.h"
 #include "FineLocalisation.h"
+#include "PixelMetricTransformer.h"
 #include "ADTF3_OpenCV_helper.h"
 #include "ADTF3_helper.h"
-#include "FineLocator.h"
 
 
 #define DEG2RAD M_PI/180
@@ -26,7 +25,6 @@ ADTF_PLUGIN(LABEL_FINE_LOCALISATION_FILTER, cFineLocalisation)
 
 cFineLocalisation::cFineLocalisation()
 {
-
     //create and set inital input format type
     m_sImageFormat.m_strFormatName = ADTF_IMAGE_FORMAT(RGB_24);
     const adtf::ucom::object_ptr<IStreamType> pType = adtf::ucom::make_object_ptr<cStreamType>(stream_meta_type_image());
@@ -101,8 +99,28 @@ cFineLocalisation::cFineLocalisation()
 
     create_inner_pipe(*this, cString::Format("%s_trigger", "inBirdsEye"), "inBirdsEye", [&](tTimeStamp tmTime) -> tResult
     {
-        return ProcessImage(tmTime);
+        return AcceptImage(tmTime);
     });
+
+	// register the runner which processes the fine localization in the background
+	if (IS_FAILED(InitializeFineLocalizationThread()))
+		LOG_ERROR("Failed initializing the FineLocalization Thread in the constructor");
+}
+
+cFineLocalisation::~cFineLocalisation()
+{
+	// tell the thread to go home
+	m_runner_reset_signal = true;
+	Deconfigure();
+}
+
+tResult cFineLocalisation::Deconfigure()
+{
+	// avoid double-free through the destructor
+	if (m_deconfigured) RETURN_NOERROR;
+	delete m_sck_pair;
+	m_deconfigured = true;
+	RETURN_NOERROR;
 }
 
 tResult cFineLocalisation::Init(const tInitStage eStage)
@@ -116,11 +134,49 @@ tResult cFineLocalisation::Init(const tInitStage eStage)
     RETURN_NOERROR;
 }
 
+tResult cFineLocalisation::Shutdown(const tInitStage eStage)
+{
+	RETURN_IF_FAILED(cFilter::Shutdown(eStage));
+	if (eStage == StageFirst)
+	{
+		// press "Deinit"
+		RETURN_IF_FAILED(Deconfigure());
+	}
+	RETURN_NOERROR;
+}
+
+tResult cFineLocalisation::Start()
+{
+	m_runner_reset_signal = false;
+
+	// wake up the thread
+	std::unique_lock<std::mutex> lk(m_runner_mutex);
+	m_parent_ready = true;
+	m_runner_cv.notify_one();
+
+	RETURN_NOERROR;
+}
+
+tResult cFineLocalisation::Stop()
+{
+	// tell the thread to stop
+	m_runner_reset_signal = true;
+
+	// break any blocking recv calls with an empty message
+	auto msg = zmq::message_t(0);
+	m_sck_pair->send(msg);
+
+	RETURN_NOERROR;
+}
+
 tResult cFineLocalisation::Configure()
 {
     //TODO transfer data to new thread and start new thread
     //get clock object
     RETURN_IF_FAILED(_runtime->GetObject(m_pClock));
+	RETURN_IF_FAILED(_runtime->GetObject(m_pZeroMQService));
+
+	// configure class
     cFilename mapPathResolved = mapPath;
     adtf::services::ant::adtf_resolve_macros(mapPathResolved);
     locator.setMap(const_cast<char*>(mapPathResolved.GetPtr()));
@@ -134,10 +190,28 @@ tResult cFineLocalisation::Configure()
     locator.setPixelMetricTransformer(PixelMetricTransformer(affineMat));
     locator.setSearchSpace(propSearchSpaceSize);
     sampleCnt = 0;
+
+	// create a pair socket that will distribute messages to the runners socket
+	m_sck_pair = new zmq::socket_t(*m_pZeroMQService->GetContext(), ZMQ_PAIR);
+
+	// do not wait at close time
+	int linger = 0;
+	m_sck_pair->setsockopt(ZMQ_LINGER, &linger, sizeof linger);
+	// limit queue length (shared for inproc sockets)
+	int hwm = m_queue_length / 2;
+	m_sck_pair->setsockopt(ZMQ_SNDHWM, &hwm, sizeof hwm);
+
+	m_sck_pair->bind(GetPairSocketAddress());
+
     RETURN_NOERROR;
 }
 
-tResult cFineLocalisation::ProcessPosition(tTimeStamp tmTimeOfTrigger){
+tResult cFineLocalisation::ProcessPosition(tTimeStamp tmTimeOfTrigger)
+{
+	// TODO: potential risk of deadlocks (maybe use https://en.cppreference.com/w/cpp/thread/timed_mutex/try_lock_until)
+	// get exclusive access to the position
+	std::lock_guard<std::mutex> oGuard(m_position_mutex);
+
     object_ptr<const ISample> pPosReadSample;
 
     if(IS_OK(m_oPosReader.GetLastSample(pPosReadSample))) {
@@ -159,45 +233,176 @@ tResult cFineLocalisation::ProcessPosition(tTimeStamp tmTimeOfTrigger){
     RETURN_NOERROR;
 }
 
-tResult cFineLocalisation::ProcessImage(tTimeStamp tmTimeOfTrigger){
+tResult cFineLocalisation::AcceptImage(tTimeStamp tmTimeOfTrigger)
+{
     object_ptr<const ISample> pReadSample;
-
     while (IS_OK(m_oReader.GetNextSample(pReadSample)) && recievedPosition)
     {
         if(sampleCnt % subSampleRate == 0) {
             object_ptr_shared_locked<const ISampleBuffer> pReadBuffer;
-            //lock read buffer
+            // lock read buffer and send to worker thread
             if (IS_OK(pReadSample->Lock(pReadBuffer))) {
-                //-------------------------- Send to new thread ----------------------------------
-                //create a opencv matrix from the media sample buffer
-                Mat bvImage = Mat(cv::Size(m_sImageFormat.m_ui32Width, m_sImageFormat.m_ui32Height), CV_8UC3, const_cast<unsigned char *>(static_cast<const unsigned char *>(pReadBuffer->GetPtr())));
-                //-------------------------- Start of new thread ----------------------------------
-                //[dx, dy, headingOffset, confidence]
-                auto start = std::chrono::system_clock::now();
-                float *location = locator.localize(bvImage, heading, x, y, axleToPicture);
-                auto end = std::chrono::system_clock::now();
-                std::chrono::duration<double> diff = end - start;
-                LOG_INFO("Localization took %e s", diff.count());
-                if(location[3] > angleRangeMax || location[3] < angleRangeMin) LOG_ERROR("caclualted angle offset out of bounds: %f", location[3]);
-                object_ptr<ISample> pWriteSample;
-                RETURN_IF_FAILED(alloc_sample(pWriteSample, m_pClock->GetStreamTime()));
-                {
-                    auto oCodec = m_PositionSampleFactory.MakeCodecFor(pWriteSample);
+				bool returncode = false;
+				const size_t imageSize = 3 * m_sImageFormat.m_ui32Width * m_sImageFormat.m_ui32Height;
 
-                    RETURN_IF_FAILED(oCodec.SetElementValue(m_ddlPositionIndex.x, x + location[0]));
-                    RETURN_IF_FAILED(oCodec.SetElementValue(m_ddlPositionIndex.y, y + location[1]));
-                    RETURN_IF_FAILED(oCodec.SetElementValue(m_ddlPositionIndex.heading, heading - headingOffset*DEG2RAD + location[2]));
-                    RETURN_IF_FAILED(oCodec.SetElementValue(m_ddlPositionIndex.speed, speed));
-                }
-                LOG_INFO("found deltas: %.2f %.2f %.4f",location[0], location[1], location[2]);
-                transmitSignalValue(m_oConfWriter, m_pClock->GetStreamTime(), m_SignalValueSampleFactory, m_ddlSignalValueId.timeStamp, 0, m_ddlSignalValueId.value, location[3]);
-                m_oPosWriter << pWriteSample << flush << trigger;
+				// send width, height and the image buffer (each value will be copied into the message buffer)
+				if (m_sck_pair->send(&m_sImageFormat.m_ui32Width, sizeof m_sImageFormat.m_ui32Width, ZMQ_SNDMORE))
+					if (m_sck_pair->send(&m_sImageFormat.m_ui32Height, sizeof m_sImageFormat.m_ui32Height, ZMQ_SNDMORE))
+						if (m_sck_pair->send(pReadBuffer->GetPtr(), imageSize))
+							returncode = true;
 
-                //-------------------------- End of new thread ----------------------------------
+				if (!returncode)
+					LOG_ERROR("Queue overflow in the fine localization thread. Reduce the fps !!!");
             }
             sampleCnt = 0;
         }
         sampleCnt++;
     }
     RETURN_NOERROR;
+}
+
+tResult cFineLocalisation::ProcessImage(Mat* bvImage)
+{
+#ifdef _DEBUG
+	const tTimeStamp start = cHighResTimer::GetTime();
+#endif
+
+	//[dx, dy, headingOffset, confidence]
+	float *location = locator.localize(*bvImage, heading, x, y, axleToPicture);
+
+#ifdef _DEBUG
+	const tTimeStamp end = cHighResTimer::GetTime();
+	LOG_DUMP("Localization run-time: %.2f ms", (end - start) / 1000.0);
+#endif
+
+	if (location[3] > angleRangeMax || location[3] < angleRangeMin) LOG_ERROR("caclualted angle offset out of bounds: %f", location[3]);
+	LOG_INFO("found deltas: %.2f %.2f %.4f", location[0], location[1], location[2]);
+	
+	// transmit result (with a lock!)
+	return TransmitResult(location);
+}
+
+tResult cFineLocalisation::TransmitResult(float* location)
+{
+	// get exclusive access to the position
+	std::lock_guard<std::mutex> oGuard(m_position_mutex);
+
+	object_ptr<ISample> pWriteSample;
+	RETURN_IF_FAILED(alloc_sample(pWriteSample, m_pClock->GetStreamTime()));
+	{
+		auto oCodec = m_PositionSampleFactory.MakeCodecFor(pWriteSample);
+
+		RETURN_IF_FAILED(oCodec.SetElementValue(m_ddlPositionIndex.x, x + location[0]));
+		RETURN_IF_FAILED(oCodec.SetElementValue(m_ddlPositionIndex.y, y + location[1]));
+		RETURN_IF_FAILED(oCodec.SetElementValue(m_ddlPositionIndex.heading, heading - headingOffset*DEG2RAD + location[2]));
+		RETURN_IF_FAILED(oCodec.SetElementValue(m_ddlPositionIndex.speed, speed));
+	}
+
+	transmitSignalValue(m_oConfWriter, m_pClock->GetStreamTime(), m_SignalValueSampleFactory, m_ddlSignalValueId.timeStamp, 0, m_ddlSignalValueId.value, location[3]);
+	m_oPosWriter << pWriteSample << flush << trigger;
+
+	RETURN_NOERROR;
+}
+
+tResult cFineLocalisation::InitializeFineLocalizationThread()
+{
+	// thread for the fine localization, where image data is processed and output samples are sent
+	const object_ptr<IRunner> zmq_thread = ::adtf::ucom::make_object_ptr<cRunner>("cv_thread", [&](tTimeStamp /* tmTime */) -> tResult
+	{
+		/* --- (1) wait for parent initialization --- */
+
+		LOG_DUMP("FineLocalization thread started. Waiting for signal ...");
+
+		// the runner needs to wait until the parent is done with binding the socket and initializing
+		std::unique_lock<std::mutex> lk(m_runner_mutex);
+		while (!m_parent_ready)
+		{
+			m_runner_cv.wait(lk);
+			if (!m_parent_ready)
+				LOG_ERROR("Spurious wake-up in the FineLocalization thread detected.");
+		}
+
+		/* --- (2) connect PAIR socket to parent thread --- */
+
+		auto pair_socket = zmq::socket_t(*m_pZeroMQService->GetContext(), ZMQ_PAIR);
+
+		// do not wait at close time
+		int linger = 0;
+		pair_socket.setsockopt(ZMQ_LINGER, &linger, sizeof linger);
+		// limit queue length
+		int hwm = m_queue_length / 2;
+		pair_socket.setsockopt(ZMQ_RCVHWM, &hwm, sizeof hwm);
+
+		const std::string address = GetPairSocketAddress();
+		pair_socket.connect(address);
+
+		LOG_DUMP("FineLocalization thread initialized. Connected to %s", address.c_str());
+
+		while (!m_runner_reset_signal && pair_socket.connected())
+		{
+			/* --- (3) receive image --- */
+
+			// an empty message from the parent thread signals a break condition
+			// message.size() > 0 IMPLIES message.more()
+
+			zmq::message_t message_width;
+			pair_socket.recv(&message_width);
+			if (message_width.size() == 0 && m_runner_reset_signal) break;
+			assert(!(message_width.size() > 0 && !message_width.more()));
+
+			zmq::message_t message_height;
+			pair_socket.recv(&message_height);
+			if (message_height.size() == 0 && m_runner_reset_signal) break;
+			assert(!(message_height.size() > 0 && !message_height.more()));
+
+			zmq::message_t message_image;
+			pair_socket.recv(&message_image);
+			if (message_image.size() == 0 && m_runner_reset_signal) break;
+			assert(!(message_image.size() > 0 && message_image.more()));
+
+			// TODO: check if the queue is really empty! if not, log an error and maybe clear the queue!
+
+			// check for stop signal from parent
+			if (m_runner_reset_signal) break;
+
+			/* --- (4) process image --- */
+
+			tUInt32 width = *static_cast<tUInt32*>(message_width.data());
+			tUInt32 height = *static_cast<tUInt32*>(message_height.data());
+			Mat bvImage = Mat(Size(width, height), CV_8UC3, static_cast<unsigned char *>(message_image.data()));
+
+			ProcessImage(&bvImage);
+		}
+
+		pair_socket.close();
+
+		// TODO: allow reconnecting ability
+		LOG_WARNING("FineLocalization thread runner stopped. Starting the session again will fail.");
+		RETURN_NOERROR;
+	});
+
+	RETURN_IF_FAILED(cRuntimeBehaviour::RegisterRunner(zmq_thread));
+	RETURN_NOERROR;
+}
+
+/**
+* \brief Resolve the inproc:// socket address for the PAIR socket between the
+* parent thread and the ZeroMQ I/O thread. The address will be inferred from the filter name,
+* such that we have a unique address per filter instantiation.
+* \return The "inproc://FILTER_NAME" address
+*/
+std::string cFineLocalisation::GetPairSocketAddress() const
+{
+	// resolve the filter name
+	std::string name;
+	GetName(adtf_string<std::string>(&name));
+
+	// replace spaces with underscores
+	std::replace(name.begin(), name.end(), ' ', '_');
+
+	// append the inproc prefix
+	std::ostringstream name_stream;
+	name_stream << "inproc://" << name;
+
+	return name_stream.str();
 }

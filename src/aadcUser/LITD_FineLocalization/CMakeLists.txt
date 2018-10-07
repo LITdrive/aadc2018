@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 3.10.0)
 project(litd_finelocalization_filter)
 
 include_directories(${OpenCV_INCLUDE_DIRS})
+include_directories(${ZMQ_INCLUDE_DIRS})
 
 set (SOURCEFILES    	stdafx.h
                         PixelMetricTransformer.h
@@ -33,7 +34,7 @@ adtf_create_plugindescription(
         "bin"
  ) 
 
-target_link_libraries(${PROJECT_NAME} LINK_PUBLIC ${OpenCV_LIBS})
+target_link_libraries(${PROJECT_NAME} LINK_PUBLIC ${OpenCV_LIBS} LINK_PUBLIC ${ZMQ_LIBS})
 
 #this is to add a folder within the ADTF solution
 set_property(TARGET ${PROJECT_NAME} PROPERTY FOLDER user)
