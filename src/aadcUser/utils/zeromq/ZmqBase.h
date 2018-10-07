@@ -41,7 +41,9 @@ enum eZmqStruct
 	LaserScanner,
 	Trajectory,
 	TrajectoryArray,
-	YoloNetOutput
+	YoloNetOutput,
+	PolynomPoint,
+	Classification
 };
 
 /*! pin name and type tuple */
@@ -388,4 +390,25 @@ private:
 		tSize f32Radius;
 		tSize f32Angle;
 	} m_ddlPolarCoordianteIndex{};
+
+	// polynom point
+	cSampleCodecFactory m_PolynomPointSampleFactory;
+	object_ptr<IStreamType> m_PolynomPointStreamType = nullptr;
+
+	struct
+	{
+		tSize id;
+		tSize parameter;
+	} m_ddlPolynomPointIndex{};
+
+	// classification
+	cSampleCodecFactory m_ClassificationSampleFactory;
+	object_ptr<IStreamType> m_ClassificationStreamType = nullptr;
+
+	struct
+	{
+		tSize className;
+		tSize classId;
+		tSize probValue;
+	} m_ddlClassificationIndex{};
 };
