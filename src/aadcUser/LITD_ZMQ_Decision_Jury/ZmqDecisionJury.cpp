@@ -1,4 +1,4 @@
-/*********************************************************************
+﻿/*********************************************************************
 Copyright (c) 2018
 Audi Autonomous Driving Cup. All rights reserved.
 
@@ -13,20 +13,28 @@ THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS AS IS AND ANY EXPRESS OR I
 
 **********************************************************************/
 
-#pragma once
+#include "ZmqDecisionJury.h"
 
-#include "../utils/zeromq/ZmqBase.h"
+ADTF_PLUGIN(LABEL_LITD_ZMQ_DECISION_JURY, cZmqDecisionJury)
 
-#define CID_LITD_ZMQ_DECISION  "litd_zmq_decision.filter.user.aadc.cid"
-#define LABEL_LITD_ZMQ_DECISION  "LITD ZMQ Decision"
-
-class cZmqDecision : public cZmqBase
+cZmqDecisionJury::cZmqDecisionJury()
 {
-public:
-	ADTF_CLASS_ID_NAME(cZmqDecision, CID_LITD_ZMQ_DECISION, LABEL_LITD_ZMQ_DECISION);
+	// input pin names and types
+	m_inputs.emplace_back("timer", BoolSignalValue);
 
-	ADTF_CLASS_DEPENDENCIES(REQUIRE_INTERFACE(IZeroMQService),
-		REQUIRE_INTERFACE(adtf::services::IReferenceClock));
+	m_inputs.emplace_back("jury", Jury);
+	m_inputs.emplace_back("jury_data_update", BoolSignalValue);
 
-	cZmqDecision();
-};
+	m_inputs.emplace_back("confidence_front", SignalValue);
+	m_inputs.emplace_back("confidence_rear", SignalValue);
+
+	// output pin names and types
+	m_outputs.emplace_back("driver", Driver);
+	m_outputs.emplace_back("position_mux", SignalValue);
+
+	// pipe out the data whenever there are new samples on these pins
+	m_triggers.emplace_back("timer");
+
+	m_triggers.emplace_back("jury");
+	m_triggers.emplace_back("jury_data_update");
+}

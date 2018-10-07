@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.10.0)
 
-project(litd_zmq_decision)
+project(litd_zmq_decision_jury)
 
 if (NOT TARGET adtf::ui)
     find_package(ADTF COMPONENTS filtersdk ui)
@@ -8,11 +8,11 @@ endif()
 
 include_directories(${ZMQ_INCLUDE_DIRS})
 
-set (HEADERS	ZmqDecision.h
+set (HEADERS	ZmqDecisionJury.h
 				../utils/zeromq/ZmqBase.h
 				)
 
-set (SOURCES	ZmqDecision.cpp
+set (SOURCES	ZmqDecisionJury.cpp
 				../utils/zeromq/ZmqBase.cpp
 				)
 
