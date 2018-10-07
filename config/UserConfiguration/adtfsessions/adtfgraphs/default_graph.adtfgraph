@@ -8,7 +8,32 @@
   <graphs>
     <graph>
       <name>default_filter_graph</name>
-      <filters/>
+      <filters>
+        <filter>
+          <name>LITD JuryFileCopy</name>
+          <class_id>litd_jury_file_copy.filter.user.aadc.cid</class_id>
+          <input_pins>
+            <pin>
+              <name>maneuver</name>
+            </pin>
+            <pin>
+              <name>roadsigns</name>
+            </pin>
+            <pin>
+              <name>opendrive</name>
+            </pin>
+          </input_pins>
+          <output_pins>
+            <pin>
+              <name>update</name>
+            </pin>
+          </output_pins>
+          <runners/>
+          <init_priority>0</init_priority>
+          <binding_servers/>
+          <binding_clients/>
+        </filter>
+      </filters>
       <subgraphs>
         <subgraph>
           <name>visualization</name>
@@ -26,13 +51,18 @@
           <init_priority>0</init_priority>
         </subgraph>
         <subgraph>
-          <name>decision</name>
-          <graph>decision_graph</graph>
+          <name>control</name>
+          <graph>control_graph</graph>
           <init_priority>0</init_priority>
         </subgraph>
         <subgraph>
-          <name>control</name>
-          <graph>control_graph</graph>
+          <name>vision</name>
+          <graph>vision_graph</graph>
+          <init_priority>0</init_priority>
+        </subgraph>
+        <subgraph>
+          <name>decision</name>
+          <graph>decision_graph</graph>
           <init_priority>0</init_priority>
         </subgraph>
       </subgraphs>
@@ -184,10 +214,6 @@
           <class_id>default_sample_stream.streaming.adtf.cid</class_id>
         </sample_stream>
         <sample_stream>
-          <name>front_cam_undistorted_stream</name>
-          <class_id>default_sample_stream.streaming.adtf.cid</class_id>
-        </sample_stream>
-        <sample_stream>
           <name>rear_cam_undistorted_stream</name>
           <class_id>default_sample_stream.streaming.adtf.cid</class_id>
         </sample_stream>
@@ -223,25 +249,30 @@
           <name>desired_speed_stream</name>
           <class_id>default_sample_stream.streaming.adtf.cid</class_id>
         </sample_stream>
+        <sample_stream>
+          <name>front_cam_undistorted_stream</name>
+          <class_id>default_sample_stream.streaming.adtf.cid</class_id>
+        </sample_stream>
+        <sample_stream>
+          <name>open_drive_map_stream</name>
+          <class_id>default_sample_stream.streaming.adtf.cid</class_id>
+        </sample_stream>
+        <sample_stream>
+          <name>road_sign_map_stream</name>
+          <class_id>default_sample_stream.streaming.adtf.cid</class_id>
+        </sample_stream>
+        <sample_stream>
+          <name>maneuver_list_stream</name>
+          <class_id>default_sample_stream.streaming.adtf.cid</class_id>
+        </sample_stream>
+        <sample_stream>
+          <name>jury_update_stream</name>
+          <class_id>default_sample_stream.streaming.adtf.cid</class_id>
+        </sample_stream>
       </sample_streams>
       <active_runners/>
       <binding_proxys/>
       <connections>
-        <connection>
-          <name>open_drive_map._visualization.open_drive</name>
-          <source_connector_path>
-            <connector/>
-            <component>open_drive_map</component>
-            <portbindingobject/>
-          </source_connector_path>
-          <destination_connector_path>
-            <connector>open_drive</connector>
-            <component>visualization</component>
-            <portbindingobject/>
-          </destination_connector_path>
-          <priority>0</priority>
-          <sync>true</sync>
-        </connection>
         <connection>
           <name>wheel_left._preprocess.wheel_left</name>
           <source_connector_path>
@@ -273,21 +304,6 @@
           <sync>true</sync>
         </connection>
         <connection>
-          <name>road_sign_map._localization.road_sign_map</name>
-          <source_connector_path>
-            <connector/>
-            <component>road_sign_map</component>
-            <portbindingobject/>
-          </source_connector_path>
-          <destination_connector_path>
-            <connector>road_sign_map</connector>
-            <component>localization</component>
-            <portbindingobject/>
-          </destination_connector_path>
-          <priority>0</priority>
-          <sync>true</sync>
-        </connection>
-        <connection>
           <name>preprocess.vehicle_speed_measured_speed_stream.</name>
           <source_connector_path>
             <connector>vehicle_speed</connector>
@@ -312,21 +328,6 @@
           <destination_connector_path>
             <connector>speed</connector>
             <component>localization</component>
-            <portbindingobject/>
-          </destination_connector_path>
-          <priority>0</priority>
-          <sync>true</sync>
-        </connection>
-        <connection>
-          <name>measured_speed_stream._decision.measured_speed</name>
-          <source_connector_path>
-            <connector/>
-            <component>measured_speed_stream</component>
-            <portbindingobject/>
-          </source_connector_path>
-          <destination_connector_path>
-            <connector>measured_speed</connector>
-            <component>decision</component>
             <portbindingobject/>
           </destination_connector_path>
           <priority>0</priority>
@@ -378,51 +379,6 @@
           <sync>true</sync>
         </connection>
         <connection>
-          <name>iner_meas_unit_stream._decision.iner_meas_unit</name>
-          <source_connector_path>
-            <connector/>
-            <component>iner_meas_unit_stream</component>
-            <portbindingobject/>
-          </source_connector_path>
-          <destination_connector_path>
-            <connector>iner_meas_unit</connector>
-            <component>decision</component>
-            <portbindingobject/>
-          </destination_connector_path>
-          <priority>0</priority>
-          <sync>true</sync>
-        </connection>
-        <connection>
-          <name>jury_struct._decision.jury_struct</name>
-          <source_connector_path>
-            <connector/>
-            <component>jury_struct</component>
-            <portbindingobject/>
-          </source_connector_path>
-          <destination_connector_path>
-            <connector>jury_struct</connector>
-            <component>decision</component>
-            <portbindingobject/>
-          </destination_connector_path>
-          <priority>0</priority>
-          <sync>true</sync>
-        </connection>
-        <connection>
-          <name>maneuver_list._decision.maneuver_list</name>
-          <source_connector_path>
-            <connector/>
-            <component>maneuver_list</component>
-            <portbindingobject/>
-          </source_connector_path>
-          <destination_connector_path>
-            <connector>maneuver_list</connector>
-            <component>decision</component>
-            <portbindingobject/>
-          </destination_connector_path>
-          <priority>0</priority>
-          <sync>true</sync>
-        </connection>
-        <connection>
           <name>preprocess.marker_road_sign_ext_road_sign_ext_stream.</name>
           <source_connector_path>
             <connector>marker_road_sign_ext</connector>
@@ -453,51 +409,6 @@
           <sync>true</sync>
         </connection>
         <connection>
-          <name>road_sign_ext_stream._decision.road_sign_ext</name>
-          <source_connector_path>
-            <connector/>
-            <component>road_sign_ext_stream</component>
-            <portbindingobject/>
-          </source_connector_path>
-          <destination_connector_path>
-            <connector>road_sign_ext</connector>
-            <component>decision</component>
-            <portbindingobject/>
-          </destination_connector_path>
-          <priority>0</priority>
-          <sync>true</sync>
-        </connection>
-        <connection>
-          <name>laserscanner._decision.laserscanner</name>
-          <source_connector_path>
-            <connector/>
-            <component>laserscanner</component>
-            <portbindingobject/>
-          </source_connector_path>
-          <destination_connector_path>
-            <connector>laserscanner</connector>
-            <component>decision</component>
-            <portbindingobject/>
-          </destination_connector_path>
-          <priority>0</priority>
-          <sync>true</sync>
-        </connection>
-        <connection>
-          <name>ultrasonic_struct._decision.ultrasonic_struct</name>
-          <source_connector_path>
-            <connector/>
-            <component>ultrasonic_struct</component>
-            <portbindingobject/>
-          </source_connector_path>
-          <destination_connector_path>
-            <connector>ultrasonic_struct</connector>
-            <component>decision</component>
-            <portbindingobject/>
-          </destination_connector_path>
-          <priority>0</priority>
-          <sync>true</sync>
-        </connection>
-        <connection>
           <name>control.trajectory_finished_trajectory_finished_stream.</name>
           <source_connector_path>
             <connector>trajectory_finished</connector>
@@ -507,21 +418,6 @@
           <destination_connector_path>
             <connector/>
             <component>trajectory_finished_stream</component>
-            <portbindingobject/>
-          </destination_connector_path>
-          <priority>0</priority>
-          <sync>true</sync>
-        </connection>
-        <connection>
-          <name>trajectory_finished_stream._decision.controller_feedback</name>
-          <source_connector_path>
-            <connector/>
-            <component>trajectory_finished_stream</component>
-            <portbindingobject/>
-          </source_connector_path>
-          <destination_connector_path>
-            <connector>controller_feedback</connector>
-            <component>decision</component>
             <portbindingobject/>
           </destination_connector_path>
           <priority>0</priority>
@@ -597,111 +493,6 @@
           <destination_connector_path>
             <connector/>
             <component>leverage_position_stream</component>
-            <portbindingobject/>
-          </destination_connector_path>
-          <priority>0</priority>
-          <sync>true</sync>
-        </connection>
-        <connection>
-          <name>leverage_position_stream._decision.controller_leverage_position</name>
-          <source_connector_path>
-            <connector/>
-            <component>leverage_position_stream</component>
-            <portbindingobject/>
-          </source_connector_path>
-          <destination_connector_path>
-            <connector>controller_leverage_position</connector>
-            <component>decision</component>
-            <portbindingobject/>
-          </destination_connector_path>
-          <priority>0</priority>
-          <sync>true</sync>
-        </connection>
-        <connection>
-          <name>decision.driver_struct_driver_struct_stream.</name>
-          <source_connector_path>
-            <connector>driver_struct</connector>
-            <component>decision</component>
-            <portbindingobject/>
-          </source_connector_path>
-          <destination_connector_path>
-            <connector/>
-            <component>driver_struct_stream</component>
-            <portbindingobject/>
-          </destination_connector_path>
-          <priority>0</priority>
-          <sync>true</sync>
-        </connection>
-        <connection>
-          <name>decision.turn_signal_left_turn_signal_left_stream.</name>
-          <source_connector_path>
-            <connector>turn_signal_left</connector>
-            <component>decision</component>
-            <portbindingobject/>
-          </source_connector_path>
-          <destination_connector_path>
-            <connector/>
-            <component>turn_signal_left_stream</component>
-            <portbindingobject/>
-          </destination_connector_path>
-          <priority>0</priority>
-          <sync>true</sync>
-        </connection>
-        <connection>
-          <name>decision.turn_signal_right_turn_signal_right_stream.</name>
-          <source_connector_path>
-            <connector>turn_signal_right</connector>
-            <component>decision</component>
-            <portbindingobject/>
-          </source_connector_path>
-          <destination_connector_path>
-            <connector/>
-            <component>turn_signal_right_stream</component>
-            <portbindingobject/>
-          </destination_connector_path>
-          <priority>0</priority>
-          <sync>true</sync>
-        </connection>
-        <connection>
-          <name>decision.hazard_light_hazard_light_stream.</name>
-          <source_connector_path>
-            <connector>hazard_light</connector>
-            <component>decision</component>
-            <portbindingobject/>
-          </source_connector_path>
-          <destination_connector_path>
-            <connector/>
-            <component>hazard_light_stream</component>
-            <portbindingobject/>
-          </destination_connector_path>
-          <priority>0</priority>
-          <sync>true</sync>
-        </connection>
-        <connection>
-          <name>decision.reverse_light_reverse_light_stream.</name>
-          <source_connector_path>
-            <connector>reverse_light</connector>
-            <component>decision</component>
-            <portbindingobject/>
-          </source_connector_path>
-          <destination_connector_path>
-            <connector/>
-            <component>reverse_light_stream</component>
-            <portbindingobject/>
-          </destination_connector_path>
-          <priority>0</priority>
-          <sync>true</sync>
-        </connection>
-        <connection>
-          <name>decision.brake_light_brake_light_stream.</name>
-          <source_connector_path>
-            <connector>brake_light</connector>
-            <component>decision</component>
-            <portbindingobject/>
-          </source_connector_path>
-          <destination_connector_path>
-            <connector/>
-            <component>brake_light_stream</component>
             <portbindingobject/>
           </destination_connector_path>
           <priority>0</priority>
@@ -798,21 +589,6 @@
           <sync>true</sync>
         </connection>
         <connection>
-          <name>decision.position_mux_position_mux_stream.</name>
-          <source_connector_path>
-            <connector>position_mux</connector>
-            <component>decision</component>
-            <portbindingobject/>
-          </source_connector_path>
-          <destination_connector_path>
-            <connector/>
-            <component>position_mux_stream</component>
-            <portbindingobject/>
-          </destination_connector_path>
-          <priority>0</priority>
-          <sync>true</sync>
-        </connection>
-        <connection>
           <name>position_mux_stream._localization.position_mux</name>
           <source_connector_path>
             <connector/>
@@ -858,36 +634,6 @@
           <sync>true</sync>
         </connection>
         <connection>
-          <name>preprocess.front_cam_undistorted_Sample Stream.</name>
-          <source_connector_path>
-            <connector>front_cam_undistorted</connector>
-            <component>preprocess</component>
-            <portbindingobject/>
-          </source_connector_path>
-          <destination_connector_path>
-            <connector/>
-            <component>front_cam_undistorted_stream</component>
-            <portbindingobject/>
-          </destination_connector_path>
-          <priority>0</priority>
-          <sync>true</sync>
-        </connection>
-        <connection>
-          <name>Sample Stream._localization.front_cam</name>
-          <source_connector_path>
-            <connector/>
-            <component>front_cam_undistorted_stream</component>
-            <portbindingobject/>
-          </source_connector_path>
-          <destination_connector_path>
-            <connector>front_cam</connector>
-            <component>localization</component>
-            <portbindingobject/>
-          </destination_connector_path>
-          <priority>0</priority>
-          <sync>true</sync>
-        </connection>
-        <connection>
           <name>front_cam._front_cam_stream.</name>
           <source_connector_path>
             <connector/>
@@ -897,21 +643,6 @@
           <destination_connector_path>
             <connector/>
             <component>front_cam_stream</component>
-            <portbindingobject/>
-          </destination_connector_path>
-          <priority>0</priority>
-          <sync>true</sync>
-        </connection>
-        <connection>
-          <name>front_cam_stream._decision.front_cam</name>
-          <source_connector_path>
-            <connector/>
-            <component>front_cam_stream</component>
-            <portbindingobject/>
-          </source_connector_path>
-          <destination_connector_path>
-            <connector>front_cam</connector>
-            <component>decision</component>
             <portbindingobject/>
           </destination_connector_path>
           <priority>0</priority>
@@ -957,21 +688,6 @@
           <destination_connector_path>
             <connector>rear_cam</connector>
             <component>preprocess</component>
-            <portbindingobject/>
-          </destination_connector_path>
-          <priority>0</priority>
-          <sync>true</sync>
-        </connection>
-        <connection>
-          <name>rear_cam_stream._decision.rear_cam</name>
-          <source_connector_path>
-            <connector/>
-            <component>rear_cam_stream</component>
-            <portbindingobject/>
-          </source_connector_path>
-          <destination_connector_path>
-            <connector>rear_cam</connector>
-            <component>decision</component>
             <portbindingobject/>
           </destination_connector_path>
           <priority>0</priority>
@@ -1038,36 +754,6 @@
           <sync>true</sync>
         </connection>
         <connection>
-          <name>confidence_rear_stream._decision.loc_confidence_rear</name>
-          <source_connector_path>
-            <connector/>
-            <component>confidence_rear_stream</component>
-            <portbindingobject/>
-          </source_connector_path>
-          <destination_connector_path>
-            <connector>loc_confidence_rear</connector>
-            <component>decision</component>
-            <portbindingobject/>
-          </destination_connector_path>
-          <priority>0</priority>
-          <sync>true</sync>
-        </connection>
-        <connection>
-          <name>confidence_front_stream._decision.loc_confidence_front</name>
-          <source_connector_path>
-            <connector/>
-            <component>confidence_front_stream</component>
-            <portbindingobject/>
-          </source_connector_path>
-          <destination_connector_path>
-            <connector>loc_confidence_front</connector>
-            <component>decision</component>
-            <portbindingobject/>
-          </destination_connector_path>
-          <priority>0</priority>
-          <sync>true</sync>
-        </connection>
-        <connection>
           <name>localization.pos_imu_position_stream.</name>
           <source_connector_path>
             <connector>pos_imu</connector>
@@ -1113,21 +799,6 @@
           <sync>true</sync>
         </connection>
         <connection>
-          <name>position_stream._decision.position</name>
-          <source_connector_path>
-            <connector/>
-            <component>position_stream</component>
-            <portbindingobject/>
-          </source_connector_path>
-          <destination_connector_path>
-            <connector>position</connector>
-            <component>decision</component>
-            <portbindingobject/>
-          </destination_connector_path>
-          <priority>0</priority>
-          <sync>true</sync>
-        </connection>
-        <connection>
           <name>position_stream._visualization.position</name>
           <source_connector_path>
             <connector/>
@@ -1137,21 +808,6 @@
           <destination_connector_path>
             <connector>position</connector>
             <component>visualization</component>
-            <portbindingobject/>
-          </destination_connector_path>
-          <priority>0</priority>
-          <sync>true</sync>
-        </connection>
-        <connection>
-          <name>decision.trajectories_trajectories_stream.</name>
-          <source_connector_path>
-            <connector>trajectories</connector>
-            <component>decision</component>
-            <portbindingobject/>
-          </source_connector_path>
-          <destination_connector_path>
-            <connector/>
-            <component>trajectories_stream</component>
             <portbindingobject/>
           </destination_connector_path>
           <priority>0</priority>
@@ -1173,6 +829,456 @@
           <sync>true</sync>
         </connection>
         <connection>
+          <name>desired_speed_stream._control.desired_speed</name>
+          <source_connector_path>
+            <connector/>
+            <component>desired_speed_stream</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector>desired_speed</connector>
+            <component>control</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>rear_cam_undistorted_stream._vision.rear_cam</name>
+          <source_connector_path>
+            <connector/>
+            <component>rear_cam_undistorted_stream</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector>rear_cam</connector>
+            <component>vision</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>front_cam_undistorted_stream._vision.front_cam</name>
+          <source_connector_path>
+            <connector/>
+            <component>front_cam_undistorted_stream</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector>front_cam</connector>
+            <component>vision</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>front_cam_undistorted_stream._localization.front_cam</name>
+          <source_connector_path>
+            <connector/>
+            <component>front_cam_undistorted_stream</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector>front_cam</connector>
+            <component>localization</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>preprocess.front_cam_undistorted_front_cam_undistorted_stream.</name>
+          <source_connector_path>
+            <connector>front_cam_undistorted</connector>
+            <component>preprocess</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector/>
+            <component>front_cam_undistorted_stream</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>maneuver_list._maneuver_list_stream.</name>
+          <source_connector_path>
+            <connector/>
+            <component>maneuver_list</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector/>
+            <component>maneuver_list_stream</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>open_drive_map._open_drive_map_stream.</name>
+          <source_connector_path>
+            <connector/>
+            <component>open_drive_map</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector/>
+            <component>open_drive_map_stream</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>road_sign_map._road_sign_map_stream.</name>
+          <source_connector_path>
+            <connector/>
+            <component>road_sign_map</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector/>
+            <component>road_sign_map_stream</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>open_drive_map_stream._visualization.open_drive</name>
+          <source_connector_path>
+            <connector/>
+            <component>open_drive_map_stream</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector>open_drive</connector>
+            <component>visualization</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>road_sign_map_stream._localization.road_sign_map</name>
+          <source_connector_path>
+            <connector/>
+            <component>road_sign_map_stream</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector>road_sign_map</connector>
+            <component>localization</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>maneuver_list_stream._LITD JuryFileCopy.maneuver</name>
+          <source_connector_path>
+            <connector/>
+            <component>maneuver_list_stream</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector>maneuver</connector>
+            <component>LITD JuryFileCopy</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>road_sign_map_stream._LITD JuryFileCopy.roadsigns</name>
+          <source_connector_path>
+            <connector/>
+            <component>road_sign_map_stream</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector>roadsigns</connector>
+            <component>LITD JuryFileCopy</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>open_drive_map_stream._LITD JuryFileCopy.opendrive</name>
+          <source_connector_path>
+            <connector/>
+            <component>open_drive_map_stream</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector>opendrive</connector>
+            <component>LITD JuryFileCopy</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>LITD JuryFileCopy.update_jury_update_stream.</name>
+          <source_connector_path>
+            <connector>update</connector>
+            <component>LITD JuryFileCopy</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector/>
+            <component>jury_update_stream</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>measured_speed_stream._decision.measured_speed</name>
+          <source_connector_path>
+            <connector/>
+            <component>measured_speed_stream</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector>measured_speed</connector>
+            <component>decision</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>iner_meas_unit_stream._decision.iner_meas_unit</name>
+          <source_connector_path>
+            <connector/>
+            <component>iner_meas_unit_stream</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector>iner_meas_unit</connector>
+            <component>decision</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>jury_struct._decision.jury_struct</name>
+          <source_connector_path>
+            <connector/>
+            <component>jury_struct</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector>jury_struct</connector>
+            <component>decision</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>laserscanner._decision.laserscanner</name>
+          <source_connector_path>
+            <connector/>
+            <component>laserscanner</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector>laserscanner</connector>
+            <component>decision</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>ultrasonic_struct._decision.ultrasonic_struct</name>
+          <source_connector_path>
+            <connector/>
+            <component>ultrasonic_struct</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector>ultrasonic_struct</connector>
+            <component>decision</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>trajectory_finished_stream._decision.controller_feedback</name>
+          <source_connector_path>
+            <connector/>
+            <component>trajectory_finished_stream</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector>controller_feedback</connector>
+            <component>decision</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>confidence_front_stream._decision.loc_confidence_front</name>
+          <source_connector_path>
+            <connector/>
+            <component>confidence_front_stream</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector>loc_confidence_front</connector>
+            <component>decision</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>confidence_rear_stream._decision.loc_confidence_rear</name>
+          <source_connector_path>
+            <connector/>
+            <component>confidence_rear_stream</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector>loc_confidence_rear</connector>
+            <component>decision</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>position_stream._decision.position</name>
+          <source_connector_path>
+            <connector/>
+            <component>position_stream</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector>position</connector>
+            <component>decision</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>leverage_position_stream._decision.controller_leverage_position</name>
+          <source_connector_path>
+            <connector/>
+            <component>leverage_position_stream</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector>controller_leverage_position</connector>
+            <component>decision</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>road_sign_ext_stream._decision.road_sign_ext</name>
+          <source_connector_path>
+            <connector/>
+            <component>road_sign_ext_stream</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector>road_sign_ext</connector>
+            <component>decision</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>maneuver_list_stream._decision.maneuver_list</name>
+          <source_connector_path>
+            <connector/>
+            <component>maneuver_list_stream</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector>maneuver_list</connector>
+            <component>decision</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>jury_update_stream._decision.jury_data_update</name>
+          <source_connector_path>
+            <connector/>
+            <component>jury_update_stream</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector>jury_data_update</connector>
+            <component>decision</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>steering_stream._decision.steering_servo</name>
+          <source_connector_path>
+            <connector/>
+            <component>steering_stream</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector>steering_servo</connector>
+            <component>decision</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>decision.trajectories_trajectories_stream.</name>
+          <source_connector_path>
+            <connector>trajectories</connector>
+            <component>decision</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector/>
+            <component>trajectories_stream</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>decision.position_mux_position_mux_stream.</name>
+          <source_connector_path>
+            <connector>position_mux</connector>
+            <component>decision</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector/>
+            <component>position_mux_stream</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
           <name>decision.desired_speed_desired_speed_stream.</name>
           <source_connector_path>
             <connector>desired_speed</connector>
@@ -1188,15 +1294,90 @@
           <sync>true</sync>
         </connection>
         <connection>
-          <name>desired_speed_stream._control.desired_speed</name>
+          <name>decision.brake_light_brake_light_stream.</name>
           <source_connector_path>
-            <connector/>
-            <component>desired_speed_stream</component>
+            <connector>brake_light</connector>
+            <component>decision</component>
             <portbindingobject/>
           </source_connector_path>
           <destination_connector_path>
-            <connector>desired_speed</connector>
-            <component>control</component>
+            <connector/>
+            <component>brake_light_stream</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>decision.reverse_light_reverse_light_stream.</name>
+          <source_connector_path>
+            <connector>reverse_light</connector>
+            <component>decision</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector/>
+            <component>reverse_light_stream</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>decision.hazard_light_hazard_light_stream.</name>
+          <source_connector_path>
+            <connector>hazard_light</connector>
+            <component>decision</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector/>
+            <component>hazard_light_stream</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>decision.turn_signal_right_turn_signal_right_stream.</name>
+          <source_connector_path>
+            <connector>turn_signal_right</connector>
+            <component>decision</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector/>
+            <component>turn_signal_right_stream</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>decision.turn_signal_left_turn_signal_left_stream.</name>
+          <source_connector_path>
+            <connector>turn_signal_left</connector>
+            <component>decision</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector/>
+            <component>turn_signal_left_stream</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>decision.driver_struct_driver_struct_stream.</name>
+          <source_connector_path>
+            <connector>driver_struct</connector>
+            <component>decision</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector/>
+            <component>driver_struct_stream</component>
             <portbindingobject/>
           </destination_connector_path>
           <priority>0</priority>
@@ -1535,7 +1716,11 @@
               <name>outConfidence</name>
             </pin>
           </output_pins>
-          <runners/>
+          <runners>
+            <runner>
+              <name>cv_thread</name>
+            </runner>
+          </runners>
           <init_priority>0</init_priority>
           <deactivated>true</deactivated>
           <binding_servers/>
@@ -1560,7 +1745,11 @@
               <name>outConfidence</name>
             </pin>
           </output_pins>
-          <runners/>
+          <runners>
+            <runner>
+              <name>cv_thread</name>
+            </runner>
+          </runners>
           <init_priority>0</init_priority>
           <deactivated>false</deactivated>
           <binding_servers/>
@@ -1711,7 +1900,16 @@
           <class_id>default_sample_stream.streaming.adtf.cid</class_id>
         </sample_stream>
       </sample_streams>
-      <active_runners/>
+      <active_runners>
+        <active_runner>
+          <name>FineLoc Front Thread</name>
+          <class_id>default_thread_runner.streaming.adtf.cid</class_id>
+        </active_runner>
+        <active_runner>
+          <name>FineLoc Rear Thread</name>
+          <class_id>default_thread_runner.streaming.adtf.cid</class_id>
+        </active_runner>
+      </active_runners>
       <binding_proxys/>
       <connections>
         <connection>
@@ -2325,6 +2523,37 @@
           <priority>0</priority>
           <sync>true</sync>
         </connection>
+        <connection>
+          <name>FineLoc Back Thread._LITD FineLocalization Rear.cv_thread</name>
+          <source_connector_path>
+            <connector/>
+            <component>FineLoc Rear Thread</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector>cv_thread</connector>
+            <component>LITD FineLocalization Rear</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <deactivated>true</deactivated>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>FineLoc Front Thread._LITD FineLocalization Front.cv_thread</name>
+          <source_connector_path>
+            <connector/>
+            <component>FineLoc Front Thread</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector>cv_thread</connector>
+            <component>LITD FineLocalization Front</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
       </connections>
       <streaming_interface_in_ports/>
       <streaming_interface_out_ports/>
@@ -2333,12 +2562,50 @@
       <name>decision_graph</name>
       <filters>
         <filter>
-          <name>LITD ZMQ Alarm Classifier</name>
-          <class_id>litd_zmq_alarm_clf.filter.user.aadc.cid</class_id>
-          <input_pins/>
+          <name>Driver Module</name>
+          <class_id>driver_module.filter.demo.aadc.cid</class_id>
+          <input_pins>
+            <pin>
+              <name>maneuver_list</name>
+            </pin>
+            <pin>
+              <name>jury_struct</name>
+            </pin>
+          </input_pins>
           <output_pins>
             <pin>
-              <name>alarm</name>
+              <name>driver_struct</name>
+            </pin>
+          </output_pins>
+          <runners/>
+          <init_priority>0</init_priority>
+          <deactivated>false</deactivated>
+          <binding_servers/>
+          <binding_clients/>
+        </filter>
+        <filter>
+          <name>LITD ZMQ Decision Jury</name>
+          <class_id>litd_zmq_decision_jury.filter.user.aadc.cid</class_id>
+          <input_pins>
+            <pin>
+              <name>jury</name>
+            </pin>
+            <pin>
+              <name>jury_data_update</name>
+            </pin>
+            <pin>
+              <name>confidence_front</name>
+            </pin>
+            <pin>
+              <name>confidence_rear</name>
+            </pin>
+          </input_pins>
+          <output_pins>
+            <pin>
+              <name>position_mux</name>
+            </pin>
+            <pin>
+              <name>driver</name>
             </pin>
           </output_pins>
           <runners>
@@ -2346,7 +2613,7 @@
               <name>zmq_thread</name>
             </runner>
             <runner>
-              <name>signal_trigger</name>
+              <name>timer_trigger</name>
             </runner>
           </runners>
           <init_priority>0</init_priority>
@@ -2354,26 +2621,63 @@
           <binding_clients/>
         </filter>
         <filter>
-          <name>LITD ZMQ Decision</name>
-          <class_id>litd_zmq_decision.filter.user.aadc.cid</class_id>
+          <name>LITD ZMQ Alarm Classifier</name>
+          <class_id>litd_zmq_alarm_clf.filter.user.aadc.cid</class_id>
+          <input_pins/>
+          <output_pins>
+            <pin>
+              <name>siren</name>
+            </pin>
+          </output_pins>
+          <runners>
+            <runner>
+              <name>zmq_thread</name>
+            </runner>
+            <runner>
+              <name>timer_trigger</name>
+            </runner>
+          </runners>
+          <init_priority>0</init_priority>
+          <binding_servers/>
+          <binding_clients/>
+        </filter>
+        <filter>
+          <name>LITD ZMQ Lidar Break</name>
+          <class_id>litd_zmq_lidar_Break.filter.user.aadc.cid</class_id>
           <input_pins>
             <pin>
-              <name>jury</name>
+              <name>lidar</name>
             </pin>
             <pin>
-              <name>yolo_front</name>
+              <name>speed</name>
             </pin>
             <pin>
-              <name>yolo_back</name>
+              <name>steering_servo</name>
             </pin>
+          </input_pins>
+          <output_pins>
+            <pin>
+              <name>break</name>
+            </pin>
+          </output_pins>
+          <runners>
+            <runner>
+              <name>zmq_thread</name>
+            </runner>
+            <runner>
+              <name>lidar_trigger</name>
+            </runner>
+          </runners>
+          <init_priority>0</init_priority>
+          <binding_servers/>
+          <binding_clients/>
+        </filter>
+        <filter>
+          <name>LITD ZMQ Decision Sensors</name>
+          <class_id>litd_zmq_decision_sensors.filter.user.aadc.cid</class_id>
+          <input_pins>
             <pin>
               <name>position</name>
-            </pin>
-            <pin>
-              <name>confidence_front</name>
-            </pin>
-            <pin>
-              <name>confidence_rear</name>
             </pin>
             <pin>
               <name>measured_speed</name>
@@ -2399,19 +2703,16 @@
             <pin>
               <name>siren</name>
             </pin>
+            <pin>
+              <name>lidar_break</name>
+            </pin>
           </input_pins>
           <output_pins>
-            <pin>
-              <name>jury_states</name>
-            </pin>
             <pin>
               <name>desired_speed</name>
             </pin>
             <pin>
               <name>trajectories</name>
-            </pin>
-            <pin>
-              <name>position_mux</name>
             </pin>
             <pin>
               <name>turn_signal_right</name>
@@ -2434,11 +2735,10 @@
               <name>zmq_thread</name>
             </runner>
             <runner>
-              <name>position_trigger</name>
+              <name>timer_trigger</name>
             </runner>
           </runners>
           <init_priority>0</init_priority>
-          <deactivated>true</deactivated>
           <binding_servers/>
           <binding_clients/>
         </filter>
@@ -2456,74 +2756,16 @@
               <name>zmq_thread</name>
             </runner>
             <runner>
-              <name>signal_trigger</name>
+              <name>timer_trigger</name>
             </runner>
           </runners>
           <init_priority>0</init_priority>
           <binding_servers/>
           <binding_clients/>
         </filter>
-        <filter>
-          <name>Object Detection Front</name>
-          <class_id>object_detection.filter.demo.aadc.cid</class_id>
-          <input_pins>
-            <pin>
-              <name>input</name>
-            </pin>
-          </input_pins>
-          <output_pins/>
-          <runners/>
-          <init_priority>0</init_priority>
-          <deactivated>true</deactivated>
-          <binding_servers/>
-          <binding_clients/>
-        </filter>
-        <filter>
-          <name>Driver Module</name>
-          <class_id>driver_module.filter.demo.aadc.cid</class_id>
-          <input_pins>
-            <pin>
-              <name>maneuver_list</name>
-            </pin>
-            <pin>
-              <name>jury_struct</name>
-            </pin>
-          </input_pins>
-          <output_pins>
-            <pin>
-              <name>driver_struct</name>
-            </pin>
-          </output_pins>
-          <runners/>
-          <init_priority>0</init_priority>
-          <deactivated>false</deactivated>
-          <binding_servers/>
-          <binding_clients/>
-        </filter>
-        <filter>
-          <name>Object Detection Rear</name>
-          <class_id>object_detection.filter.demo.aadc.cid</class_id>
-          <input_pins>
-            <pin>
-              <name>input</name>
-            </pin>
-          </input_pins>
-          <output_pins/>
-          <runners/>
-          <init_priority>0</init_priority>
-          <deactivated>true</deactivated>
-          <binding_servers/>
-          <binding_clients/>
-        </filter>
       </filters>
       <subgraphs/>
       <input_data_ports>
-        <data_port>
-          <name>front_cam</name>
-        </data_port>
-        <data_port>
-          <name>rear_cam</name>
-        </data_port>
         <data_port>
           <name>measured_speed</name>
         </data_port>
@@ -2559,6 +2801,12 @@
         </data_port>
         <data_port>
           <name>maneuver_list</name>
+        </data_port>
+        <data_port>
+          <name>jury_data_update</name>
+        </data_port>
+        <data_port>
+          <name>steering_servo</name>
         </data_port>
       </input_data_ports>
       <output_data_ports>
@@ -2602,7 +2850,7 @@
           <class_id>default_sample_stream.streaming.adtf.cid</class_id>
         </sample_stream>
         <sample_stream>
-          <name>alarm_stream</name>
+          <name>siren_stream</name>
           <class_id>default_sample_stream.streaming.adtf.cid</class_id>
         </sample_stream>
         <sample_stream>
@@ -2639,18 +2887,6 @@
         </sample_stream>
         <sample_stream>
           <name>controller_feedback_stream</name>
-          <class_id>default_sample_stream.streaming.adtf.cid</class_id>
-        </sample_stream>
-        <sample_stream>
-          <name>front_cam_stream</name>
-          <class_id>default_sample_stream.streaming.adtf.cid</class_id>
-        </sample_stream>
-        <sample_stream>
-          <name>rear_cam_stream</name>
-          <class_id>default_sample_stream.streaming.adtf.cid</class_id>
-        </sample_stream>
-        <sample_stream>
-          <name>yolo_front_stream</name>
           <class_id>default_sample_stream.streaming.adtf.cid</class_id>
         </sample_stream>
         <sample_stream>
@@ -2694,15 +2930,27 @@
           <class_id>default_sample_stream.streaming.adtf.cid</class_id>
         </sample_stream>
         <sample_stream>
-          <name>driver_struct_strema</name>
+          <name>driver_struct_driver_stream</name>
           <class_id>default_sample_stream.streaming.adtf.cid</class_id>
         </sample_stream>
         <sample_stream>
-          <name>yolo_back_stream</name>
+          <name>maneuver_list_stream_</name>
           <class_id>default_sample_stream.streaming.adtf.cid</class_id>
         </sample_stream>
         <sample_stream>
-          <name>maneuver_list_stream</name>
+          <name>driver_struct_stream</name>
+          <class_id>default_sample_stream.streaming.adtf.cid</class_id>
+        </sample_stream>
+        <sample_stream>
+          <name>lidar_break_stream</name>
+          <class_id>default_sample_stream.streaming.adtf.cid</class_id>
+        </sample_stream>
+        <sample_stream>
+          <name>jury_data_update_stream</name>
+          <class_id>default_sample_stream.streaming.adtf.cid</class_id>
+        </sample_stream>
+        <sample_stream>
+          <name>steering_servo_stream</name>
           <class_id>default_sample_stream.streaming.adtf.cid</class_id>
         </sample_stream>
       </sample_streams>
@@ -2712,7 +2960,7 @@
           <class_id>default_thread_runner.streaming.adtf.cid</class_id>
         </active_runner>
         <active_runner>
-          <name>Decision Thread</name>
+          <name>Jury Thread</name>
           <class_id>default_thread_runner.streaming.adtf.cid</class_id>
         </active_runner>
         <active_runner>
@@ -2728,118 +2976,24 @@
           <class_id>default_timer_runner.streaming.adtf.cid</class_id>
         </active_runner>
         <active_runner>
-          <name>Decision Watchdog</name>
+          <name>Jury Timer</name>
           <class_id>default_timer_runner.streaming.adtf.cid</class_id>
+        </active_runner>
+        <active_runner>
+          <name>Sensors Thread</name>
+          <class_id>default_thread_runner.streaming.adtf.cid</class_id>
+        </active_runner>
+        <active_runner>
+          <name>Sensors Timer</name>
+          <class_id>default_timer_runner.streaming.adtf.cid</class_id>
+        </active_runner>
+        <active_runner>
+          <name>Lidar Break Thread</name>
+          <class_id>default_thread_runner.streaming.adtf.cid</class_id>
         </active_runner>
       </active_runners>
       <binding_proxys/>
       <connections>
-        <connection>
-          <name>Thread Runner._LITD ZMQ Alarm Classifier.zmq_thread</name>
-          <source_connector_path>
-            <connector/>
-            <component>Alarm Thread</component>
-            <portbindingobject/>
-          </source_connector_path>
-          <destination_connector_path>
-            <connector>zmq_thread</connector>
-            <component>LITD ZMQ Alarm Classifier</component>
-            <portbindingobject/>
-          </destination_connector_path>
-          <priority>0</priority>
-          <sync>true</sync>
-        </connection>
-        <connection>
-          <name>Timer Runner._LITD ZMQ Alarm Classifier.signal_trigger</name>
-          <source_connector_path>
-            <connector/>
-            <component>Alarm Timer</component>
-            <portbindingobject/>
-          </source_connector_path>
-          <destination_connector_path>
-            <connector>signal_trigger</connector>
-            <component>LITD ZMQ Alarm Classifier</component>
-            <portbindingobject/>
-          </destination_connector_path>
-          <priority>0</priority>
-          <sync>true</sync>
-        </connection>
-        <connection>
-          <name>Thread Runner_1._LITD ZMQ Decision.zmq_thread</name>
-          <source_connector_path>
-            <connector/>
-            <component>Decision Thread</component>
-            <portbindingobject/>
-          </source_connector_path>
-          <destination_connector_path>
-            <connector>zmq_thread</connector>
-            <component>LITD ZMQ Decision</component>
-            <portbindingobject/>
-          </destination_connector_path>
-          <priority>0</priority>
-          <deactivated>true</deactivated>
-          <sync>true</sync>
-        </connection>
-        <connection>
-          <name>Thread Runner._LITD ZMQ Trajectory Template.zmq_thread</name>
-          <source_connector_path>
-            <connector/>
-            <component>Trajectory Thread</component>
-            <portbindingobject/>
-          </source_connector_path>
-          <destination_connector_path>
-            <connector>zmq_thread</connector>
-            <component>LITD ZMQ Trajectory Template</component>
-            <portbindingobject/>
-          </destination_connector_path>
-          <priority>0</priority>
-          <sync>true</sync>
-        </connection>
-        <connection>
-          <name>Trajectory Timer._LITD ZMQ Trajectory Template.signal_trigger</name>
-          <source_connector_path>
-            <connector/>
-            <component>Trajectory Timer</component>
-            <portbindingobject/>
-          </source_connector_path>
-          <destination_connector_path>
-            <connector>signal_trigger</connector>
-            <component>LITD ZMQ Trajectory Template</component>
-            <portbindingobject/>
-          </destination_connector_path>
-          <priority>0</priority>
-          <sync>true</sync>
-        </connection>
-        <connection>
-          <name>LITD ZMQ Alarm Classifier.alarm_alarm_stream.</name>
-          <source_connector_path>
-            <connector>alarm</connector>
-            <component>LITD ZMQ Alarm Classifier</component>
-            <portbindingobject/>
-          </source_connector_path>
-          <destination_connector_path>
-            <connector/>
-            <component>alarm_stream</component>
-            <portbindingobject/>
-          </destination_connector_path>
-          <priority>0</priority>
-          <sync>true</sync>
-        </connection>
-        <connection>
-          <name>LITD ZMQ Trajectory Template.trajectory_array_trajectories_zmq_stream.</name>
-          <source_connector_path>
-            <connector>trajectory_array</connector>
-            <component>LITD ZMQ Trajectory Template</component>
-            <portbindingobject/>
-          </source_connector_path>
-          <destination_connector_path>
-            <connector/>
-            <component>trajectories_zmq_stream</component>
-            <portbindingobject/>
-          </destination_connector_path>
-          <priority>0</priority>
-          <sync>true</sync>
-        </connection>
         <connection>
           <name>trajectories_zmq_stream._trajectories.</name>
           <source_connector_path>
@@ -2874,7 +3028,7 @@
           <name>driver_struct_strema._driver_struct.</name>
           <source_connector_path>
             <connector/>
-            <component>driver_struct_strema</component>
+            <component>driver_struct_driver_stream</component>
             <portbindingobject/>
           </source_connector_path>
           <destination_connector_path>
@@ -2883,22 +3037,6 @@
             <portbindingobject/>
           </destination_connector_path>
           <priority>0</priority>
-          <sync>true</sync>
-        </connection>
-        <connection>
-          <name>Decision Watchdog._LITD ZMQ Decision.position_trigger</name>
-          <source_connector_path>
-            <connector/>
-            <component>Decision Watchdog</component>
-            <portbindingobject/>
-          </source_connector_path>
-          <destination_connector_path>
-            <connector>position_trigger</connector>
-            <component>LITD ZMQ Decision</component>
-            <portbindingobject/>
-          </destination_connector_path>
-          <priority>0</priority>
-          <deactivated>true</deactivated>
           <sync>true</sync>
         </connection>
         <connection>
@@ -2914,38 +3052,6 @@
             <portbindingobject/>
           </destination_connector_path>
           <priority>0</priority>
-          <sync>true</sync>
-        </connection>
-        <connection>
-          <name>jury_struct_stream._LITD ZMQ Decision.jury</name>
-          <source_connector_path>
-            <connector/>
-            <component>jury_struct_stream</component>
-            <portbindingobject/>
-          </source_connector_path>
-          <destination_connector_path>
-            <connector>jury</connector>
-            <component>LITD ZMQ Decision</component>
-            <portbindingobject/>
-          </destination_connector_path>
-          <priority>0</priority>
-          <deactivated>true</deactivated>
-          <sync>true</sync>
-        </connection>
-        <connection>
-          <name>position_stream._LITD ZMQ Decision.position</name>
-          <source_connector_path>
-            <connector/>
-            <component>position_stream</component>
-            <portbindingobject/>
-          </source_connector_path>
-          <destination_connector_path>
-            <connector>position</connector>
-            <component>LITD ZMQ Decision</component>
-            <portbindingobject/>
-          </destination_connector_path>
-          <priority>0</priority>
-          <deactivated>true</deactivated>
           <sync>true</sync>
         </connection>
         <connection>
@@ -3006,54 +3112,6 @@
             <portbindingobject/>
           </destination_connector_path>
           <priority>0</priority>
-          <sync>true</sync>
-        </connection>
-        <connection>
-          <name>loc_confidence_front_stream._LITD ZMQ Decision.confidence_front</name>
-          <source_connector_path>
-            <connector/>
-            <component>loc_confidence_front_stream</component>
-            <portbindingobject/>
-          </source_connector_path>
-          <destination_connector_path>
-            <connector>confidence_front</connector>
-            <component>LITD ZMQ Decision</component>
-            <portbindingobject/>
-          </destination_connector_path>
-          <priority>0</priority>
-          <deactivated>true</deactivated>
-          <sync>true</sync>
-        </connection>
-        <connection>
-          <name>loc_confidence_rear_stream._LITD ZMQ Decision.confidence_rear</name>
-          <source_connector_path>
-            <connector/>
-            <component>loc_confidence_rear_stream</component>
-            <portbindingobject/>
-          </source_connector_path>
-          <destination_connector_path>
-            <connector>confidence_rear</connector>
-            <component>LITD ZMQ Decision</component>
-            <portbindingobject/>
-          </destination_connector_path>
-          <priority>0</priority>
-          <deactivated>true</deactivated>
-          <sync>true</sync>
-        </connection>
-        <connection>
-          <name>measured_speed_stream._LITD ZMQ Decision.measured_speed</name>
-          <source_connector_path>
-            <connector/>
-            <component>measured_speed_stream</component>
-            <portbindingobject/>
-          </source_connector_path>
-          <destination_connector_path>
-            <connector>measured_speed</connector>
-            <component>LITD ZMQ Decision</component>
-            <portbindingobject/>
-          </destination_connector_path>
-          <priority>0</priority>
-          <deactivated>true</deactivated>
           <sync>true</sync>
         </connection>
         <connection>
@@ -3147,260 +3205,6 @@
           <sync>true</sync>
         </connection>
         <connection>
-          <name>road_sign_ext_stream._LITD ZMQ Decision.signs</name>
-          <source_connector_path>
-            <connector/>
-            <component>road_sign_ext_stream</component>
-            <portbindingobject/>
-          </source_connector_path>
-          <destination_connector_path>
-            <connector>signs</connector>
-            <component>LITD ZMQ Decision</component>
-            <portbindingobject/>
-          </destination_connector_path>
-          <priority>0</priority>
-          <deactivated>true</deactivated>
-          <sync>true</sync>
-        </connection>
-        <connection>
-          <name>laserscanner_stream._LITD ZMQ Decision.lidar</name>
-          <source_connector_path>
-            <connector/>
-            <component>laserscanner_stream</component>
-            <portbindingobject/>
-          </source_connector_path>
-          <destination_connector_path>
-            <connector>lidar</connector>
-            <component>LITD ZMQ Decision</component>
-            <portbindingobject/>
-          </destination_connector_path>
-          <priority>0</priority>
-          <deactivated>true</deactivated>
-          <sync>true</sync>
-        </connection>
-        <connection>
-          <name>ultrasonic_stream._LITD ZMQ Decision.ultrasonic</name>
-          <source_connector_path>
-            <connector/>
-            <component>ultrasonic_stream</component>
-            <portbindingobject/>
-          </source_connector_path>
-          <destination_connector_path>
-            <connector>ultrasonic</connector>
-            <component>LITD ZMQ Decision</component>
-            <portbindingobject/>
-          </destination_connector_path>
-          <priority>0</priority>
-          <deactivated>true</deactivated>
-          <sync>true</sync>
-        </connection>
-        <connection>
-          <name>iner_meas_unit_stream._LITD ZMQ Decision.imu</name>
-          <source_connector_path>
-            <connector/>
-            <component>iner_meas_unit_stream</component>
-            <portbindingobject/>
-          </source_connector_path>
-          <destination_connector_path>
-            <connector>imu</connector>
-            <component>LITD ZMQ Decision</component>
-            <portbindingobject/>
-          </destination_connector_path>
-          <priority>0</priority>
-          <deactivated>true</deactivated>
-          <sync>true</sync>
-        </connection>
-        <connection>
-          <name>controller_leverage_position_stream._LITD ZMQ Decision.controller_leverage</name>
-          <source_connector_path>
-            <connector/>
-            <component>controller_leverage_position_stream</component>
-            <portbindingobject/>
-          </source_connector_path>
-          <destination_connector_path>
-            <connector>controller_leverage</connector>
-            <component>LITD ZMQ Decision</component>
-            <portbindingobject/>
-          </destination_connector_path>
-          <priority>0</priority>
-          <deactivated>true</deactivated>
-          <sync>true</sync>
-        </connection>
-        <connection>
-          <name>controller_feedback_stream._LITD ZMQ Decision.controller_feedback</name>
-          <source_connector_path>
-            <connector/>
-            <component>controller_feedback_stream</component>
-            <portbindingobject/>
-          </source_connector_path>
-          <destination_connector_path>
-            <connector>controller_feedback</connector>
-            <component>LITD ZMQ Decision</component>
-            <portbindingobject/>
-          </destination_connector_path>
-          <priority>0</priority>
-          <deactivated>true</deactivated>
-          <sync>true</sync>
-        </connection>
-        <connection>
-          <name>alarm_stream._LITD ZMQ Decision.siren</name>
-          <source_connector_path>
-            <connector/>
-            <component>alarm_stream</component>
-            <portbindingobject/>
-          </source_connector_path>
-          <destination_connector_path>
-            <connector>siren</connector>
-            <component>LITD ZMQ Decision</component>
-            <portbindingobject/>
-          </destination_connector_path>
-          <priority>0</priority>
-          <deactivated>true</deactivated>
-          <sync>true</sync>
-        </connection>
-        <connection>
-          <name>front_cam._front_cam_stream.</name>
-          <source_connector_path>
-            <connector/>
-            <component>front_cam</component>
-            <portbindingobject/>
-          </source_connector_path>
-          <destination_connector_path>
-            <connector/>
-            <component>front_cam_stream</component>
-            <portbindingobject/>
-          </destination_connector_path>
-          <priority>0</priority>
-          <sync>true</sync>
-        </connection>
-        <connection>
-          <name>rear_cam._rear_cam_stream.</name>
-          <source_connector_path>
-            <connector/>
-            <component>rear_cam</component>
-            <portbindingobject/>
-          </source_connector_path>
-          <destination_connector_path>
-            <connector/>
-            <component>rear_cam_stream</component>
-            <portbindingobject/>
-          </destination_connector_path>
-          <priority>0</priority>
-          <sync>true</sync>
-        </connection>
-        <connection>
-          <name>front_cam_stream._Object Detection Front.input</name>
-          <source_connector_path>
-            <connector/>
-            <component>front_cam_stream</component>
-            <portbindingobject/>
-          </source_connector_path>
-          <destination_connector_path>
-            <connector>input</connector>
-            <component>Object Detection Front</component>
-            <portbindingobject/>
-          </destination_connector_path>
-          <priority>0</priority>
-          <deactivated>true</deactivated>
-          <sync>true</sync>
-        </connection>
-        <connection>
-          <name>rear_cam_stream._Object Detection Rear.input</name>
-          <source_connector_path>
-            <connector/>
-            <component>rear_cam_stream</component>
-            <portbindingobject/>
-          </source_connector_path>
-          <destination_connector_path>
-            <connector>input</connector>
-            <component>Object Detection Rear</component>
-            <portbindingobject/>
-          </destination_connector_path>
-          <priority>0</priority>
-          <deactivated>true</deactivated>
-          <sync>true</sync>
-        </connection>
-        <connection>
-          <name>yolo_back_stream._LITD ZMQ Decision.yolo_back</name>
-          <source_connector_path>
-            <connector/>
-            <component>yolo_back_stream</component>
-            <portbindingobject/>
-          </source_connector_path>
-          <destination_connector_path>
-            <connector>yolo_back</connector>
-            <component>LITD ZMQ Decision</component>
-            <portbindingobject/>
-          </destination_connector_path>
-          <priority>0</priority>
-          <deactivated>true</deactivated>
-          <sync>true</sync>
-        </connection>
-        <connection>
-          <name>yolo_front_stream._LITD ZMQ Decision.yolo_front</name>
-          <source_connector_path>
-            <connector/>
-            <component>yolo_front_stream</component>
-            <portbindingobject/>
-          </source_connector_path>
-          <destination_connector_path>
-            <connector>yolo_front</connector>
-            <component>LITD ZMQ Decision</component>
-            <portbindingobject/>
-          </destination_connector_path>
-          <priority>0</priority>
-          <deactivated>true</deactivated>
-          <sync>true</sync>
-        </connection>
-        <connection>
-          <name>LITD ZMQ Decision.desired_speed_desired_speed_stream.</name>
-          <source_connector_path>
-            <connector>desired_speed</connector>
-            <component>LITD ZMQ Decision</component>
-            <portbindingobject/>
-          </source_connector_path>
-          <destination_connector_path>
-            <connector/>
-            <component>desired_speed_stream</component>
-            <portbindingobject/>
-          </destination_connector_path>
-          <priority>0</priority>
-          <deactivated>true</deactivated>
-          <sync>true</sync>
-        </connection>
-        <connection>
-          <name>LITD ZMQ Decision.trajectories_trajectories_stream.</name>
-          <source_connector_path>
-            <connector>trajectories</connector>
-            <component>LITD ZMQ Decision</component>
-            <portbindingobject/>
-          </source_connector_path>
-          <destination_connector_path>
-            <connector/>
-            <component>trajectories_stream</component>
-            <portbindingobject/>
-          </destination_connector_path>
-          <priority>0</priority>
-          <deactivated>true</deactivated>
-          <sync>true</sync>
-        </connection>
-        <connection>
-          <name>LITD ZMQ Decision.position_mux_position_mux_stream.</name>
-          <source_connector_path>
-            <connector>position_mux</connector>
-            <component>LITD ZMQ Decision</component>
-            <portbindingobject/>
-          </source_connector_path>
-          <destination_connector_path>
-            <connector/>
-            <component>position_mux_stream</component>
-            <portbindingobject/>
-          </destination_connector_path>
-          <priority>0</priority>
-          <deactivated>true</deactivated>
-          <sync>true</sync>
-        </connection>
-        <connection>
           <name>position_mux_stream._position_mux.</name>
           <source_connector_path>
             <connector/>
@@ -3413,86 +3217,6 @@
             <portbindingobject/>
           </destination_connector_path>
           <priority>0</priority>
-          <sync>true</sync>
-        </connection>
-        <connection>
-          <name>LITD ZMQ Decision.turn_signal_right_turn_signal_right_stream.</name>
-          <source_connector_path>
-            <connector>turn_signal_right</connector>
-            <component>LITD ZMQ Decision</component>
-            <portbindingobject/>
-          </source_connector_path>
-          <destination_connector_path>
-            <connector/>
-            <component>turn_signal_right_stream</component>
-            <portbindingobject/>
-          </destination_connector_path>
-          <priority>0</priority>
-          <deactivated>true</deactivated>
-          <sync>true</sync>
-        </connection>
-        <connection>
-          <name>LITD ZMQ Decision.turn_signal_left_turn_signal_left_stream.</name>
-          <source_connector_path>
-            <connector>turn_signal_left</connector>
-            <component>LITD ZMQ Decision</component>
-            <portbindingobject/>
-          </source_connector_path>
-          <destination_connector_path>
-            <connector/>
-            <component>turn_signal_left_stream</component>
-            <portbindingobject/>
-          </destination_connector_path>
-          <priority>0</priority>
-          <deactivated>true</deactivated>
-          <sync>true</sync>
-        </connection>
-        <connection>
-          <name>LITD ZMQ Decision.hazard_light_hazard_light_strema.</name>
-          <source_connector_path>
-            <connector>hazard_light</connector>
-            <component>LITD ZMQ Decision</component>
-            <portbindingobject/>
-          </source_connector_path>
-          <destination_connector_path>
-            <connector/>
-            <component>hazard_light_stream</component>
-            <portbindingobject/>
-          </destination_connector_path>
-          <priority>0</priority>
-          <deactivated>true</deactivated>
-          <sync>true</sync>
-        </connection>
-        <connection>
-          <name>LITD ZMQ Decision.brake_light_brake_light_stream.</name>
-          <source_connector_path>
-            <connector>brake_light</connector>
-            <component>LITD ZMQ Decision</component>
-            <portbindingobject/>
-          </source_connector_path>
-          <destination_connector_path>
-            <connector/>
-            <component>brake_light_stream</component>
-            <portbindingobject/>
-          </destination_connector_path>
-          <priority>0</priority>
-          <deactivated>true</deactivated>
-          <sync>true</sync>
-        </connection>
-        <connection>
-          <name>LITD ZMQ Decision.reverse_light_reverse_light_stream.</name>
-          <source_connector_path>
-            <connector>reverse_light</connector>
-            <component>LITD ZMQ Decision</component>
-            <portbindingobject/>
-          </source_connector_path>
-          <destination_connector_path>
-            <connector/>
-            <component>reverse_light_stream</component>
-            <portbindingobject/>
-          </destination_connector_path>
-          <priority>0</priority>
-          <deactivated>true</deactivated>
           <sync>true</sync>
         </connection>
         <connection>
@@ -3595,7 +3319,7 @@
           </source_connector_path>
           <destination_connector_path>
             <connector/>
-            <component>driver_struct_strema</component>
+            <component>driver_struct_driver_stream</component>
             <portbindingobject/>
           </destination_connector_path>
           <priority>0</priority>
@@ -3603,7 +3327,82 @@
           <sync>true</sync>
         </connection>
         <connection>
-          <name>maneuver_list._maneuver_list_stream.</name>
+          <name>Decision Thread._LITD ZMQ Decision Jury.zmq_thread</name>
+          <source_connector_path>
+            <connector/>
+            <component>Jury Thread</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector>zmq_thread</connector>
+            <component>LITD ZMQ Decision Jury</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>Decision Jury Watchdog._LITD ZMQ Decision Jury.timer_trigger</name>
+          <source_connector_path>
+            <connector/>
+            <component>Jury Timer</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector>timer_trigger</connector>
+            <component>LITD ZMQ Decision Jury</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>Alarm Thread._LITD ZMQ Alarm Classifier.zmq_thread</name>
+          <source_connector_path>
+            <connector/>
+            <component>Alarm Thread</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector>zmq_thread</connector>
+            <component>LITD ZMQ Alarm Classifier</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>Alarm Timer._LITD ZMQ Alarm Classifier.timer_trigger</name>
+          <source_connector_path>
+            <connector/>
+            <component>Alarm Timer</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector>timer_trigger</connector>
+            <component>LITD ZMQ Alarm Classifier</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>Lidar Break Thread._LITD ZMQ Lidar Break.zmq_thread</name>
+          <source_connector_path>
+            <connector/>
+            <component>Lidar Break Thread</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector>zmq_thread</connector>
+            <component>LITD ZMQ Lidar Break</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>maneuver_list._maneuver_list_stream_.</name>
           <source_connector_path>
             <connector/>
             <component>maneuver_list</component>
@@ -3611,22 +3410,547 @@
           </source_connector_path>
           <destination_connector_path>
             <connector/>
-            <component>maneuver_list_stream</component>
+            <component>maneuver_list_stream_</component>
             <portbindingobject/>
           </destination_connector_path>
           <priority>0</priority>
           <sync>true</sync>
         </connection>
         <connection>
-          <name>maneuver_list_stream._Driver Module.maneuver_list</name>
+          <name>maneuver_list_stream_._Driver Module.maneuver_list</name>
           <source_connector_path>
             <connector/>
-            <component>maneuver_list_stream</component>
+            <component>maneuver_list_stream_</component>
             <portbindingobject/>
           </source_connector_path>
           <destination_connector_path>
             <connector>maneuver_list</connector>
             <component>Driver Module</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>Sensors Thread._LITD ZMQ Decision Sensors.zmq_thread</name>
+          <source_connector_path>
+            <connector/>
+            <component>Sensors Thread</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector>zmq_thread</connector>
+            <component>LITD ZMQ Decision Sensors</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>Sensors Timer._LITD ZMQ Decision Sensors.timer_trigger</name>
+          <source_connector_path>
+            <connector/>
+            <component>Sensors Timer</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector>timer_trigger</connector>
+            <component>LITD ZMQ Decision Sensors</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>jury_struct_stream._LITD ZMQ Decision Jury.jury</name>
+          <source_connector_path>
+            <connector/>
+            <component>jury_struct_stream</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector>jury</connector>
+            <component>LITD ZMQ Decision Jury</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>LITD ZMQ Decision Jury.position_mux_position_mux_stream.</name>
+          <source_connector_path>
+            <connector>position_mux</connector>
+            <component>LITD ZMQ Decision Jury</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector/>
+            <component>position_mux_stream</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>LITD ZMQ Decision Sensors.desired_speed_desired_speed_stream.</name>
+          <source_connector_path>
+            <connector>desired_speed</connector>
+            <component>LITD ZMQ Decision Sensors</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector/>
+            <component>desired_speed_stream</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>LITD ZMQ Decision Sensors.trajectories_trajectories_stream.</name>
+          <source_connector_path>
+            <connector>trajectories</connector>
+            <component>LITD ZMQ Decision Sensors</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector/>
+            <component>trajectories_stream</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>LITD ZMQ Decision Jury.driver_driver_struct_stream.</name>
+          <source_connector_path>
+            <connector>driver</connector>
+            <component>LITD ZMQ Decision Jury</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector/>
+            <component>driver_struct_stream</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>LITD ZMQ Decision Sensors.turn_signal_right_turn_signal_right_stream.</name>
+          <source_connector_path>
+            <connector>turn_signal_right</connector>
+            <component>LITD ZMQ Decision Sensors</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector/>
+            <component>turn_signal_right_stream</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>LITD ZMQ Decision Sensors.turn_signal_left_turn_signal_left_stream.</name>
+          <source_connector_path>
+            <connector>turn_signal_left</connector>
+            <component>LITD ZMQ Decision Sensors</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector/>
+            <component>turn_signal_left_stream</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>LITD ZMQ Decision Sensors.hazard_light_hazard_light_stream.</name>
+          <source_connector_path>
+            <connector>hazard_light</connector>
+            <component>LITD ZMQ Decision Sensors</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector/>
+            <component>hazard_light_stream</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>LITD ZMQ Decision Sensors.brake_light_brake_light_stream.</name>
+          <source_connector_path>
+            <connector>brake_light</connector>
+            <component>LITD ZMQ Decision Sensors</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector/>
+            <component>brake_light_stream</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>LITD ZMQ Decision Sensors.reverse_light_reverse_light_stream.</name>
+          <source_connector_path>
+            <connector>reverse_light</connector>
+            <component>LITD ZMQ Decision Sensors</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector/>
+            <component>reverse_light_stream</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>position_stream._LITD ZMQ Decision Sensors.position</name>
+          <source_connector_path>
+            <connector/>
+            <component>position_stream</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector>position</connector>
+            <component>LITD ZMQ Decision Sensors</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>measured_speed_stream._LITD ZMQ Decision Sensors.measured_speed</name>
+          <source_connector_path>
+            <connector/>
+            <component>measured_speed_stream</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector>measured_speed</connector>
+            <component>LITD ZMQ Decision Sensors</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>road_sign_ext_stream._LITD ZMQ Decision Sensors.signs</name>
+          <source_connector_path>
+            <connector/>
+            <component>road_sign_ext_stream</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector>signs</connector>
+            <component>LITD ZMQ Decision Sensors</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>laserscanner_stream._LITD ZMQ Decision Sensors.lidar</name>
+          <source_connector_path>
+            <connector/>
+            <component>laserscanner_stream</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector>lidar</connector>
+            <component>LITD ZMQ Decision Sensors</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>ultrasonic_stream._LITD ZMQ Decision Sensors.ultrasonic</name>
+          <source_connector_path>
+            <connector/>
+            <component>ultrasonic_stream</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector>ultrasonic</connector>
+            <component>LITD ZMQ Decision Sensors</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>iner_meas_unit_stream._LITD ZMQ Decision Sensors.imu</name>
+          <source_connector_path>
+            <connector/>
+            <component>iner_meas_unit_stream</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector>imu</connector>
+            <component>LITD ZMQ Decision Sensors</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>controller_leverage_position_stream._LITD ZMQ Decision Sensors.controller_leverage</name>
+          <source_connector_path>
+            <connector/>
+            <component>controller_leverage_position_stream</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector>controller_leverage</connector>
+            <component>LITD ZMQ Decision Sensors</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>controller_feedback_stream._LITD ZMQ Decision Sensors.controller_feedback</name>
+          <source_connector_path>
+            <connector/>
+            <component>controller_feedback_stream</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector>controller_feedback</connector>
+            <component>LITD ZMQ Decision Sensors</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>siren_stream._LITD ZMQ Decision Sensors.siren</name>
+          <source_connector_path>
+            <connector/>
+            <component>siren_stream</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector>siren</connector>
+            <component>LITD ZMQ Decision Sensors</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>LITD ZMQ Alarm Classifier.siren_siren_stream.</name>
+          <source_connector_path>
+            <connector>siren</connector>
+            <component>LITD ZMQ Alarm Classifier</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector/>
+            <component>siren_stream</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>LITD ZMQ Lidar Break.break_lidar_break_stream.</name>
+          <source_connector_path>
+            <connector>break</connector>
+            <component>LITD ZMQ Lidar Break</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector/>
+            <component>lidar_break_stream</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>lidar_break_stream._LITD ZMQ Decision Sensors.lidar_break</name>
+          <source_connector_path>
+            <connector/>
+            <component>lidar_break_stream</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector>lidar_break</connector>
+            <component>LITD ZMQ Decision Sensors</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>jury_data_update._jury_data_update_stream.</name>
+          <source_connector_path>
+            <connector/>
+            <component>jury_data_update</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector/>
+            <component>jury_data_update_stream</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>loc_confidence_front_stream._LITD ZMQ Decision Jury.confidence_front</name>
+          <source_connector_path>
+            <connector/>
+            <component>loc_confidence_front_stream</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector>confidence_front</connector>
+            <component>LITD ZMQ Decision Jury</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>loc_confidence_rear_stream._LITD ZMQ Decision Jury.confidence_rear</name>
+          <source_connector_path>
+            <connector/>
+            <component>loc_confidence_rear_stream</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector>confidence_rear</connector>
+            <component>LITD ZMQ Decision Jury</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>laserscanner_stream._LITD ZMQ Lidar Break.lidar</name>
+          <source_connector_path>
+            <connector/>
+            <component>laserscanner_stream</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector>lidar</connector>
+            <component>LITD ZMQ Lidar Break</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>measured_speed_stream._LITD ZMQ Lidar Break.speed</name>
+          <source_connector_path>
+            <connector/>
+            <component>measured_speed_stream</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector>speed</connector>
+            <component>LITD ZMQ Lidar Break</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>steering_servo._steering_servo_stream.</name>
+          <source_connector_path>
+            <connector/>
+            <component>steering_servo</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector/>
+            <component>steering_servo_stream</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>steering_servo_stream._LITD ZMQ Lidar Break.steering_servo</name>
+          <source_connector_path>
+            <connector/>
+            <component>steering_servo_stream</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector>steering_servo</connector>
+            <component>LITD ZMQ Lidar Break</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>Trajectory Thread._LITD ZMQ Trajectory Template.zmq_thread</name>
+          <source_connector_path>
+            <connector/>
+            <component>Trajectory Thread</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector>zmq_thread</connector>
+            <component>LITD ZMQ Trajectory Template</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>Trajectory Timer._LITD ZMQ Trajectory Template.timer_trigger</name>
+          <source_connector_path>
+            <connector/>
+            <component>Trajectory Timer</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector>timer_trigger</connector>
+            <component>LITD ZMQ Trajectory Template</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>LITD ZMQ Trajectory Template.trajectory_array_trajectories_zmq_stream.</name>
+          <source_connector_path>
+            <connector>trajectory_array</connector>
+            <component>LITD ZMQ Trajectory Template</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector/>
+            <component>trajectories_zmq_stream</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>jury_data_update_stream._LITD ZMQ Decision Jury.jury_data_update</name>
+          <source_connector_path>
+            <connector/>
+            <component>jury_data_update_stream</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector>jury_data_update</connector>
+            <component>LITD ZMQ Decision Jury</component>
             <portbindingobject/>
           </destination_connector_path>
           <priority>0</priority>
@@ -4147,6 +4471,12 @@
             <pin>
               <name>steering</name>
             </pin>
+            <pin>
+              <name>poly_target_point</name>
+            </pin>
+            <pin>
+              <name>poly_finished</name>
+            </pin>
           </output_pins>
           <runners/>
           <init_priority>0</init_priority>
@@ -4540,6 +4870,500 @@
             <portbindingobject/>
           </destination_connector_path>
           <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>LITD StanleyControl.poly_target_point_leverage_position_stream.</name>
+          <source_connector_path>
+            <connector>poly_target_point</connector>
+            <component>LITD StanleyControl</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector/>
+            <component>leverage_position_stream</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>LITD StanleyControl.poly_finished_trajectory_finished_stream.</name>
+          <source_connector_path>
+            <connector>poly_finished</connector>
+            <component>LITD StanleyControl</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector/>
+            <component>trajectory_finished_stream</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+      </connections>
+      <streaming_interface_in_ports/>
+      <streaming_interface_out_ports/>
+    </graph>
+    <graph>
+      <name>vision_graph</name>
+      <filters>
+        <filter>
+          <name>LITD ObjectDetection Front</name>
+          <class_id>litd_objectdetection.filter.user.aadc.cid</class_id>
+          <input_pins>
+            <pin>
+              <name>input</name>
+            </pin>
+          </input_pins>
+          <output_pins>
+            <pin>
+              <name>output</name>
+            </pin>
+          </output_pins>
+          <runners>
+            <runner>
+              <name>trigger</name>
+            </runner>
+          </runners>
+          <init_priority>0</init_priority>
+          <deactivated>true</deactivated>
+          <binding_servers/>
+          <binding_clients/>
+        </filter>
+        <filter>
+          <name>LITD ObjectDetection Rear</name>
+          <class_id>litd_objectdetection.filter.user.aadc.cid</class_id>
+          <input_pins>
+            <pin>
+              <name>input</name>
+            </pin>
+          </input_pins>
+          <output_pins>
+            <pin>
+              <name>output</name>
+            </pin>
+          </output_pins>
+          <runners>
+            <runner>
+              <name>trigger</name>
+            </runner>
+          </runners>
+          <init_priority>0</init_priority>
+          <deactivated>true</deactivated>
+          <binding_servers/>
+          <binding_clients/>
+        </filter>
+        <filter>
+          <name>Object Detection Front</name>
+          <class_id>object_detection.filter.demo.aadc.cid</class_id>
+          <input_pins>
+            <pin>
+              <name>input</name>
+            </pin>
+          </input_pins>
+          <output_pins>
+            <pin>
+              <name>classification</name>
+            </pin>
+          </output_pins>
+          <runners/>
+          <init_priority>0</init_priority>
+          <deactivated>true</deactivated>
+          <binding_servers/>
+          <binding_clients/>
+        </filter>
+        <filter>
+          <name>Object Detection Rear</name>
+          <class_id>object_detection.filter.demo.aadc.cid</class_id>
+          <input_pins>
+            <pin>
+              <name>input</name>
+            </pin>
+          </input_pins>
+          <output_pins>
+            <pin>
+              <name>classification</name>
+            </pin>
+          </output_pins>
+          <runners/>
+          <init_priority>0</init_priority>
+          <deactivated>true</deactivated>
+          <binding_servers/>
+          <binding_clients/>
+        </filter>
+        <filter>
+          <name>LITD ZMQ Decision Vision</name>
+          <class_id>litd_zmq_decision_vision.filter.user.aadc.cid</class_id>
+          <input_pins>
+            <pin>
+              <name>yolo_front_straight</name>
+            </pin>
+            <pin>
+              <name>lenet_front_straight</name>
+            </pin>
+            <pin>
+              <name>lenet_back</name>
+            </pin>
+            <pin>
+              <name>yolo_back</name>
+            </pin>
+          </input_pins>
+          <output_pins/>
+          <runners>
+            <runner>
+              <name>zmq_thread</name>
+            </runner>
+            <runner>
+              <name>timer_trigger</name>
+            </runner>
+          </runners>
+          <init_priority>0</init_priority>
+          <binding_servers/>
+          <binding_clients/>
+        </filter>
+      </filters>
+      <subgraphs/>
+      <input_data_ports>
+        <data_port>
+          <name>front_cam</name>
+        </data_port>
+        <data_port>
+          <name>rear_cam</name>
+        </data_port>
+      </input_data_ports>
+      <output_data_ports/>
+      <input_interface_ports/>
+      <output_interface_ports/>
+      <output_runner_ports/>
+      <input_runner_ports/>
+      <streaming_in_ports/>
+      <streaming_out_ports/>
+      <sample_streams>
+        <sample_stream>
+          <name>front_cam_stream</name>
+          <class_id>default_sample_stream.streaming.adtf.cid</class_id>
+        </sample_stream>
+        <sample_stream>
+          <name>rear_cam_stream</name>
+          <class_id>default_sample_stream.streaming.adtf.cid</class_id>
+        </sample_stream>
+        <sample_stream>
+          <name>yolo_front_straight_stream</name>
+          <class_id>default_sample_stream.streaming.adtf.cid</class_id>
+        </sample_stream>
+        <sample_stream>
+          <name>yolo_rear_straight_stream</name>
+          <class_id>default_sample_stream.streaming.adtf.cid</class_id>
+        </sample_stream>
+        <sample_stream>
+          <name>lenet_front_stream</name>
+          <class_id>default_sample_stream.streaming.adtf.cid</class_id>
+        </sample_stream>
+        <sample_stream>
+          <name>lenet_rear_stream</name>
+          <class_id>default_sample_stream.streaming.adtf.cid</class_id>
+        </sample_stream>
+      </sample_streams>
+      <active_runners>
+        <active_runner>
+          <name>Vision Thread</name>
+          <class_id>default_thread_runner.streaming.adtf.cid</class_id>
+        </active_runner>
+        <active_runner>
+          <name>Vision Timer</name>
+          <class_id>default_timer_runner.streaming.adtf.cid</class_id>
+        </active_runner>
+        <active_runner>
+          <name>Yolo Front Thread</name>
+          <class_id>default_thread_runner.streaming.adtf.cid</class_id>
+        </active_runner>
+        <active_runner>
+          <name>Yolo Rear Thread</name>
+          <class_id>default_thread_runner.streaming.adtf.cid</class_id>
+        </active_runner>
+      </active_runners>
+      <binding_proxys/>
+      <connections>
+        <connection>
+          <name>front_cam._front_cam_stream.</name>
+          <source_connector_path>
+            <connector/>
+            <component>front_cam</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector/>
+            <component>front_cam_stream</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>rear_cam._rear_cam_stream.</name>
+          <source_connector_path>
+            <connector/>
+            <component>rear_cam</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector/>
+            <component>rear_cam_stream</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>LITD ObjectDetection.output_yolo_front_straight_stream.</name>
+          <source_connector_path>
+            <connector>output</connector>
+            <component>LITD ObjectDetection Front</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector/>
+            <component>yolo_front_straight_stream</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <deactivated>true</deactivated>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>LITD ObjectDetection_1.output_yolo_rear_straight_stream.</name>
+          <source_connector_path>
+            <connector>output</connector>
+            <component>LITD ObjectDetection Rear</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector/>
+            <component>yolo_rear_straight_stream</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <deactivated>true</deactivated>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>Object Detection_1.classification_lenet_rear_stream.</name>
+          <source_connector_path>
+            <connector>classification</connector>
+            <component>Object Detection Rear</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector/>
+            <component>lenet_rear_stream</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <deactivated>true</deactivated>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>Object Detection.classification_lenet_front_stream.</name>
+          <source_connector_path>
+            <connector>classification</connector>
+            <component>Object Detection Front</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector/>
+            <component>lenet_front_stream</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <deactivated>true</deactivated>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>front_cam_stream._LITD ObjectDetection Front.input</name>
+          <source_connector_path>
+            <connector/>
+            <component>front_cam_stream</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector>input</connector>
+            <component>LITD ObjectDetection Front</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <deactivated>true</deactivated>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>front_cam_stream._Object Detection Front.input</name>
+          <source_connector_path>
+            <connector/>
+            <component>front_cam_stream</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector>input</connector>
+            <component>Object Detection Front</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <deactivated>true</deactivated>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>rear_cam_stream._Object Detection Rear.input</name>
+          <source_connector_path>
+            <connector/>
+            <component>rear_cam_stream</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector>input</connector>
+            <component>Object Detection Rear</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <deactivated>true</deactivated>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>rear_cam_stream._LITD ObjectDetection Rear.input</name>
+          <source_connector_path>
+            <connector/>
+            <component>rear_cam_stream</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector>input</connector>
+            <component>LITD ObjectDetection Rear</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <deactivated>true</deactivated>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>Decision Vision Thread._LITD ZMQ Decision Vision.zmq_thread</name>
+          <source_connector_path>
+            <connector/>
+            <component>Vision Thread</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector>zmq_thread</connector>
+            <component>LITD ZMQ Decision Vision</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>Devision Vision Watchdog._LITD ZMQ Decision Vision.timer_trigger</name>
+          <source_connector_path>
+            <connector/>
+            <component>Vision Timer</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector>timer_trigger</connector>
+            <component>LITD ZMQ Decision Vision</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>yolo_front_straight_stream._LITD ZMQ Decision Vision.yolo_front_straight</name>
+          <source_connector_path>
+            <connector/>
+            <component>yolo_front_straight_stream</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector>yolo_front_straight</connector>
+            <component>LITD ZMQ Decision Vision</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>lenet_front_stream._LITD ZMQ Decision Vision.lenet_front_straight</name>
+          <source_connector_path>
+            <connector/>
+            <component>lenet_front_stream</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector>lenet_front_straight</connector>
+            <component>LITD ZMQ Decision Vision</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>lenet_rear_stream._LITD ZMQ Decision Vision.lenet_back</name>
+          <source_connector_path>
+            <connector/>
+            <component>lenet_rear_stream</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector>lenet_back</connector>
+            <component>LITD ZMQ Decision Vision</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>yolo_rear_straight_stream._LITD ZMQ Decision Vision.yolo_back</name>
+          <source_connector_path>
+            <connector/>
+            <component>yolo_rear_straight_stream</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector>yolo_back</connector>
+            <component>LITD ZMQ Decision Vision</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>Thread Runner._LITD ObjectDetection Front.trigger</name>
+          <source_connector_path>
+            <connector/>
+            <component>Yolo Front Thread</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector>trigger</connector>
+            <component>LITD ObjectDetection Front</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <deactivated>true</deactivated>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>Thread Runner_1._LITD ObjectDetection Rear.trigger</name>
+          <source_connector_path>
+            <connector/>
+            <component>Yolo Rear Thread</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector>trigger</connector>
+            <component>LITD ObjectDetection Rear</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <deactivated>true</deactivated>
           <sync>true</sync>
         </connection>
       </connections>

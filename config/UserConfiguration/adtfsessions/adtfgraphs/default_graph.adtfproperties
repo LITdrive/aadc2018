@@ -577,10 +577,6 @@
           <properties/>
         </property_set>
         <property_set>
-          <name>graphs/default_filter_graph/connections/open_drive_map._visualization.open_drive</name>
-          <properties/>
-        </property_set>
-        <property_set>
           <name>graphs/visualization_graph/filters/Map Visualization</name>
           <properties/>
         </property_set>
@@ -1084,20 +1080,6 @@
           <properties/>
         </property_set>
         <property_set>
-          <name>graphs/decision_graph/filters/LITD ZMQ Alarm Classifier</name>
-          <properties>
-            <property>
-              <name>ZeroMQ Socket Address</name>
-              <value>tcp://127.0.0.1:5556</value>
-              <type>cString</type>
-            </property>
-          </properties>
-        </property_set>
-        <property_set>
-          <name>graphs/decision_graph/filters/LITD ZMQ Decision</name>
-          <properties/>
-        </property_set>
-        <property_set>
           <name>graphs/decision_graph/active_runners/Alarm Thread</name>
           <properties>
             <property>
@@ -1108,7 +1090,7 @@
           </properties>
         </property_set>
         <property_set>
-          <name>graphs/decision_graph/active_runners/Decision Thread</name>
+          <name>graphs/decision_graph/active_runners/Jury Thread</name>
           <properties>
             <property>
               <name>thread_is_cyclic</name>
@@ -1128,40 +1110,6 @@
           </properties>
         </property_set>
         <property_set>
-          <name>graphs/decision_graph/connections/Thread Runner._LITD ZMQ Alarm Classifier.zmq_thread</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/decision_graph/filters/LITD ZMQ Alarm Classifier/runners/zmq_thread</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/decision_graph/connections/Timer Runner._LITD ZMQ Alarm Classifier.signal_trigger</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/decision_graph/filters/LITD ZMQ Alarm Classifier/runners/signal_trigger</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/decision_graph/connections/Thread Runner_1._LITD ZMQ Decision.zmq_thread</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/decision_graph/filters/LITD ZMQ Decision/runners/zmq_thread</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/decision_graph/filters/LITD ZMQ Trajectory Template</name>
-          <properties>
-            <property>
-              <name>ZeroMQ Socket Address</name>
-              <value>tcp://127.0.0.1:5557</value>
-              <type>cString</type>
-            </property>
-          </properties>
-        </property_set>
-        <property_set>
           <name>graphs/decision_graph/active_runners/Trajectory Thread</name>
           <properties>
             <property>
@@ -1172,14 +1120,6 @@
           </properties>
         </property_set>
         <property_set>
-          <name>graphs/decision_graph/connections/Thread Runner._LITD ZMQ Trajectory Template.zmq_thread</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/decision_graph/filters/LITD ZMQ Trajectory Template/runners/zmq_thread</name>
-          <properties/>
-        </property_set>
-        <property_set>
           <name>graphs/decision_graph/active_runners/Trajectory Timer</name>
           <properties>
             <property>
@@ -1188,14 +1128,6 @@
               <type>tInt64</type>
             </property>
           </properties>
-        </property_set>
-        <property_set>
-          <name>graphs/decision_graph/connections/Trajectory Timer._LITD ZMQ Trajectory Template.signal_trigger</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/decision_graph/filters/LITD ZMQ Trajectory Template/runners/signal_trigger</name>
-          <properties/>
         </property_set>
         <property_set>
           <name>graphs/preprocess_graph</name>
@@ -1233,10 +1165,6 @@
         </property_set>
         <property_set>
           <name>graphs/preprocess_graph/filters/Fisheye Undistortion Rear</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/decision_graph/filters/Object Detection Front</name>
           <properties/>
         </property_set>
         <property_set>
@@ -1486,31 +1414,11 @@
           <properties/>
         </property_set>
         <property_set>
-          <name>graphs/decision_graph/filters/LITD ZMQ Trajectory Template/output_pins/trajectory_array</name>
-          <properties/>
-        </property_set>
-        <property_set>
           <name>graphs/decision_graph/sample_streams/trajectories_zmq_stream</name>
           <properties/>
         </property_set>
         <property_set>
-          <name>graphs/decision_graph/sample_streams/alarm_stream</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/decision_graph/connections/LITD ZMQ Alarm Classifier.alarm_alarm_stream.</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/decision_graph/filters/LITD ZMQ Alarm Classifier/output_pins/alarm</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/decision_graph/input_data_ports/front_cam</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/decision_graph/input_data_ports/rear_cam</name>
+          <name>graphs/decision_graph/sample_streams/siren_stream</name>
           <properties/>
         </property_set>
         <property_set>
@@ -1622,18 +1530,6 @@
           <properties/>
         </property_set>
         <property_set>
-          <name>graphs/decision_graph/sample_streams/front_cam_stream</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/decision_graph/sample_streams/rear_cam_stream</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/decision_graph/sample_streams/yolo_front_stream</name>
-          <properties/>
-        </property_set>
-        <property_set>
           <name>graphs/decision_graph/sample_streams/loc_confidence_front_stream</name>
           <properties/>
         </property_set>
@@ -1678,10 +1574,6 @@
           <properties/>
         </property_set>
         <property_set>
-          <name>graphs/decision_graph/connections/LITD ZMQ Trajectory Template.trajectory_array_trajectories_zmq_stream.</name>
-          <properties/>
-        </property_set>
-        <property_set>
           <name>graphs/decision_graph/connections/trajectories_zmq_stream._trajectories.</name>
           <properties/>
         </property_set>
@@ -1690,7 +1582,7 @@
           <properties/>
         </property_set>
         <property_set>
-          <name>graphs/decision_graph/sample_streams/driver_struct_strema</name>
+          <name>graphs/decision_graph/sample_streams/driver_struct_driver_stream</name>
           <properties/>
         </property_set>
         <property_set>
@@ -1702,49 +1594,17 @@
           <properties/>
         </property_set>
         <property_set>
-          <name>graphs/decision_graph/active_runners/Decision Watchdog</name>
+          <name>graphs/decision_graph/active_runners/Jury Timer</name>
           <properties>
             <property>
               <name>timer_period_micro_sec</name>
-              <value>1000000</value>
+              <value>500000</value>
               <type>tInt64</type>
             </property>
           </properties>
         </property_set>
         <property_set>
-          <name>graphs/decision_graph/connections/Decision Watchdog._LITD ZMQ Decision.position_trigger</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/decision_graph/filters/LITD ZMQ Decision/runners/position_trigger</name>
-          <properties/>
-        </property_set>
-        <property_set>
           <name>graphs/decision_graph/connections/jury_struct._jury_struct_stream.</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/decision_graph/connections/jury_struct_stream._LITD ZMQ Decision.jury</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/decision_graph/filters/LITD ZMQ Decision/input_pins/jury</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/decision_graph/filters/LITD ZMQ Decision/input_pins/yolo_front</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/decision_graph/filters/LITD ZMQ Decision/input_pins/yolo_back</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/decision_graph/connections/position_stream._LITD ZMQ Decision.position</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/decision_graph/filters/LITD ZMQ Decision/input_pins/position</name>
           <properties/>
         </property_set>
         <property_set>
@@ -1761,30 +1621,6 @@
         </property_set>
         <property_set>
           <name>graphs/decision_graph/connections/measured_speed._measured_speed_stream.</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/decision_graph/connections/loc_confidence_front_stream._LITD ZMQ Decision.confidence_front</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/decision_graph/filters/LITD ZMQ Decision/input_pins/confidence_front</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/decision_graph/connections/loc_confidence_rear_stream._LITD ZMQ Decision.confidence_rear</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/decision_graph/filters/LITD ZMQ Decision/input_pins/confidence_rear</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/decision_graph/connections/measured_speed_stream._LITD ZMQ Decision.measured_speed</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/decision_graph/filters/LITD ZMQ Decision/input_pins/measured_speed</name>
           <properties/>
         </property_set>
         <property_set>
@@ -1812,171 +1648,7 @@
           <properties/>
         </property_set>
         <property_set>
-          <name>graphs/decision_graph/connections/road_sign_ext_stream._LITD ZMQ Decision.signs</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/decision_graph/filters/LITD ZMQ Decision/input_pins/signs</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/decision_graph/connections/laserscanner_stream._LITD ZMQ Decision.lidar</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/decision_graph/filters/LITD ZMQ Decision/input_pins/lidar</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/decision_graph/connections/ultrasonic_stream._LITD ZMQ Decision.ultrasonic</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/decision_graph/filters/LITD ZMQ Decision/input_pins/ultrasonic</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/decision_graph/connections/iner_meas_unit_stream._LITD ZMQ Decision.imu</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/decision_graph/filters/LITD ZMQ Decision/input_pins/imu</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/decision_graph/connections/controller_leverage_position_stream._LITD ZMQ Decision.controller_leverage</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/decision_graph/filters/LITD ZMQ Decision/input_pins/controller_leverage</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/decision_graph/connections/controller_feedback_stream._LITD ZMQ Decision.controller_feedback</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/decision_graph/filters/LITD ZMQ Decision/input_pins/controller_feedback</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/decision_graph/connections/alarm_stream._LITD ZMQ Decision.siren</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/decision_graph/filters/LITD ZMQ Decision/input_pins/siren</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/decision_graph/sample_streams/yolo_back_stream</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/decision_graph/connections/front_cam._front_cam_stream.</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/decision_graph/connections/rear_cam._rear_cam_stream.</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/decision_graph/filters/Object Detection Rear</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/decision_graph/connections/front_cam_stream._Object Detection Front.input</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/decision_graph/filters/Object Detection Front/input_pins/input</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/decision_graph/connections/rear_cam_stream._Object Detection Rear.input</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/decision_graph/filters/Object Detection Rear/input_pins/input</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/decision_graph/connections/yolo_back_stream._LITD ZMQ Decision.yolo_back</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/decision_graph/connections/yolo_front_stream._LITD ZMQ Decision.yolo_front</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/decision_graph/filters/LITD ZMQ Decision/output_pins/jury_states</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/decision_graph/connections/LITD ZMQ Decision.desired_speed_desired_speed_stream.</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/decision_graph/filters/LITD ZMQ Decision/output_pins/desired_speed</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/decision_graph/connections/LITD ZMQ Decision.trajectories_trajectories_stream.</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/decision_graph/filters/LITD ZMQ Decision/output_pins/trajectories</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/decision_graph/connections/LITD ZMQ Decision.position_mux_position_mux_stream.</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/decision_graph/filters/LITD ZMQ Decision/output_pins/position_mux</name>
-          <properties/>
-        </property_set>
-        <property_set>
           <name>graphs/decision_graph/connections/position_mux_stream._position_mux.</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/decision_graph/connections/LITD ZMQ Decision.turn_signal_right_turn_signal_right_stream.</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/decision_graph/filters/LITD ZMQ Decision/output_pins/turn_signal_right</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/decision_graph/connections/LITD ZMQ Decision.turn_signal_left_turn_signal_left_stream.</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/decision_graph/filters/LITD ZMQ Decision/output_pins/turn_signal_left</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/decision_graph/connections/LITD ZMQ Decision.hazard_light_hazard_light_strema.</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/decision_graph/filters/LITD ZMQ Decision/output_pins/hazard_light</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/decision_graph/connections/LITD ZMQ Decision.brake_light_brake_light_stream.</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/decision_graph/filters/LITD ZMQ Decision/output_pins/brake_light</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/decision_graph/connections/LITD ZMQ Decision.reverse_light_reverse_light_stream.</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/decision_graph/filters/LITD ZMQ Decision/output_pins/reverse_light</name>
           <properties/>
         </property_set>
         <property_set>
@@ -2238,10 +1910,6 @@
           <properties/>
         </property_set>
         <property_set>
-          <name>graphs/default_filter_graph/subgraphs/decision</name>
-          <properties/>
-        </property_set>
-        <property_set>
           <name>graphs/default_filter_graph/subgraphs/control</name>
           <properties/>
         </property_set>
@@ -2254,10 +1922,6 @@
           <properties/>
         </property_set>
         <property_set>
-          <name>graphs/default_filter_graph/connections/road_sign_map._localization.road_sign_map</name>
-          <properties/>
-        </property_set>
-        <property_set>
           <name>graphs/default_filter_graph/sample_streams/measured_speed_stream</name>
           <properties/>
         </property_set>
@@ -2267,10 +1931,6 @@
         </property_set>
         <property_set>
           <name>graphs/default_filter_graph/connections/measured_speed_stream._localization.speed</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/connections/measured_speed_stream._decision.measured_speed</name>
           <properties/>
         </property_set>
         <property_set>
@@ -2290,18 +1950,6 @@
           <properties/>
         </property_set>
         <property_set>
-          <name>graphs/default_filter_graph/connections/iner_meas_unit_stream._decision.iner_meas_unit</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/connections/jury_struct._decision.jury_struct</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/connections/maneuver_list._decision.maneuver_list</name>
-          <properties/>
-        </property_set>
-        <property_set>
           <name>graphs/default_filter_graph/sample_streams/road_sign_ext_stream</name>
           <properties/>
         </property_set>
@@ -2314,18 +1962,6 @@
           <properties/>
         </property_set>
         <property_set>
-          <name>graphs/default_filter_graph/connections/road_sign_ext_stream._decision.road_sign_ext</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/connections/laserscanner._decision.laserscanner</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/connections/ultrasonic_struct._decision.ultrasonic_struct</name>
-          <properties/>
-        </property_set>
-        <property_set>
           <name>graphs/default_filter_graph/sample_streams/trajectory_finished_stream</name>
           <properties/>
         </property_set>
@@ -2335,10 +1971,6 @@
         </property_set>
         <property_set>
           <name>graphs/default_filter_graph/connections/control.trajectory_finished_trajectory_finished_stream.</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/connections/trajectory_finished_stream._decision.controller_feedback</name>
           <properties/>
         </property_set>
         <property_set>
@@ -2394,34 +2026,6 @@
           <properties/>
         </property_set>
         <property_set>
-          <name>graphs/default_filter_graph/connections/leverage_position_stream._decision.controller_leverage_position</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/connections/decision.driver_struct_driver_struct_stream.</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/connections/decision.turn_signal_left_turn_signal_left_stream.</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/connections/decision.turn_signal_right_turn_signal_right_stream.</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/connections/decision.hazard_light_hazard_light_stream.</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/connections/decision.reverse_light_reverse_light_stream.</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/connections/decision.brake_light_brake_light_stream.</name>
-          <properties/>
-        </property_set>
-        <property_set>
           <name>graphs/default_filter_graph/connections/brake_light_stream._brake_light.</name>
           <properties/>
         </property_set>
@@ -2450,15 +2054,7 @@
           <properties/>
         </property_set>
         <property_set>
-          <name>graphs/default_filter_graph/connections/decision.position_mux_position_mux_stream.</name>
-          <properties/>
-        </property_set>
-        <property_set>
           <name>graphs/default_filter_graph/connections/position_mux_stream._localization.position_mux</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/sample_streams/front_cam_undistorted_stream</name>
           <properties/>
         </property_set>
         <property_set>
@@ -2474,26 +2070,6 @@
           <properties/>
         </property_set>
         <property_set>
-          <name>graphs/default_filter_graph/connections/preprocess.front_cam_undistorted_Sample Stream.</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/connections/Sample Stream._localization.front_cam</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/decision_graph/sample_streams/maneuver_list_stream</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/decision_graph/connections/maneuver_list._maneuver_list_stream.</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/decision_graph/connections/maneuver_list_stream._Driver Module.maneuver_list</name>
-          <properties/>
-        </property_set>
-        <property_set>
           <name>graphs/default_filter_graph/sample_streams/front_cam_stream</name>
           <properties/>
         </property_set>
@@ -2506,10 +2082,6 @@
           <properties/>
         </property_set>
         <property_set>
-          <name>graphs/default_filter_graph/connections/front_cam_stream._decision.front_cam</name>
-          <properties/>
-        </property_set>
-        <property_set>
           <name>graphs/default_filter_graph/connections/front_cam_stream._preprocess.front_cam</name>
           <properties/>
         </property_set>
@@ -2519,10 +2091,6 @@
         </property_set>
         <property_set>
           <name>graphs/default_filter_graph/connections/rear_cam_stream._preprocess.rear_cam</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/connections/rear_cam_stream._decision.rear_cam</name>
           <properties/>
         </property_set>
         <property_set>
@@ -2554,14 +2122,6 @@
           <properties/>
         </property_set>
         <property_set>
-          <name>graphs/default_filter_graph/connections/confidence_rear_stream._decision.loc_confidence_rear</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/connections/confidence_front_stream._decision.loc_confidence_front</name>
-          <properties/>
-        </property_set>
-        <property_set>
           <name>graphs/default_filter_graph/sample_streams/position_stream</name>
           <properties/>
         </property_set>
@@ -2578,10 +2138,6 @@
           <properties/>
         </property_set>
         <property_set>
-          <name>graphs/default_filter_graph/connections/position_stream._decision.position</name>
-          <properties/>
-        </property_set>
-        <property_set>
           <name>graphs/default_filter_graph/connections/position_stream._visualization.position</name>
           <properties/>
         </property_set>
@@ -2594,19 +2150,401 @@
           <properties/>
         </property_set>
         <property_set>
-          <name>graphs/default_filter_graph/connections/decision.trajectories_trajectories_stream.</name>
-          <properties/>
-        </property_set>
-        <property_set>
           <name>graphs/default_filter_graph/connections/trajectories_stream._control.trajectories</name>
           <properties/>
         </property_set>
         <property_set>
-          <name>graphs/default_filter_graph/connections/decision.desired_speed_desired_speed_stream.</name>
+          <name>graphs/default_filter_graph/connections/desired_speed_stream._control.desired_speed</name>
           <properties/>
         </property_set>
         <property_set>
-          <name>graphs/default_filter_graph/connections/desired_speed_stream._control.desired_speed</name>
+          <name>graphs/localization_graph/active_runners/FineLoc Front Thread</name>
+          <properties>
+            <property>
+              <name>thread_is_cyclic</name>
+              <value>false</value>
+              <type>tBool</type>
+            </property>
+          </properties>
+        </property_set>
+        <property_set>
+          <name>graphs/localization_graph/active_runners/FineLoc Rear Thread</name>
+          <properties>
+            <property>
+              <name>thread_is_cyclic</name>
+              <value>false</value>
+              <type>tBool</type>
+            </property>
+          </properties>
+        </property_set>
+        <property_set>
+          <name>graphs/localization_graph/connections/FineLoc Back Thread._LITD FineLocalization Rear.cv_thread</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/localization_graph/filters/LITD FineLocalization Rear/runners/cv_thread</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/localization_graph/connections/FineLoc Front Thread._LITD FineLocalization Front.cv_thread</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/localization_graph/filters/LITD FineLocalization Front/runners/cv_thread</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/control_graph/connections/LITD StanleyControl.poly_target_point_leverage_position_stream.</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/control_graph/filters/LITD StanleyControl/output_pins/poly_target_point</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/control_graph/connections/LITD StanleyControl.poly_finished_trajectory_finished_stream.</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/control_graph/filters/LITD StanleyControl/output_pins/poly_finished</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/active_runners/Sensors Thread</name>
+          <properties>
+            <property>
+              <name>thread_is_cyclic</name>
+              <value>false</value>
+              <type>tBool</type>
+            </property>
+          </properties>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/active_runners/Sensors Timer</name>
+          <properties>
+            <property>
+              <name>timer_period_micro_sec</name>
+              <value>100000</value>
+              <type>tInt64</type>
+            </property>
+          </properties>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/active_runners/Lidar Break Thread</name>
+          <properties>
+            <property>
+              <name>thread_is_cyclic</name>
+              <value>false</value>
+              <type>tBool</type>
+            </property>
+          </properties>
+        </property_set>
+        <property_set>
+          <name>graphs/vision_graph</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/vision_graph/filters/LITD ObjectDetection Front</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/vision_graph/filters/LITD ObjectDetection Rear</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/vision_graph/filters/Object Detection Front</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/vision_graph/filters/Object Detection Rear</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/vision_graph/sample_streams/front_cam_stream</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/vision_graph/sample_streams/rear_cam_stream</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/vision_graph/sample_streams/yolo_front_straight_stream</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/vision_graph/sample_streams/yolo_rear_straight_stream</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/vision_graph/sample_streams/lenet_front_stream</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/vision_graph/sample_streams/lenet_rear_stream</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/vision_graph/input_data_ports/front_cam</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/vision_graph/input_data_ports/rear_cam</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/vision_graph/connections/front_cam._front_cam_stream.</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/vision_graph/connections/rear_cam._rear_cam_stream.</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/vision_graph/connections/LITD ObjectDetection.output_yolo_front_straight_stream.</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/vision_graph/filters/LITD ObjectDetection Front/output_pins/output</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/vision_graph/connections/LITD ObjectDetection_1.output_yolo_rear_straight_stream.</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/vision_graph/filters/LITD ObjectDetection Rear/output_pins/output</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/vision_graph/connections/Object Detection_1.classification_lenet_rear_stream.</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/vision_graph/filters/Object Detection Rear/output_pins/classification</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/vision_graph/connections/Object Detection.classification_lenet_front_stream.</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/vision_graph/filters/Object Detection Front/output_pins/classification</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/vision_graph/connections/front_cam_stream._LITD ObjectDetection Front.input</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/vision_graph/filters/LITD ObjectDetection Front/input_pins/input</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/vision_graph/connections/front_cam_stream._Object Detection Front.input</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/vision_graph/filters/Object Detection Front/input_pins/input</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/vision_graph/connections/rear_cam_stream._Object Detection Rear.input</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/vision_graph/filters/Object Detection Rear/input_pins/input</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/vision_graph/connections/rear_cam_stream._LITD ObjectDetection Rear.input</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/vision_graph/filters/LITD ObjectDetection Rear/input_pins/input</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/vision_graph/active_runners/Vision Thread</name>
+          <properties>
+            <property>
+              <name>thread_is_cyclic</name>
+              <value>false</value>
+              <type>tBool</type>
+            </property>
+          </properties>
+        </property_set>
+        <property_set>
+          <name>graphs/vision_graph/active_runners/Vision Timer</name>
+          <properties>
+            <property>
+              <name>timer_period_micro_sec</name>
+              <value>200000</value>
+              <type>tInt64</type>
+            </property>
+          </properties>
+        </property_set>
+        <property_set>
+          <name>graphs/vision_graph/filters/LITD ZMQ Decision Vision</name>
+          <properties>
+            <property>
+              <name>ZeroMQ Socket Address</name>
+              <value>tcp://127.0.0.1:5566</value>
+              <type>cString</type>
+            </property>
+          </properties>
+        </property_set>
+        <property_set>
+          <name>graphs/vision_graph/connections/Decision Vision Thread._LITD ZMQ Decision Vision.zmq_thread</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/vision_graph/filters/LITD ZMQ Decision Vision/runners/zmq_thread</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/vision_graph/connections/Devision Vision Watchdog._LITD ZMQ Decision Vision.timer_trigger</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/vision_graph/filters/LITD ZMQ Decision Vision/runners/timer_trigger</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/vision_graph/connections/yolo_front_straight_stream._LITD ZMQ Decision Vision.yolo_front_straight</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/vision_graph/filters/LITD ZMQ Decision Vision/input_pins/yolo_front_straight</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/vision_graph/connections/lenet_front_stream._LITD ZMQ Decision Vision.lenet_front_straight</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/vision_graph/filters/LITD ZMQ Decision Vision/input_pins/lenet_front_straight</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/vision_graph/connections/lenet_rear_stream._LITD ZMQ Decision Vision.lenet_back</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/vision_graph/filters/LITD ZMQ Decision Vision/input_pins/lenet_back</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/vision_graph/connections/yolo_rear_straight_stream._LITD ZMQ Decision Vision.yolo_back</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/vision_graph/filters/LITD ZMQ Decision Vision/input_pins/yolo_back</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/subgraphs/vision</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/connections/rear_cam_undistorted_stream._vision.rear_cam</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/filters/LITD ZMQ Decision Jury</name>
+          <properties>
+            <property>
+              <name>ZeroMQ Socket Address</name>
+              <value>tcp://127.0.0.1:5561</value>
+              <type>cString</type>
+            </property>
+          </properties>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/connections/Decision Thread._LITD ZMQ Decision Jury.zmq_thread</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/filters/LITD ZMQ Decision Jury/runners/zmq_thread</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/vision_graph/active_runners/Yolo Front Thread</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/vision_graph/active_runners/Yolo Rear Thread</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/vision_graph/connections/Thread Runner._LITD ObjectDetection Front.trigger</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/vision_graph/filters/LITD ObjectDetection Front/runners/trigger</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/vision_graph/connections/Thread Runner_1._LITD ObjectDetection Rear.trigger</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/vision_graph/filters/LITD ObjectDetection Rear/runners/trigger</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/connections/Decision Jury Watchdog._LITD ZMQ Decision Jury.timer_trigger</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/filters/LITD ZMQ Decision Jury/runners/timer_trigger</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/filters/LITD ZMQ Alarm Classifier</name>
+          <properties>
+            <property>
+              <name>ZeroMQ Socket Address</name>
+              <value>tcp://127.0.0.1:5563</value>
+              <type>cString</type>
+            </property>
+          </properties>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/connections/Alarm Thread._LITD ZMQ Alarm Classifier.zmq_thread</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/filters/LITD ZMQ Alarm Classifier/runners/zmq_thread</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/connections/Alarm Timer._LITD ZMQ Alarm Classifier.timer_trigger</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/filters/LITD ZMQ Alarm Classifier/runners/timer_trigger</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/filters/LITD ZMQ Lidar Break</name>
+          <properties>
+            <property>
+              <name>ZeroMQ Socket Address</name>
+              <value>tcp://127.0.0.1:5564</value>
+              <type>cString</type>
+            </property>
+          </properties>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/connections/Lidar Break Thread._LITD ZMQ Lidar Break.zmq_thread</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/filters/LITD ZMQ Lidar Break/runners/zmq_thread</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/filters/LITD ZMQ Lidar Break/runners/lidar_trigger</name>
           <properties/>
         </property_set>
         <property_set>
@@ -2639,6 +2577,512 @@
         </property_set>
         <property_set>
           <name>services/zeromq.service.adtf</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/sample_streams/maneuver_list_stream_</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/connections/maneuver_list._maneuver_list_stream_.</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/connections/maneuver_list_stream_._Driver Module.maneuver_list</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/filters/LITD ZMQ Decision Sensors</name>
+          <properties>
+            <property>
+              <name>ZeroMQ Socket Address</name>
+              <value>tcp://127.0.0.1:5562</value>
+              <type>cString</type>
+            </property>
+          </properties>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/connections/Sensors Thread._LITD ZMQ Decision Sensors.zmq_thread</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/filters/LITD ZMQ Decision Sensors/runners/zmq_thread</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/connections/Sensors Timer._LITD ZMQ Decision Sensors.timer_trigger</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/filters/LITD ZMQ Decision Sensors/runners/timer_trigger</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/connections/jury_struct_stream._LITD ZMQ Decision Jury.jury</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/filters/LITD ZMQ Decision Jury/input_pins/jury</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/connections/LITD ZMQ Decision Jury.position_mux_position_mux_stream.</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/filters/LITD ZMQ Decision Jury/output_pins/position_mux</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/connections/LITD ZMQ Decision Sensors.desired_speed_desired_speed_stream.</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/filters/LITD ZMQ Decision Sensors/output_pins/desired_speed</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/connections/LITD ZMQ Decision Sensors.trajectories_trajectories_stream.</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/filters/LITD ZMQ Decision Sensors/output_pins/trajectories</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/sample_streams/driver_struct_stream</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/connections/LITD ZMQ Decision Jury.driver_driver_struct_stream.</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/filters/LITD ZMQ Decision Jury/output_pins/driver</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/connections/LITD ZMQ Decision Sensors.turn_signal_right_turn_signal_right_stream.</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/filters/LITD ZMQ Decision Sensors/output_pins/turn_signal_right</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/connections/LITD ZMQ Decision Sensors.turn_signal_left_turn_signal_left_stream.</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/filters/LITD ZMQ Decision Sensors/output_pins/turn_signal_left</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/connections/LITD ZMQ Decision Sensors.hazard_light_hazard_light_stream.</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/filters/LITD ZMQ Decision Sensors/output_pins/hazard_light</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/connections/LITD ZMQ Decision Sensors.brake_light_brake_light_stream.</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/filters/LITD ZMQ Decision Sensors/output_pins/brake_light</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/connections/LITD ZMQ Decision Sensors.reverse_light_reverse_light_stream.</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/filters/LITD ZMQ Decision Sensors/output_pins/reverse_light</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/sample_streams/lidar_break_stream</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/connections/position_stream._LITD ZMQ Decision Sensors.position</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/filters/LITD ZMQ Decision Sensors/input_pins/position</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/connections/measured_speed_stream._LITD ZMQ Decision Sensors.measured_speed</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/filters/LITD ZMQ Decision Sensors/input_pins/measured_speed</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/connections/road_sign_ext_stream._LITD ZMQ Decision Sensors.signs</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/filters/LITD ZMQ Decision Sensors/input_pins/signs</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/connections/laserscanner_stream._LITD ZMQ Decision Sensors.lidar</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/filters/LITD ZMQ Decision Sensors/input_pins/lidar</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/connections/ultrasonic_stream._LITD ZMQ Decision Sensors.ultrasonic</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/filters/LITD ZMQ Decision Sensors/input_pins/ultrasonic</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/connections/iner_meas_unit_stream._LITD ZMQ Decision Sensors.imu</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/filters/LITD ZMQ Decision Sensors/input_pins/imu</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/connections/controller_leverage_position_stream._LITD ZMQ Decision Sensors.controller_leverage</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/filters/LITD ZMQ Decision Sensors/input_pins/controller_leverage</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/connections/controller_feedback_stream._LITD ZMQ Decision Sensors.controller_feedback</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/filters/LITD ZMQ Decision Sensors/input_pins/controller_feedback</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/connections/siren_stream._LITD ZMQ Decision Sensors.siren</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/filters/LITD ZMQ Decision Sensors/input_pins/siren</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/connections/LITD ZMQ Alarm Classifier.siren_siren_stream.</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/filters/LITD ZMQ Alarm Classifier/output_pins/siren</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/connections/LITD ZMQ Lidar Break.break_lidar_break_stream.</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/filters/LITD ZMQ Lidar Break/output_pins/break</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/connections/lidar_break_stream._LITD ZMQ Decision Sensors.lidar_break</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/filters/LITD ZMQ Decision Sensors/input_pins/lidar_break</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/input_data_ports/jury_data_update</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/sample_streams/jury_data_update_stream</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/connections/jury_data_update._jury_data_update_stream.</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/filters/LITD ZMQ Decision Jury/input_pins/jury_data_update</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/connections/loc_confidence_front_stream._LITD ZMQ Decision Jury.confidence_front</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/filters/LITD ZMQ Decision Jury/input_pins/confidence_front</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/connections/loc_confidence_rear_stream._LITD ZMQ Decision Jury.confidence_rear</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/filters/LITD ZMQ Decision Jury/input_pins/confidence_rear</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/connections/laserscanner_stream._LITD ZMQ Lidar Break.lidar</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/filters/LITD ZMQ Lidar Break/input_pins/lidar</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/connections/measured_speed_stream._LITD ZMQ Lidar Break.speed</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/filters/LITD ZMQ Lidar Break/input_pins/speed</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/input_data_ports/steering_servo</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/sample_streams/steering_servo_stream</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/connections/steering_servo._steering_servo_stream.</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/connections/steering_servo_stream._LITD ZMQ Lidar Break.steering_servo</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/filters/LITD ZMQ Lidar Break/input_pins/steering_servo</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/sample_streams/front_cam_undistorted_stream</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/connections/front_cam_undistorted_stream._vision.front_cam</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/connections/front_cam_undistorted_stream._localization.front_cam</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/connections/preprocess.front_cam_undistorted_front_cam_undistorted_stream.</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/sample_streams/open_drive_map_stream</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/sample_streams/road_sign_map_stream</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/sample_streams/maneuver_list_stream</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/connections/maneuver_list._maneuver_list_stream.</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/connections/open_drive_map._open_drive_map_stream.</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/connections/road_sign_map._road_sign_map_stream.</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/connections/open_drive_map_stream._visualization.open_drive</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/connections/road_sign_map_stream._localization.road_sign_map</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/filters/LITD JuryFileCopy</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/connections/maneuver_list_stream._LITD JuryFileCopy.maneuver</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/filters/LITD JuryFileCopy/input_pins/maneuver</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/connections/road_sign_map_stream._LITD JuryFileCopy.roadsigns</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/filters/LITD JuryFileCopy/input_pins/roadsigns</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/connections/open_drive_map_stream._LITD JuryFileCopy.opendrive</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/filters/LITD JuryFileCopy/input_pins/opendrive</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/sample_streams/jury_update_stream</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/connections/LITD JuryFileCopy.update_jury_update_stream.</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/filters/LITD JuryFileCopy/output_pins/update</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/subgraphs/decision</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/connections/measured_speed_stream._decision.measured_speed</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/connections/iner_meas_unit_stream._decision.iner_meas_unit</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/connections/jury_struct._decision.jury_struct</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/connections/laserscanner._decision.laserscanner</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/connections/ultrasonic_struct._decision.ultrasonic_struct</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/connections/trajectory_finished_stream._decision.controller_feedback</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/connections/confidence_front_stream._decision.loc_confidence_front</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/connections/confidence_rear_stream._decision.loc_confidence_rear</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/connections/position_stream._decision.position</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/connections/leverage_position_stream._decision.controller_leverage_position</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/connections/road_sign_ext_stream._decision.road_sign_ext</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/connections/maneuver_list_stream._decision.maneuver_list</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/connections/jury_update_stream._decision.jury_data_update</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/connections/steering_stream._decision.steering_servo</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/connections/decision.trajectories_trajectories_stream.</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/connections/decision.position_mux_position_mux_stream.</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/connections/decision.desired_speed_desired_speed_stream.</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/connections/decision.brake_light_brake_light_stream.</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/connections/decision.reverse_light_reverse_light_stream.</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/connections/decision.hazard_light_hazard_light_stream.</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/connections/decision.turn_signal_right_turn_signal_right_stream.</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/connections/decision.turn_signal_left_turn_signal_left_stream.</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/connections/decision.driver_struct_driver_struct_stream.</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/filters/LITD ZMQ Trajectory Template</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/connections/Trajectory Thread._LITD ZMQ Trajectory Template.zmq_thread</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/filters/LITD ZMQ Trajectory Template/runners/zmq_thread</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/connections/Trajectory Timer._LITD ZMQ Trajectory Template.timer_trigger</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/filters/LITD ZMQ Trajectory Template/runners/timer_trigger</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/connections/LITD ZMQ Trajectory Template.trajectory_array_trajectories_zmq_stream.</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/filters/LITD ZMQ Trajectory Template/output_pins/trajectory_array</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/connections/jury_data_update_stream._LITD ZMQ Decision Jury.jury_data_update</name>
           <properties/>
         </property_set>
       </property_sets>
