@@ -123,8 +123,7 @@ tResult cFineLocalisation::Configure()
     RETURN_IF_FAILED(_runtime->GetObject(m_pClock));
     cFilename mapPathResolved = mapPath;
     adtf::services::ant::adtf_resolve_macros(mapPathResolved);
-    string pathToMap = mapPathResolved.GetPtr();
-    locator.setMap(const_cast<char*>(pathToMap.c_str()));
+    locator.setMap(const_cast<char*>(mapPathResolved.GetPtr()));
     locator.setAngleSearchSpace(angleRangeMin, angleRangeMax, angleIterCnt);
     affineMat[0][0] = mat00;
     affineMat[0][1] = mat01;
