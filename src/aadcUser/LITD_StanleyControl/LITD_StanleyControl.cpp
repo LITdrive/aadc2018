@@ -247,7 +247,7 @@ tResult cStanleyControl::Configure()
 
 tResult cStanleyControl::ProcessPosition(tTimeStamp tmTimeOfTrigger)
 {
-    if(!trajectoriesRecieved){
+    if(trj_list.countTrajectories()<=0){
         LOG_WARNING("Tried Driving without trajectories");
         RETURN_NOERROR;
     }
@@ -328,7 +328,7 @@ tResult cStanleyControl::ProcessPosition(tTimeStamp tmTimeOfTrigger)
 
 	calculateActualFrontAxlePosition();
 	if(DEBUG_STANLEY) LOG_INFO("Point of FrontPosition: x: %f, y: %f, h: %f", vehicleActualFrontAxlePosition.x, vehicleActualFrontAxlePosition.y, vehicleActualFrontAxlePosition.h * 180.0 / M_PI );
-	getNextVirtualPointOnPoly();
+	trj_list.getDistanceToNearestPoint(vehicleActualFrontAxlePosition, vehicleTargetFrontAxlePosition);
 	if(DEBUG_STANLEY) LOG_INFO("Point of SetPoint: x: %f, y: %f, h: %f", vehicleTargetFrontAxlePosition.x, vehicleTargetFrontAxlePosition.y, vehicleTargetFrontAxlePosition.h * 180.0 / M_PI );
 	calcSteeringAngle();
 	if(DEBUG_STANLEY) LOG_INFO("SteeringAngle in grad: %f", vehicleSteeringAngle * 180.0 / M_PI );
@@ -389,29 +389,7 @@ tResult cStanleyControl::ProcessTrajectories(tTimeStamp tmTimeOfTrigger)
 		const auto* trajectories = static_cast<const tTrajectory*>(oDecoder.GetElementAddress(m_ddlTrajectoryArrayIndex.trajectories));
 		memcpy(&trajectoryArray.trajectories, trajectories, sizeof trajectoryArray.trajectories);
 
-		// TODO: Ev. nochmal überdenken
-		// Save last Poly
-		// localTrajectoryArray[0] = localTrajectoryArray[actual_min_dist_poly_index];
-
-		/* process the new trajectories */
-		for (tSize i = 0; i < trajectoryArray.size && i < TRAJECTORY_ARRAY_LEN; i++)
-		{
-			tTrajectory t = trajectoryArray.trajectories[i];
-			/*LOG_DUMP("Trajectory [%d] x = %.2f + %.2fp + %.2fp² + %.2fp³, y = %.2f + %.2fp + %.2fp² + %.2fp³ with p = range(%.2f, %.2f) and direction = %s",
-				t.id, t.ax, t.bx, t.cx, t.dx, t.ay, t.by, t.cy, t.dy, t.start, t.end, t.backwards ? "backward" : "forward");*/
-			// TODO: Poly with ID 0 -> Reset
-			// TODO: Not sure if this is smart
-			if (false && t.backwards)
-			{
-				// If we have to drive a polynomial backwards we have to park 
-				// TODO: parkingStartPoint und parkingTargetPoint durch einsetzen in Parkpolynome (p = 1 auf Kreisbogen, p = 0 auf Gerade) berechnen
-				parking = true;
-			}
-
-			// Add received polys to local array of polys
-			localTrajectoryArray[i] = t;
-		}
-        trajectoriesRecieved = true;
+		trj_list.addTrajectoryArray(&trajectoryArray);
 	}
 
 	RETURN_NOERROR;
@@ -426,171 +404,6 @@ void cStanleyControl::calculateActualFrontAxlePosition() {
 	vehicleActualFrontAxlePosition.h = vehicleActualRearAxlePosition.h;
 }
 
-void cStanleyControl::updatePolyList(tTrajectory trajectory) {
-	//expect always "PLOYLIST_LEN" new polys in each updateStep
-	/*if (polyLen > POLYLIST_LEN || polyLen < POLYLIST_LEN) {
-		std::cout << "Got wrong number of new polys " << std::endl;
-		return;
-	}*/
-
-	//update polyList
-	/*for (int i = 0; i<TRAJECTORY_ARRAY_LEN; i++) {
-		trajectoryArray[i] = trajectory;
-	}*/
-
-	if (poly_completed)
-	{
-		localTrajectoryArray[0] = localTrajectoryArray[last_min_dist_poly_index];
-		last_min_dist_poly_index = actual_min_dist_poly_index;
-
-		for (int i = 1; i < TRAJECTORY_ARRAY_LEN; i++)
-		{
-			// TODO: trajectoryArray[i] = trajectories[i]
-			localTrajectoryArray[i] = trajectory;
-		}
-	}
-
-	else
-	{
-		for (int i = 0; i < TRAJECTORY_ARRAY_LEN; i++)
-		{
-			// TODO: trajectoryArray[i] = trajectories[i]
-			localTrajectoryArray[i] = trajectory;
-		}
-	}	
-}
-
-
-
-void cStanleyControl::getNextVirtualPointOnPoly() {
-
-	LITD_VirtualPoint actualPoint;
-	double min_dist = DBL_MAX;
-	//min_dist_poly_index = 0;
-	double min_poly_p = 0;
-	poly_completed = false;
-	double min_dist_x = DBL_MAX;
-	double min_dist_y = DBL_MAX;
-	double min_dist_h = 0;
-
-	for (int i = 0; i < TRAJECTORY_ARRAY_LEN; i++)
-	{
-		for (double j = localTrajectoryArray[i].start; j <= localTrajectoryArray[i].end; j+=(localTrajectoryArray[i].end-localTrajectoryArray[i].start)/POINTS_PER_POLY)
-		{
-            tTrajectory t = localTrajectoryArray[i];
-            if(localTrajectoryArray[i].end-localTrajectoryArray[i].start <= 0.0001){ //TODO REMOVE when proper traj management is finished -SG
-                LOG_INFO("Skipping trajectory: [%d] because range is to small", t.id);
-                break;
-            }
-
-			// p = [0, 1]
-			calcVirtualPointfromPoly(t, j, &actualPoint);
-
-			// Target Point on Polynom has to be in front of the actual position of the front axle
-			//if ((vehicleActualFrontAxlePosition.h == 0.0  && actualPoint.x > vehicleActualFrontAxlePosition.x) || (vehicleActualFrontAxlePosition.h == M_PI && actualPoint.x < vehicleActualFrontAxlePosition.x) || (vehicleActualFrontAxlePosition.h == M_PI/2 && actualPoint.y > vehicleActualFrontAxlePosition.y) || (vehicleActualFrontAxlePosition.h == (3/2)*M_PI && actualPoint.y > vehicleActualFrontAxlePosition.y) || (vehicleActualFrontAxlePosition.h > 0 && vehicleActualFrontAxlePosition.h < M_PI/2 && actualPoint.x > vehicleActualFrontAxlePosition.x && actualPoint.y > vehicleActualFrontAxlePosition.y) || (vehicleActualFrontAxlePosition.h > M_PI/2 && vehicleActualFrontAxlePosition.h < M_PI && actualPoint.x < vehicleActualFrontAxlePosition.x && actualPoint.y > vehicleActualFrontAxlePosition.y) || (vehicleActualFrontAxlePosition.h > M_PI && vehicleActualFrontAxlePosition.h < (3/2)*M_PI && actualPoint.x < vehicleActualFrontAxlePosition.x && actualPoint.y < vehicleActualFrontAxlePosition.y) || (vehicleActualFrontAxlePosition.h > (3/2)*M_PI && vehicleActualFrontAxlePosition.h < 2*M_PI && actualPoint.x > vehicleActualFrontAxlePosition.x && actualPoint.y < vehicleActualFrontAxlePosition.y))
-			//if ((vehicleActualFrontAxlePosition.h >= (3/2)*M_PI && vehicleActualFrontAxlePosition.h <= M_PI/2 && actualPoint.x > vehicleActualFrontAxlePosition.x) || (vehicleActualFrontAxlePosition.h >= M_PI/2 && vehicleActualFrontAxlePosition.h <= (3/2)*M_PI && actualPoint.x < vehicleActualFrontAxlePosition.x) || (vehicleActualFrontAxlePosition.h >= 0 && vehicleActualFrontAxlePosition.h <= M_PI && actualPoint.y > vehicleActualFrontAxlePosition.y) || (vehicleActualFrontAxlePosition.h >= M_PI && vehicleActualFrontAxlePosition.h <= 2*M_PI && actualPoint.y < vehicleActualFrontAxlePosition.y))
-			//{
-			
-			//calc vector from carfrontposition to actualpoint
-			double x_vec = actualPoint.x - vehicleActualFrontAxlePosition.x;
-			double y_vec = actualPoint.y - vehicleActualFrontAxlePosition.y;
-			double angleFromCarToActualPoint = wrapTo2Pi(atan2(y_vec, x_vec));
-			//if(DEBUG_STANLEY) LOG_INFO("Angle from Car to NextPoint: %f", angleFromCarToActualPoint * 180.0 / M_PI );
-			if(angleFromCarToActualPoint <= M_PI/2 || angleFromCarToActualPoint >= 3/2 * M_PI){
-
-				//calc norm to carPosition
-				double dist = sqrt(pow(actualPoint.x - vehicleActualFrontAxlePosition.x, 2) + pow(actualPoint.y - vehicleActualFrontAxlePosition.y, 2));
-				//if(DEBUG_STANLEY) LOG_INFO("In fancy logic-if" );
-				if (dist < min_dist)
-				{
-					min_dist = dist;
-					actual_min_dist_poly_index = i;
-					min_poly_p = j;
-					vehicleTargetFrontAxlePosition.x = actualPoint.x;
-					vehicleTargetFrontAxlePosition.y = actualPoint.y;
-					vehicleTargetFrontAxlePosition.h = actualPoint.h;
-
-					/*if (trajectoryArray[i].backwards)
-					{
-						vehicleTargetFrontAxlePosition.h = wrapTo2Pi(vehicleTargetFrontAxlePosition.h + M_PI);
-					}*/
-				}
-			}
-			//}
-		}
-	}
-	if(DEBUG_STANLEY) LOG_INFO("Point from Poly is: x: %f, y: %f, h: %f", vehicleTargetFrontAxlePosition.x, vehicleTargetFrontAxlePosition.y, vehicleTargetFrontAxlePosition.h * 180.0 / M_PI );
-	if(DEBUG_STANLEY) LOG_INFO("End of trajektorie loop" );
-
-	if (actual_min_dist_poly_index != last_min_dist_poly_index)
-	{
-		poly_completed = true;
-		//last_min_dist_poly_index = actual_min_dist_poly_index;
-	}
-
-	// Function value and ID of Poly with smallest distance to given car point
-	// idealPolyPoint->id = trajectories[actual_min_dist_poly_index].id;
-	// TODO: not compiling, there is no parameter p
-	// idealPolyPoint->p = min_poly_p;
-
-	// Point on Poly with smallest distance to given car point
-	//idealPoint->x = min_dist_x;
-	//idealPoint->y = min_dist_y;
-	//idealPoint->h = min_dist_h;
-}
-
-void cStanleyControl::calcVirtualPointfromPoly(tTrajectory poly, double p, LITD_VirtualPoint* vp) {
-	double heading = 0;
-
-	double x = poly.dx*pow(p, 3) + poly.cx*pow(p, 2) + poly.bx*p + poly.ax;
-	double y = poly.dy*pow(p, 3) + poly.cy*pow(p, 2) + poly.by*p + poly.ay;
-
-	// Poly ist Gerade
-	/*if (poly.dx == 0.0 && poly.cx == 0)
-	{
-		// Actually it's really dumb hard-coding this because straights might be rotated
-		if (poly.bx > 0 && poly.by == 0)
-		{
-			heading = 0.0;
-		}
-
-		else if (poly.bx < 0 && poly.by == 0)
-		{
-			heading = M_PI;
-		}
-
-		else if (poly.by > 0 && poly.bx == 0)
-		{
-			heading = M_PI / 2;
-		}
-
-		else if (poly.by < 0 && poly.bx == 0)
-		{
-			heading = (3 / 2)*M_PI;
-		}
-	}*/
-
-	
-	// Poly ist keine Gerade
-	double x_der = 3 * poly.dx*pow(p, 2) + 2 * poly.cx*p + poly.bx;
-	double y_der = 3 * poly.dy*pow(p, 2) + 2 * poly.cy*p + poly.by;
-
-	heading = wrapTo2Pi(atan2(y_der, x_der));
-
-	if (poly.backwards)
-	{
-		heading = wrapTo2Pi(heading + M_PI);
-	}
-	
-	//if(DEBUG_STANLEY) LOG_INFO("Derivation Points: x_der: %f, y_der: %f from h: %f", x_der, y_der, heading );
-	//double heading = wrapTo2Pi(atan2(y_p-y_m, x_p-x_m));
-
-	
-
-	vp->x = x;
-	vp->y = y;
-	vp->h = heading;
-}
 
 void cStanleyControl::mapSteeringAngle(){
 

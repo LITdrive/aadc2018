@@ -12,6 +12,8 @@ set (SOURCEFILES    	stdafx.h
 			            LITD_StanleyControl.cpp
                         LITD_VirtualPoint.h
                         LITD_VirtualPoint.cpp
+                        LITD_TrajectoryList.h
+                        LITD_TrajectoryList.cpp
                         ../utils/properties/FilePropertiesObserver.h
 						../utils/properties/FilePropertiesObserver.cpp
                                   )

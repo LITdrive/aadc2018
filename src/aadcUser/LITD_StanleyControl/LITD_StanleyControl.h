@@ -22,6 +22,7 @@ THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS AS IS AND ANY EXPRESS OR I
 
 #include "stdafx.h"
 #include "LITD_VirtualPoint.h"
+#include "LITD_TrajectoryList.h"
 #include <aadc_structs.h>
 #include "../utils/properties/FilePropertiesObserver.h"
 
@@ -116,7 +117,6 @@ private:
 	int last_min_dist_poly_index = 0;
 	bool poly_completed;
 	//::tPosition vehicleActualPosition;
-	::tTrajectory localTrajectoryArray[TRAJECTORY_ARRAY_LEN];
     LITD_VirtualPoint vehicleActualRearAxlePosition, vehicleActualFrontAxlePosition, vehicleTargetFrontAxlePosition;
 
     //controller params of Stanley
@@ -138,7 +138,9 @@ private:
 	// TODO: Output pin for poly_completed
 	// TODO: Ev. Output pin for poly completed
 	// TODO: Ev. Input pin for parking finished position
-	bool trajectoriesRecieved = false;
+
+
+	LITD_TrajectoryList trj_list;
 
 public:
 
@@ -160,15 +162,15 @@ public:
 
 	tResult ProcessPosition(tTimeStamp tmTimeOfTrigger);
 
-	void updatePolyList(tTrajectory trajectory);
+	//void updatePolyList(tTrajectory trajectory);
 
 	//void getNextVirtualPointOnPoly(tTrajectory trajectories[], uint8_t polyLen, tTrajectory* idealPolyPoint, LITD_VirtualPoint* idealPoint, LITD_VirtualPoint carPosition);
 
 	//void getNextVirtualPointOnPoly(tTrajectory trajectories[], LITD_VirtualPoint carPosition);
 
-	void getNextVirtualPointOnPoly();
+	//void getNextVirtualPointOnPoly();
 
-	void calcVirtualPointfromPoly(tTrajectory poly, double p, LITD_VirtualPoint * vp);
+	//void calcVirtualPointfromPoly(tTrajectory poly, double p, LITD_VirtualPoint * vp);
 
 	void mapSteeringAngle();
 
