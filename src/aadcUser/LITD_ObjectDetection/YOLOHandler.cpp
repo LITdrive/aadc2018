@@ -38,8 +38,8 @@ Status YOLOHandler::load_graph(string graph_path) {
 }
 
 Tensor readTensorFromMat(const Mat &left, const Mat &center, const Mat &right) {
-    int height = 448;
-    int width = 448;
+    int height = 416;
+    int width = 416;
     int depth = 3;
     int batch = 3;
     Tensor inputTensor(tensorflow::DT_FLOAT, tensorflow::TensorShape({batch, height, width, depth}));
@@ -81,7 +81,7 @@ Tensor YOLOHandler::forward_path(Mat camera_image) {
 
     int x = 50;
     int y = 380;
-    int edge_length = 448;
+    int edge_length = 416;
     cv::Rect ROI_left(x, y, edge_length, edge_length);
     left = camera_image(ROI_left);
     x = 416;

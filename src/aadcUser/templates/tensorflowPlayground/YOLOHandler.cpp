@@ -28,8 +28,8 @@ Status YOLOHandler::load_graph() {
 
 // Convert Mat image into tensor of shape (1, height, width, d) where last three dims are equal to the original dims.
 Tensor readTensorFromMat(const Mat &left, const Mat &center, const Mat &right) {
-    int height = 448;
-    int width = 448;
+    int height = 416;
+    int width = 416;
     int depth = 3;
     int batch = 3;
     Tensor inputTensor(tensorflow::DT_FLOAT, tensorflow::TensorShape({batch, height, width, depth}));
@@ -73,7 +73,7 @@ Tensor YOLOHandler::forward_path(Mat camera_image) {
 
     int x = 50;
     int y = 380;
-    int edge_length = 448;
+    int edge_length = 416;
     cv::Rect ROI_left(x, y, edge_length, edge_length);
     left = camera_image(ROI_left);
     x = 416;
@@ -120,15 +120,13 @@ int main(int argc, char* argv[]) {
         right_output_array[i] = output_flat(i+49000);
     }
 
-//    std::cout << "1: " << output_flat(1,2,3) << std::endl;
+    std::cout << "1: " << output_flat(1,2,3) << std::endl;
     std::cout << "1: " << left_output_array[24499] << std::endl;
     std::cout << "1: " << center_output_array[24499] << std::endl;
     std::cout << "1: " << right_output_array[24499] << std::endl;
-//    std::cout << "1: " << output.dims() << std::endl;
-//    std::cout << "2: "  << output.dim_size(0) << std::endl;
-//    std::cout << "3: "  << output.dim_size(1) << std::endl;
-//    std::cout << "4: "  << output.dim_size(2) << std::endl;
-//    std::cout << "5: "  << output.dim_size(3) << std::endl;
-
-    //std::cout << output.flat_outer_dims<float>();
+    std::cout << "1: " << output.dims() << std::endl;
+    std::cout << "2: "  << output.dim_size(0) << std::endl;
+    std::cout << "3: "  << output.dim_size(1) << std::endl;
+    std::cout << "4: "  << output.dim_size(2) << std::endl;
+    std::cout << "5: "  << output.dim_size(3) << std::endl;
 }

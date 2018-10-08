@@ -88,7 +88,7 @@ tResult cLITD_ObjectDetection::Process(tTimeStamp tmTimeOfTrigger)
     {
         object_ptr<const ISample> pReadSample;
         Tensor output;
-        int size_output_array = 24500;
+        int size_output_array = 21125;
         tFloat32 left_output_array[size_output_array];
         tFloat32 center_output_array[size_output_array];
         tFloat32 right_output_array[size_output_array];
@@ -113,8 +113,8 @@ tResult cLITD_ObjectDetection::Process(tTimeStamp tmTimeOfTrigger)
 
                 for (int i = 0; i < size_output_array; i++) {
                     left_output_array[i] = output_flat(i);
-                    center_output_array[i] = output_flat(i+24500);
-                    right_output_array[i] = output_flat(i+49000);
+                    center_output_array[i] = output_flat(i+21125);
+                    right_output_array[i] = output_flat(i+42250);
                 }
                 flag = 1;
             }
