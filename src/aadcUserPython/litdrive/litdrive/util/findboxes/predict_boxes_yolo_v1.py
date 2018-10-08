@@ -32,27 +32,12 @@ def postprocess(net_out):
     """
 	Takes net output, draw predictions, save to disk
 	"""
-    meta = {'side': 7, 'classes': 2, 'jitter': 0.2, 'num': 2, 'object_scale': 1, 'out_size': 588,
-            'inp_size': [448, 448, 3],
-            'model': 'cfg/v1/yolo-tiny-aadc.cfg', 'colors': [(254.0, 254.0, 254), (222.25, 190.5, 127)], 'rescore': 1,
-            'coords': 4, 'coord_scale': 5,
-            'net': {'channels': 3, 'type': '[net]', 'batch': 64, 'momentum': 0.9, 'scales': '5,5,2,2,.1,.1',
-                    'learning_rate': 0.0001, 'subdivisions': 64, 'policy': 'steps', 'max_batches': 40000, 'height': 448,
-                    'decay': 0.0005, 'width': 448, 'steps': '20,40,60,80,20000,30000'}, 'name': 'yolo-tiny-aadc',
-            'labels': ['person', 'car'], 'type': '[detection]', 'softmax': 0, 'sqrt': 1, 'class_scale': 1,
-            'noobject_scale': 0.5}
-
-    flags = {'load': 35875, 'trainer': 'rmsprop', 'summary': '', 'momentum': 0.0, 'threshold': -0.1, 'saveVideo': False,
-             'keep': 20, 'queue': 1, 'save': 2000, 'demo': '', 'verbalise': True, 'gpu': 0.0,
-             'labels': 'labels-TY-aadc.txt', 'config': './cfg/', 'lr': 1e-05, 'pbLoad': '', 'metaLoad': '',
-             'train': False, 'gpuName': '/gpu:0', 'savepb': False, 'backup': './ckpt/',
-             'annotation': '../pascal/VOCdevkit/ANN/', 'batch': 16, 'epoch': 1000, 'model': 'cfg/v1/yolo-tiny-aadc.cfg',
-             'imgdir': './sample_img/', 'binary': './bin/', 'json': False, 'dataset': '../pascal/VOCdevkit/IMG/'}
+    meta = {"net": {"type": "[net]", "batch": 64, "subdivisions": 8, "width": 416, "height": 416, "channels": 3, "momentum": 0.9, "decay": 0.0005, "angle": 0, "saturation": 1.5, "exposure": 1.5, "hue": 0.1, "learning_rate": 0.001, "max_batches": 40100, "policy": "steps", "steps": "-1,100,20000,30000", "scales": ".1,10,.1,.1"}, "type": "[region]", "anchors": [1.08, 1.19, 3.42, 4.41, 6.63, 11.38, 9.42, 5.11, 16.62, 10.52], "bias_match": 1, "classes": 20, "coords": 4, "num": 5, "softmax": 1, "jitter": 0.2, "rescore": 1, "object_scale": 5, "noobject_scale": 1, "class_scale": 1, "coord_scale": 1, "absolute": 1, "thresh": 0.5, "random": 1, "model": "cfg/tiny-yolo-voc.cfg", "inp_size": [416, 416, 3], "out_size": [13, 13, 125], "name": "tiny-yolo-voc", "labels": ["aeroplane", "bicycle", "bird", "boat", "bottle", "bus", "car", "cat", "chair", "cow", "diningtable", "dog", "horse", "motorbike", "person", "pottedplant", "sheep", "sofa", "train", "tvmonitor"], "colors": [[254.0, 254.0, 254], [239.88888888888889, 211.66666666666669, 127], [225.77777777777777, 169.33333333333334, 0], [211.66666666666669, 127.0, 254], [197.55555555555557, 84.66666666666667, 127], [183.44444444444443, 42.33333333333332, 0], [169.33333333333334, 0.0, 254], [155.22222222222223, -42.33333333333335, 127], [141.11111111111111, -84.66666666666664, 0], [127.0, 254.0, 254], [112.88888888888889, 211.66666666666669, 127], [98.77777777777777, 169.33333333333334, 0], [84.66666666666667, 127.0, 254], [70.55555555555556, 84.66666666666667, 127], [56.44444444444444, 42.33333333333332, 0], [42.33333333333332, 0.0, 254], [28.222222222222236, -42.33333333333335, 127], [14.111111111111118, -84.66666666666664, 0], [0.0, 254.0, 254], [-14.111111111111118, 211.66666666666669, 127]]}
 
     threshold = 0.1
     boxes = findboxes(meta, net_out, threshold)
 
-    h, w, = [448, 448]
+    h, w, = [416, 416]
     resultsForDecision = []
 
     for b in boxes:
