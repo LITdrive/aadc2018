@@ -50,9 +50,9 @@ private:
     /*! Reader of an InPin. */
     cPinReader m_oReader;
     /*! Writer to an OutPin. */
-    cPinWriter m_oWriter;
-    cPinWriter m_oWriter_2;
-    cPinWriter m_oWriter_3;
+    cPinWriter m_oWriterLeft;
+    cPinWriter m_oWriterCenter;
+    cPinWriter m_oWriterRight;
 
     YOLOHandler yolo_handler;
 
