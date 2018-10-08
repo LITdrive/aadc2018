@@ -173,7 +173,7 @@ cStanleyControl::cStanleyControl()
 	}
 	else
 	{
-		LOG_INFO("No mediadescription for tPolynomPoint found!");
+		LOG_WARNING("No mediadescription for tPolynomPoint found!");
 	}
 
     // register input pins
@@ -206,33 +206,6 @@ tResult cStanleyControl::Configure()
 	adtf::services::ant::adtf_resolve_macros(propertiesFileResolved);
 	m_properties = new FilePropertiesObserver(propertiesFileResolved.GetPtr());
 	m_properties->ReloadProperties();
-
-	// Fixed Polynomials of a cirle arc and a straight for testing
-	// Circle Arc
-	// 0.3443 x + 0.3115 x - 1.656 x + 0.363
-	/*localTrajectoryArray[1].start = 0;
-	localTrajectoryArray[1].end = 1;
-	localTrajectoryArray[1].ax = 0.702;
-	localTrajectoryArray[1].bx = 1.656;
-	localTrajectoryArray[1].cx = -0.3115;
-	localTrajectoryArray[1].dx = 0.3443;
-	// -0.3443 x + 1.344 x + 2.22e-16
-	localTrajectoryArray[1].ay = 0;
-	localTrajectoryArray[1].by = 0;
-	localTrajectoryArray[1].cy = 1.344;
-	localTrajectoryArray[1].dy = 0.3443;
-	// straight
-	// -0.339 x + 0.702
-	localTrajectoryArray[0].start = 0;
-	localTrajectoryArray[0].end = 1;
-	localTrajectoryArray[0].ax = 0.363;
-	localTrajectoryArray[0].bx =  0.339;
-	localTrajectoryArray[0].cx = 0;
-	localTrajectoryArray[0].dx = 0;
-	localTrajectoryArray[0].ay = 0;
-	localTrajectoryArray[0].by = 0;
-	localTrajectoryArray[0].cy = 0;
-	localTrajectoryArray[0].dy = 0;*/
 
 	// Parking
 	/*parkingStartPoint.x = -0.6369718092383394;
@@ -276,62 +249,24 @@ tResult cStanleyControl::ProcessPosition(tTimeStamp tmTimeOfTrigger)
 	vehicleActualRearAxlePosition.y = position.f32y;
 	vehicleActualRearAxlePosition.h = wrapTo2Pi(position.f32heading);
 	//vehicleActualRearAxlePosition.h = M_PI/4;
+
+
 	if(DEBUG_STANLEY) LOG_INFO("Point of BackPosition: x: %f, y: %f, h: %f", vehicleActualRearAxlePosition.x, vehicleActualRearAxlePosition.y, vehicleActualRearAxlePosition.h  * 180.0 / M_PI);
 
-	if (false && parking)
-	{
-		//irrelevant for parking --> will be handled by decision-network
-
-		/*if (!parkingStartPointReached && !parkingFinished) {
-			Vector2d diffParkingStartPosition = parkingStartPoint.getVector2d() - vehicleActualRearAxlePosition.getVector2d();
-			double distToParkingStartPosition = sqrt(pow(diffParkingStartPosition(1), 2) + pow(diffParkingStartPosition(2), 2));
-			double diffHeadingToParkingStartPosition = abs(wrapTo2Pi(atan2(diffParkingStartPosition(2), diffParkingStartPosition(1)) - M_PI / 2));
-
-			if (distToParkingStartPosition <= MAX_DIST_TO_PARKING_POSITION && diffHeadingToParkingStartPosition <= MAX_DIFF_HEADING_TO_PARKING_POSITION)
-			{
-				parkingStartPointReached = true;
-			}
-		}
-
-		else if(parkingStartPointReached && !parkingFinished)
-		{
-			Vector2d diffParkingEndPosition = parkingTargetPoint.getVector2d() - vehicleActualRearAxlePosition.getVector2d();
-			double distToParkingEndPosition = sqrt(pow(diffParkingEndPosition(1), 2) + pow(diffParkingEndPosition(2), 2));
-			double diffHeadingToParkingEndPosition = abs(wrapTo2Pi(atan2(diffParkingEndPosition(2), diffParkingEndPosition(1)) - M_PI / 2));
-
-			if (distToParkingEndPosition <= MAX_DIST_TO_PARKING_POSITION && diffHeadingToParkingEndPosition <= MAX_DIFF_HEADING_TO_PARKING_POSITION)
-			{
-				parkingFinished = true;
-			}
-		}
-
-		else if(parkingStartPointReached && parkingFinished)
-		{
-			parkingStartPointReached = false;
-			parkingFinished = false;
-			parking = false;
-		}*/
-	}
-
-	else
-	{
-		if (parkingStartPointReached)
-		{
-			parkingStartPointReached = false;
-		}
-
-		if (parkingFinished)
-		{
-			parkingFinished = false;
-		}	
-	}
-
 	calculateActualFrontAxlePosition();
+
 	if(DEBUG_STANLEY) LOG_INFO("Point of FrontPosition: x: %f, y: %f, h: %f", vehicleActualFrontAxlePosition.x, vehicleActualFrontAxlePosition.y, vehicleActualFrontAxlePosition.h * 180.0 / M_PI );
-	trj_list.getDistanceToNearestPoint(vehicleActualFrontAxlePosition, vehicleTargetFrontAxlePosition);
+
+	std::tuple<uint32_t, uint32_t, double> list_ret = trj_list.getDistanceToNearestPoint(vehicleActualFrontAxlePosition, vehicleTargetFrontAxlePosition);
+	tUInt32 id_finished = std::get<0>(list_ret);
+	tUInt32 id_current = std::get<1>(list_ret);
+	tFloat32 p_current = std::get<2>(list_ret);
 	if(DEBUG_STANLEY) LOG_INFO("Point of SetPoint: x: %f, y: %f, h: %f", vehicleTargetFrontAxlePosition.x, vehicleTargetFrontAxlePosition.y, vehicleTargetFrontAxlePosition.h * 180.0 / M_PI );
+
 	calcSteeringAngle();
+
 	if(DEBUG_STANLEY) LOG_INFO("SteeringAngle in grad: %f", vehicleSteeringAngle * 180.0 / M_PI );
+
 	mapSteeringAngle();
 	
 
@@ -343,18 +278,18 @@ tResult cStanleyControl::ProcessPosition(tTimeStamp tmTimeOfTrigger)
 		m_SteeringWriter << pWriteSampleSteering << flush << trigger;
 	}
 
-	// TODO: WRITE SAMPLE IF WE FINISHED A POLYNOMIAL
-	// TODO: WRITE SAMPLE IF WE FINISHED A POLYNOMIAL
+	//Send the finished polynomial id if the id is > 0.
 	object_ptr<ISample> pWriteSamplePolyFinished;
-	if (IS_OK(alloc_sample(pWriteSamplePolyFinished)))
-	{
-		tUInt32 id_finished = 42;
 
+	if (id_finished>0 && IS_OK(alloc_sample(pWriteSamplePolyFinished)))
+	{
 		auto oCodec = m_SignalValueSampleFactory.MakeCodecFor(pWriteSamplePolyFinished);
 		RETURN_IF_FAILED(oCodec.SetElementValue(m_ddlPolynomPointIndex.id, id_finished));
 		RETURN_IF_FAILED(oCodec.SetElementValue(m_ddlPolynomPointIndex.parameter, 0));
-		// TODO: Uncomment if done.
-		// m_PolyFinishedWriter << pWriteSamplePolyFinished << flush << trigger;
+		m_PolyFinishedWriter << pWriteSamplePolyFinished << flush << trigger;
+		if(DEBUG_STANLEY) {
+			LOG_INFO("STANLEY: submitted %u poly finished!", id_finished);
+		}
 	}
 
 	// TODO: WRITE SAMPLE WITH OUR TARGET POINT
@@ -362,12 +297,10 @@ tResult cStanleyControl::ProcessPosition(tTimeStamp tmTimeOfTrigger)
 	object_ptr<ISample> pWriteSampleTargetPoint;
 	if (IS_OK(alloc_sample(pWriteSampleTargetPoint)))
 	{
-		tUInt32 id_current = 42;
-		tFloat32 p_ansatz = 0.5;
 
 		auto oCodec = m_SignalValueSampleFactory.MakeCodecFor(pWriteSampleTargetPoint);
 		RETURN_IF_FAILED(oCodec.SetElementValue(m_ddlPolynomPointIndex.id, id_current));
-		RETURN_IF_FAILED(oCodec.SetElementValue(m_ddlPolynomPointIndex.parameter, p_ansatz));
+		RETURN_IF_FAILED(oCodec.SetElementValue(m_ddlPolynomPointIndex.parameter, p_current));
 		// TODO: Uncomment if done.
 		// m_PolyTargetPointWriter << pWriteSampleTargetPoint << flush << trigger;
 	}

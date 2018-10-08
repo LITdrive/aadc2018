@@ -36,10 +36,11 @@ bool LITD_TrajectoryList::removeTrajectory(uint32_t id) {
     return false;
 }
 
-uint32_t LITD_TrajectoryList::getDistanceToNearestPoint(LITD_VirtualPoint& car_pnt, LITD_VirtualPoint& target_pnt) {
+std::tuple<uint32_t, uint32_t, double> LITD_TrajectoryList::getDistanceToNearestPoint(LITD_VirtualPoint& car_pnt, LITD_VirtualPoint& target_pnt) {
     double smallest_dist=DBL_MAX;
     uint32_t smallest_id=0;
     uint32_t newest_passed_id=0;
+    double p_at_smallest=-1.0;
     //Iterate over all map entries in a sorted manner (std::map is sorted!)
     for(auto it = t_map.begin(); it!= t_map.end(); it++) {
 
@@ -60,6 +61,7 @@ uint32_t LITD_TrajectoryList::getDistanceToNearestPoint(LITD_VirtualPoint& car_p
                     smallest_id=trj.id;
                     smallest_dist=dist;
 
+                    p_at_smallest=j;
                     target_pnt.x=poly_pnt.x;
                     target_pnt.y=poly_pnt.y;
                     target_pnt.h=poly_pnt.h;
@@ -67,35 +69,42 @@ uint32_t LITD_TrajectoryList::getDistanceToNearestPoint(LITD_VirtualPoint& car_p
             }
         }
     }
-    //We have passed all polys. we set all polys to PASSED.
-    if(smallest_id==0) {
-        smallest_id=UINT32_MAX;
-    }
-    std::vector<uint32_t> to_delete;
-    for(auto it = t_map.begin(); it!= t_map.end(); it++) {
-        uint32_t index=it->first;
-        std::tuple<tTrajectory, LITD_TrajectoryListEntryState> tpl =  it->second;
-        LITD_TrajectoryListEntryState state = std::get<1>(tpl);
-        if(index<smallest_id) {
-            if(state!=TLES_PASSED) {
-                it->second = std::tuple<tTrajectory, LITD_TrajectoryListEntryState>(std::get<0>(tpl), TLES_PASSED);
-                newest_passed_id=index;
-            }
-            to_delete.push_back(index);
-        } else if(index==smallest_id) {
-            it->second = std::tuple<tTrajectory, LITD_TrajectoryListEntryState>(std::get<0>(tpl), TLES_CURRENT);
-        } else {
-            break;
-        }
-    }
-    if(to_delete.size()>1) {
-        to_delete.pop_back();
-        for (auto it = to_delete.cbegin(); it != to_delete.cend(); it++) {
-            t_map.erase(*it);
-        }
-    }
 
-    return newest_passed_id;
+    //We have passed all polys.
+    if(smallest_id==0) {
+        if(!t_map.empty()) {
+            newest_passed_id=(t_map.end()--)->first;
+            t_map.clear();
+        } else {
+            newest_passed_id=0;
+        }
+    } else {
+
+        std::vector<uint32_t> to_delete;
+        for(auto it = t_map.begin(); it!= t_map.end(); it++) {
+            uint32_t index=it->first;
+            std::tuple<tTrajectory, LITD_TrajectoryListEntryState> tpl =  it->second;
+            LITD_TrajectoryListEntryState state = std::get<1>(tpl);
+            if(index<smallest_id) {
+                if(state!=TLES_PASSED) {
+                    it->second = std::tuple<tTrajectory, LITD_TrajectoryListEntryState>(std::get<0>(tpl), TLES_PASSED);
+                    newest_passed_id=index;
+                }
+                to_delete.push_back(index);
+            } else if(index==smallest_id) {
+                it->second = std::tuple<tTrajectory, LITD_TrajectoryListEntryState>(std::get<0>(tpl), TLES_CURRENT);
+            } else {
+                break;
+            }
+        }
+        if(to_delete.size()>1) {
+            to_delete.pop_back();
+            for (auto it = to_delete.cbegin(); it != to_delete.cend(); it++) {
+                t_map.erase(*it);
+            }
+        }
+    }
+    return std::tuple<uint32_t, uint32_t, double> (newest_passed_id, smallest_id, p_at_smallest);
 }
 
 
