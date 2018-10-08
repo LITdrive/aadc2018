@@ -19,7 +19,6 @@ class ManeuverState(enum.Enum):
     MERGE_LEFT = 5,
     PARKING = 6
 
-
 class Car:
     def __init__(self, config: dict):
         # initialize states
@@ -90,8 +89,9 @@ class Perception:
         #TODO
         return False
 
-    def is_vehicle_coming_from_behind(self):
+    def is_ready_for_merge_lane(self):
         #for merging scenario
+        #check if moving object is in area
         #TODO
         return False
 
