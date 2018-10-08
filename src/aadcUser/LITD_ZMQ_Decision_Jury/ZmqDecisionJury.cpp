@@ -31,6 +31,7 @@ cZmqDecisionJury::cZmqDecisionJury()
 	// output pin names and types
 	m_outputs.emplace_back("driver", Driver);
 	m_outputs.emplace_back("position_mux", SignalValue);
+	m_outputs.emplace_back("initial_localization", BoolSignalValue);
 
 	// pipe out the data whenever there are new samples on these pins
 	m_triggers.emplace_back("timer");

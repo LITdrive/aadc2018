@@ -980,8 +980,8 @@
         <layout_set>
           <name>graphs/default_filter_graph/streaming_in_ports/ultrasonic_struct</name>
           <boundary>
-            <x>772</x>
-            <y>1045</y>
+            <x>778</x>
+            <y>1027</y>
             <width>0</width>
             <height>0</height>
           </boundary>
@@ -2749,7 +2749,7 @@
           <name>graphs/default_filter_graph/subgraphs/visualization</name>
           <boundary>
             <x>749</x>
-            <y>197</y>
+            <y>89</y>
             <width>135</width>
             <height>150</height>
           </boundary>
@@ -2860,7 +2860,7 @@
             <name/>
             <centerLineIsManual>true</centerLineIsManual>
             <centerLineAbsX>0</centerLineAbsX>
-            <centerLineAbsY>187</centerLineAbsY>
+            <centerLineAbsY>87</centerLineAbsY>
             <centerLineStraight>false</centerLineStraight>
           </connection_layout>
         </layout_set>
@@ -3139,8 +3139,8 @@
         <layout_set>
           <name>graphs/default_filter_graph/streaming_in_ports/laserscanner</name>
           <boundary>
-            <x>786</x>
-            <y>1009</y>
+            <x>788</x>
+            <y>991</y>
             <width>0</width>
             <height>0</height>
           </boundary>
@@ -3395,7 +3395,7 @@
           <name>graphs/default_filter_graph/streaming_in_ports/jury_struct</name>
           <boundary>
             <x>792</x>
-            <y>974</y>
+            <y>960</y>
             <width>0</width>
             <height>0</height>
           </boundary>
@@ -5512,7 +5512,7 @@
             <name/>
             <centerLineIsManual>true</centerLineIsManual>
             <centerLineAbsX>0</centerLineAbsX>
-            <centerLineAbsY>718</centerLineAbsY>
+            <centerLineAbsY>721</centerLineAbsY>
             <centerLineStraight>false</centerLineStraight>
           </connection_layout>
         </layout_set>
@@ -6437,8 +6437,8 @@
         <layout_set>
           <name>graphs/default_filter_graph/subgraphs/localization</name>
           <boundary>
-            <x>1003</x>
-            <y>421</y>
+            <x>1043</x>
+            <y>435</y>
             <width>0</width>
             <height>0</height>
           </boundary>
@@ -8856,7 +8856,7 @@
             <width>0</width>
             <height>0</height>
           </boundary>
-          <selected>true</selected>
+          <selected>false</selected>
           <connection_layout>
             <name/>
             <centerLineIsManual>true</centerLineIsManual>
@@ -11197,8 +11197,8 @@
         <layout_set>
           <name>graphs/default_filter_graph/subgraphs/decision</name>
           <boundary>
-            <x>1253</x>
-            <y>840</y>
+            <x>1277</x>
+            <y>826</y>
             <width>0</width>
             <height>0</height>
           </boundary>
@@ -11614,7 +11614,7 @@
           <connection_layout>
             <name/>
             <centerLineIsManual>true</centerLineIsManual>
-            <centerLineAbsX>906</centerLineAbsX>
+            <centerLineAbsX>913</centerLineAbsX>
             <centerLineAbsY>0</centerLineAbsY>
             <centerLineStraight>false</centerLineStraight>
           </connection_layout>
@@ -11699,7 +11699,7 @@
           <connection_layout>
             <name/>
             <centerLineIsManual>true</centerLineIsManual>
-            <centerLineAbsX>869</centerLineAbsX>
+            <centerLineAbsX>933</centerLineAbsX>
             <centerLineAbsY>0</centerLineAbsY>
             <centerLineStraight>false</centerLineStraight>
           </connection_layout>
@@ -11921,7 +11921,7 @@
             <name/>
             <centerLineIsManual>true</centerLineIsManual>
             <centerLineAbsX>0</centerLineAbsX>
-            <centerLineAbsY>640</centerLineAbsY>
+            <centerLineAbsY>652</centerLineAbsY>
             <centerLineStraight>false</centerLineStraight>
           </connection_layout>
         </layout_set>
@@ -12277,7 +12277,7 @@
           <connection_layout>
             <name/>
             <centerLineIsManual>true</centerLineIsManual>
-            <centerLineAbsX>1516</centerLineAbsX>
+            <centerLineAbsX>1489</centerLineAbsX>
             <centerLineAbsY>0</centerLineAbsY>
             <centerLineStraight>false</centerLineStraight>
           </connection_layout>
@@ -12583,7 +12583,7 @@
           <connection_layout>
             <name/>
             <centerLineIsManual>true</centerLineIsManual>
-            <centerLineAbsX>668</centerLineAbsX>
+            <centerLineAbsX>701</centerLineAbsX>
             <centerLineAbsY>0</centerLineAbsY>
             <centerLineStraight>false</centerLineStraight>
           </connection_layout>
@@ -12745,7 +12745,7 @@
           <name>graphs/default_filter_graph/sample_streams/marker_video</name>
           <boundary>
             <x>651</x>
-            <y>181</y>
+            <y>73</y>
             <width>0</width>
             <height>0</height>
           </boundary>
@@ -12897,12 +12897,12 @@
         <layout_set>
           <name>graphs/default_filter_graph/sample_streams/position_stream</name>
           <boundary>
-            <x>1270</x>
-            <y>485</y>
+            <x>1280</x>
+            <y>491</y>
             <width>0</width>
             <height>0</height>
           </boundary>
-          <selected>true</selected>
+          <selected>false</selected>
           <connection_layout>
             <name/>
             <centerLineIsManual>true</centerLineIsManual>
@@ -13021,7 +13021,7 @@
             <width>0</width>
             <height>0</height>
           </boundary>
-          <selected>true</selected>
+          <selected>false</selected>
           <connection_layout>
             <name/>
             <centerLineIsManual>true</centerLineIsManual>
@@ -13271,8 +13271,8 @@
         <layout_set>
           <name>graphs/decision_graph/filters/LITD ZMQ Decision Jury</name>
           <boundary>
-            <x>801</x>
-            <y>541</y>
+            <x>792</x>
+            <y>529</y>
             <width>0</width>
             <height>0</height>
           </boundary>
@@ -13446,7 +13446,7 @@
             <width>0</width>
             <height>0</height>
           </boundary>
-          <selected>false</selected>
+          <selected>true</selected>
           <connection_layout>
             <name/>
             <centerLineIsManual>true</centerLineIsManual>
@@ -13463,7 +13463,7 @@
             <width>0</width>
             <height>0</height>
           </boundary>
-          <selected>false</selected>
+          <selected>true</selected>
           <connection_layout>
             <name/>
             <centerLineIsManual>true</centerLineIsManual>
@@ -14189,8 +14189,8 @@
         <layout_set>
           <name>graphs/default_filter_graph/subgraphs/vision</name>
           <boundary>
-            <x>1013</x>
-            <y>305</y>
+            <x>819</x>
+            <y>253</y>
             <width>0</width>
             <height>0</height>
           </boundary>
@@ -14215,7 +14215,7 @@
           <connection_layout>
             <name/>
             <centerLineIsManual>true</centerLineIsManual>
-            <centerLineAbsX>909</centerLineAbsX>
+            <centerLineAbsX>791</centerLineAbsX>
             <centerLineAbsY>0</centerLineAbsY>
             <centerLineStraight>false</centerLineStraight>
           </connection_layout>
@@ -14232,7 +14232,7 @@
           <connection_layout>
             <name/>
             <centerLineIsManual>true</centerLineIsManual>
-            <centerLineAbsX>925</centerLineAbsX>
+            <centerLineAbsX>805</centerLineAbsX>
             <centerLineAbsY>0</centerLineAbsY>
             <centerLineStraight>false</centerLineStraight>
           </connection_layout>
@@ -14347,7 +14347,7 @@
             <width>0</width>
             <height>0</height>
           </boundary>
-          <selected>true</selected>
+          <selected>false</selected>
           <connection_layout>
             <name/>
             <centerLineIsManual>true</centerLineIsManual>
@@ -15830,7 +15830,7 @@
           <connection_layout>
             <name/>
             <centerLineIsManual>true</centerLineIsManual>
-            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsX>907</centerLineAbsX>
             <centerLineAbsY>0</centerLineAbsY>
             <centerLineStraight>false</centerLineStraight>
           </connection_layout>
@@ -15865,7 +15865,7 @@
             <name/>
             <centerLineIsManual>true</centerLineIsManual>
             <centerLineAbsX>0</centerLineAbsX>
-            <centerLineAbsY>1106</centerLineAbsY>
+            <centerLineAbsY>1168</centerLineAbsY>
             <centerLineStraight>false</centerLineStraight>
           </connection_layout>
         </layout_set>
@@ -16187,7 +16187,7 @@
           <connection_layout>
             <name/>
             <centerLineIsManual>true</centerLineIsManual>
-            <centerLineAbsX>1177</centerLineAbsX>
+            <centerLineAbsX>1129</centerLineAbsX>
             <centerLineAbsY>0</centerLineAbsY>
             <centerLineStraight>false</centerLineStraight>
           </connection_layout>
@@ -16240,6 +16240,261 @@
             <centerLineIsManual>true</centerLineIsManual>
             <centerLineAbsX>0</centerLineAbsX>
             <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/decision_graph/connections/Jury Thread._LITD ZMQ Decision Jury.zmq_thread</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/decision_graph/connections/Jury Timer._LITD ZMQ Decision Jury.timer_trigger</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/decision_graph/output_data_ports/initial_localization</name>
+          <boundary>
+            <x>1470</x>
+            <y>659</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/decision_graph/sample_streams/initial_localization_stream</name>
+          <boundary>
+            <x>1376</x>
+            <y>651</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/decision_graph/connections/initial_localization_stream._initial_localization.</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/decision_graph/connections/LITD ZMQ Decision Jury.initial_localization_initial_localization_stream.</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/decision_graph/filters/LITD ZMQ Decision Jury/output_pins/initial_localization</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/localization_graph/input_data_ports/initial_localization</name>
+          <boundary>
+            <x>43</x>
+            <y>247</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/localization_graph/sample_streams/initial_localization_stream</name>
+          <boundary>
+            <x>369</x>
+            <y>267</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/localization_graph/connections/initial_localization._initial_localization_stream.</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/default_filter_graph/sample_streams/front_cam_undistorted_stream</name>
+          <boundary>
+            <x>763</x>
+            <y>381</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/default_filter_graph/connections/rear_cam_undistorted_stream._localization.rear_cam</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>893</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/default_filter_graph/sample_streams/initial_localization_stream</name>
+          <boundary>
+            <x>982</x>
+            <y>322</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/default_filter_graph/connections/initial_localization_stream._localization.initial_localization</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/default_filter_graph/connections/decision.initial_localization_initial_localization_stream.</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>312</centerLineAbsY>
             <centerLineStraight>false</centerLineStraight>
           </connection_layout>
         </layout_set>

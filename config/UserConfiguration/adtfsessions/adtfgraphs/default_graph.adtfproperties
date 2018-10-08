@@ -1072,10 +1072,6 @@
           <properties/>
         </property_set>
         <property_set>
-          <name>graphs/default_filter_graph/subgraphs/localization</name>
-          <properties/>
-        </property_set>
-        <property_set>
           <name>graphs/decision_graph</name>
           <properties/>
         </property_set>
@@ -1930,10 +1926,6 @@
           <properties/>
         </property_set>
         <property_set>
-          <name>graphs/default_filter_graph/connections/measured_speed_stream._localization.speed</name>
-          <properties/>
-        </property_set>
-        <property_set>
           <name>graphs/default_filter_graph/connections/measured_speed_stream._control.measured_speed</name>
           <properties/>
         </property_set>
@@ -1946,19 +1938,11 @@
           <properties/>
         </property_set>
         <property_set>
-          <name>graphs/default_filter_graph/connections/iner_meas_unit_stream._localization.imu</name>
-          <properties/>
-        </property_set>
-        <property_set>
           <name>graphs/default_filter_graph/sample_streams/road_sign_ext_stream</name>
           <properties/>
         </property_set>
         <property_set>
           <name>graphs/default_filter_graph/connections/preprocess.marker_road_sign_ext_road_sign_ext_stream.</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/connections/road_sign_ext_stream._localization.road_sign_ext</name>
           <properties/>
         </property_set>
         <property_set>
@@ -2054,19 +2038,11 @@
           <properties/>
         </property_set>
         <property_set>
-          <name>graphs/default_filter_graph/connections/position_mux_stream._localization.position_mux</name>
-          <properties/>
-        </property_set>
-        <property_set>
           <name>graphs/default_filter_graph/sample_streams/rear_cam_undistorted_stream</name>
           <properties/>
         </property_set>
         <property_set>
           <name>graphs/default_filter_graph/connections/preprocess.rear_cam_undistorted_Sample Stream_1.</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/connections/Sample Stream_1._localization.rear_cam</name>
           <properties/>
         </property_set>
         <property_set>
@@ -2114,19 +2090,7 @@
           <properties/>
         </property_set>
         <property_set>
-          <name>graphs/default_filter_graph/connections/localization.confidence_front_confidence_front_stream.</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/connections/localization.confidence_rear_confidence_rear_stream.</name>
-          <properties/>
-        </property_set>
-        <property_set>
           <name>graphs/default_filter_graph/sample_streams/position_stream</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/connections/localization.pos_imu_position_stream.</name>
           <properties/>
         </property_set>
         <property_set>
@@ -2244,14 +2208,6 @@
           <properties/>
         </property_set>
         <property_set>
-          <name>graphs/vision_graph/filters/LITD ObjectDetection Front</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/vision_graph/filters/LITD ObjectDetection Rear</name>
-          <properties/>
-        </property_set>
-        <property_set>
           <name>graphs/vision_graph/filters/Object Detection Front</name>
           <properties/>
         </property_set>
@@ -2300,22 +2256,6 @@
           <properties/>
         </property_set>
         <property_set>
-          <name>graphs/vision_graph/connections/LITD ObjectDetection.output_yolo_front_straight_stream.</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/vision_graph/filters/LITD ObjectDetection Front/output_pins/output</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/vision_graph/connections/LITD ObjectDetection_1.output_yolo_rear_straight_stream.</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/vision_graph/filters/LITD ObjectDetection Rear/output_pins/output</name>
-          <properties/>
-        </property_set>
-        <property_set>
           <name>graphs/vision_graph/connections/Object Detection_1.classification_lenet_rear_stream.</name>
           <properties/>
         </property_set>
@@ -2332,14 +2272,6 @@
           <properties/>
         </property_set>
         <property_set>
-          <name>graphs/vision_graph/connections/front_cam_stream._LITD ObjectDetection Front.input</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/vision_graph/filters/LITD ObjectDetection Front/input_pins/input</name>
-          <properties/>
-        </property_set>
-        <property_set>
           <name>graphs/vision_graph/connections/front_cam_stream._Object Detection Front.input</name>
           <properties/>
         </property_set>
@@ -2353,14 +2285,6 @@
         </property_set>
         <property_set>
           <name>graphs/vision_graph/filters/Object Detection Rear/input_pins/input</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/vision_graph/connections/rear_cam_stream._LITD ObjectDetection Rear.input</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/vision_graph/filters/LITD ObjectDetection Rear/input_pins/input</name>
           <properties/>
         </property_set>
         <property_set>
@@ -2450,53 +2374,11 @@
           <properties/>
         </property_set>
         <property_set>
-          <name>graphs/decision_graph/filters/LITD ZMQ Decision Jury</name>
-          <properties>
-            <property>
-              <name>ZeroMQ Socket Address</name>
-              <value>tcp://127.0.0.1:5561</value>
-              <type>cString</type>
-            </property>
-          </properties>
-        </property_set>
-        <property_set>
-          <name>graphs/decision_graph/connections/Decision Thread._LITD ZMQ Decision Jury.zmq_thread</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/decision_graph/filters/LITD ZMQ Decision Jury/runners/zmq_thread</name>
-          <properties/>
-        </property_set>
-        <property_set>
           <name>graphs/vision_graph/active_runners/Yolo Front Thread</name>
           <properties/>
         </property_set>
         <property_set>
           <name>graphs/vision_graph/active_runners/Yolo Rear Thread</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/vision_graph/connections/Thread Runner._LITD ObjectDetection Front.trigger</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/vision_graph/filters/LITD ObjectDetection Front/runners/trigger</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/vision_graph/connections/Thread Runner_1._LITD ObjectDetection Rear.trigger</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/vision_graph/filters/LITD ObjectDetection Rear/runners/trigger</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/decision_graph/connections/Decision Jury Watchdog._LITD ZMQ Decision Jury.timer_trigger</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/decision_graph/filters/LITD ZMQ Decision Jury/runners/timer_trigger</name>
           <properties/>
         </property_set>
         <property_set>
@@ -2548,38 +2430,6 @@
           <properties/>
         </property_set>
         <property_set>
-          <name>services/kernel.service.adtf</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>services/reference_clock.service.adtf</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>services/signal_registry.service.adtf</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>services/media_description.service.adtf</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>services/qt_xsystem.ui_service.adtf</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>services/adtf_file_support.service.adtf</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>services/log_view.ui_service.adtf</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>services/zeromq.service.adtf</name>
-          <properties/>
-        </property_set>
-        <property_set>
           <name>graphs/decision_graph/sample_streams/maneuver_list_stream_</name>
           <properties/>
         </property_set>
@@ -2618,22 +2468,6 @@
           <properties/>
         </property_set>
         <property_set>
-          <name>graphs/decision_graph/connections/jury_struct_stream._LITD ZMQ Decision Jury.jury</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/decision_graph/filters/LITD ZMQ Decision Jury/input_pins/jury</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/decision_graph/connections/LITD ZMQ Decision Jury.position_mux_position_mux_stream.</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/decision_graph/filters/LITD ZMQ Decision Jury/output_pins/position_mux</name>
-          <properties/>
-        </property_set>
-        <property_set>
           <name>graphs/decision_graph/connections/LITD ZMQ Decision Sensors.desired_speed_desired_speed_stream.</name>
           <properties/>
         </property_set>
@@ -2651,14 +2485,6 @@
         </property_set>
         <property_set>
           <name>graphs/decision_graph/sample_streams/driver_struct_stream</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/decision_graph/connections/LITD ZMQ Decision Jury.driver_driver_struct_stream.</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/decision_graph/filters/LITD ZMQ Decision Jury/output_pins/driver</name>
           <properties/>
         </property_set>
         <property_set>
@@ -2814,26 +2640,6 @@
           <properties/>
         </property_set>
         <property_set>
-          <name>graphs/decision_graph/filters/LITD ZMQ Decision Jury/input_pins/jury_data_update</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/decision_graph/connections/loc_confidence_front_stream._LITD ZMQ Decision Jury.confidence_front</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/decision_graph/filters/LITD ZMQ Decision Jury/input_pins/confidence_front</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/decision_graph/connections/loc_confidence_rear_stream._LITD ZMQ Decision Jury.confidence_rear</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/decision_graph/filters/LITD ZMQ Decision Jury/input_pins/confidence_rear</name>
-          <properties/>
-        </property_set>
-        <property_set>
           <name>graphs/decision_graph/connections/laserscanner_stream._LITD ZMQ Lidar Break.lidar</name>
           <properties/>
         </property_set>
@@ -2870,22 +2676,6 @@
           <properties/>
         </property_set>
         <property_set>
-          <name>graphs/default_filter_graph/sample_streams/front_cam_undistorted_stream</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/connections/front_cam_undistorted_stream._vision.front_cam</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/connections/front_cam_undistorted_stream._localization.front_cam</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/connections/preprocess.front_cam_undistorted_front_cam_undistorted_stream.</name>
-          <properties/>
-        </property_set>
-        <property_set>
           <name>graphs/default_filter_graph/sample_streams/open_drive_map_stream</name>
           <properties/>
         </property_set>
@@ -2911,10 +2701,6 @@
         </property_set>
         <property_set>
           <name>graphs/default_filter_graph/connections/open_drive_map_stream._visualization.open_drive</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/default_filter_graph/connections/road_sign_map_stream._localization.road_sign_map</name>
           <properties/>
         </property_set>
         <property_set>
@@ -2955,6 +2741,230 @@
         </property_set>
         <property_set>
           <name>graphs/default_filter_graph/filters/LITD JuryFileCopy/output_pins/update</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/filters/LITD ZMQ Trajectory Template</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/connections/Trajectory Thread._LITD ZMQ Trajectory Template.zmq_thread</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/filters/LITD ZMQ Trajectory Template/runners/zmq_thread</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/connections/Trajectory Timer._LITD ZMQ Trajectory Template.timer_trigger</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/filters/LITD ZMQ Trajectory Template/runners/timer_trigger</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/connections/LITD ZMQ Trajectory Template.trajectory_array_trajectories_zmq_stream.</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/filters/LITD ZMQ Trajectory Template/output_pins/trajectory_array</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/filters/LITD ZMQ Decision Jury</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/connections/Jury Thread._LITD ZMQ Decision Jury.zmq_thread</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/filters/LITD ZMQ Decision Jury/runners/zmq_thread</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/connections/Jury Timer._LITD ZMQ Decision Jury.timer_trigger</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/filters/LITD ZMQ Decision Jury/runners/timer_trigger</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/connections/jury_data_update_stream._LITD ZMQ Decision Jury.jury_data_update</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/filters/LITD ZMQ Decision Jury/input_pins/jury_data_update</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/connections/jury_struct_stream._LITD ZMQ Decision Jury.jury</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/filters/LITD ZMQ Decision Jury/input_pins/jury</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/connections/loc_confidence_front_stream._LITD ZMQ Decision Jury.confidence_front</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/filters/LITD ZMQ Decision Jury/input_pins/confidence_front</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/connections/loc_confidence_rear_stream._LITD ZMQ Decision Jury.confidence_rear</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/filters/LITD ZMQ Decision Jury/input_pins/confidence_rear</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/connections/LITD ZMQ Decision Jury.driver_driver_struct_stream.</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/filters/LITD ZMQ Decision Jury/output_pins/driver</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/connections/LITD ZMQ Decision Jury.position_mux_position_mux_stream.</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/filters/LITD ZMQ Decision Jury/output_pins/position_mux</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/output_data_ports/initial_localization</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/sample_streams/initial_localization_stream</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/connections/initial_localization_stream._initial_localization.</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/connections/LITD ZMQ Decision Jury.initial_localization_initial_localization_stream.</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/filters/LITD ZMQ Decision Jury/output_pins/initial_localization</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/localization_graph/input_data_ports/initial_localization</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/localization_graph/sample_streams/initial_localization_stream</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/localization_graph/connections/initial_localization._initial_localization_stream.</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>services/kernel.service.adtf</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>services/reference_clock.service.adtf</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>services/signal_registry.service.adtf</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>services/media_description.service.adtf</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>services/qt_xsystem.ui_service.adtf</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>services/adtf_file_support.service.adtf</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>services/log_view.ui_service.adtf</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>services/zeromq.service.adtf</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/subgraphs/localization</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/sample_streams/front_cam_undistorted_stream</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/connections/preprocess.front_cam_undistorted_front_cam_undistorted_stream.</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/connections/front_cam_undistorted_stream._vision.front_cam</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/connections/front_cam_undistorted_stream._localization.front_cam</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/connections/rear_cam_undistorted_stream._localization.rear_cam</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/connections/road_sign_ext_stream._localization.road_sign_ext</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/connections/measured_speed_stream._localization.speed</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/connections/iner_meas_unit_stream._localization.imu</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/connections/road_sign_map_stream._localization.road_sign_map</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/connections/position_mux_stream._localization.position_mux</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/sample_streams/initial_localization_stream</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/connections/initial_localization_stream._localization.initial_localization</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/connections/localization.pos_imu_position_stream.</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/connections/localization.confidence_front_confidence_front_stream.</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/default_filter_graph/connections/localization.confidence_rear_confidence_rear_stream.</name>
           <properties/>
         </property_set>
         <property_set>
@@ -3054,35 +3064,7 @@
           <properties/>
         </property_set>
         <property_set>
-          <name>graphs/decision_graph/filters/LITD ZMQ Trajectory Template</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/decision_graph/connections/Trajectory Thread._LITD ZMQ Trajectory Template.zmq_thread</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/decision_graph/filters/LITD ZMQ Trajectory Template/runners/zmq_thread</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/decision_graph/connections/Trajectory Timer._LITD ZMQ Trajectory Template.timer_trigger</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/decision_graph/filters/LITD ZMQ Trajectory Template/runners/timer_trigger</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/decision_graph/connections/LITD ZMQ Trajectory Template.trajectory_array_trajectories_zmq_stream.</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/decision_graph/filters/LITD ZMQ Trajectory Template/output_pins/trajectory_array</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/decision_graph/connections/jury_data_update_stream._LITD ZMQ Decision Jury.jury_data_update</name>
+          <name>graphs/default_filter_graph/connections/decision.initial_localization_initial_localization_stream.</name>
           <properties/>
         </property_set>
       </property_sets>
