@@ -107,12 +107,28 @@ int main(int argc, char* argv[]) {
     }
 
     Tensor output = yolo_handler.forward_path(image);
+    auto output_flat = output.flat_outer_dims<float, 3>();
 
-    std::cout << "1: " << output.dims() << std::endl;
-    std::cout << "2: "  << output.dim_size(0) << std::endl;
-    std::cout << "3: "  << output.dim_size(1) << std::endl;
-    std::cout << "4: "  << output.dim_size(2) << std::endl;
-    std::cout << "5: "  << output.dim_size(3) << std::endl;
+    int size_output_array = 24500;
+    float left_output_array[size_output_array];
+    float center_output_array[size_output_array];
+    float right_output_array[size_output_array];
+
+    for (int i = 0; i < size_output_array; i++) {
+        left_output_array[i] = output_flat(i);
+        center_output_array[i] = output_flat(i+24500);
+        right_output_array[i] = output_flat(i+49000);
+    }
+
+//    std::cout << "1: " << output_flat(1,2,3) << std::endl;
+    std::cout << "1: " << left_output_array[24499] << std::endl;
+    std::cout << "1: " << center_output_array[24499] << std::endl;
+    std::cout << "1: " << right_output_array[24499] << std::endl;
+//    std::cout << "1: " << output.dims() << std::endl;
+//    std::cout << "2: "  << output.dim_size(0) << std::endl;
+//    std::cout << "3: "  << output.dim_size(1) << std::endl;
+//    std::cout << "4: "  << output.dim_size(2) << std::endl;
+//    std::cout << "5: "  << output.dim_size(3) << std::endl;
 
     //std::cout << output.flat_outer_dims<float>();
 }
