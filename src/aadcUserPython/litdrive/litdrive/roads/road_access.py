@@ -1,4 +1,4 @@
-from .LITD_RoadList import *
+from .road_list import *
 
 def getLaneListByDecisions(road_list:RoadList, start_id: int, decision_list, steps=10):
     #Returns a tuple with: a list of the lane objects, a list of ids, a list of the fired decisions (the last one is the decision that was used at this point (to detect merges etc.))

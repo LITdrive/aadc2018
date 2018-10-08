@@ -56,7 +56,7 @@ class RoadList:
             raise Exception("ERROR: tried adding successor dict for lane that does not exist!")
         self.successors[lane_id]=suc_dict
 
-    def saveToFile(self, filename):
+    def saveToFile(self, filename:str):
         try:
             f=open(filename, "wb")
             dump=pickle.dumps(self)
@@ -67,7 +67,7 @@ class RoadList:
             return False
         return True
 
-    def loadFromFile(self, filename):
+    def loadFromFile(self, filename:str):
         try:
             f=open(filename, "rb")
             loaded=pickle.load(f)
