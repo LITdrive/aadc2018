@@ -46,7 +46,9 @@ cLITD_ObjectDetection::cLITD_ObjectDetection()
     //Register input pin
     Register(m_oReader, "input", pType);
     //Register output pin
-    Register(m_oWriter, "output", pTypeTemplateData);
+    Register(m_oWriter, "left", pTypeTemplateData);
+    Register(m_oWriter_2, "center", pTypeTemplateData);
+    Register(m_oWriter_3, "right", pTypeTemplateData);
 
     //register callback for type changes
     m_oReader.SetAcceptTypeCallback([this](const adtf::ucom::ant::iobject_ptr<const adtf::streaming::ant::IStreamType>& pType) -> tResult

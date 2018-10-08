@@ -51,6 +51,8 @@ private:
     cPinReader m_oReader;
     /*! Writer to an OutPin. */
     cPinWriter m_oWriter;
+    cPinWriter m_oWriter_2;
+    cPinWriter m_oWriter_3;
 
     YOLOHandler yolo_handler;
 

@@ -97,7 +97,8 @@ Tensor YOLOHandler::forward_path(Mat camera_image) {
 }
 
 int main(int argc, char* argv[]) {
-    setenv("CUDA_VISIBLE_DEVICES", "", 1);
+    // run on CPU
+    // setenv("CUDA_VISIBLE_DEVICES", "", 1);
     Mat image = imread("/home/aadc/Downloads/pic.jpg");
     YOLOHandler yolo_handler;
     Status load_graph_status = yolo_handler.load_graph();
