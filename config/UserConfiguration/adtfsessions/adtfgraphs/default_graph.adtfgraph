@@ -5128,10 +5128,12 @@
         <active_runner>
           <name>Yolo Front Thread</name>
           <class_id>default_thread_runner.streaming.adtf.cid</class_id>
+          <deactivated>true</deactivated>
         </active_runner>
         <active_runner>
           <name>Yolo Rear Thread</name>
           <class_id>default_thread_runner.streaming.adtf.cid</class_id>
+          <deactivated>true</deactivated>
         </active_runner>
       </active_runners>
       <binding_proxys/>
