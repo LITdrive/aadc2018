@@ -194,7 +194,7 @@ typedef struct
 #pragma pack(push,1)
 typedef struct
 {
-    tFloat32 f32NodeValue[588];
+    tFloat32 f32NodeValue[21125];
 } tYOLONetOutput;
 #pragma pack(pop)
 
