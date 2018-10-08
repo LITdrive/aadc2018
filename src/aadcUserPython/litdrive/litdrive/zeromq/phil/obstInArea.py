@@ -312,14 +312,16 @@ def process(lidar,ultraSonic,position): #TODO remove IMU and Speed
     # project it to global coodrinates:
     dist_compl_global = localToGlobal(x,y,heading,dist_compl)
 
-    # check if points are in the areas
-    isinArea = np.zeros((len(dist_compl_global),areas.shape[1]))
-    for rw, point in enumerate(dist_compl_global):
-            for clm, a in enumerate(areas): #for every row
-                isIn= insideArea(point,a)
-                isinArea[rw,clm]=isIn
-    print('Obst found in areas: ',isinArea.sum(0)) #how many points are in which area
-    numPointsInArea = isinArea.sum(0)
+    # check how many points are in local areas of intrest
+    ptsInLocalAOIs=[]
+    for ara in localAOIs:
+        ptsInLocalAOIs.append(getPointsInArea(dist_compl,ara))
+
+
+    # check if points are in the global areas
+    ptsInGlobalAOIs=[]
+    for ara in areas:
+        ptsInGlobalAOIs.append(getPointsInArea(dist_compl,ara))
 
     if useMAP:
         if (i%1)==0: #update every _ samples
@@ -330,10 +332,6 @@ def process(lidar,ultraSonic,position): #TODO remove IMU and Speed
         if ((iim+1)%15)==0: #draw ever ... updates
             #locMap, loc_map_car_pos= getLocalMap(dist_compl)
             plotMap()
-
-    sig_outs = []
-    for nPiA in numPointsInArea:
-        sig_outs.append( (1337, nPiA) )
 
     if is_debugging:
         plt.figure()
@@ -371,8 +369,14 @@ def process(lidar,ultraSonic,position): #TODO remove IMU and Speed
             plt.text(a[0].real+0.1, a[0].imag,str(row))
         plt.show()
 
+    # prepare signal out
+    sig_outs = []
+    for nPiA in [*ptsInLocalAOIs, *ptsInGlobalAOIs]:
+        sig_outs.append( (1337, nPiA) )
+
     if len(sig_outs)==1:
         return sig_outs
+
     return (*sig_outs,)
 
 def insideArea(point, area):
@@ -399,6 +403,13 @@ def insideArea(point, area):
                         inside = not inside
         p1x, p1y = p2x, p2y
     return inside
+
+def getPointsInArea(dist_compl,area):
+    ctr = 0
+    for rw, point in enumerate(dist_compl):
+        isIn= insideArea(point,area)
+        if isIn: ctr+=1
+    return ctr
 
 def checkObstacles(dist_compl, centerBoxCoordinate, box_width, box_height, threshold=2):
     """
@@ -443,22 +454,35 @@ def checkObstaclesAhead(ldr_compl,tireAngle, maxLen=0.3,threshold=2):
     return sum(obstacleIdx)>threshold
 
 if __name__ == "__main__":
+    #load the local areas:
+    df = pd.read_csv('litdrive/zeromq/phil/localAOIs.csv',header=None)
+    a = df.values
+    pts = a[:,1]+1j*a[:,2]
+    pts-=pts[0] #everything is relative to the car pos
+    # the first index is front tip of the car --> offset to hinteraxn (backaxle)
+    # has to be shifted by:
+    pts+=np.array([CAR_HEIGHT/200+0j])+SHIFT #front spizzal to hinteraxn
+    localAOIs = pts[1:].reshape(4,-1) #make sure it is devidable by 4
+    if is_debugging:
+        plt.plot(pts.real,pts.imag)
+
+    #load ares to check:
+    df = pd.read_csv('litdrive/zeromq/phil/areas.csv',header=None) #add Property
+    a = df.values
+    ofs = 0
+    areas = a[:,1]+1j*a[:,2]
+    areas=areas.reshape(4,-1)
+    #TODO append if less then 20
+
+
     # open a server for the filter
     NUM_AREAS = 20 #TODO adjust
     tsv=[]
     for i in range(NUM_AREAS):
-         tsv.append("tSignalValue"])
+         tsv.append("tSignalValue")
     zmq = ZmqServer("tcp://*:5556",
                     ["tLaserScannerData","tUltrasonicStruct","tPosition"],
                     tsv)
-
-    #load ares to check:
-    df = pd.read_csv('litdrive/zeromq/phil/areas.csv') #add Property
-    a = df.values
-    ofs = 0 
-    areas = a[:,0]+1j*a[:,1]
-    areas=areas.reshape(4,-1)
-    #TODO append if less then 20
 
     if useMAP:
         if visualize:
