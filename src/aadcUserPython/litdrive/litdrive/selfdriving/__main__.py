@@ -1,18 +1,25 @@
-import json
-import argparse
 import functools
+import threading
 
-from .state import Car
 from .commander import Commander
+from .jury import JuryThread
 from .receptors import *
+from .state import Car
 from ..zeromq.server import ZmqServer
 
 
 def main(socket: str, config: dict):
     print("LITdrive >>> Towards Autonomy.")
 
+    # lock concurrent access to the state
+    lock = threading.Lock()
+
     car = Car(config)
-    commander = Commander(car, config)
+    commander = Commander(car, lock, config)
+
+    # setup and start jury thread
+    car.jury_receptor = JuryThread("tcp://*:5561", car, lock)
+    car.jury_receptor.start()
 
     # setup receptors
     car.siren_receptor = SirenReceptor(car.perception)
@@ -33,13 +40,17 @@ class DecisionServer:
         self._commander = commander
 
         inputs = [
-            "tJuryStruct",  # jury commands
-            "tPosition",  # current position
-            "tSignalValue",  # current speed
-            "tInerMeasUnitData",  # imu
+            "tBoolSignalValue",  # timer (TRIGGER)
+            "tPosition",  # position
+            "tSignalValue",  # measured_speed
+            "tRoadSignExt",  # signs
+            "tLaserScannerData",  # lidar
             "tUltrasonicStruct",  # ultrasonic
-            "tRoadSignExt",  # road signs
-            "tSignalValue"  # control feedback
+            "tInerMeasUnitData",  # imu
+            "tPolynomPoint",  # controller_leverage
+            "tPolynomPoint",  # controller_feedback
+            "tBoolSignalValue",  # siren
+            "tBoolSignalValue",  # lidar_break
         ]
         outputs = [
             "tSignalValue",  # desired speed
@@ -58,15 +69,13 @@ class DecisionServer:
 
     @staticmethod
     def _process(car: Car, commander: Commander,
-                 jury, position, speed, imu, ultrasonic, road_signs, control_feedback):
-        """
-        Hand over new samples to our receptors and ask the commander for a decision
-        :param car: A reference to the car model, which holds the receptors
-        :return: The filter output
-        """
+                 timer, position, measured_speed, signs, lidar, ultrasonic, imu,
+                 controller_leverage, controller_feedback, siren, lidar_break):
+        print("- sensor")
 
         # debug output
-        print(json.dumps([jury, position, speed, imu, ultrasonic, road_signs, control_feedback], indent=2))
+        # print(json.dumps([position, measured_speed, signs, lidar, ultrasonic, imu,
+        #                  controller_leverage, controller_feedback, siren, lidar_break], indent=2))
 
         car.roadsign_receptor.update(position)
         car.siren_receptor.update()
@@ -76,12 +85,5 @@ class DecisionServer:
         return (0, commander.out_speed), commander.out_trajectories
 
 
-# python -m litdrive.selfdriving "tcp://*:5555"
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="LITdrive Self-Driving AI")
-    parser.add_argument('socket', type=str, default="tcp://*:5555",
-                        help="The socket address for the ZeroMQ Server (e.g. 'tcp://*:5555')")
-    args = parser.parse_args()
-
-    # TODO: read configurations from command line
-    main(args.socket, {"roadFile": None})
+    main("tcp://*:5562", {"roadFile": None})

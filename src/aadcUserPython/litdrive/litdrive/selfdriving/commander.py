@@ -2,8 +2,9 @@ from .state import Car
 
 
 class Commander:
-    def __init__(self, car: Car, config: dict):
+    def __init__(self, car: Car, lock, config: dict):
         self._car = car
+        self._lock = lock
         self.out_speed = 0
         self.out_trajectories = (0, 1, 2, 3, 4, 1, 2, 3, 4, 0, 1, True)
 
