@@ -2,9 +2,10 @@ import numpy as np
 import scipy.integrate
 from enum import IntEnum
 import pickle
+from litdrive.selfdriving.enums import ManeuverState
 
 
-class RoadDecisions(IntEnum):
+'''class ManeuverState(IntEnum):
     NEXT=0
     LEFT=1
     STRAIGHT=2
@@ -12,7 +13,7 @@ class RoadDecisions(IntEnum):
     MERGE=4
     INVALID=5
     END=6
-    MAX=6
+    MAX=6'''
 
 
 class RoadList:
@@ -43,14 +44,14 @@ class RoadList:
         self.roads[road_id]=element
 
     def setLanePredecessorDict(self, lane_id, pre_dict):
-        #if(RoadDecisions.NEXT in pre_dict and len(pre_dict)!=1):
+        #if(ManeuverState.NEXT in pre_dict and len(pre_dict)!=1):
         #    raise Exception("ERROR: predecessor dict is malformed! (has a NEXT and other keys!")
         if(lane_id not in self.lanes):
             raise Exception("ERROR: tried adding predecessor dict for lane that does not exist!")
         self.predecessors[lane_id]=pre_dict
 
     def setLaneSuccessorDict(self, lane_id, suc_dict):
-        #if(RoadDecisions.NEXT in suc_dict and len(suc_dict)!=1):
+        #if(ManeuverState.NEXT in suc_dict and len(suc_dict)!=1):
         #    raise Exception("ERROR: successor dict is malformed! (has a NEXT and other keys!")
         if(lane_id not in self.lanes):
             raise Exception("ERROR: tried adding successor dict for lane that does not exist!")
@@ -291,7 +292,25 @@ class LaneElementPoly3(LaneElement):
         c=self.y_poly[2]
         b=self.y_poly[1]
         a=self.y_poly[0]
-        self.y_poly=np.poly1d([-d, 3*d+c, -3*d-2*c-b, a+b+c+d])        
+        self.y_poly=np.poly1d([-d, 3*d+c, -3*d-2*c-b, a+b+c+d])
+
+    def getPolys(self, reverse=False):
+        #Reverses the Polynomial parameter range from 0 to 1 -> 1 to 0
+        if(reverse):
+            d=self.x_poly[3]
+            c=self.x_poly[2]
+            b=self.x_poly[1]
+            a=self.x_poly[0]
+            x_poly=np.poly1d([-d, 3*d+c, -3*d-2*c-b, a+b+c+d])
+            d=self.y_poly[3]
+            c=self.y_poly[2]
+            b=self.y_poly[1]
+            a=self.y_poly[0]
+            y_poly=np.poly1d([-d, 3*d+c, -3*d-2*c-b, a+b+c+d])
+        else:
+            x_poly=self.x_poly
+            y_poly=self.y_poly
+        return (x_poly, y_poly)
 
     def __str__( self ):
         return "LaneElementPoly3: x = {0} + {1} * p + {2} * p² + {3} * p³ | y = {4} + {5} * p + {6} * p² + {7} * p³".format(self.x_poly[0],self.x_poly[1],self.x_poly[2],self.x_poly[3],self.y_poly[0],self.y_poly[1],self.y_poly[2],self.x_poly[3])

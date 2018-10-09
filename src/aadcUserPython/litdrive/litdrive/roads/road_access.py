@@ -1,4 +1,5 @@
 from .road_list import *
+from litdrive.selfdriving.enums import ManeuverState
 
 def getLaneListByDecisions(road_list:RoadList, start_id: int, decision_list, steps=10):
     #Returns a tuple with: a list of the lane objects, a list of ids, a list of the fired decisions (the last one is the decision that was used at this point (to detect merges etc.))
@@ -17,17 +18,17 @@ def getLaneListByDecisions(road_list:RoadList, start_id: int, decision_list, ste
         if(len(lane_suc)==1):
             #We either have a NEXT or a MERGE.
             #we use the merge-decision if there is any. or just run over it, if there is none.
-            if(RoadDecisions.MERGE in lane_suc):
-                if(len(decision_list)>decision_id and decision_list[decision_id]==RoadDecisions.MERGE):
+            if(ManeuverState.MERGE in lane_suc):
+                if(len(decision_list)>decision_id and decision_list[decision_id]==ManeuverState.MERGE):
                     decision_id+=1
-                result_list[2].append(RoadDecisions.MERGE)
-                lane_id=lane_suc[RoadDecisions.MERGE]
-            elif(RoadDecisions.NEXT in lane_suc):
-                lane_id=lane_suc[RoadDecisions.NEXT]
-                result_list[2].append(RoadDecisions.NEXT)
+                result_list[2].append(ManeuverState.MERGE)
+                lane_id=lane_suc[ManeuverState.MERGE]
+            elif(ManeuverState.NEXT in lane_suc):
+                lane_id=lane_suc[ManeuverState.NEXT]
+                result_list[2].append(ManeuverState.NEXT)
             else:
                 print("ERROR: lane_suc has one entry bit is neither MERGE nor NEXT!")
-                result_list[2].append(RoadDecisions.INVALID)
+                result_list[2].append(ManeuverState.INVALID)
                 return result_list
         else:
             if(len(decision_list)>decision_id):
@@ -38,11 +39,11 @@ def getLaneListByDecisions(road_list:RoadList, start_id: int, decision_list, ste
                     result_list[2].append(dec)
                 else:
                     print("WARNING: lane_suc has no suitable successor for decision!")
-                    result_list[2].append(RoadDecisions.INVALID)
+                    result_list[2].append(ManeuverState.INVALID)
                     return result_list
             else:
                 print("WARNING: lane_suc has no more decisions on this point!")
-                result_list[2].append(RoadDecisions.INVALID)
+                result_list[2].append(ManeuverState.INVALID)
                 return result_list
         steps-=1
     return result_list

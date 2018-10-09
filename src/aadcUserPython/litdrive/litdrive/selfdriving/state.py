@@ -1,23 +1,8 @@
 import enum
 
+from .enums import *
 from .planning.planner import Planner
 
-
-class GlobalState(enum.Enum):
-    STOP = 1,
-    INIT = 2,
-    DRIVING = 3,
-    RESTART = 4,
-    ERROR = 5
-
-
-class ManeuverState(enum.Enum):
-    NONE = 1,
-    STRAIGHT = 2,
-    LEFT = 3,
-    RIGHT = 4,
-    MERGE_LEFT = 5,
-    PARKING = 6
 
 class Car:
     def __init__(self, config: dict):
@@ -44,7 +29,7 @@ class Perception:
         return True
 
     def is_roadworks_ahead(self):
-        return Fals
+        return False
 
     def is_in_tunnel(self):
         return False

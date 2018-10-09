@@ -1,5 +1,6 @@
 from .road_list import *
 import numpy as np
+from litdrive.selfdriving.enums import ManeuverState
 
 
 def fitPolysToPoly(list_p1d_u, list_p1d_v, list_hdg, list_x, list_y):
@@ -509,7 +510,7 @@ def ReadOpenDrive(xml_tree, scaling_factor=1, lane_offsets=(0.0, 0.25, 0.75), an
                                     suc_lane_id=suc_road.getLaneByOpenDriveID(od_lane_id)
                                     if(suc_lane_id is None):
                                         raise Exception("ERROR: everythings fucked up here. I hate opendrive! lane_id {}, od_lane_id {}".format(lane_id,od_lane_id))
-                                    road_list.setLaneSuccessorDict(lane_id,{RoadDecisions.NEXT: suc_lane_id})
+                                    road_list.setLaneSuccessorDict(lane_id,{ManeuverState.NEXT: suc_lane_id})
 
                         for i in [1,2]:
                             lane_id=road.getLaneByOpenDriveID(i)
@@ -522,7 +523,7 @@ def ReadOpenDrive(xml_tree, scaling_factor=1, lane_offsets=(0.0, 0.25, 0.75), an
                                     suc_lane_id=suc_road.getLaneByOpenDriveID(od_lane_id)
                                     if(suc_lane_id is None):
                                         raise Exception("ERROR: everythings fucked up here. I hate opendrive! lane_id {}, od_lane_id {}".format(lane_id,od_lane_id))
-                                    road_list.setLanePredecessorDict(lane_id,{RoadDecisions.NEXT: suc_lane_id})
+                                    road_list.setLanePredecessorDict(lane_id,{ManeuverState.NEXT: suc_lane_id})
 
                     elif(suc_type.lower()=="junction"):
                         #construct a decision
@@ -548,7 +549,7 @@ def ReadOpenDrive(xml_tree, scaling_factor=1, lane_offsets=(0.0, 0.25, 0.75), an
                                 if(suc_lane_id is None):
                                     raise Exception("ERROR: No lane id for road {} junction successor road {} found!".format(road_id, suc_road_id))
                             suc_lane=road_list.lanes[suc_lane_id]
-                            suc_roads_dict[RoadDecisions.MERGE]=suc_lane_id
+                            suc_roads_dict[ManeuverState.MERGE]=suc_lane_id
                             lane_id=road_list.roads[road_id].getLaneByOpenDriveID(-1)
                             if(lane_id is None):
                                 raise Exception("ERROR: road {} has junction {} as successor, but no right lane!".format(road_id, suc_id))
@@ -563,17 +564,17 @@ def ReadOpenDrive(xml_tree, scaling_factor=1, lane_offsets=(0.0, 0.25, 0.75), an
                                         raise Exception("ERROR: No lane id for road {} junction successor road {} found!".format(road_id, suc_road_id))
                                 suc_lane=road_list.lanes[suc_lane_id]
                                 if(suc_lane.getAngleChange()>angle_left_threshold):
-                                    if(RoadDecisions.LEFT in suc_roads_dict):
+                                    if(ManeuverState.LEFT in suc_roads_dict):
                                         raise Exception("ERROR: road {} junction successor {} road has already a LEFT entry! {}".format(road_id, suc_id, suc_roads_dict))
-                                    suc_roads_dict[RoadDecisions.LEFT]=suc_lane_id
+                                    suc_roads_dict[ManeuverState.LEFT]=suc_lane_id
                                 elif(suc_lane.getAngleChange()<angle_right_threshold):
-                                    if(RoadDecisions.RIGHT in suc_roads_dict):
+                                    if(ManeuverState.RIGHT in suc_roads_dict):
                                         raise Exception("ERROR: road {} junction successor {} road has already a RIGHT entry! {}".format(road_id, suc_id, suc_roads_dict))
-                                    suc_roads_dict[RoadDecisions.RIGHT]=suc_lane_id                                        
+                                    suc_roads_dict[ManeuverState.RIGHT]=suc_lane_id                                        
                                 else:
-                                    if(RoadDecisions.STRAIGHT in suc_roads_dict):
+                                    if(ManeuverState.STRAIGHT in suc_roads_dict):
                                         raise Exception("ERROR: road {} junction successor {} road has already a STRAIGHT entry! {}".format(road_id, suc_id, suc_roads_dict))
-                                    suc_roads_dict[RoadDecisions.STRAIGHT]=suc_lane_id
+                                    suc_roads_dict[ManeuverState.STRAIGHT]=suc_lane_id
                         else:
                             raise Exception("ERROR Road {} junction {} successor has no valid roads!".format(road_id, suc_id))
                         #The Predecessor entry for a junction is always for the right lane from opendrive.
@@ -637,7 +638,7 @@ def ReadOpenDrive(xml_tree, scaling_factor=1, lane_offsets=(0.0, 0.25, 0.75), an
                                     suc_lane_id=suc_road.getLaneByOpenDriveID(od_lane_id)
                                     if(suc_lane_id is None):
                                         raise Exception("ERROR: everythings fucked up here. I hate opendrive! lane_id {}, od_lane_id {}".format(lane_id,od_lane_id))
-                                    road_list.setLanePredecessorDict(lane_id,{RoadDecisions.NEXT: suc_lane_id})
+                                    road_list.setLanePredecessorDict(lane_id,{ManeuverState.NEXT: suc_lane_id})
 
                         for i in [1,2]:
                             lane_id=road.getLaneByOpenDriveID(i)
@@ -651,7 +652,7 @@ def ReadOpenDrive(xml_tree, scaling_factor=1, lane_offsets=(0.0, 0.25, 0.75), an
                                     if(suc_lane_id is None):
                                         raise Exception("ERROR: everythings fucked up here. I hate opendrive! lane_id {}, od_lane_id {}".format(lane_id,od_lane_id))
                                     print("Found left predecessor, road {}, lane {}, od_lane {}, suc_lane {}, pre_id {}".format(road_id, lane_id, od_lane_id, suc_lane_id, pre_id))
-                                    road_list.setLaneSuccessorDict(lane_id,{RoadDecisions.NEXT: suc_lane_id})
+                                    road_list.setLaneSuccessorDict(lane_id,{ManeuverState.NEXT: suc_lane_id})
 
                     elif(pre_type.lower()=="junction"):
                         #construct a decision
@@ -677,7 +678,7 @@ def ReadOpenDrive(xml_tree, scaling_factor=1, lane_offsets=(0.0, 0.25, 0.75), an
                                     raise Exception("ERROR: No lane id for road {} junction predecessor road {} found!".format(road_id, pre_road_id))
                             print("Found lane id {} ".format(pre_lane_id))
                             pre_lane=road_list.lanes[pre_lane_id]
-                            pre_roads_dict[RoadDecisions.MERGE]=pre_lane_id
+                            pre_roads_dict[ManeuverState.MERGE]=pre_lane_id
                             lane_id=road_list.roads[road_id].getLaneByOpenDriveID(-1)
                             if(lane_id is None):
                                 raise Exception("ERROR: road {} has junction {} as predecessor, but no right lane!".format(road_id, pre_id))
@@ -694,18 +695,18 @@ def ReadOpenDrive(xml_tree, scaling_factor=1, lane_offsets=(0.0, 0.25, 0.75), an
                                 #print("Adding lane {} with angle change {}".format(pre_lane_id, pre_lane.getAngleChange()))
                                 if(pre_lane.getAngleChange()>angle_left_threshold):
                                     #the angles are reverted here!
-                                    if(RoadDecisions.LEFT in pre_roads_dict):
+                                    if(ManeuverState.LEFT in pre_roads_dict):
                                         raise Exception("ERROR: road {} junction predecessor {} road has already a LEFT entry! {}".format(road_id, pre_id, pre_roads_dict))
                                     #print("Adding {} as left for {}!".format())
-                                    pre_roads_dict[RoadDecisions.LEFT]=pre_lane_id
+                                    pre_roads_dict[ManeuverState.LEFT]=pre_lane_id
                                 elif(pre_lane.getAngleChange()<angle_right_threshold):
-                                    if(RoadDecisions.RIGHT in pre_roads_dict):
+                                    if(ManeuverState.RIGHT in pre_roads_dict):
                                         raise Exception("ERROR: road {} junction predecessor {} road has already a RIGHT entry! {}".format(road_id, pre_id, pre_roads_dict))
-                                    pre_roads_dict[RoadDecisions.RIGHT]=pre_lane_id                                        
+                                    pre_roads_dict[ManeuverState.RIGHT]=pre_lane_id                                        
                                 else:
-                                    if(RoadDecisions.STRAIGHT in pre_roads_dict):
+                                    if(ManeuverState.STRAIGHT in pre_roads_dict):
                                         raise Exception("ERROR: road {} junction predecessor {} road has already a STRAIGHT entry! {}".format(road_id, pre_id, pre_roads_dict))
-                                    pre_roads_dict[RoadDecisions.STRAIGHT]=pre_lane_id
+                                    pre_roads_dict[ManeuverState.STRAIGHT]=pre_lane_id
                         else:
                             raise Exception("ERROR Road {} junction {} predecessor has no valid roads!".format(road_id, pre_id))
                         #The Predecessor entry for a junction is always for the left lane from opendrive.
@@ -731,26 +732,26 @@ def ReadOpenDrive(xml_tree, scaling_factor=1, lane_offsets=(0.0, 0.25, 0.75), an
                             pre_roads_list.append(key2)
 
                 if(len(pre_roads_list)==1):
-                    pre_roads_dict[RoadDecisions.NEXT] = pre_roads_list[0]
+                    pre_roads_dict[ManeuverState.NEXT] = pre_roads_list[0]
                 else:
                     for lane_suc in pre_roads_list:
                         pre_lane=road_list.lanes[lane_suc]
                         print("Adding lane {} with angle change {}".format(lane_suc, pre_lane.getAngleChange()))
                         if(pre_lane.getAngleChange()<-angle_left_threshold):
                             #the angles are reverted here!
-                            if(RoadDecisions.LEFT in pre_roads_dict and pre_roads_dict[RoadDecisions.LEFT]!=lane_suc):
+                            if(ManeuverState.LEFT in pre_roads_dict and pre_roads_dict[ManeuverState.LEFT]!=lane_suc):
                                 raise Exception("ERROR: lane {} predecessor has already a LEFT entry! {}".format(key,  pre_roads_dict))
                             #print("Adding {} as left for {}!".format())
-                            pre_roads_dict[RoadDecisions.LEFT]=lane_suc
+                            pre_roads_dict[ManeuverState.LEFT]=lane_suc
                         elif(pre_lane.getAngleChange()>-angle_right_threshold):
-                            if(RoadDecisions.RIGHT in pre_roads_dict and pre_roads_dict[RoadDecisions.RIGHT]!=lane_suc):
+                            if(ManeuverState.RIGHT in pre_roads_dict and pre_roads_dict[ManeuverState.RIGHT]!=lane_suc):
                                 raise Exception("ERROR: lane {} predecessor has already a RIGHT entry! {}".format(key,  pre_roads_dict))
-                            pre_roads_dict[RoadDecisions.RIGHT]=lane_suc                                        
+                            pre_roads_dict[ManeuverState.RIGHT]=lane_suc                                        
                         else:
-                            if(RoadDecisions.STRAIGHT in pre_roads_dict and pre_roads_dict[RoadDecisions.STRAIGHT]!=lane_suc):
+                            if(ManeuverState.STRAIGHT in pre_roads_dict and pre_roads_dict[ManeuverState.STRAIGHT]!=lane_suc):
                                 print("ERROR: lane {} predecessor lane {} has already a STRAIGHT entry (could be merge lane)! {}".format(key, lane_suc, pre_roads_dict))
                             else:
-                                pre_roads_dict[RoadDecisions.STRAIGHT]=lane_suc
+                                pre_roads_dict[ManeuverState.STRAIGHT]=lane_suc
                 print("Generated: {}".format(pre_roads_dict))
                 road_list.setLanePredecessorDict(key, pre_roads_dict)
 
