@@ -14,7 +14,7 @@ class Car:
         self.perception = Perception()
 
         # setup trajectory planner
-        self.planner = Planner(config["roadFile"])
+        self.planner = Planner(None)
 
         # setup (empty) receptors
         self.siren_receptor = None
