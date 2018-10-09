@@ -120,7 +120,7 @@ private:
     LITD_VirtualPoint vehicleActualRearAxlePosition, vehicleActualFrontAxlePosition, vehicleTargetFrontAxlePosition;
 
     //controller params of Stanley
-	double stanleyGain = 1.5;
+	double stanleyGain = 2.5;
 	double maxAngleDegrees = 45;
 
 	// Controller parameters of Staurated Control for Parking

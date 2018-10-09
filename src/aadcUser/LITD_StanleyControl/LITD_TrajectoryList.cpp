@@ -53,7 +53,8 @@ std::tuple<uint32_t, uint32_t, double> LITD_TrajectoryList::getDistanceToNearest
             getPolyPoint(trj, j, poly_pnt);
             double x_vec = poly_pnt.x - car_pnt.x;
             double y_vec = poly_pnt.y - car_pnt.y;
-            double angle_diff = wrapTo2Pi<double>(atan2(y_vec, x_vec));
+            //wrapTo2Pi(diff_heading_abs - wrapTo2Pi(vehicleTargetFrontAxlePosition.h))
+            double angle_diff = wrapTo2Pi(wrapTo2Pi<double>(atan2(y_vec, x_vec)) - wrapTo2Pi<double>(car_pnt.h));
 
             if(angle_diff <= M_PI/2.0 || angle_diff >= 3.0/2.0 * M_PI) {
                 double dist = sqrt(pow(x_vec, 2) + pow(y_vec, 2));

@@ -37,7 +37,7 @@ tResult cStanleyControl::Init(const tInitStage eStage)
 	RETURN_NOERROR;
 }
 
-void cStanleyControl::calcSteeringAngle(){
+void cStanleyControl::calcSteeringAngle(){ // double cStanelyControl::calcSteeringAngle(LITD_VirtualPoint vehicleTargetFrontAxlePosition, LITD_VirtualPoint vehicleActualFrontAxlePosition, bool parking) {
 	double rad2degree = 180.0 / M_PI;
 
 	
@@ -299,7 +299,7 @@ tResult cStanleyControl::ProcessPosition(tTimeStamp tmTimeOfTrigger)
 	{
 
 		auto oCodec = m_SignalValueSampleFactory.MakeCodecFor(pWriteSampleTargetPoint);
-		RETURN_IF_FAILED(oCodec.SetElementValue(m_ddlPolynomPointIndex.id, id_current));
+		RETURN_IF_FAILED(oCodec.SetElementValue(m_ddlPolynomPointIndex.id, id_current)); 
 		RETURN_IF_FAILED(oCodec.SetElementValue(m_ddlPolynomPointIndex.parameter, p_current));
 		// TODO: Uncomment if done.
 		// m_PolyTargetPointWriter << pWriteSampleTargetPoint << flush << trigger;
@@ -328,17 +328,18 @@ tResult cStanleyControl::ProcessTrajectories(tTimeStamp tmTimeOfTrigger)
 	RETURN_NOERROR;
 }
 
-void cStanleyControl::calculateActualFrontAxlePosition() {
+void cStanleyControl::calculateActualFrontAxlePosition() { //LITD_VirtualPoint cStanleyControl::calculateActualFrontAxlePosition(LITD_VirtualPoint vehicleActualRearAxlePosition) {
 	double dx = cos(vehicleActualRearAxlePosition.h)*VEHICLE_AXIS_DISTANCE;
 	double dy = sin(vehicleActualRearAxlePosition.h)*VEHICLE_AXIS_DISTANCE;
 
 	vehicleActualFrontAxlePosition.x = vehicleActualRearAxlePosition.x + dx;
 	vehicleActualFrontAxlePosition.y = vehicleActualRearAxlePosition.y + dy;
 	vehicleActualFrontAxlePosition.h = vehicleActualRearAxlePosition.h;
+	//return
 }
 
 
-void cStanleyControl::mapSteeringAngle(){
+void cStanleyControl::mapSteeringAngle(){ // double cStanleyControl::mapSteeringAngle(double vehicleSteeringAngle) {
 
 	// it should be regardless for this function if the angle is between -90 and +90 degree or 270 to 90 degree
 
