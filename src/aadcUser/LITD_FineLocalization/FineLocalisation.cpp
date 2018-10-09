@@ -65,9 +65,26 @@ cFineLocalisation::cFineLocalisation()
     {
         LOG_INFO("No mediadescription for tSignalValue found!");
     }
+
     object_ptr<const IStreamType> pConstTypeSignalValue = pTypeSignalValue;
 
     filter_create_pin(*this, m_oConfWriter, "outConfidence", pConstTypeSignalValue);
+
+    object_ptr<IStreamType> pBoolSignalValueStreamType;
+    if IS_OK(adtf::mediadescription::ant::create_adtf_default_stream_type_from_service("tBoolSignalValue", pTypeSignalValue, m_BoolSignalValueSampleFactory))
+    {
+        (adtf_ddl::access_element::find_index(m_BoolSignalValueSampleFactory, cString("ui32ArduinoTimestamp"), m_ddlBoolSignalValueId.ui32ArduinoTimestamp));
+        (adtf_ddl::access_element::find_index(m_BoolSignalValueSampleFactory, cString("bValue"), m_ddlBoolSignalValueId.bValue));
+    }
+    else
+    {
+        LOG_INFO("No mediadescription for tBoolSignalValue found!");
+    }
+
+    object_ptr<const IStreamType> pConstBoolSignalValueStreamType = pBoolSignalValueStreamType;
+
+    //Register input pin
+    create_pin(*this, m_oInitalReader, "inInitial", pConstBoolSignalValueStreamType);
 
     //register callback for type changes
     m_oReader.SetAcceptTypeCallback([this](const adtf::ucom::ant::iobject_ptr<const adtf::streaming::ant::IStreamType>& pType) -> tResult
@@ -89,12 +106,20 @@ cFineLocalisation::cFineLocalisation()
     RegisterPropertyVariable("Angle Range Min [°]", angleRangeMin);
     RegisterPropertyVariable("Angle Range Max [°]", angleRangeMax);
     RegisterPropertyVariable("Image subsample rate", subSampleRate);
+    RegisterPropertyVariable("Initial angle range extension Faktor", initialAngleRangeExtensionFaktor);
+    RegisterPropertyVariable("Initial Pos search radius [m]", initialPosSearchRadius);
+    RegisterPropertyVariable("Initial Pos search increment [m]", initialPosSearchInc);
 
 
 
     create_inner_pipe(*this, cString::Format("%s_trigger", "inPosition"), "inPosition", [&](tTimeStamp tmTime) -> tResult
     {
         return ProcessPosition(tmTime);
+    });
+
+    create_inner_pipe(*this, cString::Format("%s_trigger", "inInitial"), "inInitial", [&](tTimeStamp tmTime) -> tResult
+    {
+        return ProcessInitial(tmTime);
     });
 
     create_inner_pipe(*this, cString::Format("%s_trigger", "inBirdsEye"), "inBirdsEye", [&](tTimeStamp tmTime) -> tResult
@@ -181,6 +206,7 @@ tResult cFineLocalisation::Configure()
     adtf::services::ant::adtf_resolve_macros(mapPathResolved);
     locator.setMap(const_cast<char*>(mapPathResolved.GetPtr()));
     locator.setAngleSearchSpace(angleRangeMin, angleRangeMax, angleIterCnt);
+    locator.setPosSearchSpace(initialPosSearchRadius, initialPosSearchInc, initialAngleRangeExtensionFaktor);
     affineMat[0][0] = mat00;
     affineMat[0][1] = mat01;
     affineMat[0][2] = mat02;
@@ -233,6 +259,26 @@ tResult cFineLocalisation::ProcessPosition(tTimeStamp tmTimeOfTrigger)
     RETURN_NOERROR;
 }
 
+tResult cFineLocalisation::ProcessInitial(tTimeStamp tmTimeOfTrigger)
+{
+    // TODO: potential risk of deadlocks (maybe use https://en.cppreference.com/w/cpp/thread/timed_mutex/try_lock_until)
+    // get exclusive access to the position
+
+    object_ptr<const ISample> pInitialReadSample;
+
+    if(IS_OK(m_oInitalReader.GetLastSample(pInitialReadSample))) {
+        auto oDecoder = m_BoolSignalValueSampleFactory.MakeDecoderFor(*pInitialReadSample);
+
+        RETURN_IF_FAILED(oDecoder.IsValid());
+
+        RETURN_IF_FAILED(oDecoder.GetElementValue(m_ddlBoolSignalValueId.bValue, &initial));
+
+    } else {
+        LOG_ERROR("!!Failed to read last Bool Sample!!");
+    }
+    RETURN_NOERROR;
+}
+
 tResult cFineLocalisation::AcceptImage(tTimeStamp tmTimeOfTrigger)
 {
     object_ptr<const ISample> pReadSample;
@@ -267,15 +313,15 @@ tResult cFineLocalisation::ProcessImage(Mat* bvImage)
 	const tTimeStamp start = cHighResTimer::GetTime();
 #endif
 
-	//[dx, dy, headingOffset, confidence]
-	float *location = locator.localize(*bvImage, heading, x, y, axleToPicture);
+	//[dx, dy, headingOffset, confidence]l
+	float *location = locator.localize(*bvImage, heading, x, y, axleToPicture, initial);
 
 #ifdef _DEBUG
 	const tTimeStamp end = cHighResTimer::GetTime();
 	LOG_DUMP("Localization run-time: %.2f ms", (end - start) / 1000.0);
 #endif
 
-	if (location[3] > angleRangeMax || location[3] < angleRangeMin) LOG_ERROR("caclualted angle offset out of bounds: %f", location[3]);
+	if ((location[3] > angleRangeMax || location[3] < angleRangeMin) && !initial) LOG_ERROR("caclualted angle offset out of bounds: %f", location[3]);
 	LOG_INFO("found deltas: %.2f %.2f %.4f", location[0], location[1], location[2]);
 	
 	// transmit result (with a lock!)

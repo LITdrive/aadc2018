@@ -22,6 +22,8 @@ private:
 
     int searchSpaceSize = 20;
 
+    float posSearchSpace = 0.5, posSearchInc = 0.1, angleRadiusFaktor = 1;
+
     PixelMetricTransformer pmt;
 
 public:
@@ -33,16 +35,17 @@ public:
     ~FineLocator();
 
     /*! \brief  returns x,y and confidence
-     *          returns a Point3f with x=x, y=y, z=confidence level
+     *          returns a float* with [x, y, heading, confidence]
      * */
 
-    float* localize(Mat img_bv, float theta, float in_x, float in_y, float offset);
+    float* localize(Mat img_bv, float theta, float in_x, float in_y, float offset, bool initial);
 
     void setMap(char* pathToScaledMap);
     void setSearchSpace(int sss);
     void setPixelMetricTransformer(PixelMetricTransformer pixelMetricTransformer);
 
     void setAngleSearchSpace(float min, float max, int cnt);
+    void setPosSearchSpace(float posSpace, float posInc, float angleFaktor);
 };
 
 

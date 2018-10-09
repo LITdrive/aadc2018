@@ -42,6 +42,7 @@ private:
     /*! Reader of an InPin. */
     cPinReader m_oReader;
     cPinReader m_oPosReader;
+    cPinReader m_oInitalReader;
     /*! Writer to an OutPin. */
     cPinWriter m_oPosWriter;
     cPinWriter m_oConfWriter;
@@ -63,11 +64,20 @@ private:
         tSize value;
     } m_ddlSignalValueId;
 
+	/*! A signal value identifier. */
+	struct tBoolSignalValueId
+	{
+		tSize ui32ArduinoTimestamp;
+		tSize bValue;
+	} m_ddlBoolSignalValueId;
+
     /*! The position signal value sample factory */
     cSampleCodecFactory m_PositionSampleFactory;
     /*! The signal value sample factory */
     cSampleCodecFactory m_SignalValueSampleFactory;
-    //Stream Formats
+	/*! The bool signal value sample factory */
+	cSampleCodecFactory m_BoolSignalValueSampleFactory;
+	//Stream Formats
     /*! The input format */
 
     adtf::streaming::tStreamImageFormat m_sImageFormat;
@@ -97,7 +107,7 @@ private:
 	bool m_deconfigured = false;
 
     tFloat32 x, y, speed, heading;
-
+	tBool initial = tFalse;
     FineLocator locator;
     // [ 142.8,    0. ,   25. ],
     // [   0. , -139.5,  567. ]
@@ -114,6 +124,9 @@ private:
     property_variable<tInt32> angleIterCnt = 11;
     property_variable<tFloat32> angleRangeMin = -5;
     property_variable<tFloat32> angleRangeMax =  5;
+    property_variable<tFloat32> initialAngleRangeExtensionFaktor =  9;
+    property_variable<tFloat32> initialPosSearchRadius =  0.5;
+    property_variable<tFloat32> initialPosSearchInc =  0.1;
     property_variable<tInt32> subSampleRate =  30;
     tInt32 sampleCnt = 0;
 
@@ -146,6 +159,8 @@ private:
 	tResult AcceptImage(tTimeStamp tmTimeOfTrigger);
 
 	tResult ProcessPosition(tTimeStamp tmTimeOfTrigger);
+
+	tResult ProcessInitial(tTimeStamp tmTimeOfTrigger);
 
 	tResult ProcessImage(Mat* bvImage);
 
