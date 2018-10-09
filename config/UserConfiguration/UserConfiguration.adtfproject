@@ -18,6 +18,12 @@
       <property_set/>
       <name>default_session_windows</name>
     </project_file>
+    <project_file>
+      <url>./adtfsessions/jury_test.adtfsession</url>
+      <properties_url/>
+      <property_set/>
+      <name>jury_test</name>
+    </project_file>
   </session_files>
   <graph_files>
     <project_file>

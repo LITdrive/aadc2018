@@ -2312,7 +2312,7 @@
           <properties>
             <property>
               <name>ZeroMQ Socket Address</name>
-              <value>tcp://127.0.0.1:5566</value>
+              <value>tcp://127.0.0.1:5565</value>
               <type>cString</type>
             </property>
           </properties>
@@ -2745,7 +2745,13 @@
         </property_set>
         <property_set>
           <name>graphs/decision_graph/filters/LITD ZMQ Trajectory Template</name>
-          <properties/>
+          <properties>
+            <property>
+              <name>ZeroMQ Socket Address</name>
+              <value>tcp://127.0.0.1:5577</value>
+              <type>cString</type>
+            </property>
+          </properties>
         </property_set>
         <property_set>
           <name>graphs/decision_graph/connections/Trajectory Thread._LITD ZMQ Trajectory Template.zmq_thread</name>
@@ -2773,7 +2779,13 @@
         </property_set>
         <property_set>
           <name>graphs/decision_graph/filters/LITD ZMQ Decision Jury</name>
-          <properties/>
+          <properties>
+            <property>
+              <name>ZeroMQ Socket Address</name>
+              <value>tcp://127.0.0.1:5561</value>
+              <type>cString</type>
+            </property>
+          </properties>
         </property_set>
         <property_set>
           <name>graphs/decision_graph/connections/Jury Thread._LITD ZMQ Decision Jury.zmq_thread</name>
@@ -3033,6 +3045,141 @@
         </property_set>
         <property_set>
           <name>graphs/default_filter_graph/connections/decision.initial_localization_initial_localization_stream.</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>streaming_graphs/jury_streaming_graph</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>streaming_graphs/jury_streaming_graph/streaminggraphdock/Filter Graph Dock</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>streaming_graphs/jury_streaming_graph/streaming_sinks/Jury Communication TCP Sender</name>
+          <properties>
+            <property>
+              <name>Enable console log</name>
+              <value>true</value>
+              <type>tBool</type>
+            </property>
+          </properties>
+        </property_set>
+        <property_set>
+          <name>streaming_graphs/jury_streaming_graph/streaming_sources/Jury Communication TCP Receiver</name>
+          <properties>
+            <property>
+              <name>Enable console log</name>
+              <value>true</value>
+              <type>tBool</type>
+            </property>
+          </properties>
+        </property_set>
+        <property_set>
+          <name>streaming_graphs/jury_streaming_graph/streaming_sinks/TCP Sender</name>
+          <properties>
+            <property>
+              <name>sink/interface</name>
+              <value>127.0.0.1</value>
+              <type>cString</type>
+            </property>
+            <property>
+              <name>sink/port</name>
+              <value>54322</value>
+              <type>tUInt32</type>
+            </property>
+          </properties>
+        </property_set>
+        <property_set>
+          <name>streaming_graphs/jury_streaming_graph/streaming_dock_in_ports/jury_struct</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>streaming_graphs/jury_streaming_graph/streaming_dock_in_ports/maneuver_list</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>streaming_graphs/jury_streaming_graph/streaming_dock_in_ports/open_drive_map</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>streaming_graphs/jury_streaming_graph/streaming_dock_in_ports/road_sign_map</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>streaming_graphs/jury_streaming_graph/streaming_dock_out_ports/driver_struct</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>streaming_graphs/jury_streaming_graph/connections/Jury Communication TCP Receiver.jury_struct_Filter Graph Dock.jury_struct</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>streaming_graphs/jury_streaming_graph/streaming_sources/Jury Communication TCP Receiver/output_pins/jury_struct</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>streaming_graphs/jury_streaming_graph/connections/Jury Communication TCP Receiver.maneuver_list_Filter Graph Dock.maneuver_list</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>streaming_graphs/jury_streaming_graph/streaming_sources/Jury Communication TCP Receiver/output_pins/maneuver_list</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>streaming_graphs/jury_streaming_graph/connections/Jury Communication TCP Receiver.open_drive_map_Filter Graph Dock.open_drive_map</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>streaming_graphs/jury_streaming_graph/streaming_sources/Jury Communication TCP Receiver/output_pins/open_drive_map</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>streaming_graphs/jury_streaming_graph/connections/Jury Communication TCP Receiver.road_sign_map_Filter Graph Dock.road_sign_map</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>streaming_graphs/jury_streaming_graph/streaming_sources/Jury Communication TCP Receiver/output_pins/road_sign_map</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>streaming_graphs/jury_streaming_graph/connections/Filter Graph Dock.driver_struct_Jury Communication TCP Sender.driver_struct</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>streaming_graphs/jury_streaming_graph/streaming_sinks/Jury Communication TCP Sender/input_pins/driver_struct</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>streaming_graphs/jury_streaming_graph/binding_proxys/Binding Proxy</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>streaming_graphs/jury_streaming_graph/connections/Jury Communication TCP Receiver.socket_Binding Proxy.</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>streaming_graphs/jury_streaming_graph/streaming_sources/Jury Communication TCP Receiver/binding_servers/socket</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>streaming_graphs/jury_streaming_graph/connections/Binding Proxy._Jury Communication TCP Sender.socket</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>streaming_graphs/jury_streaming_graph/streaming_sinks/Jury Communication TCP Sender/binding_clients/socket</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>streaming_graphs/jury_streaming_graph/streaming_dock_out_ports/position</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>streaming_graphs/jury_streaming_graph/connections/Filter Graph Dock.position_TCP Sender.position</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>streaming_graphs/jury_streaming_graph/streaming_sinks/TCP Sender/input_pins/position</name>
           <properties/>
         </property_set>
         <property_set>
