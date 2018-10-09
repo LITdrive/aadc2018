@@ -38,4 +38,6 @@ cZmqDecisionJury::cZmqDecisionJury()
 
 	m_triggers.emplace_back("jury");
 	m_triggers.emplace_back("jury_data_update");
+
+	m_next_sample_trigger = true;
 }

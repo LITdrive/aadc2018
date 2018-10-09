@@ -88,6 +88,9 @@ protected:
 	/*! new samples on these pins will trigger the process method (set by subclasses) */
 	std::vector<std::string> m_triggers;
 
+	/*! use GetNextSample() instead of GetLastSample() */
+	bool m_next_sample_trigger = false;
+
 private:
 
 	/*! server socket (tcp://ip:port OR ipc:///tmp/endpoint/0 OR inproc://endpoint) */

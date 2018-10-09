@@ -424,7 +424,13 @@ tResult cZmqBase::ProcessInputs(tTimeStamp tmTimeOfTrigger)
 
 		// if the pin is not attached or there never have been any samples, the samples might be invalid
 		object_ptr<const ISample> pSample;
-		if (IS_FAILED(pinReader->GetLastSample(pSample)))
+		tResult sampleResult;
+		if (m_next_sample_trigger)
+			sampleResult = pinReader->GetNextSample(pSample);
+		else
+			sampleResult = pinReader->GetLastSample(pSample);
+
+		if (IS_FAILED(sampleResult))
 		{
 			// send an empty message
 			zmq::message_t message(0);
