@@ -376,6 +376,9 @@ def process(lidar,ultraSonic,position): #TODO remove IMU and Speed
     sig_outs = []
     for nPiA in [*ptsInLocalAOIs, *ptsInGlobalAOIs]:
         sig_outs.append( (1337, nPiA) )
+		
+	print('Nr Obst. in local AOIs: ',ptsInLocalAOIs)
+	print('Nr Obst. in global AIOs: ',ptsInGlobalAOIs)
 
     if len(sig_outs)==1:
         return sig_outs
