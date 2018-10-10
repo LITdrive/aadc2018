@@ -7,6 +7,8 @@ from .receptors import *
 from .state import Car
 from ..zeromq.server import ZmqServer
 
+from os.path import dirname, join, abspath
+
 
 def main(socket: str, config: dict):
     print("LITdrive >>> Towards Autonomy.")
@@ -104,14 +106,16 @@ class DecisionServer:
         # print(json.dumps([position, measured_speed, signs, lidar, ultrasonic, imu,
         #                  controller_leverage, controller_feedback, siren, lidar_break], indent=2))
 
-
         car.roadsign_receptor.update(position)
         car.siren_receptor.update()
 
         commander.decide()
 
-        #Should be called last, so that new decisions can already be taken into account in this call.
-        out_trajectories=car.planner.update(int(controller_feedback["id"]), int(controller_leverage["id"]), float(controller_leverage["p"]))
+        # Should be called last, so that new decisions can already be taken into account in this call.
+        out_trajectories = None
+        if controller_leverage and controller_feedback:
+            out_trajectories = car.planner.update(int(controller_feedback["id"]), int(controller_leverage["id"]),
+                                                  float(controller_leverage["p"]))
 
         return (0, commander.out_speed), out_trajectories
 
@@ -119,7 +123,10 @@ class DecisionServer:
 if __name__ == "__main__":
     main("tcp://*:5562", {
         "roadFile": None,
-        "roadSignsFile": r"C:\data\Dropbox\AADC\adtf\configuration_files\maps\AADC_2018_Testevent_maps\aadc_testevent_2018_signs_v_2_0.xml",
-        "maneuverListFile": r"C:\data\Dropbox\AADC\adtf\configuration_files\Maneuverlist.xml",
-        "pickledOpenDriveMap": r"C:\data\Dropbox\AADC\adtf\configuration_files\maps\qualifying_2018_litd.pickle"
+        "roadSignsFile":
+            abspath(join(dirname(__file__), r'../../../../../configuration_files/jury/roadsigns.xml')),
+        "maneuverListFile":
+            abspath(join(dirname(__file__), r'../../../../../configuration_files/jury/maneuver.xml')),
+        "pickledOpenDriveMap":
+            abspath(join(dirname(__file__), r'../../../../../configuration_files/maps/qualifying_2018_litd.pickle'))
     })

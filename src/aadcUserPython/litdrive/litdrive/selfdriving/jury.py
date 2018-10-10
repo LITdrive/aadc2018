@@ -58,8 +58,10 @@ class JuryThread(threading.Thread):
     def read_files(self):
         print("Reading road signs ...")
         roadsigns = parse_roadsigns(self._config["roadSignsFile"])
+        print(roadsigns)
         print("Reading maneuver list ...")
         maneuver = parse_roadsigns(self._config["maneuverListFile"])
+        print(maneuver)
 
         with self._lock:
             self._car.THREAD_maneuvers = maneuver
