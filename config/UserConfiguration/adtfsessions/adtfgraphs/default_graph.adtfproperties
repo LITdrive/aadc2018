@@ -870,18 +870,38 @@
           <properties>
             <property>
               <name>search space size</name>
-              <value>30</value>
+              <value>20</value>
               <type>tInt32</type>
             </property>
             <property>
               <name>Image subsample rate</name>
-              <value>15</value>
+              <value>5</value>
               <type>tInt32</type>
             </property>
             <property>
               <name>Path to Map</name>
               <value>../../../../data/scaledMap.png</value>
               <type>cFilename</type>
+            </property>
+            <property>
+              <name>AffineMat@00</name>
+              <value>149.35714286</value>
+              <type>tFloat32</type>
+            </property>
+            <property>
+              <name>AffineMat@02</name>
+              <value>0.000000</value>
+              <type>tFloat32</type>
+            </property>
+            <property>
+              <name>AffineMat@11</name>
+              <value>-148.35714286</value>
+              <type>tFloat32</type>
+            </property>
+            <property>
+              <name>AffineMat@12</name>
+              <value>2077.000</value>
+              <type>tFloat32</type>
             </property>
           </properties>
         </property_set>
@@ -3421,6 +3441,20 @@
           <properties/>
         </property_set>
         <property_set>
+          <name>graphs/decision_graph/active_runners/Jury Watchdog</name>
+          <properties>
+            <property>
+              <name>timer_period_micro_sec</name>
+              <value>500000</value>
+              <type>tInt64</type>
+            </property>
+          </properties>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/connections/Jury Watchdog._LITD ZMQ Decision Jury.timer_trigger</name>
+          <properties/>
+        </property_set>
+        <property_set>
           <name>services/kernel.service.adtf</name>
           <properties/>
         </property_set>
@@ -3450,6 +3484,14 @@
         </property_set>
         <property_set>
           <name>services/zeromq.service.adtf</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>services/signal_table_view.ui_service.adtf_disptb</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>services/signal_tree_view.ui_service.adtf_disptb</name>
           <properties/>
         </property_set>
       </property_sets>

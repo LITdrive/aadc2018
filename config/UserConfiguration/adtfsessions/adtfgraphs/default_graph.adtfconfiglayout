@@ -2481,7 +2481,7 @@
             <width>0</width>
             <height>0</height>
           </boundary>
-          <selected>true</selected>
+          <selected>false</selected>
           <connection_layout>
             <name/>
             <centerLineIsManual>true</centerLineIsManual>
@@ -3212,7 +3212,7 @@
             <width>0</width>
             <height>0</height>
           </boundary>
-          <selected>false</selected>
+          <selected>true</selected>
           <connection_layout>
             <name/>
             <centerLineIsManual>true</centerLineIsManual>
@@ -6506,7 +6506,7 @@
           <name>graphs/decision_graph/active_runners/Alarm Thread</name>
           <boundary>
             <x>347</x>
-            <y>1058</y>
+            <y>1061</y>
             <width>0</width>
             <height>0</height>
           </boundary>
@@ -6663,7 +6663,7 @@
             <width>0</width>
             <height>0</height>
           </boundary>
-          <selected>false</selected>
+          <selected>true</selected>
           <connection_layout>
             <name/>
             <centerLineIsManual>true</centerLineIsManual>
@@ -13288,7 +13288,7 @@
         <layout_set>
           <name>graphs/decision_graph/filters/LITD ZMQ Decision Sensors</name>
           <boundary>
-            <x>853</x>
+            <x>851</x>
             <y>827</y>
             <width>0</width>
             <height>0</height>
@@ -17016,7 +17016,7 @@
             <width>0</width>
             <height>0</height>
           </boundary>
-          <selected>true</selected>
+          <selected>false</selected>
           <connection_layout>
             <name/>
             <centerLineIsManual>true</centerLineIsManual>
@@ -18042,6 +18042,40 @@
             <centerLineIsManual>true</centerLineIsManual>
             <centerLineAbsX>0</centerLineAbsX>
             <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/decision_graph/active_runners/Jury Watchdog</name>
+          <boundary>
+            <x>1028</x>
+            <y>435</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/decision_graph/connections/Jury Watchdog._LITD ZMQ Decision Jury.timer_trigger</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>517</centerLineAbsY>
             <centerLineStraight>false</centerLineStraight>
           </connection_layout>
         </layout_set>

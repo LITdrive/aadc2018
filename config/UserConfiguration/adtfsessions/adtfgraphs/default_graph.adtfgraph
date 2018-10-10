@@ -3182,6 +3182,10 @@
           <name>Thread Runner</name>
           <class_id>default_thread_runner.streaming.adtf.cid</class_id>
         </active_runner>
+        <active_runner>
+          <name>Jury Watchdog</name>
+          <class_id>default_timer_runner.streaming.adtf.cid</class_id>
+        </active_runner>
       </active_runners>
       <binding_proxys/>
       <connections>
@@ -4517,6 +4521,21 @@
           <destination_connector_path>
             <connector>ObstInArea9</connector>
             <component>LITD ZMQ Decision Sensors</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>Jury Watchdog._LITD ZMQ Decision Jury.timer_trigger</name>
+          <source_connector_path>
+            <connector/>
+            <component>Jury Watchdog</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector>timer_trigger</connector>
+            <component>LITD ZMQ Decision Jury</component>
             <portbindingobject/>
           </destination_connector_path>
           <priority>0</priority>

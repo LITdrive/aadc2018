@@ -246,6 +246,12 @@
     <plugin>
       <url>$(BIN_DIR)/debug/zeromq_service.adtfplugin</url>
     </plugin>
+    <plugin>
+      <url>$(ADTF_DIR)/addons/displaytoolbox/bin/signal_table_view.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(ADTF_DIR)/addons/displaytoolbox/bin/signal_tree_view.adtfplugin</url>
+    </plugin>
   </plugins>
   <debug_plugins>
     <plugin>
@@ -374,6 +380,12 @@
     <plugin>
       <url>$(BIN_DIR)/debug/zeromq_service.adtfplugin</url>
     </plugin>
+    <plugin>
+      <url>$(ADTF_DIR)/addons/displaytoolbox/bin/debug/signal_table_view.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(ADTF_DIR)/addons/displaytoolbox/bin/debug/signal_tree_view.adtfplugin</url>
+    </plugin>
   </debug_plugins>
   <services>
     <service>
@@ -415,6 +427,16 @@
       <classid>zeromq.service.adtf.cid</classid>
       <objectid>zeromq.service.adtf</objectid>
       <runlevel>system</runlevel>
+    </service>
+    <service>
+      <classid>signal_table_view.ui_service.adtf_disptb.cid</classid>
+      <objectid>signal_table_view.ui_service.adtf_disptb</objectid>
+      <runlevel>session</runlevel>
+    </service>
+    <service>
+      <classid>signal_tree_view.ui_service.adtf_disptb.cid</classid>
+      <objectid>signal_tree_view.ui_service.adtf_disptb</objectid>
+      <runlevel>session</runlevel>
     </service>
   </services>
 </system>
