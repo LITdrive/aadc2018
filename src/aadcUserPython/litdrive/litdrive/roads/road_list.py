@@ -1,19 +1,6 @@
 import numpy as np
 import scipy.integrate
-from enum import IntEnum
 import pickle
-from litdrive.selfdriving.enums import ManeuverState
-
-
-'''class ManeuverState(IntEnum):
-    NEXT=0
-    LEFT=1
-    STRAIGHT=2
-    RIGHT=3
-    MERGE=4
-    INVALID=5
-    END=6
-    MAX=6'''
 
 
 class RoadList:
@@ -145,7 +132,7 @@ class RoadElement:
 
 class LaneElement:
 
-    def getPixelPointList(self, px_per_m, points_per_m):
+    def getPixelPointList(self, px_x_per_m, px_y_per_m,  points_per_m):
         raise NotImplementedError("This is the abstract base class. No functions implemented!")
 
     def calcArcLength(self):
@@ -241,13 +228,13 @@ class LaneElementPoly3(LaneElement):
         return self.angle_variance
 
 
-    def getPixelPointList(self, pixel_per_meter=100, points=100):
+    def getPixelPointList(self, pixel_x_per_meter=100, pixel_y_per_meter=100, points=100):
         if(points<=0):
             print("getPixelPointList needs a points parameter which is > 0!")
             return []
         p=np.linspace(0.0, 1.0, points)
-        x_array=pixel_per_meter*self.x_poly(p)
-        y_array=pixel_per_meter*self.y_poly(p)
+        x_array=pixel_x_per_meter*self.x_poly(p)
+        y_array=pixel_y_per_meter*self.y_poly(p)
         return (x_array, y_array)
     
     
