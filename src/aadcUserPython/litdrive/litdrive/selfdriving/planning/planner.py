@@ -56,7 +56,7 @@ class Planner:
         if(self.state<=PlannerState.INVALID ):
             print("ERROR: Planner is in INVALID-State!!!")
         elif(self.state==PlannerState.ERROR):
-            print("ERROR: " + )
+            print("ERROR: " + str(self.state))
 
 
         #Delete all elements up to the given ID
