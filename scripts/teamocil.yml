@@ -28,5 +28,5 @@ windows:
         - cd ~/share/adtf/src/aadcUserPython/litdrive
         - python -m litdrive.zeromq.phil.obstInArea
       # adtf
-      - ~/share/adtf/scripts/start_adtf_ce.sh
+      - ~/share/adtf/scripts/run_user_default_session.sh
 
