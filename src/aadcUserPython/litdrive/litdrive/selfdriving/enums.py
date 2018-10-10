@@ -56,3 +56,20 @@ class RoadSignType(enum.IntEnum):
     KMH50 = 13
     KMH100 = 14
     Undefined = 99
+
+class PlannerState(enum.IntEnum):
+    INVALID=0
+    ERROR=1
+    NO_TRAJECTORIES=2
+    FORWARD_NORMAL=3
+    FORWARD_OVERTAKE=4
+    BACKWARDS_NORMAL=5
+    BACKWARDS_OVERTAKE=6
+    FORWARD_PARK=7
+    BACKWARD_PARK=8
+    MAX=9
+
+class PlannerErrors(enum.IntEnum):
+    NONE=0
+    INVALID_DECISION=1
+    OUT_OF_DECISIONS=2

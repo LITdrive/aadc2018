@@ -103,13 +103,16 @@ class DecisionServer:
         # print(json.dumps([position, measured_speed, signs, lidar, ultrasonic, imu,
         #                  controller_leverage, controller_feedback, siren, lidar_break], indent=2))
 
+
         car.roadsign_receptor.update(position)
         car.siren_receptor.update()
 
         commander.decide()
 
-        return None
-        # return (0, commander.out_speed), commander.out_trajectories
+        #Should be called last, so that new decisions can already be taken into account in this call.
+        out_trajectories=car.planner.update(int(controller_feedback["id"]), int(controller_leverage["id"]), float(controller_leverage["p"]))
+
+        return (0, commander.out_speed), out_trajectories
 
 
 if __name__ == "__main__":

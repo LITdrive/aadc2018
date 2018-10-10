@@ -19,7 +19,7 @@ class Car:
         self.siren_receptor = None
         self.roadsign_receptor = None
 
-        # parsed maneuver and roadsign lits
+        # parsed maneuver and roadsign lists
         self.THREAD_maneuvers = None
         self.THREAD_roadsigns = None
 

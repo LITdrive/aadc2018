@@ -12,6 +12,9 @@ TRAJECTORY_NUM_FIELDS = 12
 class Planner:
     def __init__(self, road_file: str):
 
+        self.state=PlannerState.NO_TRAJECTORIES
+        self.error=PlannerErrors
+
         self.controller_current_id=0
         self.controller_current_p=0.0
 
@@ -36,8 +39,10 @@ class Planner:
         pass
 
 
-    def initPlannerSettings(self, init_id:int):
+    def initPlannerSettings(self, init_x:float, init_y:float):
         self.init_id=init_id
+
+        return self.init_id
 
     #Management of the lanes in the controller
 
@@ -48,6 +53,12 @@ class Planner:
 
 
     def update(self, controller_done_id, controller_current_id, controller_current_p):
+        if(self.state<=PlannerState.INVALID ):
+            print("ERROR: Planner is in INVALID-State!!!")
+        elif(self.state==PlannerState.ERROR):
+            print("ERROR: " + )
+
+
         #Delete all elements up to the given ID
         last_id=0
         last_controller_id=0
@@ -108,6 +119,13 @@ class Planner:
             return buffer
 
         return None
+
+    def getUpcommingLanes(self):
+        return self.lanes_in_controller
+
+    def getUpcommingDecisions(self):
+        return self.decisions_in_controller
+
 
 
 
