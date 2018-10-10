@@ -12,7 +12,7 @@ Redistribution and use in source and binary forms, with or without modification,
 THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS AS IS AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL AUDI AG OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 **********************************************************************/
-#define DEBUG_STANLEY false
+
 #define _USE_MATH_DEFINES
 #include "LITD_StanleyControl.h"
 #include <cmath>
@@ -37,93 +37,10 @@ tResult cStanleyControl::Init(const tInitStage eStage)
 	RETURN_NOERROR;
 }
 
-void cStanleyControl::calcSteeringAngle(){ // double cStanelyControl::calcSteeringAngle(LITD_VirtualPoint vehicleTargetFrontAxlePosition, LITD_VirtualPoint vehicleActualFrontAxlePosition, bool parking) {
-	double rad2degree = 180.0 / M_PI;
-
-	
-	//if (!parking || parking && !parkingStartPointReached || parking && parkingFinished)
-	if (!parking) //parking handling only through trajectories
-	{
-		// No Parking -> Drive with Stanley
-		
-		//vector between car and virtualpoint
-		// call getNextVirtualPointOnPoly -> Result is vehicleTargetFrontAxlePosition
-		Vector2d diff = vehicleTargetFrontAxlePosition.getVector2d() - vehicleActualFrontAxlePosition.getVector2d();
-
-		//calc sign to steer in direction of road
-		int sign = 1;
-		double diff_heading_abs = wrapTo2Pi(atan2(diff(1), diff(0)));
-		if (wrapTo2Pi(diff_heading_abs - wrapTo2Pi(vehicleTargetFrontAxlePosition.h)) > M_PI) {
-			sign = -1;
-		}
-
-		//calc normal distance of tangent to car (e)
-		// double e = (vehicleTargetFrontAxlePosition.getVector2d() - vehicleActualFrontAxlePosition.getVector2d()).norm() * sign;
-		double e = diff.norm()*sign;
-
-		//calc angle between car heading and point tangent
-		//double theta_c = wrapTo2Pi(vehicleActualFrontAxlePosition.h - vehicleTargetFrontAxlePosition.h);
-		double theta_c = wrapTo2Pi(vehicleTargetFrontAxlePosition.h - vehicleActualFrontAxlePosition.h);
-
-		//if (theta_c < 0)
-		//{
-		//	theta_c = 2 * M_PI + theta_c;
-		//}
-
-		//calc steering-angle with stanley-approach
-		double dynamicStanleyPart = 0;
-
-		if (vehicleSpeed > 0.02)
-		{
-			dynamicStanleyPart = atan2(stanleyGain * e, vehicleSpeed);
-		}
-
-		vehicleSteeringAngle = theta_c + dynamicStanleyPart;
-
-		if(DEBUG_STANLEY) LOG_INFO("-----------------------");
-		if(DEBUG_STANLEY) LOG_INFO("--------Stanley--------");
-		if(DEBUG_STANLEY) LOG_INFO("POINT_Heading in °: %f", vehicleTargetFrontAxlePosition.h *rad2degree);
-		if(DEBUG_STANLEY) LOG_INFO("Car Heading in °: %f", vehicleActualFrontAxlePosition.h *rad2degree);
-		if(DEBUG_STANLEY) LOG_INFO("Diff Heading in °: %f", diff_heading_abs *rad2degree);
-		if(DEBUG_STANLEY) LOG_INFO("Stanley e: %f", e);
-		if(DEBUG_STANLEY) LOG_INFO("Stanley Theta in °: %f", theta_c *rad2degree);
-		if(DEBUG_STANLEY) LOG_INFO("Steering Angle in °: %f", vehicleSteeringAngle *rad2degree);
-		if(DEBUG_STANLEY) LOG_INFO("-----------------------");
-	}
-
-	else
-	{
-		// Parking -> Drive with saturated control
-		double theta = vehicleActualRearAxlePosition.h - M_PI;
-		double v = K*(theta - a_0*vehicleActualRearAxlePosition.y);
-		double vehicleSteeringAngleDegree = atan(VEHICLE_AXIS_DISTANCE*u*tanh(K_t*v)); // Degree
-		vehicleSteeringAngle = vehicleSteeringAngleDegree*(M_PI / 180.0); // Radians
-		// TODO ev. noch *(-1) bzw. theta umdrehen -> Vorzeichen ändern wenn Lenkeinschlag in falsche Richtung
-
-		if(DEBUG_STANLEY) LOG_INFO("-----------------------");
-		if(DEBUG_STANLEY) LOG_INFO("---Saturated Control---");
-		if(DEBUG_STANLEY) LOG_INFO("Car Heading in °: %f", vehicleActualRearAxlePosition.h *rad2degree);
-		if(DEBUG_STANLEY) LOG_INFO("Saturated Control Theta in °: %f", theta *rad2degree);
-		if(DEBUG_STANLEY) LOG_INFO("Steering Angle in °: %f", vehicleSteeringAngleDegree);
-		if(DEBUG_STANLEY) LOG_INFO("-----------------------");
-	}
-
-    //Debug Messages
-    /*std::cout << "-----------------------" << std::endl;
-    std::cout << "point heading : " << vp.h << "(" << rad2degree * vp.h << "°)" << std::endl;
-    std::cout << "car heading: " << carPosition.h << "(" << rad2degree * carPosition.h << "°)" << std::endl;
-    std::cout << "diff heading: " << diff_heading_abs << "(" << rad2degree * diff_heading_abs << "°)" << std::endl;
-    std::cout << "e: " << e << std::endl;
-    std::cout << "Theta_C: " << theta_c << "(" << rad2degree * theta_c << "°)" << std::endl;
-    std::cout << "Steering Angle: " << carSteeringAngle << "(" << rad2degree * carSteeringAngle << "°)" << std::endl;
-    std::cout << "-----------------------" << std::endl;*/
-	
-
-}
-
 cStanleyControl::cStanleyControl()
 {
 	RegisterPropertyVariable("dynamic properties path", m_properties_file);
+	RegisterPropertyVariable("show debug log outputs", m_debug_messages);
 
 	/* tPosition */
 	object_ptr<IStreamType> pTypePositionData;
@@ -199,21 +116,13 @@ cStanleyControl::cStanleyControl()
 //implement the Configure function to read ALL Properties
 tResult cStanleyControl::Configure()
 {
-	if(DEBUG_STANLEY) LOG_INFO("Configure is running now!");
+	if(m_debug_messages) LOG_INFO("Configure is running now!");
 
 	// load properties file for dynamic properties
 	cFilename propertiesFileResolved = m_properties_file;
 	adtf::services::ant::adtf_resolve_macros(propertiesFileResolved);
 	m_properties = new FilePropertiesObserver(propertiesFileResolved.GetPtr());
 	m_properties->ReloadProperties();
-
-	// Parking
-	/*parkingStartPoint.x = -0.6369718092383394;
-	parkingStartPoint.y = 1.0000000000000004;
-	parkingStartPoint.h = M_PI / 2;
-	parkingTargetPoint.x = 0.702;
-	parkingTargetPoint.y = 0.0;
-	parkingTargetPoint.h = M_PI;*/
 
     RETURN_NOERROR;
 }
@@ -224,7 +133,7 @@ tResult cStanleyControl::ProcessPosition(tTimeStamp tmTimeOfTrigger)
         LOG_WARNING("Tried Driving without trajectories");
         RETURN_NOERROR;
     }
-	::tPosition position;
+	::tPosition position, position_front, position_target;
 	//Read Property-File
 	m_properties->TriggerPropertiesReload(80); // reload the file every 2 seconds with a 25 msec timer
 	stanleyGain = m_properties->GetFloat("stanley_gain");
@@ -243,38 +152,34 @@ tResult cStanleyControl::ProcessPosition(tTimeStamp tmTimeOfTrigger)
 		RETURN_IF_FAILED(oDecoder.GetElementValue(m_ddlPositionIndex.f32speed, &position.f32speed));
 	}
 
-	vehicleSpeed = position.f32speed;
-	//vehicleSpeed = 0;
-	vehicleActualRearAxlePosition.x = position.f32x;
-	vehicleActualRearAxlePosition.y = position.f32y;
-	vehicleActualRearAxlePosition.h = wrapTo2Pi(position.f32heading);
-	//vehicleActualRearAxlePosition.h = M_PI/4;
+	position.f32heading=wrapTo2Pi(position.f32heading);
 
 
-	if(DEBUG_STANLEY) LOG_INFO("Point of BackPosition: x: %f, y: %f, h: %f", vehicleActualRearAxlePosition.x, vehicleActualRearAxlePosition.y, vehicleActualRearAxlePosition.h  * 180.0 / M_PI);
+	if(m_debug_messages) LOG_INFO("Back: x: %f, y: %f, h: %f", position.f32x, position.f32y, position.f32heading  * 180.0 / M_PI);
 
-	calculateActualFrontAxlePosition();
+	calculateActualFrontAxlePosition(position, position_front);
 
-	if(DEBUG_STANLEY) LOG_INFO("Point of FrontPosition: x: %f, y: %f, h: %f", vehicleActualFrontAxlePosition.x, vehicleActualFrontAxlePosition.y, vehicleActualFrontAxlePosition.h * 180.0 / M_PI );
+	if(m_debug_messages) LOG_INFO("Front: x: %f, y: %f, h: %f", position_front.f32x, position_front.f32y, position_front.f32heading * 180.0 / M_PI );
 
-	std::tuple<uint32_t, uint32_t, double> list_ret = trj_list.getDistanceToNearestPoint(vehicleActualFrontAxlePosition, vehicleTargetFrontAxlePosition);
+	std::tuple<uint32_t, uint32_t, double> list_ret = trj_list.getDistanceToNearestPoint(position_front, position_target);
 	tUInt32 id_finished = std::get<0>(list_ret);
 	tUInt32 id_current = std::get<1>(list_ret);
 	tFloat32 p_current = std::get<2>(list_ret);
-	if(DEBUG_STANLEY) LOG_INFO("Point of SetPoint: x: %f, y: %f, h: %f", vehicleTargetFrontAxlePosition.x, vehicleTargetFrontAxlePosition.y, vehicleTargetFrontAxlePosition.h * 180.0 / M_PI );
+	if(m_debug_messages) LOG_INFO("Target: x: %f, y: %f, h: %f; id: %d, p: %f", position_target.f32x, position_target.f32y, position_target.f32heading * 180.0 / M_PI, id_current, p_current);
 
-	calcSteeringAngle();
+	tFloat32 steering_angle=calcSteeringAngle(position_target, position_front);
 
-	if(DEBUG_STANLEY) LOG_INFO("SteeringAngle in grad: %f", vehicleSteeringAngle * 180.0 / M_PI );
+	if(m_debug_messages) LOG_INFO("SteeringAngle in degree: %f", steering_angle * 180.0 / M_PI );
 
-	mapSteeringAngle();
+	tFloat32 actual_steering_angle=mapSteeringAngle(steering_angle);
 	
+	if(m_debug_messages) LOG_INFO("Actual steering angle in degree: %f", steering_angle * 180.0 / M_PI );
 
 	object_ptr<ISample> pWriteSampleSteering;
 	if (IS_OK(alloc_sample(pWriteSampleSteering)))
 	{
 		auto oCodec = m_SignalValueSampleFactory.MakeCodecFor(pWriteSampleSteering);
-		RETURN_IF_FAILED(oCodec.SetElementValue(m_ddlSignalValueId.value, vehicleSteeringAngle));
+		RETURN_IF_FAILED(oCodec.SetElementValue(m_ddlSignalValueId.value, actual_steering_angle));
 		m_SteeringWriter << pWriteSampleSteering << flush << trigger;
 	}
 
@@ -287,7 +192,7 @@ tResult cStanleyControl::ProcessPosition(tTimeStamp tmTimeOfTrigger)
 		RETURN_IF_FAILED(oCodec.SetElementValue(m_ddlPolynomPointIndex.id, id_finished));
 		RETURN_IF_FAILED(oCodec.SetElementValue(m_ddlPolynomPointIndex.parameter, 0));
 		m_PolyFinishedWriter << pWriteSamplePolyFinished << flush << trigger;
-		if(DEBUG_STANLEY) {
+		if(m_debug_messages) {
 			LOG_INFO("STANLEY: submitted %u poly finished!", id_finished);
 		}
 	}
@@ -328,43 +233,84 @@ tResult cStanleyControl::ProcessTrajectories(tTimeStamp tmTimeOfTrigger)
 	RETURN_NOERROR;
 }
 
-void cStanleyControl::calculateActualFrontAxlePosition() { //LITD_VirtualPoint cStanleyControl::calculateActualFrontAxlePosition(LITD_VirtualPoint vehicleActualRearAxlePosition) {
-	double dx = cos(vehicleActualRearAxlePosition.h)*VEHICLE_AXIS_DISTANCE;
-	double dy = sin(vehicleActualRearAxlePosition.h)*VEHICLE_AXIS_DISTANCE;
+void cStanleyControl::calculateActualFrontAxlePosition(::tPosition& rear, ::tPosition& front) {
+	float dx = cos(rear.f32heading)*VEHICLE_AXIS_DISTANCE;
+	float dy = sin(rear.f32heading)*VEHICLE_AXIS_DISTANCE;
 
-	vehicleActualFrontAxlePosition.x = vehicleActualRearAxlePosition.x + dx;
-	vehicleActualFrontAxlePosition.y = vehicleActualRearAxlePosition.y + dy;
-	vehicleActualFrontAxlePosition.h = vehicleActualRearAxlePosition.h;
-	//return
+	front.f32x = rear.f32x + dx;
+	front.f32y = rear.f32y + dy;
+	front.f32heading = rear.f32heading;
+	front.f32speed = rear.f32speed;
 }
 
 
-void cStanleyControl::mapSteeringAngle(){ // double cStanleyControl::mapSteeringAngle(double vehicleSteeringAngle) {
+tFloat32 cStanleyControl::mapSteeringAngle(tFloat32 vehicleSteeringAngle) {
 
-	// it should be regardless for this function if the angle is between -90 and +90 degree or 270 to 90 degree
+	vehicleSteeringAngle = wrapToPi<tFloat32>(vehicleSteeringAngle);
 
-	tFloat32  rad2degree  = 180.0 / M_PI;
-
-	while(vehicleSteeringAngle < -M_PI)
-		vehicleSteeringAngle += 2 * M_PI;
-
-	while(vehicleSteeringAngle > M_PI)
-		vehicleSteeringAngle -= 2 * M_PI;
-
-	/*if(vehicleSteeringAngle > 3/2 * M_PI && vehicleSteeringAngle < 2*M_PI){
-		vehicleSteeringAngle -= 2 * M_PI; 
-	}*/
-
-	 if(vehicleSteeringAngle < -M_PI/4){
+	if(vehicleSteeringAngle < -M_PI/4){
             vehicleSteeringAngle = -M_PI/4;
-            if(DEBUG_STANLEY) LOG_INFO("Steering angle truncated to -45°!");
+            if(m_debug_messages) LOG_INFO("Steering angle truncated to -45°!");
     } else if(vehicleSteeringAngle > M_PI/4){
             vehicleSteeringAngle = M_PI/4;
-            if(DEBUG_STANLEY) LOG_INFO("Steering angle truncated to 45°!");
+            if(m_debug_messages) LOG_INFO("Steering angle truncated to 45°!");
     }
 
 
-    vehicleSteeringAngle = (vehicleSteeringAngle * rad2degree) / maxAngleDegrees * (-100); 
-    if(DEBUG_STANLEY) LOG_INFO("SteeringAngle in steps: %f", vehicleSteeringAngle );
+    vehicleSteeringAngle = (vehicleSteeringAngle * 180.0 / M_PI) / maxAngleDegrees * (-100); 
+    if(m_debug_messages) LOG_INFO("SteeringAngle in steps: %f", vehicleSteeringAngle );
+	return vehicleSteeringAngle;
+}
+
+tFloat32 cStanleyControl::calcSteeringAngle(::tPosition& target, ::tPosition& front) {
+	tFloat32 rad2degree = 180.0 / M_PI;
+
+	
+	//vector from car-front-axle to the target point. 
+	tFloat32 dx = target.f32x - front.f32x;
+	tFloat32 dy = target.f32y - front.f32y;
+
+
+	//calc sign to steer in direction of road
+	int sign = 1;
+
+	//Calculate the angle of the vector.
+	tFloat32 diff_heading_abs = wrapTo2Pi(atan2(dy, dx));
+
+	//If the angle is left of the car (difference between car heading and vector-heading is < M_PI), the sign is positive, otherwise negative.
+	if (wrapTo2Pi(diff_heading_abs - wrapTo2Pi(target.f32heading)) > M_PI) {
+		sign = -1;
+	}
+
+	//calc normal distance of tangent to car (e)
+	// double e = (target.getVector2d() - front.getVector2d()).norm() * sign;
+	tFloat32 e = sqrt(dx*dx+dy*dy)*sign;
+
+	//calc angle between car heading and point tangent
+	//double theta_c = wrapTo2Pi(front.f32heading - target.f32heading);
+	tFloat32 theta_c = wrapTo2Pi(target.f32heading - front.f32heading);
+
+	//calc steering-angle with stanley-approach
+	tFloat32 dynamicStanleyPart = 0;
+
+	if (target.f32speed > 0.02)
+	{
+		dynamicStanleyPart = atan2(stanleyGain * e, target.f32speed);
+	}
+
+	tFloat32 vehicleSteeringAngle = theta_c + dynamicStanleyPart;
+
+	if(m_debug_messages) {
+		LOG_INFO("--------Stanley--------");
+		LOG_INFO("POINT_Heading in °: %f", target.f32heading *rad2degree);
+		LOG_INFO("Car Heading in °: %f", front.f32heading *rad2degree);
+		LOG_INFO("Diff Heading in °: %f", diff_heading_abs *rad2degree);
+		LOG_INFO("Stanley e: %f", e);
+		LOG_INFO("Stanley Theta in °: %f", theta_c *rad2degree);
+		LOG_INFO("Steering Angle in °: %f", vehicleSteeringAngle *rad2degree);
+		LOG_INFO("-----------------------");
+	}
+
+	return vehicleSteeringAngle;
 
 }

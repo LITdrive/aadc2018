@@ -57,11 +57,9 @@ public:
 
 private:
 
-    void calcSteeringAngle();
-
 	property_variable<cFilename> m_properties_file = cFilename("/home/aadc/share/adtf/configuration_files/properties/stanleycontrol_pid.ini");
 	FilePropertiesObserver* m_properties;
-    property_variable<tBool>       m_bShowDebug = tFalse;
+    property_variable<tBool> m_debug_messages = tFalse;
 
 
 	/* tPosition */
@@ -105,34 +103,20 @@ private:
 	cPinWriter m_PolyFinishedWriter;
 	cPinWriter m_PolyTargetPointWriter;
 
-	/*// Parameters of Polynomial
-	tFloat64 poly_x_a, poly_x_b, poly_x_c, poly_x_d, poly_y_a, poly_y_b, poly_y_c, poly_y_d;
-	// Actual vehicle position
-    tFloat64 vehicleActualPosition_x, vehicleActualPosition_y, vehicleActualHeading, vehicleActualSpeed;
-	// Target vehicle position
-	tFloat64 vehicleActualPosition_x, vehicleActualPosition_y, vehicleActualHeading, vehicleActualSpeed;*/
-    tFloat64 vehicleSteeringAngle;
-	tFloat64 vehicleSpeed;
+
 	int actual_min_dist_poly_index = 0;
 	int last_min_dist_poly_index = 0;
-	bool poly_completed;
 	//::tPosition vehicleActualPosition;
-    LITD_VirtualPoint vehicleActualRearAxlePosition, vehicleActualFrontAxlePosition, vehicleTargetFrontAxlePosition;
 
     //controller params of Stanley
-	double stanleyGain = 2.5;
-	double maxAngleDegrees = 45;
+	tFloat32 stanleyGain = 2.5;
+	tFloat32 maxAngleDegrees = 45;
 
 	// Controller parameters of Staurated Control for Parking
-	bool parking = false;
-	bool parkingStartPointReached = false;
-	bool parkingFinished = false;
-	LITD_VirtualPoint parkingStartPoint;
-	LITD_VirtualPoint parkingTargetPoint;
-	const double K_t = 8;
-	const double K = 5.85;
-	const double a_0 = 0.17;
-	const double u = tan(maxAngleDegrees*(M_PI/180.0)) / VEHICLE_AXIS_DISTANCE;
+	const tFloat32 K_t = 8;
+	const tFloat32 K = 5.85;
+	const tFloat32 a_0 = 0.17;
+	const tFloat32 u = tan(maxAngleDegrees*(M_PI/180.0)) / VEHICLE_AXIS_DISTANCE;
 	// TODO: Input pin with parking flag
 	// TODO: Input pin with parking start point
 	// TODO: Output pin for poly_completed
@@ -156,7 +140,10 @@ public:
 
     tResult ProcessTrajectories(tTimeStamp tmTimeOfTrigger);
 
-	void calculateActualFrontAxlePosition();
+
+	tFloat32 calcSteeringAngle(::tPosition& target, ::tPosition& front);
+
+	void calculateActualFrontAxlePosition(::tPosition& rear, ::tPosition& front);
 
 	//void calculateFrontAxlePosition(LITD_VirtualPoint rearAxlePosition, LITD_VirtualPoint* frontAxlePosition);
 
@@ -172,7 +159,7 @@ public:
 
 	//void calcVirtualPointfromPoly(tTrajectory poly, double p, LITD_VirtualPoint * vp);
 
-	void mapSteeringAngle();
+	tFloat32 mapSteeringAngle(tFloat32 vehicleSteeringAngle);
 
 	//void calcVirtualPointfromPoly(tTrajectory * poly, double p, LITD_VirtualPoint * vp);
 
