@@ -132,7 +132,7 @@ def process(signal):
 
 if __name__ == "__main__":
     # open a server for the filter
-    zmq = ZmqServer("tcp://127.0.0.1:5555",
+    zmq = ZmqServer("tcp://*:5563",
                     ["tSignalValue",], 
                     ["tBoolSignalValue",])
     try:

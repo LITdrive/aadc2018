@@ -480,7 +480,7 @@ if __name__ == "__main__":
     tsv=[]
     for i in range(NUM_AREAS):
          tsv.append("tSignalValue")
-    zmq = ZmqServer("tcp://*:5556",
+    zmq = ZmqServer("tcp://*:5565",
                     ["tLaserScannerData","tUltrasonicStruct","tPosition"],
                     tsv)
 

@@ -90,7 +90,7 @@ def checkObstaclesAhead(ldr_compl,tireAngle, maxLen=0.3,threshold=2):
 
 if __name__ == "__main__":
     # open a server for the filter
-    zmq = ZmqServer("tcp://*:5557",
+    zmq = ZmqServer("tcp://*:5564",
                     ["tLaserScannerData","tSignalValue","tSignalValue"],
                     ["tBoolSignalValue"])
     try:
