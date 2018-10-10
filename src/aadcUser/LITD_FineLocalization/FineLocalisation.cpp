@@ -273,8 +273,6 @@ tResult cFineLocalisation::AcceptImage(tTimeStamp tmTimeOfTrigger)
             m_initial = false;
         }
 
-    } else {
-        LOG_ERROR("!!Failed to read last Bool Sample!!");
     }
 
     if (!m_initial || do_initial_processing_once) {
