@@ -99,6 +99,7 @@ class DecisionServer:
                  lz1, lz2, lz3, lz4, lz5, lz6, lz7, lz8, lz9, lz10,
                  lz11, lz12, lz13, lz14, lz15, lz16, lz17, lz18, lz19, lz20):
         # print("- sensor")
+        print(position)
         # debug output
         # print(json.dumps([position, measured_speed, signs, lidar, ultrasonic, imu,
         #                  controller_leverage, controller_feedback, siren, lidar_break], indent=2))

@@ -67,9 +67,6 @@ class JuryThread(threading.Thread):
 
     @staticmethod
     def _process(self, timer, jury, jury_update, conf_front, conf_rear):
-        print("Jury processing ...")
-        # print(json.dumps([jury, jury_update, conf_front, conf_rear], indent=2))
-
         driver, position_mux, initial_localization = None, None, None
 
         if jury_update and jury_update["bValue"]:
@@ -110,12 +107,14 @@ class JuryThread(threading.Thread):
                 int(time.time() - self._localization_timer) > 1:
             print("Marker Positioning done. Waiting for Fine Localization ...")
             initial_localization = (0, True)
+            position_mux = (0, 1)
             self._localization_state = LocalizationState.WaitForFineLoc
             self._localization_timer = time.time()
         elif self._localization_state == LocalizationState.WaitForFineLoc and \
                 int(time.time() - self._localization_timer) > 4:
             print("Fine Localization done. Switching to normal operation.")
             initial_localization = (0, False)
+            position_mux = (0, 0)
             driver = (JuryCarState.Ready.value, -1)
             self._localization_state = LocalizationState.Normal
 
