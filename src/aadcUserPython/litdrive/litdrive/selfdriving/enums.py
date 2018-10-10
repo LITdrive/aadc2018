@@ -1,14 +1,6 @@
 import enum
 
 
-class GlobalState(enum.IntEnum):
-    STOP = 1,
-    INIT = 2,
-    DRIVING = 3,
-    RESTART = 4,
-    ERROR = 5
-
-
 class ManeuverState(enum.IntEnum):
     NEXT = 0
     LEFT = 1
