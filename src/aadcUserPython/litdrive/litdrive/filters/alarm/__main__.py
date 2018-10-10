@@ -92,7 +92,7 @@ def getSireneProb():
     spectrum, freqs, t = mySpec(sig.flatten(),fs,nfft)
 
     freqidx = (freqs>f_min)*(freqs<f_max) #TODO move out of here to make more efficient
-    if sum(spectrum[freqidx]<=0)>0: 
+    if np.sum(np.sum(spectrum[freqidx]<=0)) > 0: 
         print('No Microphone Signal =S --> get the mic running ;); Set timer to min 1.5 seconds')
         return 0.0
     X = (np.log(spectrum[freqidx])+scaling_mean)/scaling_std #scale

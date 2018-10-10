@@ -37,6 +37,8 @@ def process(lidar,wheelSteeringPercent,speed):
        Process the lidar data from Car: to a complex coordinate system
        0 measurments are removed (either too far or too near (lidar distance range: 0.15 - 12 meters)
     """
+    if lidar is None or wheelSteeringPercent is None or speed is None:
+        return None
     #TODO processSpeed ---------------------------
     speed = speed[1]
     # processTireAngle ---------------------------

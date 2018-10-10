@@ -301,6 +301,9 @@ def process(lidar,ultraSonic,position): #TODO remove IMU and Speed
        Process the lidar and US data from Car: to a complex coordinate system
        0 measurments are removed (either too far or too near 
     """
+    if lidar is None or ultraSonic is None or position is None:
+        return None
+    
     x,y,heading=processPOS(position)
 
     ldr_compl=processLidar(lidar)
