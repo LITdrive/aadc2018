@@ -162,7 +162,7 @@ private:
 
 	tResult ProcessInitial(tTimeStamp tmTimeOfTrigger);
 
-	tResult ProcessImage(Mat* bvImage);
+	tResult ProcessImage(Mat* bvImage, tBool init);
 
 	tResult TransmitResult(float* location);
 
