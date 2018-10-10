@@ -4674,7 +4674,7 @@
             <width>0</width>
             <height>0</height>
           </boundary>
-          <selected>false</selected>
+          <selected>true</selected>
           <connection_layout>
             <name/>
             <centerLineIsManual>true</centerLineIsManual>
@@ -6658,12 +6658,12 @@
         <layout_set>
           <name>graphs/decision_graph/filters/LITD ZMQ Trajectory Template</name>
           <boundary>
-            <x>883</x>
-            <y>1228</y>
+            <x>1295</x>
+            <y>1341</y>
             <width>0</width>
             <height>0</height>
           </boundary>
-          <selected>true</selected>
+          <selected>false</selected>
           <connection_layout>
             <name/>
             <centerLineIsManual>true</centerLineIsManual>
@@ -6675,8 +6675,8 @@
         <layout_set>
           <name>graphs/decision_graph/active_runners/Trajectory Thread</name>
           <boundary>
-            <x>1001</x>
-            <y>1113</y>
+            <x>1383</x>
+            <y>1192</y>
             <width>0</width>
             <height>0</height>
           </boundary>
@@ -6726,8 +6726,8 @@
         <layout_set>
           <name>graphs/decision_graph/active_runners/Trajectory Timer</name>
           <boundary>
-            <x>1094</x>
-            <y>1149</y>
+            <x>1484</x>
+            <y>1218</y>
             <width>0</width>
             <height>0</height>
           </boundary>
@@ -8069,8 +8069,8 @@
         <layout_set>
           <name>graphs/decision_graph/input_data_ports/ultrasonic_struct</name>
           <boundary>
-            <x>268</x>
-            <y>848</y>
+            <x>0</x>
+            <y>862</y>
             <width>0</width>
             <height>0</height>
           </boundary>
@@ -8205,8 +8205,8 @@
         <layout_set>
           <name>graphs/decision_graph/input_data_ports/position</name>
           <boundary>
-            <x>305</x>
-            <y>681</y>
+            <x>27</x>
+            <y>1007</y>
             <width>0</width>
             <height>0</height>
           </boundary>
@@ -8341,8 +8341,8 @@
         <layout_set>
           <name>graphs/decision_graph/sample_streams/position_stream</name>
           <boundary>
-            <x>447</x>
-            <y>682</y>
+            <x>157</x>
+            <y>1037</y>
             <width>0</width>
             <height>0</height>
           </boundary>
@@ -8392,8 +8392,8 @@
         <layout_set>
           <name>graphs/decision_graph/sample_streams/ultrasonic_stream</name>
           <boundary>
-            <x>446</x>
-            <y>847</y>
+            <x>150</x>
+            <y>920</y>
             <width>0</width>
             <height>0</height>
           </boundary>
@@ -8856,7 +8856,7 @@
             <width>0</width>
             <height>0</height>
           </boundary>
-          <selected>false</selected>
+          <selected>true</selected>
           <connection_layout>
             <name/>
             <centerLineIsManual>true</centerLineIsManual>
@@ -13271,8 +13271,8 @@
         <layout_set>
           <name>graphs/decision_graph/filters/LITD ZMQ Decision Jury</name>
           <boundary>
-            <x>792</x>
-            <y>529</y>
+            <x>790</x>
+            <y>527</y>
             <width>0</width>
             <height>0</height>
           </boundary>
@@ -13288,8 +13288,8 @@
         <layout_set>
           <name>graphs/decision_graph/filters/LITD ZMQ Decision Sensors</name>
           <boundary>
-            <x>779</x>
-            <y>798</y>
+            <x>853</x>
+            <y>827</y>
             <width>0</width>
             <height>0</height>
           </boundary>
@@ -16976,6 +16976,1060 @@
         </layout_set>
         <layout_set>
           <name>streaming_graphs/jury_streaming_graph/streaming_sinks/TCP Sender/input_pins/position</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/decision_graph/connections/driver_struct_stream._driver_struct.</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/decision_graph/filters/LITD ZMQ Obst InArea</name>
+          <boundary>
+            <x>329</x>
+            <y>1562</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>true</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/decision_graph/sample_streams/obst1_stream</name>
+          <boundary>
+            <x>633</x>
+            <y>1492</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/decision_graph/sample_streams/obst2_stream</name>
+          <boundary>
+            <x>653</x>
+            <y>1537</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/decision_graph/sample_streams/obst3_stream</name>
+          <boundary>
+            <x>693</x>
+            <y>1574</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/decision_graph/sample_streams/obst4_stream</name>
+          <boundary>
+            <x>727</x>
+            <y>1599</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/decision_graph/sample_streams/obst5_stream</name>
+          <boundary>
+            <x>721</x>
+            <y>1635</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/decision_graph/sample_streams/obst6_stream</name>
+          <boundary>
+            <x>727</x>
+            <y>1681</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/decision_graph/sample_streams/obst7_stream</name>
+          <boundary>
+            <x>729</x>
+            <y>1723</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/decision_graph/sample_streams/obst8_stream</name>
+          <boundary>
+            <x>741</x>
+            <y>1750</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/decision_graph/sample_streams/obst9_stream</name>
+          <boundary>
+            <x>749</x>
+            <y>1789</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/decision_graph/sample_streams/obst10_stream</name>
+          <boundary>
+            <x>769</x>
+            <y>1822</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/decision_graph/sample_streams/Sample Stream_10</name>
+          <boundary>
+            <x>785</x>
+            <y>1864</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>true</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/decision_graph/active_runners/Thread Runner</name>
+          <boundary>
+            <x>423</x>
+            <y>1487</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/decision_graph/connections/Thread Runner._LITD ZMQ Obst InArea.zmq_thread</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/decision_graph/filters/LITD ZMQ Obst InArea/runners/zmq_thread</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/decision_graph/connections/ultrasonic_stream._LITD ZMQ Obst InArea.ultrasonic</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/decision_graph/filters/LITD ZMQ Obst InArea/input_pins/ultrasonic</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/decision_graph/connections/laserscanner_stream._LITD ZMQ Obst InArea.Lidar</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/decision_graph/filters/LITD ZMQ Obst InArea/input_pins/Lidar</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/decision_graph/connections/position_stream._LITD ZMQ Obst InArea.position</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/decision_graph/filters/LITD ZMQ Obst InArea/input_pins/position</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/decision_graph/connections/LITD ZMQ Obst InArea.ObstInArea0_obst1_stream.</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/decision_graph/filters/LITD ZMQ Obst InArea/output_pins/ObstInArea0</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/decision_graph/connections/LITD ZMQ Obst InArea.ObstInArea1_obst2_stream.</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/decision_graph/filters/LITD ZMQ Obst InArea/output_pins/ObstInArea1</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/decision_graph/connections/LITD ZMQ Obst InArea.ObstInArea2_obst3_stream.</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/decision_graph/filters/LITD ZMQ Obst InArea/output_pins/ObstInArea2</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/decision_graph/connections/LITD ZMQ Obst InArea.ObstInArea3_obst4_stream.</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/decision_graph/filters/LITD ZMQ Obst InArea/output_pins/ObstInArea3</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/decision_graph/connections/LITD ZMQ Obst InArea.ObstInArea4_obst5_stream.</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/decision_graph/filters/LITD ZMQ Obst InArea/output_pins/ObstInArea4</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/decision_graph/connections/LITD ZMQ Obst InArea.ObstInArea5_obst6_stream.</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/decision_graph/filters/LITD ZMQ Obst InArea/output_pins/ObstInArea5</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/decision_graph/connections/LITD ZMQ Obst InArea.ObstInArea6_obst7_stream.</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/decision_graph/filters/LITD ZMQ Obst InArea/output_pins/ObstInArea6</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/decision_graph/connections/LITD ZMQ Obst InArea.ObstInArea7_obst8_stream.</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/decision_graph/filters/LITD ZMQ Obst InArea/output_pins/ObstInArea7</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/decision_graph/connections/LITD ZMQ Obst InArea.ObstInArea8_obst9_stream.</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/decision_graph/filters/LITD ZMQ Obst InArea/output_pins/ObstInArea8</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/decision_graph/connections/LITD ZMQ Obst InArea.ObstInArea9_obst10_stream.</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/decision_graph/filters/LITD ZMQ Obst InArea/output_pins/ObstInArea9</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/decision_graph/connections/obst1_stream._LITD ZMQ Decision Sensors.ObstInArea0</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/decision_graph/filters/LITD ZMQ Decision Sensors/input_pins/ObstInArea0</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/decision_graph/connections/obst2_stream._LITD ZMQ Decision Sensors.ObstInArea1</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/decision_graph/filters/LITD ZMQ Decision Sensors/input_pins/ObstInArea1</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/decision_graph/connections/obst3_stream._LITD ZMQ Decision Sensors.ObstInArea2</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/decision_graph/filters/LITD ZMQ Decision Sensors/input_pins/ObstInArea2</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/decision_graph/connections/obst4_stream._LITD ZMQ Decision Sensors.ObstInArea3</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/decision_graph/filters/LITD ZMQ Decision Sensors/input_pins/ObstInArea3</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/decision_graph/connections/obst5_stream._LITD ZMQ Decision Sensors.ObstInArea4</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/decision_graph/filters/LITD ZMQ Decision Sensors/input_pins/ObstInArea4</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/decision_graph/connections/obst6_stream._LITD ZMQ Decision Sensors.ObstInArea5</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/decision_graph/filters/LITD ZMQ Decision Sensors/input_pins/ObstInArea5</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/decision_graph/connections/obst7_stream._LITD ZMQ Decision Sensors.ObstInArea6</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/decision_graph/filters/LITD ZMQ Decision Sensors/input_pins/ObstInArea6</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/decision_graph/connections/obst8_stream._LITD ZMQ Decision Sensors.ObstInArea7</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/decision_graph/filters/LITD ZMQ Decision Sensors/input_pins/ObstInArea7</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/decision_graph/connections/obst9_stream._LITD ZMQ Decision Sensors.ObstInArea8</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/decision_graph/filters/LITD ZMQ Decision Sensors/input_pins/ObstInArea8</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/decision_graph/connections/obst10_stream._LITD ZMQ Decision Sensors.ObstInArea9</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/decision_graph/filters/LITD ZMQ Decision Sensors/input_pins/ObstInArea9</name>
           <boundary>
             <x>0</x>
             <y>0</y>

@@ -35,6 +35,27 @@ cZmqDecisionSensors::cZmqDecisionSensors()
 
 	m_inputs.emplace_back("siren", BoolSignalValue);
 	m_inputs.emplace_back("lidar_break", BoolSignalValue);
+	
+	m_inputs.emplace_back("ObstInArea0", SignalValue);
+	m_inputs.emplace_back("ObstInArea1", SignalValue);
+	m_inputs.emplace_back("ObstInArea2", SignalValue);
+	m_inputs.emplace_back("ObstInArea3", SignalValue);
+	m_inputs.emplace_back("ObstInArea4", SignalValue);
+	m_inputs.emplace_back("ObstInArea5", SignalValue);
+	m_inputs.emplace_back("ObstInArea6", SignalValue);
+	m_inputs.emplace_back("ObstInArea7", SignalValue);
+	m_inputs.emplace_back("ObstInArea8", SignalValue);
+	m_inputs.emplace_back("ObstInArea9", SignalValue);
+	m_inputs.emplace_back("ObstInArea10", SignalValue);
+	m_inputs.emplace_back("ObstInArea11", SignalValue);
+	m_inputs.emplace_back("ObstInArea12", SignalValue);
+	m_inputs.emplace_back("ObstInArea13", SignalValue);
+	m_inputs.emplace_back("ObstInArea14", SignalValue);
+	m_inputs.emplace_back("ObstInArea15", SignalValue);
+	m_inputs.emplace_back("ObstInArea16", SignalValue);
+	m_inputs.emplace_back("ObstInArea17", SignalValue);
+	m_inputs.emplace_back("ObstInArea18", SignalValue);
+	m_inputs.emplace_back("ObstInArea19", SignalValue);
 
 	// output pin names and types
 	m_outputs.emplace_back("desired_speed", SignalValue);

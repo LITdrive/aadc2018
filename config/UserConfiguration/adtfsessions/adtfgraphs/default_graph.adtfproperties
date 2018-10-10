@@ -1586,20 +1586,6 @@
           <properties/>
         </property_set>
         <property_set>
-          <name>graphs/decision_graph/connections/driver_struct_strema._driver_struct.</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/decision_graph/active_runners/Jury Timer</name>
-          <properties>
-            <property>
-              <name>timer_period_micro_sec</name>
-              <value>500000</value>
-              <type>tInt64</type>
-            </property>
-          </properties>
-        </property_set>
-        <property_set>
           <name>graphs/decision_graph/connections/jury_struct._jury_struct_stream.</name>
           <properties/>
         </property_set>
@@ -2796,10 +2782,6 @@
           <properties/>
         </property_set>
         <property_set>
-          <name>graphs/decision_graph/connections/Jury Timer._LITD ZMQ Decision Jury.timer_trigger</name>
-          <properties/>
-        </property_set>
-        <property_set>
           <name>graphs/decision_graph/filters/LITD ZMQ Decision Jury/runners/timer_trigger</name>
           <properties/>
         </property_set>
@@ -3183,6 +3165,10 @@
           <properties/>
         </property_set>
         <property_set>
+          <name>graphs/decision_graph/connections/driver_struct_stream._driver_struct.</name>
+          <properties/>
+        </property_set>
+        <property_set>
           <name>services/kernel.service.adtf</name>
           <properties/>
         </property_set>
@@ -3212,6 +3198,258 @@
         </property_set>
         <property_set>
           <name>services/zeromq.service.adtf</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/filters/LITD ZMQ Obst InArea</name>
+          <properties>
+            <property>
+              <name>ZeroMQ Socket Address</name>
+              <value>tcp://127.0.0.1:5565</value>
+              <type>cString</type>
+            </property>
+          </properties>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/sample_streams/obst1_stream</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/sample_streams/obst2_stream</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/sample_streams/obst3_stream</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/sample_streams/obst4_stream</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/sample_streams/obst5_stream</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/sample_streams/obst6_stream</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/sample_streams/obst7_stream</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/sample_streams/obst8_stream</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/sample_streams/obst9_stream</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/sample_streams/obst10_stream</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/active_runners/Thread Runner</name>
+          <properties>
+            <property>
+              <name>thread_is_cyclic</name>
+              <value>false</value>
+              <type>tBool</type>
+            </property>
+          </properties>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/connections/Thread Runner._LITD ZMQ Obst InArea.zmq_thread</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/filters/LITD ZMQ Obst InArea/runners/zmq_thread</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/connections/ultrasonic_stream._LITD ZMQ Obst InArea.ultrasonic</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/filters/LITD ZMQ Obst InArea/input_pins/ultrasonic</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/connections/laserscanner_stream._LITD ZMQ Obst InArea.Lidar</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/filters/LITD ZMQ Obst InArea/input_pins/Lidar</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/connections/position_stream._LITD ZMQ Obst InArea.position</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/filters/LITD ZMQ Obst InArea/input_pins/position</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/connections/LITD ZMQ Obst InArea.ObstInArea0_obst1_stream.</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/filters/LITD ZMQ Obst InArea/output_pins/ObstInArea0</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/connections/LITD ZMQ Obst InArea.ObstInArea1_obst2_stream.</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/filters/LITD ZMQ Obst InArea/output_pins/ObstInArea1</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/connections/LITD ZMQ Obst InArea.ObstInArea2_obst3_stream.</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/filters/LITD ZMQ Obst InArea/output_pins/ObstInArea2</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/connections/LITD ZMQ Obst InArea.ObstInArea3_obst4_stream.</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/filters/LITD ZMQ Obst InArea/output_pins/ObstInArea3</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/connections/LITD ZMQ Obst InArea.ObstInArea4_obst5_stream.</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/filters/LITD ZMQ Obst InArea/output_pins/ObstInArea4</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/connections/LITD ZMQ Obst InArea.ObstInArea5_obst6_stream.</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/filters/LITD ZMQ Obst InArea/output_pins/ObstInArea5</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/connections/LITD ZMQ Obst InArea.ObstInArea6_obst7_stream.</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/filters/LITD ZMQ Obst InArea/output_pins/ObstInArea6</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/connections/LITD ZMQ Obst InArea.ObstInArea7_obst8_stream.</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/filters/LITD ZMQ Obst InArea/output_pins/ObstInArea7</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/connections/LITD ZMQ Obst InArea.ObstInArea8_obst9_stream.</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/filters/LITD ZMQ Obst InArea/output_pins/ObstInArea8</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/connections/LITD ZMQ Obst InArea.ObstInArea9_obst10_stream.</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/filters/LITD ZMQ Obst InArea/output_pins/ObstInArea9</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/connections/obst1_stream._LITD ZMQ Decision Sensors.ObstInArea0</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/filters/LITD ZMQ Decision Sensors/input_pins/ObstInArea0</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/connections/obst2_stream._LITD ZMQ Decision Sensors.ObstInArea1</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/filters/LITD ZMQ Decision Sensors/input_pins/ObstInArea1</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/connections/obst3_stream._LITD ZMQ Decision Sensors.ObstInArea2</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/filters/LITD ZMQ Decision Sensors/input_pins/ObstInArea2</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/connections/obst4_stream._LITD ZMQ Decision Sensors.ObstInArea3</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/filters/LITD ZMQ Decision Sensors/input_pins/ObstInArea3</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/connections/obst5_stream._LITD ZMQ Decision Sensors.ObstInArea4</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/filters/LITD ZMQ Decision Sensors/input_pins/ObstInArea4</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/connections/obst6_stream._LITD ZMQ Decision Sensors.ObstInArea5</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/filters/LITD ZMQ Decision Sensors/input_pins/ObstInArea5</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/connections/obst7_stream._LITD ZMQ Decision Sensors.ObstInArea6</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/filters/LITD ZMQ Decision Sensors/input_pins/ObstInArea6</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/connections/obst8_stream._LITD ZMQ Decision Sensors.ObstInArea7</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/filters/LITD ZMQ Decision Sensors/input_pins/ObstInArea7</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/connections/obst9_stream._LITD ZMQ Decision Sensors.ObstInArea8</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/filters/LITD ZMQ Decision Sensors/input_pins/ObstInArea8</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/connections/obst10_stream._LITD ZMQ Decision Sensors.ObstInArea9</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/filters/LITD ZMQ Decision Sensors/input_pins/ObstInArea9</name>
           <properties/>
         </property_set>
       </property_sets>

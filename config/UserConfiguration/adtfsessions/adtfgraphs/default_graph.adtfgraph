@@ -2725,6 +2725,36 @@
             <pin>
               <name>lidar_break</name>
             </pin>
+            <pin>
+              <name>ObstInArea0</name>
+            </pin>
+            <pin>
+              <name>ObstInArea1</name>
+            </pin>
+            <pin>
+              <name>ObstInArea2</name>
+            </pin>
+            <pin>
+              <name>ObstInArea3</name>
+            </pin>
+            <pin>
+              <name>ObstInArea4</name>
+            </pin>
+            <pin>
+              <name>ObstInArea5</name>
+            </pin>
+            <pin>
+              <name>ObstInArea6</name>
+            </pin>
+            <pin>
+              <name>ObstInArea7</name>
+            </pin>
+            <pin>
+              <name>ObstInArea8</name>
+            </pin>
+            <pin>
+              <name>ObstInArea9</name>
+            </pin>
           </input_pins>
           <output_pins>
             <pin>
@@ -2816,6 +2846,61 @@
             </runner>
             <runner>
               <name>timer_trigger</name>
+            </runner>
+          </runners>
+          <init_priority>0</init_priority>
+          <binding_servers/>
+          <binding_clients/>
+        </filter>
+        <filter>
+          <name>LITD ZMQ Obst InArea</name>
+          <class_id>litd_zmq_Obst_InArea.filter.user.aadc.cid</class_id>
+          <input_pins>
+            <pin>
+              <name>ultrasonic</name>
+            </pin>
+            <pin>
+              <name>Lidar</name>
+            </pin>
+            <pin>
+              <name>position</name>
+            </pin>
+          </input_pins>
+          <output_pins>
+            <pin>
+              <name>ObstInArea0</name>
+            </pin>
+            <pin>
+              <name>ObstInArea1</name>
+            </pin>
+            <pin>
+              <name>ObstInArea2</name>
+            </pin>
+            <pin>
+              <name>ObstInArea3</name>
+            </pin>
+            <pin>
+              <name>ObstInArea4</name>
+            </pin>
+            <pin>
+              <name>ObstInArea5</name>
+            </pin>
+            <pin>
+              <name>ObstInArea6</name>
+            </pin>
+            <pin>
+              <name>ObstInArea7</name>
+            </pin>
+            <pin>
+              <name>ObstInArea8</name>
+            </pin>
+            <pin>
+              <name>ObstInArea9</name>
+            </pin>
+          </output_pins>
+          <runners>
+            <runner>
+              <name>zmq_thread</name>
             </runner>
           </runners>
           <init_priority>0</init_priority>
@@ -3019,6 +3104,46 @@
           <name>initial_localization_stream</name>
           <class_id>default_sample_stream.streaming.adtf.cid</class_id>
         </sample_stream>
+        <sample_stream>
+          <name>obst1_stream</name>
+          <class_id>default_sample_stream.streaming.adtf.cid</class_id>
+        </sample_stream>
+        <sample_stream>
+          <name>obst2_stream</name>
+          <class_id>default_sample_stream.streaming.adtf.cid</class_id>
+        </sample_stream>
+        <sample_stream>
+          <name>obst3_stream</name>
+          <class_id>default_sample_stream.streaming.adtf.cid</class_id>
+        </sample_stream>
+        <sample_stream>
+          <name>obst4_stream</name>
+          <class_id>default_sample_stream.streaming.adtf.cid</class_id>
+        </sample_stream>
+        <sample_stream>
+          <name>obst5_stream</name>
+          <class_id>default_sample_stream.streaming.adtf.cid</class_id>
+        </sample_stream>
+        <sample_stream>
+          <name>obst6_stream</name>
+          <class_id>default_sample_stream.streaming.adtf.cid</class_id>
+        </sample_stream>
+        <sample_stream>
+          <name>obst7_stream</name>
+          <class_id>default_sample_stream.streaming.adtf.cid</class_id>
+        </sample_stream>
+        <sample_stream>
+          <name>obst8_stream</name>
+          <class_id>default_sample_stream.streaming.adtf.cid</class_id>
+        </sample_stream>
+        <sample_stream>
+          <name>obst9_stream</name>
+          <class_id>default_sample_stream.streaming.adtf.cid</class_id>
+        </sample_stream>
+        <sample_stream>
+          <name>obst10_stream</name>
+          <class_id>default_sample_stream.streaming.adtf.cid</class_id>
+        </sample_stream>
       </sample_streams>
       <active_runners>
         <active_runner>
@@ -3042,10 +3167,6 @@
           <class_id>default_timer_runner.streaming.adtf.cid</class_id>
         </active_runner>
         <active_runner>
-          <name>Jury Timer</name>
-          <class_id>default_timer_runner.streaming.adtf.cid</class_id>
-        </active_runner>
-        <active_runner>
           <name>Sensors Thread</name>
           <class_id>default_thread_runner.streaming.adtf.cid</class_id>
         </active_runner>
@@ -3055,6 +3176,10 @@
         </active_runner>
         <active_runner>
           <name>Lidar Break Thread</name>
+          <class_id>default_thread_runner.streaming.adtf.cid</class_id>
+        </active_runner>
+        <active_runner>
+          <name>Thread Runner</name>
           <class_id>default_thread_runner.streaming.adtf.cid</class_id>
         </active_runner>
       </active_runners>
@@ -3085,21 +3210,6 @@
           <destination_connector_path>
             <connector/>
             <component>desired_speed</component>
-            <portbindingobject/>
-          </destination_connector_path>
-          <priority>0</priority>
-          <sync>true</sync>
-        </connection>
-        <connection>
-          <name>driver_struct_strema._driver_struct.</name>
-          <source_connector_path>
-            <connector/>
-            <component>driver_struct_driver_stream</component>
-            <portbindingobject/>
-          </source_connector_path>
-          <destination_connector_path>
-            <connector/>
-            <component>driver_struct</component>
             <portbindingobject/>
           </destination_connector_path>
           <priority>0</priority>
@@ -3918,21 +4028,6 @@
           <sync>true</sync>
         </connection>
         <connection>
-          <name>Jury Timer._LITD ZMQ Decision Jury.timer_trigger</name>
-          <source_connector_path>
-            <connector/>
-            <component>Jury Timer</component>
-            <portbindingobject/>
-          </source_connector_path>
-          <destination_connector_path>
-            <connector>timer_trigger</connector>
-            <component>LITD ZMQ Decision Jury</component>
-            <portbindingobject/>
-          </destination_connector_path>
-          <priority>0</priority>
-          <sync>true</sync>
-        </connection>
-        <connection>
           <name>jury_data_update_stream._LITD ZMQ Decision Jury.jury_data_update</name>
           <source_connector_path>
             <connector/>
@@ -4047,6 +4142,381 @@
           <destination_connector_path>
             <connector/>
             <component>initial_localization_stream</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>driver_struct_stream._driver_struct.</name>
+          <source_connector_path>
+            <connector/>
+            <component>driver_struct_stream</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector/>
+            <component>driver_struct</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>Thread Runner._LITD ZMQ Obst InArea.zmq_thread</name>
+          <source_connector_path>
+            <connector/>
+            <component>Thread Runner</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector>zmq_thread</connector>
+            <component>LITD ZMQ Obst InArea</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>ultrasonic_stream._LITD ZMQ Obst InArea.ultrasonic</name>
+          <source_connector_path>
+            <connector/>
+            <component>ultrasonic_stream</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector>ultrasonic</connector>
+            <component>LITD ZMQ Obst InArea</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>laserscanner_stream._LITD ZMQ Obst InArea.Lidar</name>
+          <source_connector_path>
+            <connector/>
+            <component>laserscanner_stream</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector>Lidar</connector>
+            <component>LITD ZMQ Obst InArea</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>position_stream._LITD ZMQ Obst InArea.position</name>
+          <source_connector_path>
+            <connector/>
+            <component>position_stream</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector>position</connector>
+            <component>LITD ZMQ Obst InArea</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>LITD ZMQ Obst InArea.ObstInArea0_obst1_stream.</name>
+          <source_connector_path>
+            <connector>ObstInArea0</connector>
+            <component>LITD ZMQ Obst InArea</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector/>
+            <component>obst1_stream</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>LITD ZMQ Obst InArea.ObstInArea1_obst2_stream.</name>
+          <source_connector_path>
+            <connector>ObstInArea1</connector>
+            <component>LITD ZMQ Obst InArea</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector/>
+            <component>obst2_stream</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>LITD ZMQ Obst InArea.ObstInArea2_obst3_stream.</name>
+          <source_connector_path>
+            <connector>ObstInArea2</connector>
+            <component>LITD ZMQ Obst InArea</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector/>
+            <component>obst3_stream</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>LITD ZMQ Obst InArea.ObstInArea3_obst4_stream.</name>
+          <source_connector_path>
+            <connector>ObstInArea3</connector>
+            <component>LITD ZMQ Obst InArea</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector/>
+            <component>obst4_stream</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>LITD ZMQ Obst InArea.ObstInArea4_obst5_stream.</name>
+          <source_connector_path>
+            <connector>ObstInArea4</connector>
+            <component>LITD ZMQ Obst InArea</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector/>
+            <component>obst5_stream</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>LITD ZMQ Obst InArea.ObstInArea5_obst6_stream.</name>
+          <source_connector_path>
+            <connector>ObstInArea5</connector>
+            <component>LITD ZMQ Obst InArea</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector/>
+            <component>obst6_stream</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>LITD ZMQ Obst InArea.ObstInArea6_obst7_stream.</name>
+          <source_connector_path>
+            <connector>ObstInArea6</connector>
+            <component>LITD ZMQ Obst InArea</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector/>
+            <component>obst7_stream</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>LITD ZMQ Obst InArea.ObstInArea7_obst8_stream.</name>
+          <source_connector_path>
+            <connector>ObstInArea7</connector>
+            <component>LITD ZMQ Obst InArea</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector/>
+            <component>obst8_stream</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>LITD ZMQ Obst InArea.ObstInArea8_obst9_stream.</name>
+          <source_connector_path>
+            <connector>ObstInArea8</connector>
+            <component>LITD ZMQ Obst InArea</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector/>
+            <component>obst9_stream</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>LITD ZMQ Obst InArea.ObstInArea9_obst10_stream.</name>
+          <source_connector_path>
+            <connector>ObstInArea9</connector>
+            <component>LITD ZMQ Obst InArea</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector/>
+            <component>obst10_stream</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>obst1_stream._LITD ZMQ Decision Sensors.ObstInArea0</name>
+          <source_connector_path>
+            <connector/>
+            <component>obst1_stream</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector>ObstInArea0</connector>
+            <component>LITD ZMQ Decision Sensors</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>obst2_stream._LITD ZMQ Decision Sensors.ObstInArea1</name>
+          <source_connector_path>
+            <connector/>
+            <component>obst2_stream</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector>ObstInArea1</connector>
+            <component>LITD ZMQ Decision Sensors</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>obst3_stream._LITD ZMQ Decision Sensors.ObstInArea2</name>
+          <source_connector_path>
+            <connector/>
+            <component>obst3_stream</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector>ObstInArea2</connector>
+            <component>LITD ZMQ Decision Sensors</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>obst4_stream._LITD ZMQ Decision Sensors.ObstInArea3</name>
+          <source_connector_path>
+            <connector/>
+            <component>obst4_stream</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector>ObstInArea3</connector>
+            <component>LITD ZMQ Decision Sensors</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>obst5_stream._LITD ZMQ Decision Sensors.ObstInArea4</name>
+          <source_connector_path>
+            <connector/>
+            <component>obst5_stream</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector>ObstInArea4</connector>
+            <component>LITD ZMQ Decision Sensors</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>obst6_stream._LITD ZMQ Decision Sensors.ObstInArea5</name>
+          <source_connector_path>
+            <connector/>
+            <component>obst6_stream</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector>ObstInArea5</connector>
+            <component>LITD ZMQ Decision Sensors</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>obst7_stream._LITD ZMQ Decision Sensors.ObstInArea6</name>
+          <source_connector_path>
+            <connector/>
+            <component>obst7_stream</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector>ObstInArea6</connector>
+            <component>LITD ZMQ Decision Sensors</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>obst8_stream._LITD ZMQ Decision Sensors.ObstInArea7</name>
+          <source_connector_path>
+            <connector/>
+            <component>obst8_stream</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector>ObstInArea7</connector>
+            <component>LITD ZMQ Decision Sensors</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>obst9_stream._LITD ZMQ Decision Sensors.ObstInArea8</name>
+          <source_connector_path>
+            <connector/>
+            <component>obst9_stream</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector>ObstInArea8</connector>
+            <component>LITD ZMQ Decision Sensors</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>obst10_stream._LITD ZMQ Decision Sensors.ObstInArea9</name>
+          <source_connector_path>
+            <connector/>
+            <component>obst10_stream</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector>ObstInArea9</connector>
+            <component>LITD ZMQ Decision Sensors</component>
             <portbindingobject/>
           </destination_connector_path>
           <priority>0</priority>
