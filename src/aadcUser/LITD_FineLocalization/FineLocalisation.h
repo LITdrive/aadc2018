@@ -107,7 +107,7 @@ private:
 	bool m_deconfigured = false;
 
     tFloat32 x, y, speed, heading;
-	tBool initial = tFalse;
+	bool m_initial = false;
     FineLocator locator;
     // [ 142.8,    0. ,   25. ],
     // [   0. , -139.5,  567. ]

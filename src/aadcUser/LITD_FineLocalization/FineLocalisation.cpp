@@ -117,11 +117,6 @@ cFineLocalisation::cFineLocalisation()
         return ProcessPosition(tmTime);
     });
 
-    create_inner_pipe(*this, cString::Format("%s_trigger", "inInitial"), "inInitial", [&](tTimeStamp tmTime) -> tResult
-    {
-        return ProcessInitial(tmTime);
-    });
-
     create_inner_pipe(*this, cString::Format("%s_trigger", "inBirdsEye"), "inBirdsEye", [&](tTimeStamp tmTime) -> tResult
     {
         return AcceptImage(tmTime);
@@ -259,69 +254,73 @@ tResult cFineLocalisation::ProcessPosition(tTimeStamp tmTimeOfTrigger)
     RETURN_NOERROR;
 }
 
-tResult cFineLocalisation::ProcessInitial(tTimeStamp tmTimeOfTrigger)
+tResult cFineLocalisation::AcceptImage(tTimeStamp tmTimeOfTrigger)
 {
-    // TODO: potential risk of deadlocks (maybe use https://en.cppreference.com/w/cpp/thread/timed_mutex/try_lock_until)
-    // get exclusive access to the position
-
+    bool do_initial_processing_once = false;
     object_ptr<const ISample> pInitialReadSample;
-
-    if(IS_OK(m_oInitalReader.GetLastSample(pInitialReadSample))) {
+    if(IS_OK(m_oInitalReader.GetNextSample(pInitialReadSample))) {
         auto oDecoder = m_BoolSignalValueSampleFactory.MakeDecoderFor(*pInitialReadSample);
 
         RETURN_IF_FAILED(oDecoder.IsValid());
+        RETURN_IF_FAILED(oDecoder.GetElementValue(m_ddlBoolSignalValueId.bValue, &do_initial_processing_once));
 
-        RETURN_IF_FAILED(oDecoder.GetElementValue(m_ddlBoolSignalValueId.bValue, &initial));
+
+        if(do_initial_processing_once && !m_initial) {
+            m_initial = true;
+        }
+
+        if(!do_initial_processing_once){
+            m_initial = false;
+        }
 
     } else {
         LOG_ERROR("!!Failed to read last Bool Sample!!");
     }
-    RETURN_NOERROR;
-}
 
-tResult cFineLocalisation::AcceptImage(tTimeStamp tmTimeOfTrigger)
-{
-    object_ptr<const ISample> pReadSample;
-    while (IS_OK(m_oReader.GetNextSample(pReadSample)) && recievedPosition)
-    {
-        if(sampleCnt % subSampleRate == 0) {
-            object_ptr_shared_locked<const ISampleBuffer> pReadBuffer;
-            // lock read buffer and send to worker thread
-            if (IS_OK(pReadSample->Lock(pReadBuffer))) {
-				bool returncode = false;
-				const size_t imageSize = 3 * m_sImageFormat.m_ui32Width * m_sImageFormat.m_ui32Height;
+    if (!m_initial || do_initial_processing_once) {
+        object_ptr<const ISample> pReadSample;
+        while (IS_OK(m_oReader.GetNextSample(pReadSample)) && recievedPosition) {
+            if (sampleCnt % subSampleRate == 0) {
+                object_ptr_shared_locked<const ISampleBuffer> pReadBuffer;
+                // lock read buffer and send to worker thread
+                if (IS_OK(pReadSample->Lock(pReadBuffer))) {
+                    bool returncode = false;
+                    const size_t imageSize = 3 * m_sImageFormat.m_ui32Width * m_sImageFormat.m_ui32Height;
 
-				// send width, height and the image buffer (each value will be copied into the message buffer)
-				if (m_sck_pair->send(&m_sImageFormat.m_ui32Width, sizeof m_sImageFormat.m_ui32Width, ZMQ_SNDMORE | ZMQ_DONTWAIT))
-					if (m_sck_pair->send(&m_sImageFormat.m_ui32Height, sizeof m_sImageFormat.m_ui32Height, ZMQ_SNDMORE | ZMQ_DONTWAIT))
-						if (m_sck_pair->send(pReadBuffer->GetPtr(), imageSize, ZMQ_DONTWAIT))
-							returncode = true;
+                    // send width, height and the image buffer (each value will be copied into the message buffer)
+                    if (m_sck_pair->send(&do_initial_processing_once, sizeof do_initial_processing_once, ZMQ_SNDMORE | ZMQ_DONTWAIT))
+                        if (m_sck_pair->send(&m_sImageFormat.m_ui32Width, sizeof m_sImageFormat.m_ui32Width, ZMQ_SNDMORE | ZMQ_DONTWAIT))
+                            if (m_sck_pair->send(&m_sImageFormat.m_ui32Height, sizeof m_sImageFormat.m_ui32Height, ZMQ_SNDMORE | ZMQ_DONTWAIT))
+                                if (m_sck_pair->send(pReadBuffer->GetPtr(), imageSize, ZMQ_DONTWAIT))
+                                    returncode = true;
 
-				if (!returncode)
-					LOG_ERROR("Queue overflow in the fine localization thread. Reduce the fps !!!");
+                    if (!returncode)
+                        LOG_ERROR("Queue overflow in the fine localization thread. Reduce the fps !!!");
+                }
+                sampleCnt = 0;
             }
-            sampleCnt = 0;
+            sampleCnt++;
         }
-        sampleCnt++;
+    } else {
+        m_oReader.Clear();
     }
     RETURN_NOERROR;
 }
 
-tResult cFineLocalisation::ProcessImage(Mat* bvImage)
+tResult cFineLocalisation::ProcessImage(Mat* bvImage, tBool init)
 {
 #ifdef _DEBUG
 	const tTimeStamp start = cHighResTimer::GetTime();
 #endif
-
 	//[dx, dy, headingOffset, confidence]l
-	float *location = locator.localize(*bvImage, heading, x, y, axleToPicture, initial);
+	float *location = locator.localize(*bvImage, heading, x, y, axleToPicture, init);
 
 #ifdef _DEBUG
 	const tTimeStamp end = cHighResTimer::GetTime();
 	LOG_DUMP("Localization run-time: %.2f ms", (end - start) / 1000.0);
 #endif
 
-	if ((location[3] > angleRangeMax || location[3] < angleRangeMin) && !initial) LOG_ERROR("caclualted angle offset out of bounds: %f", location[3]);
+	if ((location[3] > angleRangeMax || location[3] < angleRangeMin) && !init) LOG_ERROR("caclualted angle offset out of bounds: %f", location[3]);
 	LOG_INFO("found deltas: %.2f %.2f %.4f", location[0], location[1], location[2]);
 	
 	// transmit result (with a lock!)
@@ -391,6 +390,11 @@ tResult cFineLocalisation::InitializeFineLocalizationThread()
 			// an empty message from the parent thread signals a break condition
 			// message.size() > 0 IMPLIES message.more()
 
+            zmq::message_t message_initial;
+            pair_socket.recv(&message_initial);
+            if (message_initial.size() == 0 && m_runner_reset_signal) break;
+            assert(!(message_initial.size() > 0 && !message_initial.more()));
+
 			zmq::message_t message_width;
 			pair_socket.recv(&message_width);
 			if (message_width.size() == 0 && m_runner_reset_signal) break;
@@ -413,11 +417,12 @@ tResult cFineLocalisation::InitializeFineLocalizationThread()
 
 			/* --- (4) process image --- */
 
+			tBool initial = *static_cast<tBool*>(message_initial.data());
 			tUInt32 width = *static_cast<tUInt32*>(message_width.data());
 			tUInt32 height = *static_cast<tUInt32*>(message_height.data());
 			Mat bvImage = Mat(Size(width, height), CV_8UC3, static_cast<unsigned char *>(message_image.data()));
 
-			ProcessImage(&bvImage);
+			ProcessImage(&bvImage, initial);
 		}
 
 		pair_socket.close();
