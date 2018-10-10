@@ -3169,38 +3169,6 @@
           <properties/>
         </property_set>
         <property_set>
-          <name>services/kernel.service.adtf</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>services/reference_clock.service.adtf</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>services/signal_registry.service.adtf</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>services/media_description.service.adtf</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>services/qt_xsystem.ui_service.adtf</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>services/adtf_file_support.service.adtf</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>services/log_view.ui_service.adtf</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>services/zeromq.service.adtf</name>
-          <properties/>
-        </property_set>
-        <property_set>
           <name>graphs/decision_graph/filters/LITD ZMQ Obst InArea</name>
           <properties>
             <property>
@@ -3450,6 +3418,38 @@
         </property_set>
         <property_set>
           <name>graphs/decision_graph/filters/LITD ZMQ Decision Sensors/input_pins/ObstInArea9</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>services/kernel.service.adtf</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>services/reference_clock.service.adtf</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>services/signal_registry.service.adtf</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>services/media_description.service.adtf</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>services/qt_xsystem.ui_service.adtf</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>services/adtf_file_support.service.adtf</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>services/log_view.ui_service.adtf</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>services/zeromq.service.adtf</name>
           <properties/>
         </property_set>
       </property_sets>

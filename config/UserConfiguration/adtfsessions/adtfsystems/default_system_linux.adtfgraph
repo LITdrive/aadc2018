@@ -166,6 +166,9 @@
       <url>$(BIN_DIR)/debug/litd_zmq_decision_jury.adtfplugin</url>
     </plugin>
     <plugin>
+      <url>$(BIN_DIR)/debug/litd_zmq_Obst_InArea.adtfplugin</url>
+    </plugin>
+    <plugin>
       <url>$(BIN_DIR)/debug/converter_wheels.adtfplugin</url>
     </plugin>
     <plugin>
@@ -242,9 +245,6 @@
     </plugin>
     <plugin>
       <url>$(BIN_DIR)/debug/zeromq_service.adtfplugin</url>
-    </plugin>
-    <plugin>
-      <url>$(BIN_DIR)/debug/litd_zmq_Obst_InArea.adtfplugin</url>
     </plugin>
   </plugins>
   <debug_plugins>
@@ -294,6 +294,9 @@
       <url>$(BIN_DIR)/debug/litd_zmq_decision_jury.adtfplugin</url>
     </plugin>
     <plugin>
+      <url>$(BIN_DIR)/debug/litd_zmq_Obst_InArea.adtfplugin</url>
+    </plugin>
+    <plugin>
       <url>$(BIN_DIR)/debug/converter_wheels.adtfplugin</url>
     </plugin>
     <plugin>
@@ -370,9 +373,6 @@
     </plugin>
     <plugin>
       <url>$(BIN_DIR)/debug/zeromq_service.adtfplugin</url>
-    </plugin>
-    <plugin>
-      <url>$(BIN_DIR)/debug/litd_zmq_Obst_InArea.adtfplugin</url>
     </plugin>
   </debug_plugins>
   <services>
