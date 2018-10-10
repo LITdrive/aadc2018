@@ -11,22 +11,23 @@ windows:
       - commands:
         - source ~/anaconda3/bin/activate aadc
         - cd ~/share/adtf/src/aadcUserPython/litdrive
-        - python -m litdrive.selfdriving
+        - while true; do python -m litdrive.selfdriving; done
       # alarm
       - commands:
         - source ~/anaconda3/bin/activate aadc
         - cd ~/share/adtf/src/aadcUserPython/litdrive
-        - python -m litdrive.filters.alarm
+        - while true; do python -m litdrive.filters.alarm; done
       # lidarBreak
       - commands:
         - source ~/anaconda3/bin/activate aadc
         - cd ~/share/adtf/src/aadcUserPython/litdrive
-        - python -m litdrive.zeromq.demo.lidarBreak
+        - while true; do python -m litdrive.zeromq.demo.lidarBreak; done
       # obstInArea
       - commands:
         - source ~/anaconda3/bin/activate aadc
         - cd ~/share/adtf/src/aadcUserPython/litdrive
-        - python -m litdrive.zeromq.phil.obstInArea
+        - while true; do python -m litdrive.zeromq.phil.obstInArea; done
       # adtf
       - ~/share/adtf/scripts/run_user_default_session.sh
+
 
