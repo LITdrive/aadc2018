@@ -102,7 +102,7 @@ Part 7
 <roadSign id="3" x="2.644" y="9.865" radius="1.0" direction="0" name="Intersection" />
 <roadSign id="3" x="4.356" y="11.135" radius="1.0" direction="180" name="Intersection" />
 <roadSign id="1" x="2.865" y="11.356" radius="1.0" direction="-90" name="Stop"/>
-<roadSign id="1" x="4.135" y="9.644" radius="1.0" direction="90" name="Stop"/>
+<roadSign id="23" x="4.135" y="9.644" radius="5.0" direction="90" name="Stop" init="1" />
 
 <roadSign id="3" x="2.644" y="12.865" radius="1.0" direction="0" name="Intersection" />
 <roadSign id="1" x="4.135" y="12.644" radius="1.0" direction="90" name="Stop"/>

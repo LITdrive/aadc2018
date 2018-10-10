@@ -21,12 +21,14 @@ class Commander:
                                                       self._car.position["f32y"],
                                                       self._car.position["f32heading"])
                 # send maneuvers
-                for maneuver in self._car.THREAD_maneuvers:
-                    mapped = _map_maneuver_state(maneuver.action)
-                    mapped = [e for e in mapped if e != ManeuverState.INVALID]
-                    self._car.planner.addManeuver(mapped)
-
-        self.out_speed = 0.5
+                for section in self._car.THREAD_maneuvers:
+                    for maneuver in section:
+                        print(maneuver)
+                        mapped = _map_maneuver_state(maneuver.action)
+                        if mapped != ManeuverState.INVALID:
+                            self._car.planner.addManeuver(mapped)
+                self.out_speed = 0.3
+            self._car.running_previous = self._car.THREAD_running
 
 
 def _map_maneuver_state(m):

@@ -59,7 +59,7 @@ class JuryThread(threading.Thread):
         roadsigns = parse_roadsigns(self._config["roadSignsFile"])
         print(roadsigns)
         print("Reading maneuver list ...")
-        maneuver = parse_roadsigns(self._config["maneuverListFile"])
+        maneuver = parse_maneuver(self._config["maneuverListFile"])
         print(maneuver)
         self._received_files = True
         with self._lock:

@@ -76,7 +76,7 @@ class DecisionServer:
         ]
         outputs = [
             "tSignalValue",  # desired speed
-            "tTrajectory",  # desired trajectory
+            "tTrajectoryArray",  # desired trajectory
             "tBoolSignalValue",  # turn_signal_right
             "tBoolSignalValue",  # turn_signal_left
             "tBoolSignalValue",  # hazard_light
@@ -131,11 +131,17 @@ class DecisionServer:
             break_signal = siren or lidar_break or car.THREAD_jury_stop_signal
 
         # Should be called last, so that new decisions can already be taken into account in this call.
-        out_trajectories = None
-        if controller_leverage and controller_feedback:
-            out_trajectories = car.planner.update(int(controller_feedback["id"]), int(controller_leverage["id"]),
-                                                  float(controller_leverage["p"]))
 
+        leverage_p = controller_leverage["p"] if controller_leverage else 0
+        leverage_id = controller_leverage["id"] if controller_leverage else 0
+        feedback = controller_feedback["id"] if controller_feedback else 0
+
+        out_trajectories = car.planner.update(int(feedback), int(leverage_id),
+                                              float(leverage_p))
+
+        print("SPEED: " + str(commander.out_speed))
+        print(out_trajectories)
+        print(car.planner)
         return (0, 0 if break_signal else commander.out_speed), out_trajectories
 
 

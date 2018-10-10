@@ -36,6 +36,7 @@ def parse_roadsigns(path: str):
 
 
 def parse_maneuver(path: str):
+    print(path)
     tree = ElementTree.parse(path)
     sectors = []
     for s in tree.getroot():
