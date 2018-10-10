@@ -30,13 +30,13 @@ class LITD_TrajectoryList {
         //Returns the nearest point to the given point on the known polynomials in target_pnt.
         //It updates the list, but does not drop the old items. 
         //Returns the ID of the last Tile, if we changed to a new one.
-        std::tuple<uint32_t, uint32_t, double> getDistanceToNearestPoint(LITD_VirtualPoint& car_pnt, LITD_VirtualPoint& target_pnt);
+        std::tuple<uint32_t, uint32_t, float> getDistanceToNearestPoint(::tPosition& car_pnt, ::tPosition& target_pnt);
 
         //friend std::ostream& operator<<(std::ostream&, const LITD_TrajectoryList&);
 
         //std::tuple<uint32_t, double> getNextChangePoint();
 
-        static void getPolyPoint(tTrajectory& trj, double p, LITD_VirtualPoint& pnt);
+        void getPolyPoint(tTrajectory& trj, float p, ::tPosition& pnt);
 
 
         static const double p_resolution;
