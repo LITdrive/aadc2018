@@ -31,6 +31,11 @@ class Car:
         # TODO: continue here with sending data
         self.THREAD_jury_current_maneuver = -1
 
+        self.running_previous = False
+        self.THREAD_running = False
+
+        self.position = None
+
 
 class Perception:
     def __init__(self):

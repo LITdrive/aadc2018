@@ -109,7 +109,26 @@ class DecisionServer:
         car.roadsign_receptor.update(position)
         car.siren_receptor.update()
 
+        if position:
+            car.position = position
+
         commander.decide()
+
+        if siren:
+            print("SIREN DETECTED")
+        if lidar_break:
+            print("LIDAR BREAK")
+
+        jury_break = False
+        with commander._lock:
+            jury_break = car.THREAD_jury_stop_signal
+
+        if jury_break:
+            print("JURY BREAK")
+
+        # emergency break
+        with commander._lock:
+            break_signal = siren or lidar_break or car.THREAD_jury_stop_signal
 
         # Should be called last, so that new decisions can already be taken into account in this call.
         out_trajectories = None
@@ -117,7 +136,7 @@ class DecisionServer:
             out_trajectories = car.planner.update(int(controller_feedback["id"]), int(controller_leverage["id"]),
                                                   float(controller_leverage["p"]))
 
-        return (0, commander.out_speed), out_trajectories
+        return (0, 0 if break_signal else commander.out_speed), out_trajectories
 
 
 if __name__ == "__main__":

@@ -24,8 +24,7 @@ class JuryThread(threading.Thread):
 
         self._last_maneuver = None
 
-        # to run or not to run .. that is the question
-        self._running = False
+        self._received_files = False
 
         # 0815 state machine for initial localization
         self._localization_state = LocalizationState.Inactive
@@ -62,7 +61,7 @@ class JuryThread(threading.Thread):
         print("Reading maneuver list ...")
         maneuver = parse_roadsigns(self._config["maneuverListFile"])
         print(maneuver)
-
+        self._received_files = True
         with self._lock:
             self._car.THREAD_maneuvers = maneuver
             self._car.THREAD_roadsigns = roadsigns
@@ -88,20 +87,21 @@ class JuryThread(threading.Thread):
 
             elif action_id == JuryAction.Start:
                 print("Received START signal.")
-                if self._localization_state != LocalizationState.Normal:
-                    print("ERROR: Initial Positioing not yet done!")
+                if self._localization_state != LocalizationState.Normal or \
+                        not self._received_files:
+                    print("ERROR: Initial Positioing not yet done OR didn't receive files yet!")
                     driver = (JuryCarState.Error.value, -1)
                 else:
-                    self._running = True
                     driver = (JuryCarState.Running, maneuver_entry)
                     with self._lock:
+                        self._car.THREAD_running = True
                         self._car.THREAD_jury_maneuver_entry = maneuver_entry
                         self._car.THREAD_jury_current_maneuver = maneuver_entry
                         self._car.THREAD_jury_stop_signal = False
             elif action_id == JuryAction.Stop:
                 print("Received STOP signal.")
-                self._running = False
                 with self._lock:
+                    self._car.THREAD_running = False
                     self._car.THREAD_jury_stop_signal = True
 
         # localization state machine
@@ -121,13 +121,13 @@ class JuryThread(threading.Thread):
             self._localization_state = LocalizationState.Normal
 
         if self._localization_state == LocalizationState.Normal:
-            if self._running:
-                with self._lock:
+            with self._lock:
+                if self._car.THREAD_running:
                     maneuver = self._car.THREAD_jury_current_maneuver
-                if maneuver != self._last_maneuver:
-                    driver = (JuryCarState.Running, maneuver)
-                self._last_maneuver = maneuver
-            else:
-                driver = (JuryCarState.Ready.value, -1)
+                    if maneuver != self._last_maneuver:
+                        driver = (JuryCarState.Running, maneuver)
+                    self._last_maneuver = maneuver
+                else:
+                    driver = (JuryCarState.Ready.value, -1)
 
         return driver, position_mux, initial_localization
