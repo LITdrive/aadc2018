@@ -73,3 +73,4 @@ class PlannerErrors(enum.IntEnum):
     NONE=0
     INVALID_DECISION=1
     OUT_OF_DECISIONS=2
+    NO_INIT_LANE=3

@@ -23,6 +23,7 @@ class Commander:
                 # send maneuvers
                 for maneuver in self._car.THREAD_maneuvers:
                     mapped = _map_maneuver_state(maneuver.action)
+                    mapped = [e for e in mapped if e != ManeuverState.INVALID]
                     self._car.planner.addManeuver(mapped)
 
         self.out_speed = 0.5

@@ -39,8 +39,14 @@ class Planner:
         pass
 
 
-    def initPlannerSettings(self, init_x:float, init_y:float):
-        self.init_id=init_id
+    def initPlannerSettings(self, init_x:float, init_y:float, init_h:float):
+
+        self.init_id=getLaneByPosition(self.rl, init_x, init_y, init_h)
+        if(self.init_id<=0):
+            self.state=PlannerState.ERROR
+            self.error=PlannerErrors.NO_INIT_LANE
+        else:
+            self.state=PlannerState.NO_TRAJECTORIES
 
         return self.init_id
 
@@ -49,6 +55,8 @@ class Planner:
 
     def addManeuver(self, maneuver:ManeuverState):
         self.decisions_to_submit.append(maneuver)
+        if(len(self.decisions_to_submit)>0):
+            self.state=PlannerState.FORWARD_NORMAL
 
 
 
@@ -56,20 +64,19 @@ class Planner:
         if(self.state<=PlannerState.INVALID ):
             print("ERROR: Planner is in INVALID-State!!!")
         elif(self.state==PlannerState.ERROR):
-            print("ERROR: " + str(self.state))
+            print("ERROR: " + str(self.error))
+        elif(self.state==PlannerState.FORWARD_NORMAL):
+            print("Forward normal")
+            #Delete all elements up to the given ID
+            last_id=0
+            last_controller_id=0
+            while len(self.ids_in_controller)>0 and self.ids_in_controller[0]<controller_done_id:
+                print("planner: deleting controller lane id {}!".format(self.ids_in_controller[0]))
+                self.lanes_in_controller.pop(0)
+                self.ids_in_controller.pop(0)
 
 
-        #Delete all elements up to the given ID
-        last_id=0
-        last_controller_id=0
-        while len(self.ids_in_controller)>0 and self.ids_in_controller[0]<controller_done_id:
-            print("planner: deleting controller lane id {}!".format(self.ids_in_controller[0]))
-            self.lanes_in_controller.pop(0)
-            self.ids_in_controller.pop(0)
-
-
-        num_controller = len (self.ids_in_controller)
-        if last_id==0:
+            num_controller = len (self.ids_in_controller)
             if(num_controller==0):
                 print("Selected ids from Init")
                 last_id=self.init_id
@@ -79,44 +86,38 @@ class Planner:
                 last_id=self.lanes_in_controller[-1]
                 last_controller_id=self.ids_in_controller[-1]
 
+            #num_controller = len (self.ids_in_controller)
+            if(num_controller<TRAJECTORY_ARRAY_SIZE):
+                print("Adding Trajectories")
+                if(len(self.decisions_in_controller)>0 and( self.decisions_in_controller[-1]==ManeuverState.LEFT or self.decisions_in_controller[-1]==ManeuverState.STRAIGHT or self.decisions_in_controller[-1]==ManeuverState.RIGHT or self.decisions_in_controller[-1]==ManeuverState.MERGE)):
+                    self.decisions_to_submit.insert(0,self.decisions_in_controller[-1])
+                lanes, ids, dec = getLaneListByDecisions(self.rl, last_id, self.decisions_to_submit, TRAJECTORY_ARRAY_SIZE-num_controller+1)
 
+                if(ManeuverState.INVALID in dec):
+                    print("WARNING: Decision has an INVALID state inside.")
 
+                for d in dec:
+                    if(d==ManeuverState.LEFT or d==ManeuverState.STRAIGHT or d==ManeuverState.RIGHT or d==ManeuverState.MERGE):
+                        if(d!=self.decisions_to_submit[0]):
+                            print("WARNING: Used decision is not in to submit list!")
+                        self.decisions_to_submit.pop(0)
 
-        self.controller_current_id=controller_current_id
-        self.controller_current_p =controller_current_p
+                if(num_controller>0):
+                    self.lanes_in_controller.pop(num_controller-1)
+                    self.decisions_in_controller.pop(num_controller-1)
+                    self.ids_in_controller.pop(num_controller-1)
+                self.lanes_in_controller.extend(ids)
+                self.decisions_in_controller.extend(dec)
+                controller_ids=list(range(last_controller_id, last_controller_id+len(ids)))
+                print("New controller ids from {} to {}".format(last_controller_id, last_controller_id+len(ids)))
+                self.ids_in_controller.extend(controller_ids)
 
+                buffer = ([0] * TRAJECTORY_NUM_FIELDS * TRAJECTORY_ARRAY_SIZE)
+                for i in range(0, len(ids)):
+                    x_poly, y_poly = lanes[i].getPolys(False)
+                    buffer[i*TRAJECTORY_NUM_FIELDS:(i+1)*TRAJECTORY_NUM_FIELDS]=[controller_ids[i], *tuple(x_poly)[::-1], *tuple(y_poly)[::-1], 0.0, 1.0, False]
 
-        #num_controller = len (self.ids_in_controller)
-        if(num_controller<TRAJECTORY_ARRAY_SIZE):
-            if(len(self.decisions_in_controller)>0 and( self.decisions_in_controller[-1]==ManeuverState.LEFT or self.decisions_in_controller[-1]==ManeuverState.STRAIGHT or self.decisions_in_controller[-1]==ManeuverState.RIGHT or self.decisions_in_controller[-1]==ManeuverState.MERGE)):
-                self.decisions_to_submit.insert(0,self.decisions_in_controller[-1])
-            lanes, ids, dec = getLaneListByDecisions(self.rl, last_id, self.decisions_to_submit, TRAJECTORY_ARRAY_SIZE-num_controller+1)
-
-            if(ManeuverState.INVALID in dec):
-                print("WARNING: Decision has an INVALID state inside.")
-
-            for d in dec:
-                if(d==ManeuverState.LEFT or d==ManeuverState.STRAIGHT or d==ManeuverState.RIGHT or d==ManeuverState.MERGE):
-                    if(d!=self.decisions_to_submit[0]):
-                        print("WARNING: Used decision is not in to submit list!")
-                    self.decisions_to_submit.pop(0)
-
-            if(num_controller>0):
-                self.lanes_in_controller.pop(num_controller-1)
-                self.decisions_in_controller.pop(num_controller-1)
-                self.ids_in_controller.pop(num_controller-1)
-            self.lanes_in_controller.extend(ids)
-            self.decisions_in_controller.extend(dec)
-            controller_ids=list(range(last_controller_id, last_controller_id+len(ids)))
-            print("New controller ids from {} to {}".format(last_controller_id, last_controller_id+len(ids)))
-            self.ids_in_controller.extend(controller_ids)
-
-            buffer = ([0] * TRAJECTORY_NUM_FIELDS * TRAJECTORY_ARRAY_SIZE)
-            for i in range(0, len(ids)):
-                x_poly, y_poly = lanes[i].getPolys(False)
-                buffer[i*TRAJECTORY_NUM_FIELDS:(i+1)*TRAJECTORY_NUM_FIELDS]=[controller_ids[i], *tuple(x_poly)[::-1], *tuple(y_poly)[::-1], 0.0, 1.0, False]
-
-            return buffer
+                return buffer
 
         return None
 
