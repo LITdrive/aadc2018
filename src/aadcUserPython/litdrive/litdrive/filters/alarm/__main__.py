@@ -18,7 +18,7 @@ from ...zeromq.server import ZmqServer
 #Parameters--------------
 p =  abspath(join(dirname(__file__), r'../../../../../../configuration_files/alarm'))
 thld = 0.65 #treshold for detection
-weights = np.asarray([7,10,9,8]) #weights for final dec. lr, es, cnn, nb_pca
+weights = np.asarray([5,10,9,8]) #weights for final dec. lr, es, cnn, nb_pca
 weights=weights/sum(weights)
 is_debugging=False #debugging mode
 # don't touch those ;)
