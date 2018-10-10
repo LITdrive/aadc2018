@@ -33,7 +33,7 @@ from scipy import signal #for 2dconv
 from litdrive.zeromq.demo.aadc_geometrics import * #get car geometrics in cm
 import scipy.misc
 from scipy import ndimage # to rotate local map
-from skimage.draw import line_aa #to draw lines
+#from skimage.draw import line_aa #to draw lines
 import pandas as pd
 
 # those are measured in the middle and have to be shifted by 36cm in Real axis
