@@ -10,12 +10,12 @@ backwards=[False, False, False, False]
 
 
 print("Init!")
-print("init id is: " + str(pl.initPlannerSettings(1.0, 1.0, 5.0/2.0*np.pi)))
+print("init id is: " + str(pl.initPlannerSettings(3.8, 9.6, np.pi/2.0)))
 
 
 print(pl)
 
-man=[ManeuverState.RIGHT, ManeuverState.LEFT, ManeuverState.STRAIGHT, ManeuverState.LEFT, ManeuverState.RIGHT]
+man=[ManeuverState.RIGHT, ManeuverState.STRAIGHT, ManeuverState.RIGHT, ManeuverState.STRAIGHT, ManeuverState.STRAIGHT, ManeuverState.RIGHT, ManeuverState.STRAIGHT, ManeuverState.LEFT]
 for m in man:
     pl.addManeuver(m)
 

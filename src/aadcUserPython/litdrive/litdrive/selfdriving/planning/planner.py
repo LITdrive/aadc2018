@@ -107,7 +107,7 @@ class Planner:
                 print("Adding Trajectories")
                 if(len(self.decisions_in_controller)>0 and( self.decisions_in_controller[-1]==ManeuverState.LEFT or self.decisions_in_controller[-1]==ManeuverState.STRAIGHT or self.decisions_in_controller[-1]==ManeuverState.RIGHT or self.decisions_in_controller[-1]==ManeuverState.MERGE)):
                     self.decisions_to_submit.insert(0,self.decisions_in_controller[-1])
-                lanes, ids, dec = getLaneListByDecisions(self.rl, last_id, self.decisions_to_submit, TRAJECTORY_ARRAY_SIZE-num_controller+1)
+                lanes, ids, dec = getLaneListByDecisions(self.rl, last_id, self.decisions_to_submit, TRAJECTORY_ARRAY_SIZE-num_controller)
 
                 if(ManeuverState.INVALID in dec):
                     print("WARNING: Decision has an INVALID state inside.")
@@ -129,15 +129,13 @@ class Planner:
                 self.ids_in_controller.extend(controller_ids)
 
                 buffer = [0] * TRAJECTORY_NUM_FIELDS * TRAJECTORY_ARRAY_SIZE
-                poly_buffer = []
                 for i in range(0, len(ids)):
                     x_poly, y_poly = lanes[i].getPolys(False)
-                    #buffer[i*TRAJECTORY_NUM_FIELDS:(i+1)*TRAJECTORY_NUM_FIELDS]=[controller_ids[i], *tuple(x_poly)[::-1], *tuple(y_poly)[::-1], 0.0, 1.0, False]
-                    poly = [controller_ids[i], *tuple(x_poly)[::-1], *tuple(y_poly)[::-1], 0.0, 1.0, False]
-                    poly_buffer.append(poly)
+                    buffer[i*TRAJECTORY_NUM_FIELDS:(i+1)*TRAJECTORY_NUM_FIELDS]=[controller_ids[i], *tuple(x_poly)[::-1], *tuple(y_poly)[::-1], 0.0, 1.0, False]
 
-                #return [len(ids)] + buffer
-                return Planner.build_trajectory_array_buffer(poly_buffer)
+                buffer.insert(0, len(ids))
+                return buffer
+                #return Planner.build_trajectory_array_buffer(poly_buffer)
 
         return None
 
