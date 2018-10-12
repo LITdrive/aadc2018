@@ -37,27 +37,35 @@ Status YOLOHandler::load_graph(string graph_path) {
     return Status::OK();
 }
 
-Tensor readTensorFromMat(const Mat &mat) {
-    int height = mat.rows;
-    int width = mat.cols;
-    int depth = mat.channels();
-    Tensor inputTensor(tensorflow::DT_FLOAT, tensorflow::TensorShape({1, height, width, depth}));
+Tensor readTensorFromMat(const Mat &left, const Mat &center, const Mat &right) {
+    int height = 416;
+    int width = 416;
+    int depth = 3;
+    int batch = 3;
+    Tensor inputTensor(tensorflow::DT_FLOAT, tensorflow::TensorShape({batch, height, width, depth}));
     auto inputTensorMapped = inputTensor.tensor<float, 4>();
 
-    const tensorflow::uint8* source_data = (tensorflow::uint8*)mat.data;
+    const tensorflow::uint8 *left_source_data = (tensorflow::uint8 *) left.data;
+    const tensorflow::uint8 *center_source_data = (tensorflow::uint8 *) center.data;
+    const tensorflow::uint8 *right_source_data = (tensorflow::uint8 *) right.data;
 
-    for (int y=0; y<height; y++){
-        const tensorflow::uint8* source_row = source_data + (y*width*depth);
-        for (int x=0; x<width; x++){
-            const tensorflow::uint8* source_pixel = source_row + (x*depth);
+    const tensorflow::uint8 *all_images[3] = {left_source_data, center_source_data, right_source_data};
 
-            const tensorflow::uint8* source_value_blue = source_pixel;
-            const tensorflow::uint8* source_value_green = source_pixel + 1;
-            const tensorflow::uint8* source_value_red = source_pixel + 2;
+    for (int b=0; b<batch; b++){
+        const tensorflow::uint8 *source_data = all_images[b];
+        for (int y = 0; y < height; y++) {
+            const tensorflow::uint8 *source_row = source_data + (y * width * depth);
+            for (int x = 0; x < width; x++) {
+                const tensorflow::uint8 *source_pixel = source_row + (x * depth);
 
-            inputTensorMapped(0, y, x, 0) = (*source_value_red)/255.;
-            inputTensorMapped(0, y, x, 1) = (*source_value_green)/255.;
-            inputTensorMapped(0, y, x, 2) = (*source_value_blue)/255.;
+                const tensorflow::uint8 *source_value_blue = source_pixel;
+                const tensorflow::uint8 *source_value_green = source_pixel + 1;
+                const tensorflow::uint8 *source_value_red = source_pixel + 2;
+
+                inputTensorMapped(b, y, x, 0) = (*source_value_red) / 255.;
+                inputTensorMapped(b, y, x, 1) = (*source_value_green) / 255.;
+                inputTensorMapped(b, y, x, 2) = (*source_value_blue) / 255.;
+            }
         }
     }
 
@@ -65,14 +73,25 @@ Tensor readTensorFromMat(const Mat &mat) {
 }
 
 Tensor YOLOHandler::forward_path(Mat camera_image) {
-    int height = 448;
-    int width = 448;
-    Mat image;
+    Mat left;
+    Mat center;
+    Mat right;
     std::vector<Tensor> outputs;
     Tensor inputTensor;
 
-    resize(camera_image, image, Size(height, width));
-    inputTensor = readTensorFromMat(image);
+    int x = 50;
+    int y = 380;
+    int edge_length = 416;
+    cv::Rect ROI_left(x, y, edge_length, edge_length);
+    left = camera_image(ROI_left);
+    x = 416;
+    cv::Rect ROI_center(x, y, edge_length, edge_length);
+    center = camera_image(ROI_center);
+    x = 742;
+    cv::Rect ROI_right(x, y, edge_length, edge_length);
+    right = camera_image(ROI_right);
+
+    inputTensor = readTensorFromMat(left, right, center);
 
     Status run_status = session->Run({{"input", inputTensor}},
                                         {"output"}, {}, &outputs);

@@ -46,7 +46,9 @@ cLITD_ObjectDetection::cLITD_ObjectDetection()
     //Register input pin
     Register(m_oReader, "input", pType);
     //Register output pin
-    Register(m_oWriter, "output", pTypeTemplateData);
+    Register(m_oWriterLeft, "left", pTypeTemplateData);
+    Register(m_oWriterCenter, "center", pTypeTemplateData);
+    Register(m_oWriterRight, "right", pTypeTemplateData);
 
     //register callback for type changes
     m_oReader.SetAcceptTypeCallback([this](const adtf::ucom::ant::iobject_ptr<const adtf::streaming::ant::IStreamType>& pType) -> tResult
@@ -81,11 +83,15 @@ tResult cLITD_ObjectDetection::Configure()
 
 tResult cLITD_ObjectDetection::Process(tTimeStamp tmTimeOfTrigger)
 {
+    LOG_INFO("forward path called");
     while (!m_runner_reset_signal)
     {
         object_ptr<const ISample> pReadSample;
         Tensor output;
-        tFloat32 output_array[588];
+        int size_output_array = 21125;
+        tFloat32 left_output_array[size_output_array];
+        tFloat32 center_output_array[size_output_array];
+        tFloat32 right_output_array[size_output_array];
         int flag = 0;
 
         if (IS_OK(m_oReader.GetLastSample(pReadSample)))
@@ -98,37 +104,53 @@ tResult cLITD_ObjectDetection::Process(tTimeStamp tmTimeOfTrigger)
                 Mat inputImage = Mat(cv::Size(m_sImageFormat.m_ui32Width, m_sImageFormat.m_ui32Height),
                                         CV_8UC3, const_cast<unsigned char*>(static_cast<const unsigned char*>(pReadBuffer->GetPtr())));
 
-                // Setup a rectangle to define your region of interest
-                int8 x = 380;
-                int8 x_plus_offset = x+448;
-
-                cv::Rect myROI(x, x, x_plus_offset, x_plus_offset);
-
-                cv::Mat croppedImage = inputImage(myROI);
 
                 //Do the image processing and copy to destination image buffer
                 // TODO: use .data() instead
-                output = yolo_handler.forward_path(croppedImage);
-                tensorflow::TTypes<float>::Flat output_flat = output.flat<float>();
+                output = yolo_handler.forward_path(inputImage);
+                LOG_INFO("forward path done");
+                auto output_flat = output.flat_outer_dims<float, 3>();
 
-                for (int i = 0; i < 588; i++) {
-                    output_array[i] = output_flat(i);
+                for (int i = 0; i < size_output_array; i++) {
+                    left_output_array[i] = output_flat(i);
+                    center_output_array[i] = output_flat(i+21125);
+                    right_output_array[i] = output_flat(i+42250);
                 }
                 flag = 1;
             }
 
             if (flag == 1) {
-                object_ptr<ISample> pWriteSample;
 
-                if (IS_OK(alloc_sample(pWriteSample)))
+                object_ptr<ISample> pWriteSampleLeft;
+                if (IS_OK(alloc_sample(pWriteSampleLeft)))
                 {
-                    auto oCodec = m_YNOStructSampleFactory.MakeCodecFor(pWriteSample);
+                    auto oCodec = m_YNOStructSampleFactory.MakeCodecFor(pWriteSampleLeft);
 
                     tFloat32 *nodeValues = static_cast<tFloat32*>(oCodec.GetElementAddress(m_ddtYOLONetOutputStruct.nodeValues));
-                    memcpy(nodeValues, output_array, sizeof output_array);
+                    memcpy(nodeValues, left_output_array, sizeof left_output_array);
                 }
+                m_oWriterLeft << pWriteSampleLeft << flush << trigger;
 
-                m_oWriter << pWriteSample << flush << trigger;
+                object_ptr<ISample> pWriteSampleCenter;
+                if (IS_OK(alloc_sample(pWriteSampleCenter)))
+                {
+                    auto oCodec = m_YNOStructSampleFactory.MakeCodecFor(pWriteSampleCenter);
+
+                    tFloat32 *nodeValues = static_cast<tFloat32*>(oCodec.GetElementAddress(m_ddtYOLONetOutputStruct.nodeValues));
+                    memcpy(nodeValues, center_output_array, sizeof center_output_array);
+                }
+                m_oWriterCenter << pWriteSampleCenter << flush << trigger;
+
+                object_ptr<ISample> pWriteSampleRight;
+                if (IS_OK(alloc_sample(pWriteSampleRight)))
+                {
+                    auto oCodec = m_YNOStructSampleFactory.MakeCodecFor(pWriteSampleRight);
+
+                    tFloat32 *nodeValues = static_cast<tFloat32*>(oCodec.GetElementAddress(m_ddtYOLONetOutputStruct.nodeValues));
+                    memcpy(nodeValues, right_output_array, sizeof right_output_array);
+                }
+                m_oWriterRight << pWriteSampleRight << flush << trigger;
+
             }
         }
 
