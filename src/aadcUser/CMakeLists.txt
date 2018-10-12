@@ -64,3 +64,6 @@ add_subdirectory(LITD_WheelSpeedController)
 add_subdirectory(LITD_ZMQ_Decision)
 add_subdirectory(LITD_ZMQ_ImageTemplate)
 add_subdirectory(LITD_ZMQ_SensorTemplate)
+
+# unused filters
+#add_subdirectory(LITD_FFT)
