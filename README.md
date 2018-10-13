@@ -23,6 +23,15 @@ And some important files:
 - The `build_*.sh` scripts build, compile and install the project
 - `AADCConfig.cmake` is the CMake configuration for configuring the entire project and all its dependencies
 
+## Documentation
+
+If you are working with ADTF, you might want to read about some [**Common ADTF Pitfalls**](/doc/adtf-pitfalls).
+
+Additionally, you may find these external guides on ADTF very helpful:
+
+- [**ADTF3 Guides:** Very beginner-friendly tutorial-style introduction (by Digitalwerk)](https://support.digitalwerk.net/adtf3_guides/index.html)
+- [**ADTF3 Software Documentation:** The core objects have very useful documentation](https://support.digitalwerk.net/adtf/v3/adtf_html/index.html)
+
 ## Additional Libraries
 
 The following additional libraries need to be installed on the car.
