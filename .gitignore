@@ -60,3 +60,6 @@ __pycache__/
 .ipynb_checkpoints
 ipython_config.py
 .python-version
+
+# machine learning models
+/configuration_files/models/

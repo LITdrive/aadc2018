@@ -40,7 +40,10 @@ enum eZmqStruct
 	PolarCoordinate,
 	LaserScanner,
 	Trajectory,
-	TrajectoryArray
+	TrajectoryArray,
+	YoloNetOutput,
+	PolynomPoint,
+	Classification
 };
 
 /*! pin name and type tuple */
@@ -84,6 +87,9 @@ protected:
 
 	/*! new samples on these pins will trigger the process method (set by subclasses) */
 	std::vector<std::string> m_triggers;
+
+	/*! use GetNextSample() instead of GetLastSample() */
+	bool m_next_sample_trigger = false;
 
 private:
 
@@ -293,6 +299,16 @@ private:
 		tSize backwards;
 	} m_ddlTrajectoryIndex{};
 
+	// trajectory array
+	cSampleCodecFactory m_TrajectoryArraySampleFactory;
+	object_ptr<IStreamType> m_TrajectoryArrayStreamType = nullptr;
+
+	struct
+	{
+		tSize size;
+		tSize trajectories;
+	} m_ddlTrajectoryArrayIndex{};
+
 	// jury
 	cSampleCodecFactory m_JuryStructSampleFactory;
 	object_ptr<IStreamType> m_JuryStructStreamType = nullptr;
@@ -314,4 +330,88 @@ private:
 		tSize tvec;
 		tSize rvec;
 	} m_ddlRoadSignExtIndex{};
+
+	// yolo net
+	cSampleCodecFactory m_YoloNetOutputSampleFactory;
+	object_ptr<IStreamType> m_YoloNetOutputStreamType = nullptr;
+
+	struct
+	{
+		tSize f32NodeValue;
+	} m_ddlYoloNetOutputIndex{};
+
+	// traffic sign
+	cSampleCodecFactory m_TrafficSignSampleFactory;
+	object_ptr<IStreamType> m_TrafficSignStreamType = nullptr;
+
+	struct
+	{
+		tSize i16Identifier;
+		tSize f32x;
+		tSize f32y;
+		tSize f32angle;
+	} m_ddlTrafficSignIndex{};
+
+	// parking space
+	cSampleCodecFactory m_ParkingSpaceSampleFactory;
+	object_ptr<IStreamType> m_ParkingSpaceStreamType = nullptr;
+
+	struct
+	{
+		tSize i16Identifier;
+		tSize f32x;
+		tSize f32y;
+		tSize ui16Status;
+	} m_ddlParkingSpaceIndex{};
+
+	// obstacle
+	cSampleCodecFactory m_ObstacleSampleFactory;
+	object_ptr<IStreamType> m_ObstacleStreamType = nullptr;
+
+	struct
+	{
+		tSize f32x;
+		tSize f32y;
+	} m_ddlObstacleIndex{};
+
+	// driver
+	cSampleCodecFactory m_DriverStructSampleFactory;
+	object_ptr<IStreamType> m_DriverStructStreamType = nullptr;
+
+	struct
+	{
+		tSize i16StateID;
+		tSize i16ManeuverEntry;
+	} m_ddlDriverStructIndex{};
+
+	// polar coordiante
+	cSampleCodecFactory m_PolarCoordianteSampleFactory;
+	object_ptr<IStreamType> m_PolarCoordianteStreamType = nullptr;
+
+	struct
+	{
+		tSize f32Radius;
+		tSize f32Angle;
+	} m_ddlPolarCoordianteIndex{};
+
+	// polynom point
+	cSampleCodecFactory m_PolynomPointSampleFactory;
+	object_ptr<IStreamType> m_PolynomPointStreamType = nullptr;
+
+	struct
+	{
+		tSize id;
+		tSize parameter;
+	} m_ddlPolynomPointIndex{};
+
+	// classification
+	cSampleCodecFactory m_ClassificationSampleFactory;
+	object_ptr<IStreamType> m_ClassificationStreamType = nullptr;
+
+	struct
+	{
+		tSize className;
+		tSize classId;
+		tSize probValue;
+	} m_ddlClassificationIndex{};
 };

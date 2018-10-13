@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<configuration>
+
+<roadSign id="10" x="14.0" y="0.865" radius="1.0" direction="0" name="Autonomous" />
+<roadSign id="3" x="16.5" y="0.865" radius="1.0" direction="0" name="Intersection" />
+<roadSign id="10" x="21.0" y="1.865" radius="1.0" direction="0" name="Autonomous" />
+<roadSign id="10" x="25.0" y="4.865" radius="1.0" direction="0" name="Autonomous" />
+<roadSign id="10" x="28.135" y="8.0" radius="1.0" direction="90" name="Autonomous" />
+<roadSign id="10" x="25.0" y="14.135" radius="1.0" direction="180" name="Autonomous" />
+<roadSign id="10" x="19.0" y="14.135" radius="1.0" direction="180" name="Autonomous" />
+<roadSign id="10" x="16.865" y="12.0" radius="1.0" direction="-90" name="Autonomous" />
+<roadSign id="2" x="18.05" y="7.865" radius="1.0" direction="0" name="Parking" />
+<roadSign id="2" x="18.05" y="10.135" radius="1.0" direction="0" name="Parking" />
+<roadSign id="10" x="18.135" y="6.5" radius="1.0" direction="90" name="Autonomous" />
+<roadSign id="3" x="18.356" y="2.135" radius="1.0" direction="180" name="Intersection" />
+<roadSign id="1"  x="16.865" y="2.356" radius="1.0" direction="-90" name="Stop"/>
+
+<roadSign id="10" x="-0.135" y="3.0" radius="1.0" direction="-90" name="Autonomous" />
+<roadSign id="3" x="-0.135" y="6.0" radius="1.0" direction="-90" name="Intersection" />
+<roadSign id="6"  x="-0.135" y="8.0" radius="1.0" direction="-90" name="Pedestrian"/>
+<roadSign id="10" x="-0.135" y="10.0" radius="1.0" direction="-90" name="Autonomous" />
+<roadSign id="3" x="-0.135" y="11.0" radius="1.0" direction="-90" name="Intersection" />
+
+<roadSign id="3" x="1.135" y="4.644" radius="1.0" direction="90" name="Intersection" />
+<roadSign id="1" x="1.356" y="6.135" radius="1.0" direction="180" name="Stop"/>
+<roadSign id="6" x="1.135" y="7.0" radius="1.0" direction="90" name="Pedestrian"/>
+<roadSign id="3" x="1.135" y="9.644" radius="1.0" direction="90" name="Intersection" />
+<roadSign id="5" x="1.356" y="11.135" radius="1.0" direction="180" name="Give way"/>
+
+<roadSign id="10" x="3.0" y="0.865" radius="1.0" direction="0" name="Autonomous" />
+<roadSign id="3" x="2.644" y="4.865" radius="1.0" direction="0" name="Intersection" />
+<roadSign id="5" x="2.865" y="6.356" radius="1.0" direction="-90" name="Give way"/>
+<roadSign id="3" x="2.644" y="9.865" radius="1.0" direction="0" name="Intersection" />
+<roadSign id="1" x="2.865" y="11.356" radius="1.0" direction="-90" name="Stop"/>
+<roadSign id="3" x="2.644" y="12.865" radius="1.0" direction="0" name="Intersection" />
+<roadSign id="10" x="2.0" y="14.135" radius="1.0" direction="180" name="Autonomous" />
+
+<roadSign id="3" x="4.356" y="6.135" radius="1.0" direction="180" name="Intersection" />
+<roadSign id="1" x="4.135" y="9.644" radius="1.0" direction="90" name="Stop"/>
+<roadSign id="3" x="4.356" y="11.135" radius="1.0" direction="180" name="Intersection" />
+<roadSign id="1" x="4.135" y="12.644" radius="1.0" direction="90" name="Stop"/>
+<roadSign id="3" x="4.0" y="14.135" radius="1.0" direction="180" name="Intersection" />
+
+<roadSign id="10" x="5.135" y="6.644" radius="1.0" direction="-90" name="Autonomous" />
+<roadSign id="3" x="5.644" y="9.865" radius="1.0" direction="0" name="Intersection" />
+<roadSign id="1" x="5.865" y="11.356" radius="1.0" direction="-90" name="Stop"/>
+<roadSign id="3" x="5.644" y="12.865" radius="1.0" direction="0" name="Intersection" />
+
+<roadSign id="1" x="7.135" y="9.644" radius="1.0" direction="90" name="Stop"/>
+<roadSign id="3" x="7.356" y="11.135" radius="1.0" direction="180" name="Intersection" />
+<roadSign id="1" x="7.135" y="12.644" radius="1.0" direction="90" name="Stop"/>
+<roadSign id="3" x="7.0" y="14.135" radius="1.0" direction="180" name="Intersection" />
+
+<roadSign id="6" x="8.0" y="12.865" radius="1.0" direction="0" name="Pedestrian"/>
+<roadSign id="6" x="9.0" y="14.135" radius="1.0" direction="180" name="Pedestrian"/>
+
+<roadSign id="10" x="9.0" y="5.135" radius="1.0" direction="180" name="Autonomous" />
+<roadSign id="1" x="10.865" y="5.356" radius="1.0" direction="-90" name="Stop"/>
+<roadSign id="3" x="12.356" y="5.135" radius="1.0" direction="180" name="Intersection" />
+<roadSign id="3" x="10.644" y="3.865" radius="1.0" direction="0" name="Intersection" />
+
+<roadSign id="5" x="12.135" y="7.644" radius="1.0" direction="90" name="Give way"/>
+<roadSign id="5" x="8.644" y="9.865" radius="1.0" direction="0" name="Give way"/>
+<roadSign id="5" x="14.356" y="11.135" radius="1.0" direction="180" name="Give way"/>
+
+<roadSign id="10" x="14.0" y="3.865" radius="1.0" direction="0" name="Autonomous" />
+<roadSign id="10" x="14.865" y="6.0" radius="1.0" direction="-90" name="Autonomous" />
+<roadSign id="2" x="16.05" y="5.865" radius="1.0" direction="0" name="Parking" />
+<roadSign id="2" x="16.05" y="8.135" radius="1.0" direction="0" name="Parking" />
+<roadSign id="1" x="14.644" y="9.865" radius="1.0" direction="0" name="Stop"/>
+<roadSign id="3" x="16.135" y="9.644" radius="1.0" direction="90" name="Intersection" />
+<roadSign id="3" x="14.865" y="11.356" radius="1.0" direction="-90" name="Intersection" />
+<roadSign id="10" x="16.135" y="12.0" radius="1.0" direction="90" name="Autonomous" />
+<roadSign id="10" x="14.0" y="14.135" radius="1.0" direction="180" name="Autonomous" />
+
+<!-- parking -->
+<parkingSpace id="8" x="18.0" y="8.25" status="0" direction="180" />
+<parkingSpace id="7" x="18.0" y="8.75" status="0" direction="180" />
+<parkingSpace id="6" x="18.0" y="9.25" status="0" direction="180" />
+<parkingSpace id="5" x="18.0" y="9.75" status="0" direction="180" />
+
+<parkingSpace id="4" x="16.0" y="7.75" status="0" direction="180" />
+<parkingSpace id="3" x="16.0" y="7.25" status="0" direction="180" />
+<parkingSpace id="2" x="16.0" y="6.75" status="0" direction="180" />
+<parkingSpace id="1" x="16.0" y="6.25" status="0" direction="180" />
+
+</configuration>

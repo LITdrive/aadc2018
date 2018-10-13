@@ -1,18 +1,27 @@
-import json
-import argparse
 import functools
+import threading
 
-from .state import Car
 from .commander import Commander
+from .jury import JuryThread
 from .receptors import *
+from .state import Car
 from ..zeromq.server import ZmqServer
+
+from os.path import dirname, join, abspath
 
 
 def main(socket: str, config: dict):
     print("LITdrive >>> Towards Autonomy.")
 
+    # lock concurrent access to the state
+    lock = threading.Lock()
+
     car = Car(config)
-    commander = Commander(car, config)
+    commander = Commander(car, lock, config)
+
+    # setup and start jury thread
+    car.jury_receptor = JuryThread("tcp://*:5561", car, lock, config)
+    car.jury_receptor.start()
 
     # setup receptors
     car.siren_receptor = SirenReceptor(car.perception)
@@ -33,17 +42,46 @@ class DecisionServer:
         self._commander = commander
 
         inputs = [
-            "tJuryStruct",  # jury commands
-            "tPosition",  # current position
-            "tSignalValue",  # current speed
-            "tInerMeasUnitData",  # imu
+            "tBoolSignalValue",  # timer (TRIGGER)
+            "tPosition",  # position
+            "tSignalValue",  # measured_speed
+            "tRoadSignExt",  # signs
+            "tLaserScannerData",  # lidar
             "tUltrasonicStruct",  # ultrasonic
-            "tRoadSignExt",  # road signs
-            "tSignalValue"  # control feedback
+            "tInerMeasUnitData",  # imu
+            "tPolynomPoint",  # controller_leverage
+            "tPolynomPoint",  # controller_feedback
+            "tBoolSignalValue",  # siren
+            "tBoolSignalValue",  # lidar_break
+            "tBoolSignalValue",  # lidarzone1
+            "tBoolSignalValue",  # lidarzone2
+            "tBoolSignalValue",  # lidarzone3
+            "tBoolSignalValue",  # lidarzone4
+            "tBoolSignalValue",  # lidarzone5
+            "tBoolSignalValue",  # lidarzone6
+            "tBoolSignalValue",  # lidarzone7
+            "tBoolSignalValue",  # lidarzone8
+            "tBoolSignalValue",  # lidarzone9
+            "tBoolSignalValue",  # lidarzone10
+            "tBoolSignalValue",  # lidarzone11
+            "tBoolSignalValue",  # lidarzone12
+            "tBoolSignalValue",  # lidarzone13
+            "tBoolSignalValue",  # lidarzone14
+            "tBoolSignalValue",  # lidarzone15
+            "tBoolSignalValue",  # lidarzone16
+            "tBoolSignalValue",  # lidarzone17
+            "tBoolSignalValue",  # lidarzone18
+            "tBoolSignalValue",  # lidarzone19
+            "tBoolSignalValue"  # lidarzone20
         ]
         outputs = [
             "tSignalValue",  # desired speed
-            "tTrajectory"  # desired trajectory
+            "tTrajectoryArray",  # desired trajectory
+            "tBoolSignalValue",  # turn_signal_right
+            "tBoolSignalValue",  # turn_signal_left
+            "tBoolSignalValue",  # hazard_light
+            "tBoolSignalValue",  # brake_light
+            "tBoolSignalValue"  # reverse_light
         ]
 
         self._server = ZmqServer(address, inputs, outputs)
@@ -58,30 +96,62 @@ class DecisionServer:
 
     @staticmethod
     def _process(car: Car, commander: Commander,
-                 jury, position, speed, imu, ultrasonic, road_signs, control_feedback):
-        """
-        Hand over new samples to our receptors and ask the commander for a decision
-        :param car: A reference to the car model, which holds the receptors
-        :return: The filter output
-        """
-
+                 timer, position, measured_speed, signs, lidar, ultrasonic, imu,
+                 controller_leverage, controller_feedback, siren, lidar_break,
+                 lz1, lz2, lz3, lz4, lz5, lz6, lz7, lz8, lz9, lz10,
+                 lz11, lz12, lz13, lz14, lz15, lz16, lz17, lz18, lz19, lz20):
+        # print("- sensor")
+        print(position)
         # debug output
-        print(json.dumps([jury, position, speed, imu, ultrasonic, road_signs, control_feedback], indent=2))
+        # print(json.dumps([position, measured_speed, signs, lidar, ultrasonic, imu,
+        #                  controller_leverage, controller_feedback, siren, lidar_break], indent=2))
 
         car.roadsign_receptor.update(position)
         car.siren_receptor.update()
 
+        if position:
+            car.position = position
+
         commander.decide()
 
-        return (0, commander.out_speed), commander.out_trajectories
+        if siren:
+            print("SIREN DETECTED")
+        if lidar_break:
+            print("LIDAR BREAK")
+
+        jury_break = False
+        with commander._lock:
+            jury_break = car.THREAD_jury_stop_signal
+
+        if jury_break:
+            print("JURY BREAK")
+
+        # emergency break
+        with commander._lock:
+            break_signal = siren or lidar_break or car.THREAD_jury_stop_signal
+
+        # Should be called last, so that new decisions can already be taken into account in this call.
+
+        leverage_p = controller_leverage["p"] if controller_leverage else 0
+        leverage_id = controller_leverage["id"] if controller_leverage else 0
+        feedback = controller_feedback["id"] if controller_feedback else 0
+
+        out_trajectories = car.planner.update(int(feedback), int(leverage_id),
+                                              float(leverage_p))
+
+        print("SPEED: " + str(commander.out_speed))
+        print(out_trajectories)
+        print(car.planner)
+        return (0, 0 if break_signal else commander.out_speed), out_trajectories
 
 
-# python -m litdrive.selfdriving "tcp://*:5555"
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="LITdrive Self-Driving AI")
-    parser.add_argument('socket', type=str, default="tcp://*:5555",
-                        help="The socket address for the ZeroMQ Server (e.g. 'tcp://*:5555')")
-    args = parser.parse_args()
-
-    # TODO: read configurations from command line
-    main(args.socket, {"roadFile": None})
+    main("tcp://*:5562", {
+        "roadFile": None,
+        "roadSignsFile":
+            abspath(join(dirname(__file__), r'../../../../../configuration_files/jury/roadsigns.xml')),
+        "maneuverListFile":
+            abspath(join(dirname(__file__), r'../../../../../configuration_files/jury/maneuver.xml')),
+        "pickledOpenDriveMap":
+            abspath(join(dirname(__file__), r'../../../../../configuration_files/maps/qualifying_2018_litd.pickle'))
+    })

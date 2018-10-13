@@ -49,6 +49,58 @@ On Windows, download the 64 bit binaries from [here](ftp://ftp.fftw.org/pub/fftw
 	lib /machine:x64 /def:libfftw3-3.def
 	lib /machine:x64 /def:libfftw3l-3.def
 
+### Nvidia Driver 396.xx
+
+**Linux-only!**
+
+    sudo add-apt-repository ppa:graphics-drivers/ppa
+    sudo apt update
+    sudo apt install nvidia-396
+
+Restart machine and check with
+
+    nvidia-smi
+
+### Eigen 3.3.4
+
+**Linux-only!** Download the precompiled archive from [here](https://drive.google.com/file/d/1m8tXbVHjtSuV_cpZmR51T1Z4Kzz9et-3/view?usp=sharing), extract and copy this to `/opt/eigen/3.3.4` (such that you have `share` and `include` folders in there). Next, configure the shared library.
+
+### Protobuf 3.5.0
+
+**Linux-only!** We need to build Protobuf. Prepare the environment with
+
+    sudo apt-get update
+    sudo apt-get install autoconf automake libtool curl make g++ unzip
+
+Next, download and extract the package
+
+    cd /opt
+    sudo wget https://github.com/protocolbuffers/protobuf/releases/download/v3.5.1/protobuf-cpp-3.5.1.tar.gz -O /tmp/protobuf.tar.gz
+    sudo mkdir protobuf
+    sudo tar -xzf /tmp/protobuf.tar.gz -C protobuf
+    sudo chown -R aadc:aadc protobuf
+
+Next, configure, make, install and update the shared library path
+
+    cd /opt/protobuf/protobuf-3.5.1
+    chmod +x configure
+    ./configure
+    make -j5
+    make check -j5
+    sudo make install
+    sudo ldconfig
+
+The libraries should have been installed to `/usr/local/lib`, you can check this with
+
+    ls /usr/local/lib/ | grep proto
+
+### Tensorflow 1.8.0
+
+**Linux-only!** Download the precompiled archive from [here](https://drive.google.com/file/d/1lY8VUlROLTkavQFePoHVidur-TpKr1fj/view?usp=sharing), extract and copy this to `/opt/tensorflow/1.8.0` (such that you have `external`, `include` and `lib` folders in there). Next, configure the shared library.
+
+    echo '/opt/tensorflow/1.8.0/lib' | sudo tee /etc/ld.so.conf.d/tensorflow.conf
+    sudo ldconfig
+
 ## Structure
 
 ### Folders

@@ -7,9 +7,9 @@ import json
 from ..server import ZmqServer
 
 
-def process(signal, bool_signal, wheel, imu, us, voltage):
+def process(signal, bool_signal, wheel, imu, lidar, us, voltage):
     # pretty-print the dictionaries
-    print(json.dumps([signal, bool_signal, wheel, imu, us, voltage], indent=2))
+    print(json.dumps([signal, bool_signal, wheel, imu, lidar, us, voltage], indent=2))
 
     # you can omit individual outputs by sending None
     # return signal_out, None
@@ -27,7 +27,7 @@ if __name__ == "__main__":
     # open a server for the filter
     zmq = ZmqServer("tcp://*:5555",
                     ["tSignalValue", "tBoolSignalValue", "tWheelData",
-                     "tInerMeasUnitData", "tUltrasonicStruct", "tVoltageStruct"],
+                     "tInerMeasUnitData", "tLaserScannerData", "tUltrasonicStruct", "tVoltageStruct"],
                     ["tSignalValue", "tBoolSignalValue"])
 
     try:

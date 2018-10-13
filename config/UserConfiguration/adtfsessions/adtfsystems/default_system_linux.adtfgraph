@@ -9,7 +9,7 @@
   <environment>
     <variable>
       <name>BIN_DIR</name>
-      <value>/home/aadc/AADC/_install/linux64/bin</value>
+      <value>/home/aadc/share/adtf/_install/linux64/bin</value>
     </variable>
   </environment>
   <dependencies>
@@ -35,6 +35,12 @@
         <library>
           <url>$(ADTF_DIR)/3rdparty/qt5/bin/Qt5OpenGL.dll</url>
         </library>
+        <library>
+          <url>$(ADTF_DIR)/3rdparty/qt5/bin/Qt5Concurrent.dll</url>
+        </library>
+        <library>
+          <url>$(ADTF_DIR)/3rdparty/qt5/bin/Qt5PrintSupport.dll</url>
+        </library>
       </libraries>
     </platform>
     <platform>
@@ -54,6 +60,12 @@
         </library>
         <library>
           <url>$(ADTF_DIR)/3rdparty/qt5/bin/Qt5OpenGLd.dll</url>
+        </library>
+        <library>
+          <url>$(ADTF_DIR)/3rdparty/qt5/bin/Qt5Concurrentd.dll</url>
+        </library>
+        <library>
+          <url>$(ADTF_DIR)/3rdparty/qt5/bin/Qt5PrintSupportd.dll</url>
         </library>
       </libraries>
     </platform>
@@ -90,6 +102,12 @@
         <library>
           <url>$(ADTF_DIR)/3rdparty/qt5/lib/libQt5XcbQpa.so</url>
         </library>
+        <library>
+          <url>$(ADTF_DIR)/3rdparty/qt5/lib/libQt5Concurrent.so</url>
+        </library>
+        <library>
+          <url>$(ADTF_DIR)/3rdparty/qt5/lib/libQt5PrintSupport.so</url>
+        </library>
       </libraries>
     </platform>
     <platform>
@@ -103,22 +121,10 @@
   </dependencies>
   <plugins>
     <plugin>
-      <url>$(BIN_DIR)/debug/fisheye_undistortion.adtfplugin</url>
+      <url>$(BIN_DIR)/debug/litd_jury_file_copy.adtfplugin</url>
     </plugin>
     <plugin>
-      <url>$(BIN_DIR)/debug/marker_detector.adtfplugin</url>
-    </plugin>
-    <plugin>
-      <url>$(BIN_DIR)/debug/converter_wheels.adtfplugin</url>
-    </plugin>
-    <plugin>
-      <url>$(BIN_DIR)/debug/driver_module.adtfplugin</url>
-    </plugin>
-    <plugin>
-      <url>$(BIN_DIR)/debug/marker_positioning.adtfplugin</url>
-    </plugin>
-    <plugin>
-      <url>$(ADTF_DIR)/bin/default_core_objects.adtfplugin</url>
+      <url>$(ADTF_DIR)/bin/debug/default_core_objects.adtfplugin</url>
     </plugin>
     <plugin>
       <url>$(ADTF_DIR)/src/examples/bin/demo_qt_video_display.adtfplugin</url>
@@ -127,55 +133,44 @@
       <url>$(BIN_DIR)/debug/map_visualization.adtfplugin</url>
     </plugin>
     <plugin>
-      <url>$(BIN_DIR)/debug/arduino_battery_sensor.adtfplugin</url>
+      <url>$(BIN_DIR)/debug/litd_birdseyeview_filter.adtfplugin</url>
     </plugin>
     <plugin>
-      <url>$(BIN_DIR)/debug/arduino_egomotion_sensor.adtfplugin</url>
+      <url>$(BIN_DIR)/debug/marker_positioning.adtfplugin</url>
     </plugin>
     <plugin>
-      <url>$(BIN_DIR)/debug/arduino_us_sensors.adtfplugin</url>
+      <url>$(BIN_DIR)/debug/LITD_IMULocalization.adtfplugin</url>
     </plugin>
     <plugin>
-      <url>$(BIN_DIR)/debug/basler_camera.adtfplugin</url>
+      <url>$(BIN_DIR)/debug/litd_finelocalization_filter.adtfplugin</url>
     </plugin>
     <plugin>
-      <url>$(BIN_DIR)/debug/universal_camera.adtfplugin</url>
+      <url>$(BIN_DIR)/debug/litd_positionmux_filter.adtfplugin</url>
     </plugin>
     <plugin>
-      <url>$(BIN_DIR)/debug/laser_scanner.adtfplugin</url>
+      <url>$(BIN_DIR)/debug/driver_module.adtfplugin</url>
     </plugin>
     <plugin>
-      <url>$(BIN_DIR)/debug/jury_communication_tcp.adtfplugin</url>
+      <url>$(BIN_DIR)/debug/litd_zmq_alarm_clf.adtfplugin</url>
     </plugin>
     <plugin>
-      <url>$(BIN_DIR)/debug/arduino_actuator.adtfplugin</url>
+      <url>$(BIN_DIR)/debug/litd_zmq_lidar_Break.adtfplugin</url>
     </plugin>
     <plugin>
-      <url>$(ADTF_DIR)/bin/adtf_ipc_tcp.adtfplugin</url>
+      <url>$(BIN_DIR)/debug/litd_zmq_decision_sensors.adtfplugin</url>
     </plugin>
     <plugin>
-      <url>$(ADTF_DIR)/bin/adtf_kernel.adtfplugin</url>
+      <url>$(BIN_DIR)/debug/litd_zmq_trajectory_template.adtfplugin</url>
     </plugin>
     <plugin>
-      <url>$(ADTF_DIR)/bin/adtf_clock.adtfplugin</url>
+      <url>$(BIN_DIR)/debug/litd_zmq_decision_jury.adtfplugin</url>
     </plugin>
     <plugin>
-      <url>$(ADTF_DIR)/bin/adtf_signal_registry.adtfplugin</url>
+      <url>$(BIN_DIR)/debug/litd_zmq_Obst_InArea.adtfplugin</url>
     </plugin>
     <plugin>
-      <url>$(ADTF_DIR)/bin/adtf_media_description.adtfplugin</url>
+      <url>$(BIN_DIR)/debug/converter_wheels.adtfplugin</url>
     </plugin>
-    <plugin>
-      <url>$(ADTF_DIR)/bin/adtf_xsystem.adtfplugin</url>
-    </plugin>
-    <plugin>
-      <url>$(ADTF_DIR)/bin/adtf_file_support.adtfplugin</url>
-    </plugin>
-    <plugin>
-      <url>$(ADTF_DIR)/bin/adtf_log_view.adtfplugin</url>
-    </plugin>
-  </plugins>
-  <debug_plugins>
     <plugin>
       <url>$(BIN_DIR)/debug/fisheye_undistortion.adtfplugin</url>
     </plugin>
@@ -183,22 +178,22 @@
       <url>$(BIN_DIR)/debug/marker_detector.adtfplugin</url>
     </plugin>
     <plugin>
-      <url>$(BIN_DIR)/debug/converter_wheels.adtfplugin</url>
+      <url>$(BIN_DIR)/debug/LITD_StanleyControl.adtfplugin</url>
     </plugin>
     <plugin>
-      <url>$(BIN_DIR)/debug/driver_module.adtfplugin</url>
+      <url>$(BIN_DIR)/debug/litd_wheel_speed_controller.adtfplugin</url>
     </plugin>
     <plugin>
-      <url>$(BIN_DIR)/debug/marker_positioning.adtfplugin</url>
+      <url>$(BIN_DIR)/debug/litd_keyboard_control.adtfplugin</url>
     </plugin>
     <plugin>
-      <url>$(ADTF_DIR)/bin/debug/default_core_objects.adtfplugin</url>
+      <url>$(BIN_DIR)/debug/litd_speed_limit.adtfplugin</url>
     </plugin>
     <plugin>
-      <url>$(ADTF_DIR)/src/examples/bin/debug/demo_qt_video_display.adtfplugin</url>
+      <url>$(BIN_DIR)/debug/object_detection.adtfplugin</url>
     </plugin>
     <plugin>
-      <url>$(BIN_DIR)/debug/map_visualization.adtfplugin</url>
+      <url>$(BIN_DIR)/debug/litd_zmq_decision_vision.adtfplugin</url>
     </plugin>
     <plugin>
       <url>$(BIN_DIR)/debug/arduino_battery_sensor.adtfplugin</url>
@@ -248,6 +243,149 @@
     <plugin>
       <url>$(ADTF_DIR)/bin/debug/adtf_log_view.adtfplugin</url>
     </plugin>
+    <plugin>
+      <url>$(BIN_DIR)/debug/zeromq_service.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(ADTF_DIR)/addons/displaytoolbox/bin/signal_table_view.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(ADTF_DIR)/addons/displaytoolbox/bin/signal_tree_view.adtfplugin</url>
+    </plugin>
+  </plugins>
+  <debug_plugins>
+    <plugin>
+      <url>$(BIN_DIR)/debug/litd_jury_file_copy.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(ADTF_DIR)/bin/debug/default_core_objects.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(ADTF_DIR)/src/examples/bin/debug/demo_qt_video_display.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(BIN_DIR)/debug/map_visualization.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(BIN_DIR)/debug/litd_birdseyeview_filter.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(BIN_DIR)/debug/marker_positioning.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(BIN_DIR)/debug/LITD_IMULocalization.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(BIN_DIR)/debug/litd_finelocalization_filter.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(BIN_DIR)/debug/litd_positionmux_filter.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(BIN_DIR)/debug/driver_module.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(BIN_DIR)/debug/litd_zmq_alarm_clf.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(BIN_DIR)/debug/litd_zmq_lidar_Break.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(BIN_DIR)/debug/litd_zmq_decision_sensors.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(BIN_DIR)/debug/litd_zmq_trajectory_template.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(BIN_DIR)/debug/litd_zmq_decision_jury.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(BIN_DIR)/debug/litd_zmq_Obst_InArea.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(BIN_DIR)/debug/converter_wheels.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(BIN_DIR)/debug/fisheye_undistortion.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(BIN_DIR)/debug/marker_detector.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(BIN_DIR)/debug/LITD_StanleyControl.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(BIN_DIR)/debug/litd_wheel_speed_controller.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(BIN_DIR)/debug/litd_keyboard_control.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(BIN_DIR)/debug/litd_speed_limit.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(BIN_DIR)/debug/object_detection.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(BIN_DIR)/debug/litd_zmq_decision_vision.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(BIN_DIR)/debug/arduino_battery_sensor.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(BIN_DIR)/debug/arduino_egomotion_sensor.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(BIN_DIR)/debug/arduino_us_sensors.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(BIN_DIR)/debug/basler_camera.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(BIN_DIR)/debug/universal_camera.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(BIN_DIR)/debug/laser_scanner.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(BIN_DIR)/debug/jury_communication_tcp.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(BIN_DIR)/debug/arduino_actuator.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(ADTF_DIR)/bin/debug/adtf_ipc_tcp.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(ADTF_DIR)/bin/debug/adtf_kernel.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(ADTF_DIR)/bin/debug/adtf_clock.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(ADTF_DIR)/bin/debug/adtf_signal_registry.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(ADTF_DIR)/bin/debug/adtf_media_description.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(ADTF_DIR)/bin/debug/adtf_xsystem.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(ADTF_DIR)/bin/debug/adtf_file_support.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(ADTF_DIR)/bin/debug/adtf_log_view.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(BIN_DIR)/debug/zeromq_service.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(ADTF_DIR)/addons/displaytoolbox/bin/debug/signal_table_view.adtfplugin</url>
+    </plugin>
+    <plugin>
+      <url>$(ADTF_DIR)/addons/displaytoolbox/bin/debug/signal_tree_view.adtfplugin</url>
+    </plugin>
   </debug_plugins>
   <services>
     <service>
@@ -284,6 +422,21 @@
       <classid>log_view.ui_service.adtf.cid</classid>
       <objectid>log_view.ui_service.adtf</objectid>
       <runlevel>system</runlevel>
+    </service>
+    <service>
+      <classid>zeromq.service.adtf.cid</classid>
+      <objectid>zeromq.service.adtf</objectid>
+      <runlevel>system</runlevel>
+    </service>
+    <service>
+      <classid>signal_table_view.ui_service.adtf_disptb.cid</classid>
+      <objectid>signal_table_view.ui_service.adtf_disptb</objectid>
+      <runlevel>session</runlevel>
+    </service>
+    <service>
+      <classid>signal_tree_view.ui_service.adtf_disptb.cid</classid>
+      <objectid>signal_tree_view.ui_service.adtf_disptb</objectid>
+      <runlevel>session</runlevel>
     </service>
   </services>
 </system>

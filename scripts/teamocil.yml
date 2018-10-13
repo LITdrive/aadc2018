@@ -1,0 +1,33 @@
+# cp teamocil.yml ~/.teamocil/aadc.yml
+# tmux
+# teamocil aadc
+# (close with CTRL+B -> SHIFT+6 -> write 'y')
+windows:
+  - name: aadc
+    root: ~/share/adtf
+    layout: tiled
+    panes:
+      # decision + jury
+      - commands:
+        - source ~/anaconda3/bin/activate aadc
+        - cd ~/share/adtf/src/aadcUserPython/litdrive
+        - while true; do python -m litdrive.selfdriving; done
+      # alarm
+      - commands:
+        - source ~/anaconda3/bin/activate aadc
+        - cd ~/share/adtf/src/aadcUserPython/litdrive
+        - while true; do python -m litdrive.filters.alarm; done
+      # lidarBreak
+      - commands:
+        - source ~/anaconda3/bin/activate aadc
+        - cd ~/share/adtf/src/aadcUserPython/litdrive
+        - while true; do python -m litdrive.zeromq.demo.lidarBreak; done
+      # obstInArea
+      - commands:
+        - source ~/anaconda3/bin/activate aadc
+        - cd ~/share/adtf/src/aadcUserPython/litdrive
+        - while true; do python -m litdrive.zeromq.phil.obstInArea; done
+      # adtf
+      - ~/share/adtf/scripts/run_user_default_session.sh
+
+
