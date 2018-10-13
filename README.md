@@ -1,14 +1,35 @@
-# AADC 2018 - LITdrive
+# Team LITdrive - Audi Autonomous Driving Cup 2018
 
-This is the main folder for the ADTF plugin development and the running of ADTF projects and contains all the delivered sources.
+[![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
 
-## Additional libraries
+This is the source code of **LITdrive**, the team of the [Johannes Kepler University Linz](https://www.jku.at/) for the [Audi Autonomous Driving Cup 2018](https://www.audi-autonomous-driving-cup.com/).
+This repository serves as an archive for interested teams and as a starting point for future competitions.
+You need the [ADAS car](https://www.bfft.de/wp-content/uploads/2017/06/produktreferenz_adas-modellfahrzeug.pdf) and the AADC code base in order to setup this project.
 
-The following additional libraries need to be installed on the car.
+:car: :car: :car:
+
+## Project Structure
+
+- `src/aadcUser` holds the main filters for the competition, written in C++
+- `src/aadcUserPython` holds the filters written in Python (and some additional notebooks)
+- `src/aadcBase` holds filters provided by the organizers (arduino communication, jury interface, positioning, etc.)
+- `src/aadcDemo:` holds demo filters for lane detection, object detection, controllers, sensor visualization and processing
+- `configuration_files` holds calibration files for the camera, machine learning models, map data, properties, etc.
+- `config` holds the ADTF projects *LiveVisualization* (for development) and *UserConfiguration* (competition graph)
+- `include:` holds headers and libraries (e.g., Eigen) which are used by all projects
+
+And some important files:
+
+- The `build_*.sh` scripts build, compile and install the project
+- `AADCConfig.cmake` is the CMake configuration for configuring the entire project and all its dependencies
+
+## Additional Libraries
+
+:warning: **The following additional libraries need to be installed on the car.**
 
 ### ZeroMQ
 
-ZeroMQ is a low-overhead, low-latency, high-speed IPC library, which is used for pumping sensor data to a message queue and receiving it with another program, e.g. Python.
+[ZeroMQ](http://zeromq.org/) is a low-overhead, low-latency, high-speed IPC library, which is used for pumping sensor data to a message queue and receiving it with another program, e.g. Python.
 
     cd /opt
     sudo git clone https://github.com/zeromq/libzmq.git
@@ -28,7 +49,7 @@ On Windows, do the following:
 	
 ### FFTW
 
-FFTW is a library for computing the discrete Fourier transform (DFT) in one or more dimensions, used on the microphone samples.
+[FFTW](http://www.fftw.org/) is a library for computing the discrete Fourier transform (DFT) in one or more dimensions, used on the microphone samples.
 
     cd /opt
 	sudo wget http://www.fftw.org/fftw-3.3.8.tar.gz -O /tmp/fftw.tar.gz
@@ -49,9 +70,9 @@ On Windows, download the 64 bit binaries from [here](ftp://ftp.fftw.org/pub/fftw
 	lib /machine:x64 /def:libfftw3-3.def
 	lib /machine:x64 /def:libfftw3l-3.def
 
-### Nvidia Driver 396.xx
+### NVIDIA Driver 396.xx
 
-**Linux-only!**
+:penguin: **Linux-only!** This NVIDIA driver enables you to run TensorFlow graphs on the GPU.
 
     sudo add-apt-repository ppa:graphics-drivers/ppa
     sudo apt update
@@ -63,11 +84,15 @@ Restart machine and check with
 
 ### Eigen 3.3.4
 
-**Linux-only!** Download the precompiled archive from [here](https://drive.google.com/file/d/1m8tXbVHjtSuV_cpZmR51T1Z4Kzz9et-3/view?usp=sharing), extract and copy this to `/opt/eigen/3.3.4` (such that you have `share` and `include` folders in there). Next, configure the shared library.
+[Eigen](http://eigen.tuxfamily.org/index.php?title=Main_Page) is a header-only library for various linear algebra stuff (matrices, vectors, solvers, etc.).
+
+:penguin: **Linux-only!** Download the precompiled archive from [here](https://drive.google.com/file/d/1m8tXbVHjtSuV_cpZmR51T1Z4Kzz9et-3/view?usp=sharing), extract and copy this to `/opt/eigen/3.3.4` (such that you have `share` and `include` folders in there).
 
 ### Protobuf 3.5.0
 
-**Linux-only!** We need to build Protobuf. Prepare the environment with
+[Protocol Buffers](https://developers.google.com/protocol-buffers/) are the binary message format for TensorFlow graph files.
+
+:penguin: **Linux-only!** We need to build Protobuf. Prepare the environment with
 
     sudo apt-get update
     sudo apt-get install autoconf automake libtool curl make g++ unzip
@@ -94,40 +119,11 @@ The libraries should have been installed to `/usr/local/lib`, you can check this
 
     ls /usr/local/lib/ | grep proto
 
-### Tensorflow 1.8.0
+### TensorFlow 1.8.0
+
+[TensorFlow](https://www.tensorflow.org/) is a machine learning framework.
 
 **Linux-only!** Download the precompiled archive from [here](https://drive.google.com/file/d/1lY8VUlROLTkavQFePoHVidur-TpKr1fj/view?usp=sharing), extract and copy this to `/opt/tensorflow/1.8.0` (such that you have `external`, `include` and `lib` folders in there). Next, configure the shared library.
 
     echo '/opt/tensorflow/1.8.0/lib' | sudo tee /etc/ld.so.conf.d/tensorflow.conf
     sudo ldconfig
-
-## Structure
-
-### Folders
-
-- `_build_user:` temporary folder which is generated by calling `build_user.sh` or `build_user_win.bat` and is used while building plugins
-- `_build_base:` temporary folder which is generated by calling `build_base.sh` or `build_base_win.bat` and is used while building plugins
-- `_build_demo:` temporary folder which is generated by calling `build_demo.sh` or `build_demo_win.bat` and is used while building plugins
-- `_install:` temporary folder which is generated in build process and contains all the generated binaries
-- `config:` Some demo ADTF configurations can be found here
-- `configuration_files:` Here a lot of useful files located, e.g. calibration files for the camera, an example of a manueverlist and many more
-- `doc:` Documentation folder
-- `include:` Some general sources are located here which are used by all projects
-- `src/aadcUser:` Here are some template plugins for the teams located. The teams are advised to include all their filters in this project.
-- `src/aadcBase:` In the base folder are the ADTF base plugins contained which must be used by all teams. The final project running at the competition must contain these filters.
-- `src/aadcDemo:` Here are a lot of demo filters  contained which can be used by the teams or can also be modified by the teams on their own.
-
-### Files
-
-- `build_user.sh:` Builds and compiles the sources contained in `src/aadcUser` for Linux
-- `build_base.sh:` Builds and compiles the sources contained in `src/aadcBase` for Linux
-- `build_demo.sh:` Builds and compiles the sources contained in `src/aadcDemo` for Linux
-- `build_user_win.bat:` Builds and compiles the sources contained in `src/aadcUser` for windows
-- `build_base_win.bat:` Builds and compiles the sources contained in `src/aadcBase` for windows
-- `build_demo_win.bat:` Builds and compiles the sources contained in `src/aadcDemo` for windows
-- `AADCConfig.cmake:` configuration file for CMake which configures are all the used SDKs
-- `AADC_PRIVATE.cmake:` contains some macros for use in CMake
-- `AADCConfigVersion.cmake:` holds the version numbers of the current source
-- `changelog.txt:` overview of the changes in source
-- `LICENSE.txt:` license information
-- `README.txt:` this file
