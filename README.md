@@ -1,6 +1,6 @@
 # Team LITdrive - Audi Autonomous Driving Cup 2018
 
-[![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
+[![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](LICENSE.txt)
 
 This is the source code of **Team LITdrive**, the team of the [Johannes Kepler University Linz](https://www.jku.at/) for the [Audi Autonomous Driving Cup 2018](https://www.audi-autonomous-driving-cup.com/).
 This repository serves as an archive for interested teams and as a starting point for future competitions.
