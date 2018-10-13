@@ -77,3 +77,9 @@ add_subdirectory(LITD_SpeedInjector)
 if (THIS_IS_A_CAR)
 	add_subdirectory(LITD_ObjectDetection)
 endif(THIS_IS_A_CAR)
+
+# unused filters
+#add_subdirectory(LITD_FFT)
+#add_subdirectory(LITD_ClassifyPedestrian)
+#add_subdirectory(LITD_MatrixFollower)
+#add_subdirectory(LITD_TestMatrixFollower)

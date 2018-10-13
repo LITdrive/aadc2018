@@ -76,28 +76,6 @@
           <binding_clients/>
         </filter>
         <filter>
-          <name>LITD_IMULocalization</name>
-          <class_id>imulocalization.filter.user.aadc.cid</class_id>
-          <input_pins>
-            <pin>
-              <name>speed</name>
-            </pin>
-            <pin>
-              <name>imu</name>
-            </pin>
-          </input_pins>
-          <output_pins>
-            <pin>
-              <name>position</name>
-            </pin>
-          </output_pins>
-          <runners/>
-          <init_priority>0</init_priority>
-          <deactivated>false</deactivated>
-          <binding_servers/>
-          <binding_clients/>
-        </filter>
-        <filter>
           <name>ConverterWheels</name>
           <class_id>converter_wheels.filter.demo.aadc.cid</class_id>
           <input_pins>
@@ -111,59 +89,6 @@
           <output_pins>
             <pin>
               <name>vehicle_speed</name>
-            </pin>
-          </output_pins>
-          <runners/>
-          <init_priority>0</init_priority>
-          <binding_servers/>
-          <binding_clients/>
-        </filter>
-        <filter>
-          <name>LITD Keyboard Control</name>
-          <class_id>litd_keyboard_control.filter.user.aadc.cid</class_id>
-          <input_pins/>
-          <output_pins>
-            <pin>
-              <name>steering</name>
-            </pin>
-            <pin>
-              <name>speed</name>
-            </pin>
-          </output_pins>
-          <runners/>
-          <init_priority>0</init_priority>
-          <binding_servers/>
-          <binding_clients/>
-        </filter>
-        <filter>
-          <name>LITD_LaneGenerator</name>
-          <class_id>lane_generator.filter.user.aadc.cid</class_id>
-          <input_pins>
-            <pin>
-              <name>tPosition input</name>
-            </pin>
-          </input_pins>
-          <output_pins>
-            <pin>
-              <name>tPosition normal-point</name>
-            </pin>
-          </output_pins>
-          <runners/>
-          <init_priority>0</init_priority>
-          <binding_servers/>
-          <binding_clients/>
-        </filter>
-        <filter>
-          <name>LITD StanleyControl</name>
-          <class_id>litd_stanley_control.filter.user.aadc.cid</class_id>
-          <input_pins>
-            <pin>
-              <name>actual_point</name>
-            </pin>
-          </input_pins>
-          <output_pins>
-            <pin>
-              <name>steering</name>
             </pin>
           </output_pins>
           <runners/>
@@ -263,22 +188,6 @@
           <name>stream_marker_detector</name>
           <class_id>default_sample_stream.streaming.adtf.cid</class_id>
         </sample_stream>
-        <sample_stream>
-          <name>Vehicle Speed</name>
-          <class_id>default_sample_stream.streaming.adtf.cid</class_id>
-        </sample_stream>
-        <sample_stream>
-          <name>Position</name>
-          <class_id>default_sample_stream.streaming.adtf.cid</class_id>
-        </sample_stream>
-        <sample_stream>
-          <name>position Fine</name>
-          <class_id>default_sample_stream.streaming.adtf.cid</class_id>
-        </sample_stream>
-        <sample_stream>
-          <name>Sample Stream</name>
-          <class_id>default_sample_stream.streaming.adtf.cid</class_id>
-        </sample_stream>
       </sample_streams>
       <active_runners/>
       <binding_proxys/>
@@ -373,6 +282,38 @@
           <destination_connector_path>
             <connector>voltage_struct</connector>
             <component>Sensor Visualization</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <deactivated>false</deactivated>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>Car Controller.steering_steering_out.</name>
+          <source_connector_path>
+            <connector>steering</connector>
+            <component>Car Controller</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector/>
+            <component>steering_out</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <deactivated>false</deactivated>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>Car Controller.speed_speed_out.</name>
+          <source_connector_path>
+            <connector>speed</connector>
+            <component>Car Controller</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector/>
+            <component>speed_out</component>
             <portbindingobject/>
           </destination_connector_path>
           <priority>0</priority>
@@ -536,21 +477,6 @@
           <sync>true</sync>
         </connection>
         <connection>
-          <name>ConverterWheels.vehicle_speed_Sample Stream.</name>
-          <source_connector_path>
-            <connector>vehicle_speed</connector>
-            <component>ConverterWheels</component>
-            <portbindingobject/>
-          </source_connector_path>
-          <destination_connector_path>
-            <connector/>
-            <component>Vehicle Speed</component>
-            <portbindingobject/>
-          </destination_connector_path>
-          <priority>0</priority>
-          <sync>true</sync>
-        </connection>
-        <connection>
           <name>wheel_left._ConverterWheels.wheel_left</name>
           <source_connector_path>
             <connector/>
@@ -580,126 +506,6 @@
           <priority>0</priority>
           <sync>true</sync>
         </connection>
-        <connection>
-          <name>Vehicle Speed._LITD_IMULocalization.speed</name>
-          <source_connector_path>
-            <connector/>
-            <component>Vehicle Speed</component>
-            <portbindingobject/>
-          </source_connector_path>
-          <destination_connector_path>
-            <connector>speed</connector>
-            <component>LITD_IMULocalization</component>
-            <portbindingobject/>
-          </destination_connector_path>
-          <priority>0</priority>
-          <sync>true</sync>
-        </connection>
-        <connection>
-          <name>LITD_IMULocalization.position_Position.</name>
-          <source_connector_path>
-            <connector>position</connector>
-            <component>LITD_IMULocalization</component>
-            <portbindingobject/>
-          </source_connector_path>
-          <destination_connector_path>
-            <connector/>
-            <component>Position</component>
-            <portbindingobject/>
-          </destination_connector_path>
-          <priority>0</priority>
-          <sync>true</sync>
-        </connection>
-        <connection>
-          <name>iner_meas_unit._LITD_IMULocalization.imu</name>
-          <source_connector_path>
-            <connector/>
-            <component>iner_meas_unit</component>
-            <portbindingobject/>
-          </source_connector_path>
-          <destination_connector_path>
-            <connector>imu</connector>
-            <component>LITD_IMULocalization</component>
-            <portbindingobject/>
-          </destination_connector_path>
-          <priority>0</priority>
-          <sync>true</sync>
-        </connection>
-        <connection>
-          <name>LITD Keyboard Control.speed_speed_out.</name>
-          <source_connector_path>
-            <connector>speed</connector>
-            <component>LITD Keyboard Control</component>
-            <portbindingobject/>
-          </source_connector_path>
-          <destination_connector_path>
-            <connector/>
-            <component>speed_out</component>
-            <portbindingobject/>
-          </destination_connector_path>
-          <priority>0</priority>
-          <sync>true</sync>
-        </connection>
-        <connection>
-          <name>Position._LITD_LaneGenerator.tPosition input</name>
-          <source_connector_path>
-            <connector/>
-            <component>Position</component>
-            <portbindingobject/>
-          </source_connector_path>
-          <destination_connector_path>
-            <connector>tPosition input</connector>
-            <component>LITD_LaneGenerator</component>
-            <portbindingobject/>
-          </destination_connector_path>
-          <priority>0</priority>
-          <sync>true</sync>
-        </connection>
-        <connection>
-          <name>LITD_LaneGenerator.tPosition normal-point_Sample Stream.</name>
-          <source_connector_path>
-            <connector>tPosition normal-point</connector>
-            <component>LITD_LaneGenerator</component>
-            <portbindingobject/>
-          </source_connector_path>
-          <destination_connector_path>
-            <connector/>
-            <component>Sample Stream</component>
-            <portbindingobject/>
-          </destination_connector_path>
-          <priority>0</priority>
-          <sync>true</sync>
-        </connection>
-        <connection>
-          <name>LITD StanleyControl.steering_steering_out.</name>
-          <source_connector_path>
-            <connector>steering</connector>
-            <component>LITD StanleyControl</component>
-            <portbindingobject/>
-          </source_connector_path>
-          <destination_connector_path>
-            <connector/>
-            <component>steering_out</component>
-            <portbindingobject/>
-          </destination_connector_path>
-          <priority>0</priority>
-          <sync>true</sync>
-        </connection>
-        <connection>
-          <name>Position._LITD StanleyControl.actual_point</name>
-          <source_connector_path>
-            <connector/>
-            <component>Position</component>
-            <portbindingobject/>
-          </source_connector_path>
-          <destination_connector_path>
-            <connector>actual_point</connector>
-            <component>LITD StanleyControl</component>
-            <portbindingobject/>
-          </destination_connector_path>
-          <priority>0</priority>
-          <sync>true</sync>
-        </connection>
       </connections>
       <streaming_interface_in_ports/>
       <streaming_interface_out_ports/>
@@ -716,24 +522,6 @@
             </pin>
           </input_pins>
           <output_pins/>
-          <runners/>
-          <init_priority>0</init_priority>
-          <binding_servers/>
-          <binding_clients/>
-        </filter>
-        <filter>
-          <name>OpenCV Edge Detection</name>
-          <class_id>opencv_template.filter.user.aadc.cid</class_id>
-          <input_pins>
-            <pin>
-              <name>input</name>
-            </pin>
-          </input_pins>
-          <output_pins>
-            <pin>
-              <name>output</name>
-            </pin>
-          </output_pins>
           <runners/>
           <init_priority>0</init_priority>
           <binding_servers/>
@@ -774,6 +562,62 @@
           <binding_servers/>
           <binding_clients/>
         </filter>
+        <filter>
+          <name>Driver Module</name>
+          <class_id>driver_module.filter.demo.aadc.cid</class_id>
+          <input_pins>
+            <pin>
+              <name>jury_struct</name>
+            </pin>
+            <pin>
+              <name>maneuver_list</name>
+            </pin>
+          </input_pins>
+          <output_pins>
+            <pin>
+              <name>driver_struct</name>
+            </pin>
+          </output_pins>
+          <runners/>
+          <init_priority>0</init_priority>
+          <binding_servers/>
+          <binding_clients/>
+        </filter>
+        <filter>
+          <name>Audio Visualization</name>
+          <class_id>audio_visualization.filter.demo.aadc.cid</class_id>
+          <input_pins>
+            <pin>
+              <name>audio</name>
+            </pin>
+          </input_pins>
+          <output_pins/>
+          <runners/>
+          <init_priority>0</init_priority>
+          <binding_servers/>
+          <binding_clients/>
+        </filter>
+        <filter>
+          <name>ConverterWheels</name>
+          <class_id>converter_wheels.filter.demo.aadc.cid</class_id>
+          <input_pins>
+            <pin>
+              <name>wheel_left</name>
+            </pin>
+            <pin>
+              <name>wheel_right</name>
+            </pin>
+          </input_pins>
+          <output_pins>
+            <pin>
+              <name>vehicle_speed</name>
+            </pin>
+          </output_pins>
+          <runners/>
+          <init_priority>0</init_priority>
+          <binding_servers/>
+          <binding_clients/>
+        </filter>
       </filters>
       <subgraphs/>
       <input_data_ports/>
@@ -787,8 +631,37 @@
           <name>image</name>
           <portname>rear_cam</portname>
         </streaming_in_port>
+        <streaming_in_port>
+          <name>maneuver_list</name>
+          <portname>maneuver_list</portname>
+        </streaming_in_port>
+        <streaming_in_port>
+          <name>jury_struct</name>
+          <portname>jury_struct</portname>
+        </streaming_in_port>
+        <streaming_in_port>
+          <name>audio</name>
+          <portname>audio</portname>
+        </streaming_in_port>
+        <streaming_in_port>
+          <name>wheel_left</name>
+          <portname>wheel_left</portname>
+        </streaming_in_port>
+        <streaming_in_port>
+          <name>wheel_right</name>
+          <portname>wheel_right</portname>
+        </streaming_in_port>
       </streaming_in_ports>
-      <streaming_out_ports/>
+      <streaming_out_ports>
+        <streaming_out_port>
+          <name>driver_struct</name>
+          <portname>driver_struct</portname>
+        </streaming_out_port>
+        <streaming_out_port>
+          <name>Vehicle Speed</name>
+          <portname>speed_measured</portname>
+        </streaming_out_port>
+      </streaming_out_ports>
       <sample_streams>
         <sample_stream>
           <name>stream_edge_video</name>
@@ -802,36 +675,6 @@
       <active_runners/>
       <binding_proxys/>
       <connections>
-        <connection>
-          <name>image._OpenCV Edge Detection.input</name>
-          <source_connector_path>
-            <connector/>
-            <component>image</component>
-            <portbindingobject/>
-          </source_connector_path>
-          <destination_connector_path>
-            <connector>input</connector>
-            <component>OpenCV Edge Detection</component>
-            <portbindingobject/>
-          </destination_connector_path>
-          <priority>0</priority>
-          <sync>true</sync>
-        </connection>
-        <connection>
-          <name>OpenCV Edge Detection.output_stream_edge_video.</name>
-          <source_connector_path>
-            <connector>output</connector>
-            <component>OpenCV Edge Detection</component>
-            <portbindingobject/>
-          </source_connector_path>
-          <destination_connector_path>
-            <connector/>
-            <component>stream_edge_video</component>
-            <portbindingobject/>
-          </destination_connector_path>
-          <priority>0</priority>
-          <sync>true</sync>
-        </connection>
         <connection>
           <name>stream_edge_video._Demo Qt Video Display.video</name>
           <source_connector_path>
@@ -887,6 +730,111 @@
           <destination_connector_path>
             <connector>input</connector>
             <component>Object Detection</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>jury_struct._Driver Module.jury_struct</name>
+          <source_connector_path>
+            <connector/>
+            <component>jury_struct</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector>jury_struct</connector>
+            <component>Driver Module</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>maneuver_list._Driver Module.maneuver_list</name>
+          <source_connector_path>
+            <connector/>
+            <component>maneuver_list</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector>maneuver_list</connector>
+            <component>Driver Module</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>Driver Module.driver_struct_driver_struct.</name>
+          <source_connector_path>
+            <connector>driver_struct</connector>
+            <component>Driver Module</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector/>
+            <component>driver_struct</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>audio._Audio Visualization.audio</name>
+          <source_connector_path>
+            <connector/>
+            <component>audio</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector>audio</connector>
+            <component>Audio Visualization</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>ConverterWheels.vehicle_speed_Vehicle Speed.</name>
+          <source_connector_path>
+            <connector>vehicle_speed</connector>
+            <component>ConverterWheels</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector/>
+            <component>Vehicle Speed</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>wheel_left._ConverterWheels.wheel_left</name>
+          <source_connector_path>
+            <connector/>
+            <component>wheel_left</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector>wheel_left</connector>
+            <component>ConverterWheels</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>wheel_right._ConverterWheels.wheel_right</name>
+          <source_connector_path>
+            <connector/>
+            <component>wheel_right</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector>wheel_right</connector>
+            <component>ConverterWheels</component>
             <portbindingobject/>
           </destination_connector_path>
           <priority>0</priority>
@@ -2095,21 +2043,6 @@
           <sync>true</sync>
         </connection>
         <connection>
-          <name>ADTFDAT File Player.rear_video_Filter Graph Dock.rear_cam</name>
-          <source_connector_path>
-            <connector>rear_video</connector>
-            <component>ADTFDAT File Player</component>
-            <portbindingobject/>
-          </source_connector_path>
-          <destination_connector_path>
-            <connector>rear_cam</connector>
-            <component>Filter Graph Dock</component>
-            <portbindingobject/>
-          </destination_connector_path>
-          <priority>0</priority>
-          <sync>true</sync>
-        </connection>
-        <connection>
           <name>ADTFDAT File Player.laser_scanner_Filter Graph Dock.laser_scanner</name>
           <source_connector_path>
             <connector>laser_scanner</connector>
@@ -2144,6 +2077,7 @@
           </output_pins>
           <runners/>
           <init_priority>0</init_priority>
+          <deactivated>false</deactivated>
           <binding_servers/>
           <binding_clients/>
         </streaming_source>
@@ -2154,6 +2088,60 @@
           <output_pins>
             <pin>
               <name>video_rgb</name>
+            </pin>
+          </output_pins>
+          <runners/>
+          <init_priority>0</init_priority>
+          <deactivated>false</deactivated>
+          <binding_servers/>
+          <binding_clients/>
+        </streaming_source>
+        <streaming_source>
+          <name>Jury Communication TCP Receiver</name>
+          <class_id>jury_communication_tcp.streaming_source.base.aadc.cid</class_id>
+          <input_pins/>
+          <output_pins>
+            <pin>
+              <name>maneuver_list</name>
+            </pin>
+            <pin>
+              <name>jury_struct</name>
+            </pin>
+          </output_pins>
+          <runners/>
+          <init_priority>0</init_priority>
+          <deactivated>false</deactivated>
+          <binding_servers>
+            <pin>
+              <name>socket</name>
+            </pin>
+          </binding_servers>
+          <binding_clients/>
+        </streaming_source>
+        <streaming_source>
+          <name>Microphone</name>
+          <class_id>microphone.streaming_source.demo.aadc.cid</class_id>
+          <input_pins/>
+          <output_pins>
+            <pin>
+              <name>audio</name>
+            </pin>
+          </output_pins>
+          <runners/>
+          <init_priority>0</init_priority>
+          <binding_servers/>
+          <binding_clients/>
+        </streaming_source>
+        <streaming_source>
+          <name>Arduino EgoMotion Sensor</name>
+          <class_id>arduino_egomotion_sensor.streaming_source.base.aadc.cid</class_id>
+          <input_pins/>
+          <output_pins>
+            <pin>
+              <name>wheel_left</name>
+            </pin>
+            <pin>
+              <name>wheel_right</name>
             </pin>
           </output_pins>
           <runners/>
@@ -2171,9 +2159,58 @@
           <name>front_cam</name>
           <class_id>default_sample_stream.streaming.adtf.cid</class_id>
         </sample_stream>
+        <sample_stream>
+          <name>maneuver_list</name>
+          <class_id>default_sample_stream.streaming.adtf.cid</class_id>
+        </sample_stream>
+        <sample_stream>
+          <name>jury_struct</name>
+          <class_id>default_sample_stream.streaming.adtf.cid</class_id>
+        </sample_stream>
+        <sample_stream>
+          <name>audio</name>
+          <class_id>default_sample_stream.streaming.adtf.cid</class_id>
+        </sample_stream>
+        <sample_stream>
+          <name>wheel_left</name>
+          <class_id>default_sample_stream.streaming.adtf.cid</class_id>
+        </sample_stream>
+        <sample_stream>
+          <name>wheel_right</name>
+          <class_id>default_sample_stream.streaming.adtf.cid</class_id>
+        </sample_stream>
       </streaming_dock_in_ports>
-      <streaming_dock_out_ports/>
-      <streaming_sinks/>
+      <streaming_dock_out_ports>
+        <sample_stream>
+          <name>driver_struct</name>
+          <class_id>default_sample_stream.streaming.adtf.cid</class_id>
+        </sample_stream>
+        <sample_stream>
+          <name>speed_measured</name>
+          <class_id>default_sample_stream.streaming.adtf.cid</class_id>
+        </sample_stream>
+      </streaming_dock_out_ports>
+      <streaming_sinks>
+        <streaming_sink>
+          <name>Jury Communication TCP Sender</name>
+          <class_id>jury_communication_tcp.streaming_sink.base.aadc.cid</class_id>
+          <input_pins>
+            <pin>
+              <name>driver_struct</name>
+            </pin>
+          </input_pins>
+          <output_pins/>
+          <runners/>
+          <init_priority>0</init_priority>
+          <deactivated>false</deactivated>
+          <binding_servers/>
+          <binding_clients>
+            <pin>
+              <name>socket</name>
+            </pin>
+          </binding_clients>
+        </streaming_sink>
+      </streaming_sinks>
       <sample_streams/>
       <connections>
         <connection>
@@ -2189,6 +2226,7 @@
             <portbindingobject/>
           </destination_connector_path>
           <priority>0</priority>
+          <deactivated>false</deactivated>
           <sync>true</sync>
         </connection>
         <connection>
@@ -2204,10 +2242,140 @@
             <portbindingobject/>
           </destination_connector_path>
           <priority>0</priority>
+          <deactivated>false</deactivated>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>Jury Communication TCP Receiver.socket_Binding Proxy.</name>
+          <source_connector_path>
+            <connector>socket</connector>
+            <component>Jury Communication TCP Receiver</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector/>
+            <component>Binding Proxy</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <deactivated>false</deactivated>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>Binding Proxy._Jury Communication TCP Sender.socket</name>
+          <source_connector_path>
+            <connector/>
+            <component>Binding Proxy</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector>socket</connector>
+            <component>Jury Communication TCP Sender</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <deactivated>false</deactivated>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>Jury Communication TCP Receiver.maneuver_list_Filter Graph Dock.maneuver_list</name>
+          <source_connector_path>
+            <connector>maneuver_list</connector>
+            <component>Jury Communication TCP Receiver</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector>maneuver_list</connector>
+            <component>Filter Graph Dock</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <deactivated>false</deactivated>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>Jury Communication TCP Receiver.jury_struct_Filter Graph Dock.jury_struct</name>
+          <source_connector_path>
+            <connector>jury_struct</connector>
+            <component>Jury Communication TCP Receiver</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector>jury_struct</connector>
+            <component>Filter Graph Dock</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>Filter Graph Dock.driver_struct_Jury Communication TCP Sender.driver_struct</name>
+          <source_connector_path>
+            <connector>driver_struct</connector>
+            <component>Filter Graph Dock</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector>driver_struct</connector>
+            <component>Jury Communication TCP Sender</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>Microphone.audio_Filter Graph Dock.audio</name>
+          <source_connector_path>
+            <connector>audio</connector>
+            <component>Microphone</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector>audio</connector>
+            <component>Filter Graph Dock</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>Arduino EgoMotion Sensor.wheel_left_Filter Graph Dock.wheel_left</name>
+          <source_connector_path>
+            <connector>wheel_left</connector>
+            <component>Arduino EgoMotion Sensor</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector>wheel_left</connector>
+            <component>Filter Graph Dock</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>Arduino EgoMotion Sensor.wheel_right_Filter Graph Dock.wheel_right</name>
+          <source_connector_path>
+            <connector>wheel_right</connector>
+            <component>Arduino EgoMotion Sensor</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector>wheel_right</connector>
+            <component>Filter Graph Dock</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
           <sync>true</sync>
         </connection>
       </connections>
-      <binding_proxys/>
+      <binding_proxys>
+        <binding_proxy>
+          <name>Binding Proxy</name>
+          <class_id>default_binding_proxy.streaming.adtf.cid</class_id>
+          <deactivated>false</deactivated>
+        </binding_proxy>
+      </binding_proxys>
       <streaming_dock_interface_in_ports/>
       <streaming_dock_interface_out_ports/>
       <streaming_dock_runner_in_ports/>
