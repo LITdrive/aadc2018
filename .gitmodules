@@ -1,0 +1,3 @@
+[submodule "src/aadcUserPython/opendrive/opendrive2lanelets-converter"]
+	path = src/aadcUserPython/opendrive/opendrive2lanelets-converter
+	url = https://github.com/stefan-urban/opendrive2lanelets-converter.git
