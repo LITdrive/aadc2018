@@ -2,7 +2,7 @@
 
 [![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
 
-This is the source code of **LITdrive**, the team of the [Johannes Kepler University Linz](https://www.jku.at/) for the [Audi Autonomous Driving Cup 2018](https://www.audi-autonomous-driving-cup.com/).
+This is the source code of **Team LITdrive**, the team of the [Johannes Kepler University Linz](https://www.jku.at/) for the [Audi Autonomous Driving Cup 2018](https://www.audi-autonomous-driving-cup.com/).
 This repository serves as an archive for interested teams and as a starting point for future competitions.
 You need the [ADAS car](https://www.bfft.de/wp-content/uploads/2017/06/produktreferenz_adas-modellfahrzeug.pdf) and the AADC code base in order to setup this project.
 
@@ -25,7 +25,7 @@ And some important files:
 
 ## Additional Libraries
 
-:warning: **The following additional libraries need to be installed on the car.**
+The following additional libraries need to be installed on the car.
 
 ### ZeroMQ
 
@@ -72,7 +72,7 @@ On Windows, download the 64 bit binaries from [here](ftp://ftp.fftw.org/pub/fftw
 
 ### NVIDIA Driver 396.xx
 
-:penguin: **Linux-only!** This NVIDIA driver enables you to run TensorFlow graphs on the GPU.
+**Linux-only!** This NVIDIA driver enables you to run TensorFlow graphs on the GPU.
 
     sudo add-apt-repository ppa:graphics-drivers/ppa
     sudo apt update
@@ -86,13 +86,13 @@ Restart machine and check with
 
 [Eigen](http://eigen.tuxfamily.org/index.php?title=Main_Page) is a header-only library for various linear algebra stuff (matrices, vectors, solvers, etc.).
 
-:penguin: **Linux-only!** Download the precompiled archive from [here](https://drive.google.com/file/d/1m8tXbVHjtSuV_cpZmR51T1Z4Kzz9et-3/view?usp=sharing), extract and copy this to `/opt/eigen/3.3.4` (such that you have `share` and `include` folders in there).
+**Linux-only!** Download the precompiled archive from [here](https://drive.google.com/file/d/1m8tXbVHjtSuV_cpZmR51T1Z4Kzz9et-3/view?usp=sharing), extract and copy this to `/opt/eigen/3.3.4` (such that you have `share` and `include` folders in there).
 
 ### Protobuf 3.5.0
 
 [Protocol Buffers](https://developers.google.com/protocol-buffers/) are the binary message format for TensorFlow graph files.
 
-:penguin: **Linux-only!** We need to build Protobuf. Prepare the environment with
+**Linux-only!** We need to build Protobuf. Prepare the environment with
 
     sudo apt-get update
     sudo apt-get install autoconf automake libtool curl make g++ unzip
