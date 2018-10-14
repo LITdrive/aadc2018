@@ -10,18 +10,22 @@ You need the [ADAS car](https://www.bfft.de/wp-content/uploads/2017/06/produktre
 
 ## Project Structure
 
-- `src/aadcUser` holds the main filters for the competition, written in C++
-- `src/aadcUserPython` holds the filters written in Python (and some additional notebooks)
-- `src/aadcBase` holds filters provided by the organizers (arduino communication, jury interface, positioning, etc.)
-- `src/aadcDemo:` holds demo filters for lane detection, object detection, controllers, sensor visualization and processing
-- `configuration_files` holds calibration files for the camera, machine learning models, map data, properties, etc.
-- `config` holds the ADTF projects *LiveVisualization* (for development) and *UserConfiguration* (competition graph)
-- `include:` holds headers and libraries (e.g., Eigen) which are used by all projects
+- [`config`](/config) holds the ADTF projects *LiveVisualization* (for development) and *UserConfiguration* (competition graph)
+- [`configuration_files`](/configuration_files) holds calibration files for the camera, machine learning models, properties, etc.
+- [`data`](/data) holds map data for the localization filters
+- [`description`](/description) holds the stream type definitions for ADTF
+- [`doc/adtf-pitfalls`](/doc/adtf-pitfalls) holds some notes about common ADTF pitfalls
+- [`include`](/include) holds headers and libraries (e.g., Eigen) which are used by all projects
+- [`scripts`](/scripts) holds some scripts for running the ADTF sessions and preparing the environment
+- [`src/aadcBase`](/src/aadcBase) holds filters provided by the organizers (arduino communication, jury interface, positioning, etc.)
+- [`src/aadcDemo:`](/src/aadcDemo) holds demo filters for lane detection, object detection, controllers, sensor visualization and processing
+- **[`src/aadcUser`](/src/aadcUser) holds the main filters for the competition, written in C++**
+- **[`src/aadcUserPython`](/src/aadcUserPython)  holds the filters written in Python (and some additional notebooks)**
 
 And some important files:
 
 - The `build_*.sh` scripts build, compile and install the project
-- `AADCConfig.cmake` is the CMake configuration for configuring the entire project and all its dependencies
+- [`AADCConfig.cmake`](AADCConfig.cmake) is the CMake configuration for configuring the entire project and all its dependencies
 
 ## Documentation
 
@@ -47,37 +51,37 @@ The following additional libraries need to be installed on the car.
     mkdir build; cd build
     cmake ..
     make
-	
+
 On Windows, do the following:
 
-	cd C:\SDKs
-	git clone https://github.com/zeromq/libzmq.git
-	md build; cd build
-	cmake -G "Visual Studio 14 2015 Win64" ..
-	cmake --build . --target INSTALL --config Release
-	
+    cd C:\SDKs
+    git clone https://github.com/zeromq/libzmq.git
+    md build; cd build
+    cmake -G "Visual Studio 14 2015 Win64" ..
+    cmake --build . --target INSTALL --config Release
+
 ### FFTW
 
 [FFTW](http://www.fftw.org/) is a library for computing the discrete Fourier transform (DFT) in one or more dimensions, used on the microphone samples.
 
     cd /opt
-	sudo wget http://www.fftw.org/fftw-3.3.8.tar.gz -O /tmp/fftw.tar.gz
-	sudo mkdir fftw
-	sudo tar -xzf /tmp/fftw.tar.gz -C fftw
+    sudo wget http://www.fftw.org/fftw-3.3.8.tar.gz -O /tmp/fftw.tar.gz
+    sudo mkdir fftw
+    sudo tar -xzf /tmp/fftw.tar.gz -C fftw
     sudo chown -R aadc:aadc fftw
     cd /opt/fftw/fftw-3.3.8
     mkdir build; cd build
     cmake ..
     make
-	echo '/opt/fftw/fftw-3.3.8/build/' | sudo tee /etc/ld.so.conf.d/fftw.conf	
-	sudo ldconfig
-	
+    echo '/opt/fftw/fftw-3.3.8/build/' | sudo tee /etc/ld.so.conf.d/fftw.conf
+    sudo ldconfig
+
 On Windows, download the 64 bit binaries from [here](ftp://ftp.fftw.org/pub/fftw/fftw-3.3.5-dll64.zip), extract the contents to `C:\SDK\fftw\fftw-3.3.5-dll64` and execute the following commands in a VS2015 Developer Console (to generate the `*.lib` files from the `*.dll` files):
 
-	cd C:\SDK\fftw\fftw-3.3.5-dll64
-	lib /machine:x64 /def:libfftw3f-3.def
-	lib /machine:x64 /def:libfftw3-3.def
-	lib /machine:x64 /def:libfftw3l-3.def
+    cd C:\SDK\fftw\fftw-3.3.5-dll64
+    lib /machine:x64 /def:libfftw3f-3.def
+    lib /machine:x64 /def:libfftw3-3.def
+    lib /machine:x64 /def:libfftw3l-3.def
 
 ### NVIDIA Driver 396.xx
 
