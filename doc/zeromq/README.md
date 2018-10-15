@@ -10,6 +10,7 @@ ZeroMQ has a wide variety of [language bindings](http://zeromq.org/bindings:_sta
 ### Installing ZeroMQ on your system
 
 - On Linux, install the library like so:
+
     ```bash
     cd /opt
     sudo git clone https://github.com/zeromq/libzmq.git
@@ -20,6 +21,7 @@ ZeroMQ has a wide variety of [language bindings](http://zeromq.org/bindings:_sta
     make
     ```
 - On Windows, do the following:
+
     ```bash
     cd C:\SDKs
     git clone https://github.com/zeromq/libzmq.git
@@ -31,6 +33,7 @@ ZeroMQ has a wide variety of [language bindings](http://zeromq.org/bindings:_sta
 ### Referencing ZeroMQ in your CMake configuration
 
 - In your [`AADCConfig.cmake`](/AADCConfig.cmake), add the following snippet to reference the  binaries and include directories for ZeroMQ:
+
     ```cmake
     if(UNIX)
         set(ZMQ_DIR "/opt/libzmq")
@@ -70,6 +73,7 @@ If you compile the project, you should see those filters in the ADTF Configurati
 
 - Create a new directory for the filter in [`src/aadcUser`](/src/aadcUser). We will create a `MyFirstZmqFilter` directory in this example.
 - You will need a `CMakeLists.txt` that includes the `ZMQ_INCLUDE_DIRS` and links against the `ZMQ_LIBS`:
+
     ```cmake
     cmake_minimum_required(VERSION 3.10.0)
 
@@ -98,6 +102,7 @@ If you compile the project, you should see those filters in the ADTF Configurati
     target_link_libraries(${PROJECT_NAME} LINK_PUBLIC ${ZMQ_LIBS})
     ```
 - Next up, create the header file `MyFirstZmqFilter.h`:
+
     ```cpp
     #pragma once
 
@@ -118,6 +123,7 @@ If you compile the project, you should see those filters in the ADTF Configurati
     };
     ```
 - And finally, the source file `MyFirstZmqFilter.cpp`:
+
     ```cpp
     #include "MyFirstZmqFilter.h"
 
