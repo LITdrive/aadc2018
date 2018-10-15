@@ -7891,7 +7891,7 @@
           <connection_layout>
             <name/>
             <centerLineIsManual>true</centerLineIsManual>
-            <centerLineAbsX>1164</centerLineAbsX>
+            <centerLineAbsX>1389</centerLineAbsX>
             <centerLineAbsY>500</centerLineAbsY>
             <centerLineStraight>false</centerLineStraight>
           </connection_layout>
@@ -8774,7 +8774,7 @@
           <selected>false</selected>
           <connection_layout>
             <name/>
-            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineIsManual>false</centerLineIsManual>
             <centerLineAbsX>0</centerLineAbsX>
             <centerLineAbsY>0</centerLineAbsY>
             <centerLineStraight>false</centerLineStraight>

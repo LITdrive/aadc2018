@@ -1590,10 +1590,6 @@
           <properties/>
         </property_set>
         <property_set>
-          <name>graphs/decision_graph/connections/trajectories_zmq_stream._trajectories.</name>
-          <properties/>
-        </property_set>
-        <property_set>
           <name>graphs/decision_graph/output_data_ports/driver_struct</name>
           <properties/>
         </property_set>
@@ -3492,6 +3488,10 @@
         </property_set>
         <property_set>
           <name>services/signal_tree_view.ui_service.adtf_disptb</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/decision_graph/connections/trajectories_stream._trajectories.</name>
           <properties/>
         </property_set>
       </property_sets>
