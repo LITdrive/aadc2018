@@ -31,6 +31,9 @@ And some important files:
 
 If you are working with ADTF, you might want to read about some [**Common ADTF Pitfalls**](/doc/adtf-pitfalls).
 
+You might also want to use our famous ZeroMQ filter, which is used for pumping sensor data to a message queue and receiving it with another process, e.g. Python.
+Find some details on [**how to use ZeroMQ filters here**](/doc/zeromq).
+
 Additionally, you may find these external guides on ADTF very helpful:
 
 - [**ADTF3 Guides:** Very beginner-friendly tutorial-style introduction (by Digitalwerk)](https://support.digitalwerk.net/adtf3_guides/index.html)
