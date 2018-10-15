@@ -220,12 +220,14 @@ The communication is asynchronous, the ADTF filter won't block your pipeline sin
 If the server is not responsive or available, the sample will be dropped after a timeout (~ 3 seconds).
 Pending samples will be enqueued, as long as the send queue is not full (size specified in properties).
 If the queue is full, samples will be dropped.
+You can bind and unbind a server at any time. The filter will try to reconnect automatically.
 
 Samples will only be sent if a trigger is received on the specified trigger pins.
 Any trigger will always send all the input pin samples.
+There is no way to only send a few input pins.
 You might want to set the trigger onto the pin with the highest trigger frequency if you want to process every update.
 
-Input and output pins are transmitted as a [multi-part messages](http://zguide.zeromq.org/php:chapter2#toc11), where each pin represents a message frame.
+Input and output pins are transmitted as [multi-part messages](http://zguide.zeromq.org/php:chapter2#toc11), where each pin represents a message frame.
 The individual samples are sent as the raw binary value of the associated struct, without any alignment and in little endian encoding.
 Detached input pins or input pins without samples are represented as empty message frames.
 If your filter has no output pins, you still need to send an reply - an empty one in this case (i.e., an empty message).
