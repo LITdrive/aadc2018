@@ -8,6 +8,15 @@ index 63e15e6..ca61f84 100644
  CUDNN=0
  OPENCV=0
  OPENMP=0
+@@ -21,7 +21,7 @@ OBJDIR=./obj/
+ 
+ CC=gcc
+ CPP=g++
+-NVCC=nvcc 
++NVCC=/opt/cuda/9.2/bin/nvcc 
+ AR=ar
+ ARFLAGS=rcs
+ OPTS=-Ofast
 @@ -47,9 +47,9 @@ COMMON+= `pkg-config --cflags opencv`
  endif
  
@@ -20,4 +29,3 @@ index 63e15e6..ca61f84 100644
  endif
  
  ifeq ($(CUDNN), 1) 
-
