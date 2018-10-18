@@ -1,0 +1,23 @@
+diff --git a/Makefile b/Makefile
+index 63e15e6..ca61f84 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1,4 +1,4 @@
+-GPU=0
++GPU=1
+ CUDNN=0
+ OPENCV=0
+ OPENMP=0
+@@ -47,9 +47,9 @@ COMMON+= `pkg-config --cflags opencv`
+ endif
+ 
+ ifeq ($(GPU), 1) 
+-COMMON+= -DGPU -I/usr/local/cuda/include/
++COMMON+= -DGPU -I/opt/cuda/9.2/include
+ CFLAGS+= -DGPU
+-LDFLAGS+= -L/usr/local/cuda/lib64 -lcuda -lcudart -lcublas -lcurand
++LDFLAGS+= -L/opt/cuda/9.2/lib64 -lcuda -lcudart -lcublas -lcurand
+ endif
+ 
+ ifeq ($(CUDNN), 1) 
+

@@ -143,3 +143,18 @@ The libraries should have been installed to `/usr/local/lib`, you can check this
 
     echo '/opt/tensorflow/1.8.0/lib' | sudo tee /etc/ld.so.conf.d/tensorflow.conf
     sudo ldconfig
+
+### Darknet
+
+[Darknet](https://pjreddie.com/darknet/) is an open source neural network framework written in C and CUDA.
+
+**Linux-only!** We need to build darknet from the sources. Darknet is built with CUDA support, but without OpenCV (the picture is already in raw format) or OpenMP.
+
+        cd /opt
+        sudo git clone https://github.com/pjreddie/darknet.git
+        sudo chown aadc:aadc ./darknet -R
+        cd darknet
+        git apply /home/aadc/share/adtf/scripts/darknet_makefile.patch
+        make -j4
+
+Darknet is now built and ready!
