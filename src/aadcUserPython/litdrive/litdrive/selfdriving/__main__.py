@@ -101,7 +101,6 @@ class DecisionServer:
                  lz1, lz2, lz3, lz4, lz5, lz6, lz7, lz8, lz9, lz10,
                  lz11, lz12, lz13, lz14, lz15, lz16, lz17, lz18, lz19, lz20):
         # print("- sensor")
-        print(position)
         # debug output
         # print(json.dumps([position, measured_speed, signs, lidar, ultrasonic, imu,
         #                  controller_leverage, controller_feedback, siren, lidar_break], indent=2))
@@ -140,9 +139,9 @@ class DecisionServer:
                                               float(leverage_p))
 
         print("SPEED: " + str(commander.out_speed))
-        print(out_trajectories)
         print(car.planner)
-        return (0, 0 if break_signal else commander.out_speed), out_trajectories
+        print(position)
+        return (0, 0 if break_signal else commander.out_speed), out_trajectories, None, None, None, None, None
 
 
 if __name__ == "__main__":
@@ -153,5 +152,5 @@ if __name__ == "__main__":
         "maneuverListFile":
             abspath(join(dirname(__file__), r'../../../../../configuration_files/jury/maneuver.xml')),
         "pickledOpenDriveMap":
-            abspath(join(dirname(__file__), r'../../../../../configuration_files/maps/qualifying_2018_litd.pickle'))
+            abspath(join(dirname(__file__), r'../../../../../configuration_files/maps/scp3_2018_litd.pickle'))
     })

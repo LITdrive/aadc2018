@@ -58,24 +58,6 @@ class Planner:
         if(len(self.decisions_to_submit)>0):
             self.state=PlannerState.FORWARD_NORMAL
 
-    @staticmethod
-    def build_trajectory_array_buffer(trajectories):
-        if not trajectories or len(trajectories) == 0:
-            return None
-
-        # assert len(trajectories) <= TRAJECTORY_ARRAY_SIZE
-        print(trajectories)
-        trajectories = trajectories[0:10]
-        buffer = ([[0] * TRAJECTORY_NUM_FIELDS] * TRAJECTORY_ARRAY_SIZE)
-
-        for i, trajectory in enumerate(trajectories):
-            buffer[i] = trajectory
-
-        def _flatten(data):
-            return [item for sublist in data for item in sublist]
-
-        return [len(trajectories)] + _flatten(buffer)
-
     def update(self, controller_done_id, controller_current_id, controller_current_p):
         if(self.state<=PlannerState.INVALID ):
             print("ERROR: Planner is in INVALID-State!!!")
@@ -131,11 +113,16 @@ class Planner:
                 buffer = [0] * TRAJECTORY_NUM_FIELDS * TRAJECTORY_ARRAY_SIZE
                 for i in range(0, len(ids)):
                     x_poly, y_poly = lanes[i].getPolys(False)
-                    buffer[i*TRAJECTORY_NUM_FIELDS:(i+1)*TRAJECTORY_NUM_FIELDS]=[controller_ids[i], *tuple(x_poly)[::-1], *tuple(y_poly)[::-1], 0.0, 1.0, False]
+
+                    # presenting the ugliest zero-pad in history ...
+                    x_poly_pad, y_poly_pad = np.zeros(4), np.zeros(4)
+                    x_poly_pad[0:x_poly.order+1]= np.flip(x_poly, 0)
+                    y_poly_pad[0:y_poly.order+1]= np.flip(y_poly, 0)
+
+                    buffer[(i*TRAJECTORY_NUM_FIELDS):((i+1)*TRAJECTORY_NUM_FIELDS)]=[controller_ids[i], *tuple(x_poly_pad), *tuple(y_poly_pad), 0.0, 1.0, False]
 
                 buffer.insert(0, len(ids))
                 return buffer
-                #return Planner.build_trajectory_array_buffer(poly_buffer)
 
         return None
 
