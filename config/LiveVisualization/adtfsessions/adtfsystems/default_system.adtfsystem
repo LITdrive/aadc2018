@@ -9,7 +9,7 @@
   <environment>
     <variable>
       <name>BIN_DIR</name>
-      <value>/home/aadc/AADC/_install/linux64/bin</value>
+      <value>/home/aadc/share/adtf/_install/linux64/bin</value>
     </variable>
   </environment>
   <dependencies>

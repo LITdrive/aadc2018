@@ -1770,6 +1770,9 @@
             <pin>
               <name>inPosition</name>
             </pin>
+            <pin>
+              <name>inInitial</name>
+            </pin>
           </input_pins>
           <output_pins>
             <pin>
@@ -2605,6 +2608,21 @@
           <destination_connector_path>
             <connector/>
             <component>initial_localization_stream</component>
+            <portbindingobject/>
+          </destination_connector_path>
+          <priority>0</priority>
+          <sync>true</sync>
+        </connection>
+        <connection>
+          <name>initial_localization_stream._LITD FineLocalization Front.inInitial</name>
+          <source_connector_path>
+            <connector/>
+            <component>initial_localization_stream</component>
+            <portbindingobject/>
+          </source_connector_path>
+          <destination_connector_path>
+            <connector>inInitial</connector>
+            <component>LITD FineLocalization Front</component>
             <portbindingobject/>
           </destination_connector_path>
           <priority>0</priority>
@@ -5589,14 +5607,6 @@
           <class_id>default_sample_stream.streaming.adtf.cid</class_id>
         </sample_stream>
         <sample_stream>
-          <name>yolo_front_straight_stream</name>
-          <class_id>default_sample_stream.streaming.adtf.cid</class_id>
-        </sample_stream>
-        <sample_stream>
-          <name>yolo_rear_straight_stream</name>
-          <class_id>default_sample_stream.streaming.adtf.cid</class_id>
-        </sample_stream>
-        <sample_stream>
           <name>lenet_front_stream</name>
           <class_id>default_sample_stream.streaming.adtf.cid</class_id>
         </sample_stream>
@@ -5613,16 +5623,6 @@
         <active_runner>
           <name>Vision Timer</name>
           <class_id>default_timer_runner.streaming.adtf.cid</class_id>
-        </active_runner>
-        <active_runner>
-          <name>Yolo Front Thread</name>
-          <class_id>default_thread_runner.streaming.adtf.cid</class_id>
-          <deactivated>true</deactivated>
-        </active_runner>
-        <active_runner>
-          <name>Yolo Rear Thread</name>
-          <class_id>default_thread_runner.streaming.adtf.cid</class_id>
-          <deactivated>true</deactivated>
         </active_runner>
       </active_runners>
       <binding_proxys/>
@@ -5752,21 +5752,6 @@
           <sync>true</sync>
         </connection>
         <connection>
-          <name>yolo_front_straight_stream._LITD ZMQ Decision Vision.yolo_front_straight</name>
-          <source_connector_path>
-            <connector/>
-            <component>yolo_front_straight_stream</component>
-            <portbindingobject/>
-          </source_connector_path>
-          <destination_connector_path>
-            <connector>yolo_front_straight</connector>
-            <component>LITD ZMQ Decision Vision</component>
-            <portbindingobject/>
-          </destination_connector_path>
-          <priority>0</priority>
-          <sync>true</sync>
-        </connection>
-        <connection>
           <name>lenet_front_stream._LITD ZMQ Decision Vision.lenet_front_straight</name>
           <source_connector_path>
             <connector/>
@@ -5790,21 +5775,6 @@
           </source_connector_path>
           <destination_connector_path>
             <connector>lenet_back</connector>
-            <component>LITD ZMQ Decision Vision</component>
-            <portbindingobject/>
-          </destination_connector_path>
-          <priority>0</priority>
-          <sync>true</sync>
-        </connection>
-        <connection>
-          <name>yolo_rear_straight_stream._LITD ZMQ Decision Vision.yolo_back</name>
-          <source_connector_path>
-            <connector/>
-            <component>yolo_rear_straight_stream</component>
-            <portbindingobject/>
-          </source_connector_path>
-          <destination_connector_path>
-            <connector>yolo_back</connector>
             <component>LITD ZMQ Decision Vision</component>
             <portbindingobject/>
           </destination_connector_path>
@@ -5912,7 +5882,7 @@
           </output_pins>
           <runners/>
           <init_priority>0</init_priority>
-          <deactivated>false</deactivated>
+          <deactivated>true</deactivated>
           <binding_servers/>
           <binding_clients/>
         </streaming_source>
@@ -5927,7 +5897,7 @@
           </output_pins>
           <runners/>
           <init_priority>0</init_priority>
-          <deactivated>false</deactivated>
+          <deactivated>true</deactivated>
           <binding_servers/>
           <binding_clients/>
         </streaming_source>
@@ -6334,7 +6304,7 @@
             <portbindingobject/>
           </destination_connector_path>
           <priority>0</priority>
-          <deactivated>false</deactivated>
+          <deactivated>true</deactivated>
           <sync>true</sync>
         </connection>
         <connection>
@@ -6494,7 +6464,7 @@
             <portbindingobject/>
           </destination_connector_path>
           <priority>0</priority>
-          <deactivated>false</deactivated>
+          <deactivated>true</deactivated>
           <sync>true</sync>
         </connection>
         <connection>

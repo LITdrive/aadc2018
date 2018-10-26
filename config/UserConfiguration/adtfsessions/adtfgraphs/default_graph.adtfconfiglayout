@@ -3212,7 +3212,7 @@
             <width>0</width>
             <height>0</height>
           </boundary>
-          <selected>true</selected>
+          <selected>false</selected>
           <connection_layout>
             <name/>
             <centerLineIsManual>true</centerLineIsManual>
@@ -4130,7 +4130,7 @@
             <width>0</width>
             <height>0</height>
           </boundary>
-          <selected>false</selected>
+          <selected>true</selected>
           <connection_layout>
             <name/>
             <centerLineIsManual>true</centerLineIsManual>
@@ -4674,7 +4674,7 @@
             <width>0</width>
             <height>0</height>
           </boundary>
-          <selected>true</selected>
+          <selected>false</selected>
           <connection_layout>
             <name/>
             <centerLineIsManual>true</centerLineIsManual>
@@ -6663,7 +6663,7 @@
             <width>0</width>
             <height>0</height>
           </boundary>
-          <selected>true</selected>
+          <selected>false</selected>
           <connection_layout>
             <name/>
             <centerLineIsManual>true</centerLineIsManual>
@@ -6799,7 +6799,7 @@
             <width>0</width>
             <height>0</height>
           </boundary>
-          <selected>false</selected>
+          <selected>true</selected>
           <connection_layout>
             <name/>
             <centerLineIsManual>true</centerLineIsManual>
@@ -10318,7 +10318,7 @@
             <width>0</width>
             <height>0</height>
           </boundary>
-          <selected>false</selected>
+          <selected>true</selected>
           <connection_layout>
             <name/>
             <centerLineIsManual>true</centerLineIsManual>
@@ -13276,7 +13276,7 @@
             <width>0</width>
             <height>0</height>
           </boundary>
-          <selected>false</selected>
+          <selected>true</selected>
           <connection_layout>
             <name/>
             <centerLineIsManual>true</centerLineIsManual>
@@ -13429,7 +13429,7 @@
             <width>0</width>
             <height>0</height>
           </boundary>
-          <selected>true</selected>
+          <selected>false</selected>
           <connection_layout>
             <name/>
             <centerLineIsManual>true</centerLineIsManual>
@@ -13497,7 +13497,7 @@
             <width>0</width>
             <height>0</height>
           </boundary>
-          <selected>false</selected>
+          <selected>true</selected>
           <connection_layout>
             <name/>
             <centerLineIsManual>true</centerLineIsManual>
@@ -13548,7 +13548,7 @@
             <width>0</width>
             <height>0</height>
           </boundary>
-          <selected>false</selected>
+          <selected>true</selected>
           <connection_layout>
             <name/>
             <centerLineIsManual>true</centerLineIsManual>
@@ -13565,7 +13565,7 @@
             <width>0</width>
             <height>0</height>
           </boundary>
-          <selected>false</selected>
+          <selected>true</selected>
           <connection_layout>
             <name/>
             <centerLineIsManual>true</centerLineIsManual>
@@ -14347,7 +14347,7 @@
             <width>0</width>
             <height>0</height>
           </boundary>
-          <selected>false</selected>
+          <selected>true</selected>
           <connection_layout>
             <name/>
             <centerLineIsManual>true</centerLineIsManual>
@@ -14364,7 +14364,7 @@
             <width>0</width>
             <height>0</height>
           </boundary>
-          <selected>false</selected>
+          <selected>true</selected>
           <connection_layout>
             <name/>
             <centerLineIsManual>true</centerLineIsManual>
@@ -16013,7 +16013,7 @@
             <width>0</width>
             <height>0</height>
           </boundary>
-          <selected>false</selected>
+          <selected>true</selected>
           <connection_layout>
             <name/>
             <centerLineIsManual>true</centerLineIsManual>
@@ -18076,6 +18076,40 @@
             <centerLineIsManual>true</centerLineIsManual>
             <centerLineAbsX>0</centerLineAbsX>
             <centerLineAbsY>517</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/localization_graph/connections/initial_localization_stream._LITD FineLocalization Front.inInitial</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>896</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
+            <centerLineStraight>false</centerLineStraight>
+          </connection_layout>
+        </layout_set>
+        <layout_set>
+          <name>graphs/localization_graph/filters/LITD FineLocalization Front/input_pins/inInitial</name>
+          <boundary>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
+          </boundary>
+          <selected>false</selected>
+          <connection_layout>
+            <name/>
+            <centerLineIsManual>true</centerLineIsManual>
+            <centerLineAbsX>0</centerLineAbsX>
+            <centerLineAbsY>0</centerLineAbsY>
             <centerLineStraight>false</centerLineStraight>
           </connection_layout>
         </layout_set>

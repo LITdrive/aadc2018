@@ -2226,14 +2226,6 @@
           <properties/>
         </property_set>
         <property_set>
-          <name>graphs/vision_graph/sample_streams/yolo_front_straight_stream</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/vision_graph/sample_streams/yolo_rear_straight_stream</name>
-          <properties/>
-        </property_set>
-        <property_set>
           <name>graphs/vision_graph/sample_streams/lenet_front_stream</name>
           <properties/>
         </property_set>
@@ -2336,10 +2328,6 @@
           <properties/>
         </property_set>
         <property_set>
-          <name>graphs/vision_graph/connections/yolo_front_straight_stream._LITD ZMQ Decision Vision.yolo_front_straight</name>
-          <properties/>
-        </property_set>
-        <property_set>
           <name>graphs/vision_graph/filters/LITD ZMQ Decision Vision/input_pins/yolo_front_straight</name>
           <properties/>
         </property_set>
@@ -2360,10 +2348,6 @@
           <properties/>
         </property_set>
         <property_set>
-          <name>graphs/vision_graph/connections/yolo_rear_straight_stream._LITD ZMQ Decision Vision.yolo_back</name>
-          <properties/>
-        </property_set>
-        <property_set>
           <name>graphs/vision_graph/filters/LITD ZMQ Decision Vision/input_pins/yolo_back</name>
           <properties/>
         </property_set>
@@ -2373,14 +2357,6 @@
         </property_set>
         <property_set>
           <name>graphs/default_filter_graph/connections/rear_cam_undistorted_stream._vision.rear_cam</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/vision_graph/active_runners/Yolo Front Thread</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/vision_graph/active_runners/Yolo Rear Thread</name>
           <properties/>
         </property_set>
         <property_set>
@@ -3451,6 +3427,18 @@
           <properties/>
         </property_set>
         <property_set>
+          <name>graphs/decision_graph/connections/trajectories_stream._trajectories.</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/localization_graph/connections/initial_localization_stream._LITD FineLocalization Front.inInitial</name>
+          <properties/>
+        </property_set>
+        <property_set>
+          <name>graphs/localization_graph/filters/LITD FineLocalization Front/input_pins/inInitial</name>
+          <properties/>
+        </property_set>
+        <property_set>
           <name>services/kernel.service.adtf</name>
           <properties/>
         </property_set>
@@ -3488,10 +3476,6 @@
         </property_set>
         <property_set>
           <name>services/signal_tree_view.ui_service.adtf_disptb</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>graphs/decision_graph/connections/trajectories_stream._trajectories.</name>
           <properties/>
         </property_set>
       </property_sets>

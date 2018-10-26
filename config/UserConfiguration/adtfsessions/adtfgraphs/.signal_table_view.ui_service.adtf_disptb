@@ -1,0 +1,21 @@
+<xml>
+ <property name="Signal Table View" value="tableview" />
+ <property name="Signal Table View.column_0_name" value="Signal" />
+ <property name="Signal Table View.column_0_show" value="true" />
+ <property name="Signal Table View.column_0_width" value="100" />
+ <property name="Signal Table View.column_1_name" value="Time" />
+ <property name="Signal Table View.column_1_show" value="true" />
+ <property name="Signal Table View.column_1_width" value="100" />
+ <property name="Signal Table View.column_2_name" value="Value" />
+ <property name="Signal Table View.column_2_show" value="true" />
+ <property name="Signal Table View.column_2_width" value="100" />
+ <property name="Signal Table View.column_3_name" value="Unit" />
+ <property name="Signal Table View.column_3_show" value="true" />
+ <property name="Signal Table View.column_3_width" value="100" />
+ <property name="Signal Table View.column_4_name" value="Raw" />
+ <property name="Signal Table View.column_4_show" value="false" />
+ <property name="Signal Table View.column_4_width" value="100" />
+ <property name="Signal Table View.column_5_name" value="Text" />
+ <property name="Signal Table View.column_5_show" value="true" />
+ <property name="Signal Table View.column_5_width" value="100" />
+</xml>
