@@ -16,7 +16,7 @@ THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS AS IS AND ANY EXPRESS OR I
 ###: ADTF Source Package:
 
 Version:        1.1.1
-Date:           2018.10.07
+Date:           2018.11.07
 *	fixed "calibration file" property of Marker Detector in marker_detection subgraph in LiveVisualization project
 *	removed obsolete TCP Streaming Sink for position output in UserConfiguration project
 *	fixed problems in the jury application caused by loading maneuver files and some usability issues
