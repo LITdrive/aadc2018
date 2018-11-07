@@ -2481,7 +2481,7 @@
             <width>0</width>
             <height>0</height>
           </boundary>
-          <selected>false</selected>
+          <selected>true</selected>
           <connection_layout>
             <name/>
             <centerLineIsManual>true</centerLineIsManual>

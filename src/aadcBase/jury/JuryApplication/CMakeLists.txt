@@ -34,7 +34,7 @@ install(TARGETS ${PROJECT_NAME} DESTINATION bin/debug/application CONFIGURATIONS
 
 #install dlls for qt to binary folder 
 if(WIN32)
-    install(FILES "${QT_DIR}/bin/Qt5Gui.dll" DESTINATION bin/debug/application CONFIGURATIONS Release)
+    install(FILES "${QT_DIR}/bin/Qt5Gui.dll" DESTINATION bin/application CONFIGURATIONS RelWithDebInfo Release)
     install(FILES "${QT_DIR}/bin/Qt5Core.dll" DESTINATION bin/application CONFIGURATIONS RelWithDebInfo Release)
     install(FILES "${QT_DIR}/bin/Qt5Xml.dll" DESTINATION bin/application CONFIGURATIONS RelWithDebInfo Release)
     install(FILES "${QT_DIR}/bin/Qt5Widgets.dll" DESTINATION bin/application CONFIGURATIONS RelWithDebInfo Release)

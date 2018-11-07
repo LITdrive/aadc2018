@@ -955,7 +955,7 @@
           <properties>
             <property>
               <name>trigger/Calibration File</name>
-              <value>../../../../configuration_files/basler_fisheye_intrinsic_calib.yml</value>
+              <value>../../../../configuration_files/basler_afterFisheye_intrinsic_calibration.yml</value>
               <type>cFilename</type>
             </property>
             <property>

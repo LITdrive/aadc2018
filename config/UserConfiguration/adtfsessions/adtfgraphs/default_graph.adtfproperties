@@ -588,18 +588,6 @@
           <properties/>
         </property_set>
         <property_set>
-          <name>streaming_graphs/default_streaming_graph/streaming_sinks/TCP Sender</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>streaming_graphs/default_streaming_graph/connections/Filter Graph Dock.positon_TCP Sender.position</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>streaming_graphs/default_streaming_graph/streaming_sinks/TCP Sender/input_pins/position</name>
-          <properties/>
-        </property_set>
-        <property_set>
           <name>graphs/default_filter_graph/filters/Driver Module</name>
           <properties>
             <property>
@@ -953,10 +941,6 @@
         </property_set>
         <property_set>
           <name>services/log_view.ui_service.adtf</name>
-          <properties/>
-        </property_set>
-        <property_set>
-          <name>services/adtf_file_support.service.adtf</name>
           <properties/>
         </property_set>
       </property_sets>
