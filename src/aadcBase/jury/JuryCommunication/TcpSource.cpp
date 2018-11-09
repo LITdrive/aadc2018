@@ -87,7 +87,7 @@ tResult cTcpSource::Init()
 {
     RETURN_IF_FAILED(cSampleStreamingSource::Init());
 
-    RETURN_IF_FAILED_DESC(m_serverSocket.Open(static_cast<tUInt>(m_propTCPPort), cServerSocket::SS_Exclusive),
+    RETURN_IF_FAILED_DESC(m_serverSocket.Open(static_cast<tUInt>(m_propTCPPort)),
                           cString::Format("Could not open server socket with port %d", static_cast<tUInt>(m_propTCPPort)));
     LOG_INFO(cString::Format("Server Socket was opened with port %d", static_cast<tUInt>(m_propTCPPort)));
     RETURN_IF_FAILED_DESC(m_serverSocket.Listen(),

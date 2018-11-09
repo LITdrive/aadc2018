@@ -15,6 +15,13 @@ THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS AS IS AND ANY EXPRESS OR I
 
 ###: ADTF Source Package:
 
+Version:        1.1.1
+Date:           2018.11.07
+*	fixed "calibration file" property of Marker Detector in marker_detection subgraph in LiveVisualization project
+*	removed obsolete TCP Streaming Sink for position output in UserConfiguration project
+*	fixed problems in the jury application caused by loading maneuver files and some usability issues
+*	enabled swift reuse of socket to jury application during competition in case the software on the car broke
+
 Version:        1.1.0
 Date:           2018.09.17
 *   change BaslerCamera Property Naming unit for frame delay from [ms] to [micro s] to highlight that the frame delay is set in micro seconds

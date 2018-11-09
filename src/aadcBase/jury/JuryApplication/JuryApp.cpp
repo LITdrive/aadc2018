@@ -12,8 +12,8 @@ JuryApp::JuryApp(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    QRegExpValidator ipRegEx(QRegExp("[0 - 9]{ 1,3 }\\.[0 - 9]{ 1,3 }\\.[0 - 9]{ 1,3 }\\.[0 - 9]{ 1,3 }"), this);
-    ui->lEdIpAddress->setValidator(&ipRegEx);
+    QRegExp ipRegEx("^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$");
+    ui->lEdIpAddress->setValidator( new QRegExpValidator(ipRegEx,this));
 
     m_tcpSocket = new QTcpSocket(this);
 
@@ -77,6 +77,9 @@ void JuryApp::onLoadManeuverTriggered()
     }
     m_hasValidManeuverFile = true;
 
+	ui->cmBoxSections->clear();
+	ui->cmBoxManeuvers->clear();
+
     //write possible sections to combo list 
     for (int i = 0; i < m_parsedManeuverFile.size(); i++)
     {
@@ -124,7 +127,7 @@ bool JuryApp::TransmitFile(QFile* pFile, const aadc::jury::juryContainerId fileT
     }
     else
     {
-        WriteLog("File " + pFile->fileName() + "could not be opened for sending");
+        WriteLog("File \"" + pFile->fileName() + "\" could not be opened for sending");
         return false;
     }
     pFile->close();
@@ -136,9 +139,11 @@ void JuryApp::onSendManeuverTriggered()
     if (m_hasValidManeuverFile)
     {
         WriteLog("Sending maneuver file (" + m_maneuverFile->fileName() + ").");
-        TransmitFile(m_maneuverFile, aadc::jury::container_id_maneuverlist);
+        if (TransmitFile(m_maneuverFile, aadc::jury::container_id_maneuverlist))
+        {
+            BrushGraphicsView(ui->viewStateManeuverFileSent, Qt::green);            
+        }
 
-        BrushGraphicsView(ui->viewStateManeuverFileSent, Qt::green);
     }
 }
 
@@ -151,10 +156,11 @@ void JuryApp::onSendOpenDriveMapTriggered()
     openDriveMapFile = new QFile(ui->lEdOpenDriveMap->text(), this);
 
     WriteLog("Sending OpenDrive map (" + openDriveMapFile->fileName() + ").");
-    TransmitFile(openDriveMapFile, aadc::jury::container_id_opendrive_map);
+    if (TransmitFile(openDriveMapFile, aadc::jury::container_id_opendrive_map))
+    {
+        BrushGraphicsView(ui->viewStateOpenDriveMapSent, Qt::green);
+    }
 
-
-    BrushGraphicsView(ui->viewStateOpenDriveMapSent, Qt::green);
 
 }
 
@@ -165,9 +171,10 @@ void JuryApp::onSendRoadSignMapTriggered()
     roadSignMapFile = new QFile(ui->lEdRoadSignMap->text(), this);
 
     WriteLog("Sending road sign map (" + roadSignMapFile->fileName() + ").");
-    TransmitFile(roadSignMapFile, aadc::jury::container_id_traffic_sign_map);
-
-    BrushGraphicsView(ui->viewStateRoadSignMapSent, Qt::green);
+    if (TransmitFile(roadSignMapFile, aadc::jury::container_id_traffic_sign_map))
+    {
+        BrushGraphicsView(ui->viewStateRoadSignMapSent, Qt::green);        
+    }
 }
 
 void JuryApp::on_connect()
@@ -209,6 +216,9 @@ void JuryApp::on_disconnect()
     m_isConnected = false;
     ui->btConnect->setDisabled(false);
     ui->btDisconnect->setDisabled(true);
+    BrushGraphicsView(ui->viewStateManeuverFileSent, Qt::red);
+    BrushGraphicsView(ui->viewStateRoadSignMapSent, Qt::red);
+    BrushGraphicsView(ui->viewStateOpenDriveMapSent, Qt::red);
 
 }
 
@@ -245,7 +255,7 @@ void JuryApp::on_socketConnectionEstablished()
 void JuryApp::on_ipAddressEntered()
 {
     //check necessary inputs
-    if (ui->lEdIpAddress->hasAcceptableInput())
+    if (!ui->lEdIpAddress->hasAcceptableInput())
     {
         WriteLog("Please set a valid client IP address!");
         return;
@@ -304,6 +314,11 @@ void JuryApp::on_sectionIndexChanged(int index)
         //write possible maneuvers to combo list 
         for (std::vector<aadc::jury::tManeuver>::iterator it = m_parsedManeuverFile[index].begin(); it != m_parsedManeuverFile[index].end(); ++it)
         {
+			if(it->action == aadc::jury::manuever_undefined)
+			{
+				continue;
+			}
+
             ui->cmBoxManeuvers->addItem(QString::number(it->id));
         }
     }
