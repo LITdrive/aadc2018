@@ -72,6 +72,7 @@ add_subdirectory(LITD_PositionMux)
 add_subdirectory(LITD_JuryFileCopy)
 add_subdirectory(LITD_SpeedExtractor)
 add_subdirectory(LITD_SpeedInjector)
+add_subdirectory(LITD_ArduinoDump)
 
 # only build the tensorflow stuff on the cars
 if (THIS_IS_A_CAR)
