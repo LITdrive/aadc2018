@@ -15,6 +15,7 @@ THIS SOFTWARE IS PROVIDED BY AUDI AG AND CONTRIBUTORS AS IS AND ANY EXPRESS OR I
 
 #include "stdafx.h"
 #include "LITD_SpeedLimit.h"
+#include <ADTF3_helper.h>
 
 
 ADTF_TRIGGER_FUNCTION_FILTER_PLUGIN(CID_TEMPLATEFILTER_DATA_TRIGGERED_FILTER,
@@ -26,6 +27,9 @@ ADTF_TRIGGER_FUNCTION_FILTER_PLUGIN(CID_TEMPLATEFILTER_DATA_TRIGGERED_FILTER,
 cSpeedLimit::cSpeedLimit()
 {
     RegisterPropertyVariable("MAX speed allowed", maxspeed);
+    RegisterPropertyVariable("Gain factor", gainfactor);
+    RegisterPropertyVariable("Activity Signal Threshold", active_property);
+
     //DO NOT FORGET TO LOAD MEDIA DESCRIPTION SERVICE IN ADTF3 AND CHOOSE aadc.description
     object_ptr<IStreamType> pTypeTemplateData;
     if IS_OK(adtf::mediadescription::ant::create_adtf_default_stream_type_from_service("tSignalValue", pTypeTemplateData, m_templateDataSampleFactory))
@@ -37,8 +41,23 @@ cSpeedLimit::cSpeedLimit()
         LOG_WARNING("No mediadescription for tTemplateData found!");
     }
 
+    object_ptr<IStreamType> pTypeBoolSignalValue;
+	if IS_OK(adtf::mediadescription::ant::create_adtf_default_stream_type_from_service("tBoolSignalValue", pTypeBoolSignalValue, m_BoolSignalValueSampleFactory))
+	{
+		access_element::find_index(m_BoolSignalValueSampleFactory, cString("ui32ArduinoTimestamp"), m_ddlBoolSignalValueId.ui32ArduinoTimestamp);
+		access_element::find_index(m_BoolSignalValueSampleFactory, cString("bValue"), m_ddlBoolSignalValueId.bValue);
+	}
+	else
+	{
+		LOG_INFO("No mediadescription for tBoolSignalValue found!");
+	}
+
     Register(m_oReader, "input" , pTypeTemplateData);
     Register(m_oWriter, "output", pTypeTemplateData);
+
+    
+	// update signal
+	Register(m_active_signal, "update", pTypeBoolSignalValue);
 
 }
 
@@ -69,7 +88,7 @@ tResult cSpeedLimit::Process(tTimeStamp tmTimeOfTrigger)
     }
 
     // Do the Processing
-    tFloat32 outputData = inputData;
+    tFloat32 outputData = inputData * gainfactor;
     if (outputData > speed_config)
      {
          outputData = speed_config;
@@ -92,6 +111,11 @@ tResult cSpeedLimit::Process(tTimeStamp tmTimeOfTrigger)
 
     }
     m_oWriter << pWriteSample << flush << trigger;
+
+
+    // activity signal
+    tBool boolVal = fabs(outputData) >= active_property;
+    transmitBoolSignalValue(m_active_signal, tmTimeOfTrigger, m_BoolSignalValueSampleFactory, m_ddlBoolSignalValueId.ui32ArduinoTimestamp, 0, m_ddlBoolSignalValueId.bValue, boolVal);
 
     RETURN_NOERROR;
 }

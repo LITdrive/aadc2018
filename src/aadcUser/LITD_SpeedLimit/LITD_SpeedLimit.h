@@ -38,7 +38,9 @@ private:
         tSize value;
     } m_ddlSignalValueId;
 
-    adtf::base::property_variable<tFloat32> maxspeed = 10;
+    adtf::base::property_variable<tFloat32> maxspeed = 20.0f;
+    adtf::base::property_variable<tFloat32> gainfactor = 1.0f;
+    adtf::base::property_variable<tFloat32> active_property = 1.0f;
     float speed_config = 0;
     /*! The template data sample factory */
     adtf::mediadescription::cSampleCodecFactory m_templateDataSampleFactory;
@@ -49,6 +51,15 @@ private:
 
     /*! Writer to an OutPin. */
     cPinWriter m_oWriter;
+
+	cPinWriter m_active_signal;
+
+    struct tBoolSignalValueId
+	{
+		tSize ui32ArduinoTimestamp;
+		tSize bValue;
+	} m_ddlBoolSignalValueId;
+	cSampleCodecFactory m_BoolSignalValueSampleFactory;
 
 public:
 
