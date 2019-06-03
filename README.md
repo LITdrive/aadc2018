@@ -79,7 +79,7 @@ On Windows, do the following:
     echo '/opt/fftw/fftw-3.3.8/build/' | sudo tee /etc/ld.so.conf.d/fftw.conf
     sudo ldconfig
 
-On Windows, download the 64 bit binaries from [here](ftp://ftp.fftw.org/pub/fftw/fftw-3.3.5-dll64.zip), extract the contents to `C:\SDK\fftw\fftw-3.3.5-dll64` and execute the following commands in a VS2015 Developer Console (to generate the `*.lib` files from the `*.dll` files):
+On Windows, download the 64 bit binaries from [here](https://bit.ly/2Wkq8f2), extract the contents to `C:\SDK\fftw\fftw-3.3.5-dll64` and execute the following commands in a VS2015 Developer Console (to generate the `*.lib` files from the `*.dll` files):
 
     cd C:\SDK\fftw\fftw-3.3.5-dll64
     lib /machine:x64 /def:libfftw3f-3.def
@@ -88,7 +88,7 @@ On Windows, download the 64 bit binaries from [here](ftp://ftp.fftw.org/pub/fftw
 
 ### NVIDIA Driver 396.xx
 
-**Linux-only!** This NVIDIA driver enables you to run TensorFlow graphs on the GPU.
+:penguin: **Linux-only!** This NVIDIA driver enables you to run TensorFlow graphs on the GPU.
 
     sudo add-apt-repository ppa:graphics-drivers/ppa
     sudo apt update
@@ -102,13 +102,13 @@ Restart machine and check with
 
 [Eigen](http://eigen.tuxfamily.org/index.php?title=Main_Page) is a header-only library for various linear algebra stuff (matrices, vectors, solvers, etc.).
 
-**Linux-only!** Download the precompiled archive from [here](https://drive.google.com/file/d/1m8tXbVHjtSuV_cpZmR51T1Z4Kzz9et-3/view?usp=sharing), extract and copy this to `/opt/eigen/3.3.4` (such that you have `share` and `include` folders in there).
+:penguin: **Linux-only!** Download the precompiled archive from [here](https://drive.google.com/file/d/1m8tXbVHjtSuV_cpZmR51T1Z4Kzz9et-3/view?usp=sharing), extract and copy this to `/opt/eigen/3.3.4` (such that you have `share` and `include` folders in there).
 
 ### Protobuf 3.5.0
 
 [Protocol Buffers](https://developers.google.com/protocol-buffers/) are the binary message format for TensorFlow graph files.
 
-**Linux-only!** We need to build Protobuf. Prepare the environment with
+:penguin: **Linux-only!** We need to build Protobuf. Prepare the environment with
 
     sudo apt-get update
     sudo apt-get install autoconf automake libtool curl make g++ unzip
@@ -137,24 +137,24 @@ The libraries should have been installed to `/usr/local/lib`, you can check this
 
 ### TensorFlow 1.8.0
 
-[TensorFlow](https://www.tensorflow.org/) is a machine learning framework.
+[TensorFlow](https://www.tensorflow.org/) is a machine learning framework used for our own machine learning models.
 
-**Linux-only!** Download the precompiled archive from [here](https://drive.google.com/file/d/1lY8VUlROLTkavQFePoHVidur-TpKr1fj/view?usp=sharing), extract and copy this to `/opt/tensorflow/1.8.0` (such that you have `external`, `include` and `lib` folders in there). Next, configure the shared library.
+:penguin: **Linux-only!** Download the precompiled archive from [here](https://drive.google.com/file/d/1lY8VUlROLTkavQFePoHVidur-TpKr1fj/view?usp=sharing), extract and copy this to `/opt/tensorflow/1.8.0` (such that you have `external`, `include` and `lib` folders in there). Next, configure the shared library.
 
     echo '/opt/tensorflow/1.8.0/lib' | sudo tee /etc/ld.so.conf.d/tensorflow.conf
     sudo ldconfig
 
 ### Darknet
 
-[Darknet](https://pjreddie.com/darknet/) is an open source neural network framework written in C and CUDA.
+[Darknet](https://pjreddie.com/darknet/) is an open source neural network framework written in C and CUDA and used for the [YOLO](https://pjreddie.com/darknet/yolo/) Real-Time Object-Detection classifier.
 
-**Linux-only!** We need to build darknet from the sources. Darknet is built with CUDA support, but without OpenCV (the picture is already in raw format) or OpenMP.
+:penguin: **Linux-only!** We need to build darknet from the sources. Darknet is built with CUDA support, but without OpenCV (the picture is already in raw format) or OpenMP.
 
-        cd /opt
-        sudo git clone https://github.com/pjreddie/darknet.git
-        sudo chown aadc:aadc ./darknet -R
-        cd darknet
-        git apply /home/aadc/share/adtf/scripts/darknet_makefile.patch
-        make -j4
+    cd /opt
+    sudo git clone https://github.com/pjreddie/darknet.git
+    sudo chown aadc:aadc ./darknet -R
+    cd darknet
+    git apply /home/aadc/share/adtf/scripts/darknet_makefile.patch
+    make -j4
 
 Darknet is now built and ready!
